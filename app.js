@@ -1807,6 +1807,8 @@ function renderDetections() {
     const siteCell = document.createElement("td");
     const statusCell = document.createElement("td");
     const referenceCell = document.createElement("td");
+    const previewCell = document.createElement("td");
+    const processedCell = document.createElement("td");
     const input = document.createElement("input");
     const quantityWarning = quantityNeedsReview(detection);
 
@@ -1818,9 +1820,13 @@ function renderDetections() {
 
     quantityCell.className = "quantity-cell";
     referenceCell.className = "image-cell";
+    previewCell.className = "image-cell";
+    processedCell.className = "image-cell";
 
     if (detection.ambiguousMatch) detection.referencePreview.classList.add("review-border");
     referenceCell.append(makeReferenceCorrectionDropdown(detection));
+    previewCell.append(detection.preview);
+    processedCell.append(detection.processedPreview);
 
     if (detection.wikiPage) {
       const link = document.createElement("a");
@@ -1887,12 +1893,14 @@ function renderDetections() {
     };
 
     row.append(
-      referenceCell,
       nameCell,
       levelCell,
       themeCell,
       siteCell,
       statusCell,
+      referenceCell,
+      previewCell,
+      processedCell,
       quantityCell
     );
     resultsBody.append(row);
@@ -2382,7 +2390,7 @@ function drawEmptyState(message) {
   const row = document.createElement("tr");
   const cell = document.createElement("td");
   cell.className = "empty";
-  cell.colSpan = 7;
+  cell.colSpan = 9;
   cell.textContent = message;
   row.append(cell);
   resultsBody.append(row);

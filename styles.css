@@ -318,7 +318,7 @@ input[type="search"] {
 table {
   border-collapse: separate;
   border-spacing: 0;
-  min-width: 760px;
+  min-width: 980px;
   width: 100%;
 }
 
@@ -363,10 +363,30 @@ tbody tr summary {
 
 .image-cell,
 .quantity-cell,
-th:nth-child(1),
-th:nth-child(3),
+th:nth-child(2),
 th:nth-child(6),
-th:nth-child(7) {
+th:nth-child(7),
+th:nth-child(8),
+th:nth-child(9) {
+  text-align: center;
+}
+
+th:nth-child(2),
+th:nth-child(6),
+th:nth-child(7),
+th:nth-child(8) {
+  width: 72px;
+}
+
+th:nth-child(9) {
+  width: 128px;
+}
+
+td:nth-child(2),
+td:nth-child(6),
+td:nth-child(7),
+td:nth-child(8),
+td:nth-child(9) {
   text-align: center;
 }
 
