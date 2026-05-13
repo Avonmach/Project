@@ -1806,8 +1806,6 @@ function renderDetections() {
     const themeCell = document.createElement("td");
     const siteCell = document.createElement("td");
     const statusCell = document.createElement("td");
-    const previewCell = document.createElement("td");
-    const processedCell = document.createElement("td");
     const referenceCell = document.createElement("td");
     const input = document.createElement("input");
     const quantityWarning = quantityNeedsReview(detection);
@@ -1818,13 +1816,9 @@ function renderDetections() {
       verifyDetection(detection);
     });
 
-    previewCell.className = "image-cell";
     quantityCell.className = "quantity-cell";
-    processedCell.className = "image-cell";
     referenceCell.className = "image-cell";
 
-    previewCell.append(detection.preview);
-    processedCell.append(detection.processedPreview);
     if (detection.ambiguousMatch) detection.referencePreview.classList.add("review-border");
     referenceCell.append(makeReferenceCorrectionDropdown(detection));
 
@@ -1899,8 +1893,6 @@ function renderDetections() {
       themeCell,
       siteCell,
       statusCell,
-      previewCell,
-      processedCell,
       quantityCell
     );
     resultsBody.append(row);
@@ -2390,7 +2382,7 @@ function drawEmptyState(message) {
   const row = document.createElement("tr");
   const cell = document.createElement("td");
   cell.className = "empty";
-  cell.colSpan = 9;
+  cell.colSpan = 7;
   cell.textContent = message;
   row.append(cell);
   resultsBody.append(row);

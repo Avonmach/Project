@@ -318,7 +318,7 @@ input[type="search"] {
 table {
   border-collapse: separate;
   border-spacing: 0;
-  min-width: 1080px;
+  min-width: 760px;
   width: 100%;
 }
 
@@ -366,9 +366,7 @@ tbody tr summary {
 th:nth-child(1),
 th:nth-child(3),
 th:nth-child(6),
-th:nth-child(7),
-th:nth-child(8),
-th:nth-child(9) {
+th:nth-child(7) {
   text-align: center;
 }
 
