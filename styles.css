@@ -310,7 +310,7 @@ input[type="search"] {
 }
 
 .table-wrap {
-  overflow-x: auto;
+  overflow-x: visible;
   overflow-y: visible;
   position: relative;
 }
@@ -318,14 +318,15 @@ input[type="search"] {
 table {
   border-collapse: separate;
   border-spacing: 0;
-  min-width: 980px;
+  table-layout: fixed;
   width: 100%;
 }
 
 th,
 td {
   border-bottom: 1px solid var(--soft-line);
-  padding: 8px 9px;
+  overflow-wrap: anywhere;
+  padding: 7px 7px;
   text-align: left;
   vertical-align: middle;
 }
@@ -375,11 +376,23 @@ th:nth-child(2),
 th:nth-child(6),
 th:nth-child(7),
 th:nth-child(8) {
-  width: 72px;
+  width: 58px;
 }
 
 th:nth-child(9) {
-  width: 128px;
+  width: 112px;
+}
+
+th:nth-child(3) {
+  width: 82px;
+}
+
+th:nth-child(4) {
+  width: 92px;
+}
+
+th:nth-child(5) {
+  width: 78px;
 }
 
 td:nth-child(2),
@@ -412,9 +425,9 @@ tbody tr:has(.processed-preview:hover),
   background: #302b26;
   border: 1px solid #4a443d;
   border-radius: 5px;
-  height: 44px;
+  height: 38px;
   image-rendering: pixelated;
-  width: 44px;
+  width: 38px;
 }
 
 .slot-preview,
@@ -474,7 +487,7 @@ tbody tr:has(.processed-preview:hover),
   height: 34px;
   padding: 0;
   text-align: center;
-  width: 38px;
+  width: 34px;
 }
 
 .qty-input.quantity-warning-input,
@@ -508,7 +521,7 @@ tbody tr:has(.processed-preview:hover),
   justify-content: center;
   min-height: 0;
   padding: 0;
-  width: 28px;
+  width: 24px;
 }
 
 .qty-button:first-child {
@@ -534,7 +547,7 @@ tbody tr:has(.processed-preview:hover),
 }
 
 .quantity-diagnostics {
-  max-width: 120px;
+  max-width: 92px;
   text-align: center;
 }
 
