@@ -1893,7 +1893,7 @@ function renderDetections() {
     };
 
     row.append(
-      quantityCell,
+      referenceCell,
       nameCell,
       levelCell,
       themeCell,
@@ -1901,7 +1901,7 @@ function renderDetections() {
       statusCell,
       previewCell,
       processedCell,
-      referenceCell
+      quantityCell
     );
     resultsBody.append(row);
   }
