@@ -41,7 +41,7 @@ body {
 .workspace,
 .control-panel {
   margin: 0 auto 16px;
-  max-width: 1280px;
+  max-width: 1480px;
 }
 
 .topbar {
@@ -378,23 +378,23 @@ th:nth-child(2),
 th:nth-child(6),
 th:nth-child(7),
 th:nth-child(8) {
-  width: 58px;
+  width: 60px;
 }
 
 th:nth-child(9) {
-  width: 112px;
+  width: 106px;
 }
 
 th:nth-child(3) {
-  width: 82px;
+  width: 100px;
 }
 
 th:nth-child(4) {
-  width: 92px;
+  width: 112px;
 }
 
 th:nth-child(5) {
-  width: 78px;
+  width: 86px;
 }
 
 td:nth-child(2),

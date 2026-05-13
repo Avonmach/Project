@@ -1897,8 +1897,8 @@ function renderDetections() {
       themeCell,
       siteCell,
       statusCell,
-      referenceCell,
       previewCell,
+      referenceCell,
       processedCell,
       quantityCell
     );
