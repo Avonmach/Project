@@ -1,7 +1,7 @@
 {
   "source": "https://runescape.wiki/w/Category:Damaged_artefacts",
   "generatedAt": "2026-05-13T16:02:21.585Z",
-  "count": 219,
+  "count": 218,
   "items": [
     {
       "name": "'Animate Dead' spell scroll (damaged)",
@@ -716,23 +716,6 @@
       "digSite": "None",
       "excavationHotspot": "dragonkin remains",
       "pageId": 769161
-    },
-    {
-      "name": "Ceremonial dragonkin tablet (damaged)",
-      "restoredName": "Ceremonial dragonkin tablet",
-      "state": "damaged",
-      "wikiPage": "https://runescape.wiki/w/Ceremonial_dragonkin_tablet_(damaged)",
-      "restoredWikiPage": "https://runescape.wiki/w/Ceremonial_dragonkin_tablet",
-      "icon": "reference-icons/ceremonial-dragonkin-tablet-damaged.png",
-      "sourceIcon": "https://runescape.wiki/images/Ceremonial_dragonkin_tablet.png?6a991",
-      "damagedIcon": "reference-icons/ceremonial-dragonkin-tablet-damaged-damaged.png",
-      "damagedSourceIcon": "https://runescape.wiki/images/Ceremonial_dragonkin_tablet_%28damaged%29.png?80483",
-      "referenceVariant": "restored",
-      "archaeologyLevel": 90,
-      "culture": "Miscellaneous",
-      "digSite": "None",
-      "excavationHotspot": "Orthen rubble",
-      "pageId": 769163
     },
     {
       "name": "Ceremonial mace (damaged)",

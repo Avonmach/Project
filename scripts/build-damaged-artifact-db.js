@@ -7,6 +7,10 @@ const OUT_DIR = path.join(__dirname, "..", "data");
 const ICON_DIR = path.join(OUT_DIR, "reference-icons");
 const DB_FILE = path.join(OUT_DIR, "damaged-artifacts.json");
 const USER_AGENT = "ArcheologyImageRecognition/0.1 (local personal project)";
+const EXCLUDED_DAMAGED_ARTEFACTS = new Set([
+  // One-off Orthen collection artefact that is visually too close to the quest tablet.
+  "Ceremonial dragonkin tablet (damaged)"
+]);
 
 async function main() {
   await fs.mkdir(ICON_DIR, { recursive: true });
@@ -212,7 +216,11 @@ async function getDamagedArtefactPages() {
     if (cmcontinue) params.cmcontinue = cmcontinue;
 
     const data = await requestJson(API, params);
-    pages.push(...data.query.categorymembers.filter((page) => page.title.includes("(damaged)")));
+    pages.push(
+      ...data.query.categorymembers.filter(
+        (page) => page.title.includes("(damaged)") && !EXCLUDED_DAMAGED_ARTEFACTS.has(page.title)
+      )
+    );
     cmcontinue = data.continue?.cmcontinue || null;
   } while (cmcontinue);
 
