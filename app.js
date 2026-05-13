@@ -1823,7 +1823,10 @@ function renderDetections() {
     previewCell.className = "image-cell";
     processedCell.className = "image-cell";
 
-    if (detection.ambiguousMatch) detection.referencePreview.classList.add("review-border");
+    detection.referencePreview.classList.toggle(
+      "review-border",
+      detection.ambiguousMatch && !(detection.corrected && detection.manual)
+    );
     referenceCell.append(makeReferenceCorrectionDropdown(detection));
     previewCell.append(detection.preview);
     processedCell.append(detection.processedPreview);
