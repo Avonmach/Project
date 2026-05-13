@@ -215,8 +215,7 @@ input[type="search"] {
   grid-template-columns: minmax(0, 1fr) 330px;
 }
 
-.image-panel,
-.results-panel {
+.image-panel {
   overflow: auto;
 }
 
@@ -294,6 +293,9 @@ input[type="search"] {
 
 .results-panel {
   grid-column: 1 / 2;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
 }
 
 .results-heading {
@@ -308,7 +310,9 @@ input[type="search"] {
 }
 
 .table-wrap {
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
+  position: relative;
 }
 
 table {
@@ -338,6 +342,7 @@ th {
 
 tbody tr {
   cursor: pointer;
+  position: relative;
 }
 
 tbody tr:nth-child(even) td {
@@ -372,6 +377,13 @@ th:nth-child(9) {
   position: relative;
 }
 
+tbody tr:has(.slot-preview:hover),
+tbody tr:has(.processed-preview:hover),
+.image-cell:has(.slot-preview:hover),
+.image-cell:has(.processed-preview:hover) {
+  z-index: 50;
+}
+
 .slot-preview,
 .processed-preview,
 .clean-preview,
@@ -399,7 +411,7 @@ th:nth-child(9) {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
   filter: brightness(1.8) saturate(1.75);
   transform: scale(3);
-  z-index: 30;
+  z-index: 80;
 }
 
 .processed-preview,
