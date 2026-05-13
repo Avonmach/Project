@@ -27,7 +27,7 @@ The current per-digit quantity heuristics in `adjustCommonQuantityMistakes()` ha
 - `6` can be corrected to `0`
 - `8` can be corrected to `6`
 
-Quantity values with low confidence or close alternatives are marked for review in the UI.
+Quantity values with close alternatives are marked for review in the UI. The current cutoff is a top-two alternative confidence gap of `3` percentage points or less.
 
 ## Saving Future Reference
 

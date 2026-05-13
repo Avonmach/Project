@@ -1330,9 +1330,14 @@ function quantityAlternatives(matches) {
 }
 
 function quantityCandidatesAreClose(detection) {
+  const gap = quantityAlternativeConfidenceGap(detection);
+  return gap !== null && gap <= QUANTITY_REVIEW_MARGIN;
+}
+
+function quantityAlternativeConfidenceGap(detection) {
   const options = detection.quantityAlternatives || [];
-  if (options.length < 2) return false;
-  return Math.abs(options[0].confidence - options[1].confidence) < QUANTITY_REVIEW_MARGIN;
+  if (options.length < 2) return null;
+  return Math.abs(options[0].confidence - options[1].confidence);
 }
 
 function collectYellowPixels(imageData, box) {
@@ -1883,7 +1888,7 @@ function rowReviewClass(detection, quantityWarning = quantityNeedsReview(detecti
 }
 
 function quantityNeedsReview(detection) {
-  return !detection.quantityManual && ((detection.quantity !== 1 && detection.quantityConfidence < 0.9) || quantityCandidatesAreClose(detection));
+  return !detection.quantityManual && quantityCandidatesAreClose(detection);
 }
 
 function applyQuantityChange(detection, quantity, source) {
