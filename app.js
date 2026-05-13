@@ -51,6 +51,7 @@ let recipeByRestoredName = new Map();
 let materialByName = new Map();
 let activeResultsTab = "damaged";
 const screenshotRequestedTabs = new Set();
+let collectionSort = { key: "progress", direction: "desc" };
 
 const DIGIT_TEMPLATE_WIDTH = 3;
 const DIGIT_TEMPLATE_HEIGHT = 5;
@@ -2377,19 +2378,14 @@ function sortMaterialRows(rows) {
 function makeCollectionOverview(items) {
   const section = document.createElement("div");
   section.className = "collection-overview";
-  const selectedArtefacts = new Set(items.map((item) => normalizeName(item.restoredName || item.artefact)));
+  const ownedArtefacts = getOwnedArtefactMap(items);
   const rows = (archaeologyReference.collections || [])
     .map((collection) => {
-      const matched = collection.artefacts.filter((artefact) => selectedArtefacts.has(normalizeName(artefact)));
-      return { collection, matched };
+      const matched = collection.artefacts.filter((artefact) => ownedArtefacts.has(normalizeName(artefact)));
+      return { collection, matched, progress: matched.length };
     })
     .filter((row) => row.matched.length)
-    .sort(
-      (a, b) =>
-        b.matched.length - a.matched.length ||
-        nullableNumber(a.collection.archaeologyLevel) - nullableNumber(b.collection.archaeologyLevel) ||
-        a.collection.name.localeCompare(b.collection.name)
-    );
+    .sort(compareCollectionRows);
 
   const title = document.createElement("h3");
   title.textContent = "Matching collections";
@@ -2402,7 +2398,7 @@ function makeCollectionOverview(items) {
 
   const table = document.createElement("table");
   table.className = "secondary-table";
-  table.append(makeTableHead(["Collection", "Collector", "Level", "Progress", "Matched artefacts"]));
+  table.append(makeCollectionTableHead());
   const body = document.createElement("tbody");
   for (const row of rows) {
     const tr = document.createElement("tr");
@@ -2410,14 +2406,127 @@ function makeCollectionOverview(items) {
       makeLinkedTextCell(row.collection.name, row.collection.wikiPage),
       makeTextCell(row.collection.collector || ""),
       makeTextCell(row.collection.archaeologyLevel ?? ""),
-      makeTextCell(`${row.matched.length}/${row.collection.artefactCount || row.collection.artefacts.length}`),
-      makeTextCell(row.matched.join(", "))
+      makeTextCell(`${row.progress}/${row.collection.artefactCount || row.collection.artefacts.length}`),
+      makeCollectionArtefactsCell(row.collection.artefacts, ownedArtefacts)
     );
     body.append(tr);
   }
   table.append(body);
   section.append(table);
   return section;
+}
+
+function makeCollectionTableHead() {
+  const columns = [
+    ["name", "Collection"],
+    ["collector", "Collector"],
+    ["level", "Level"],
+    ["progress", "Progress"],
+    [null, "Artefacts"]
+  ];
+  const head = document.createElement("thead");
+  const row = document.createElement("tr");
+
+  for (const [key, label] of columns) {
+    const cell = document.createElement("th");
+    if (!key) {
+      cell.textContent = label;
+      row.append(cell);
+      continue;
+    }
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "table-sort";
+    button.textContent = label;
+    if (collectionSort.key === key) {
+      button.classList.add("is-active");
+      button.dataset.direction = collectionSort.direction;
+    }
+    button.addEventListener("click", () => {
+      collectionSort = {
+        key,
+        direction: collectionSort.key === key && collectionSort.direction === "asc" ? "desc" : "asc"
+      };
+      renderResultsTabContent();
+    });
+    cell.append(button);
+    row.append(cell);
+  }
+
+  head.append(row);
+  return head;
+}
+
+function compareCollectionRows(a, b) {
+  const direction = collectionSort.direction === "asc" ? 1 : -1;
+  let result = 0;
+  if (collectionSort.key === "name") result = a.collection.name.localeCompare(b.collection.name);
+  if (collectionSort.key === "collector") {
+    result = String(a.collection.collector || "").localeCompare(String(b.collection.collector || ""));
+  }
+  if (collectionSort.key === "level") {
+    result = nullableNumber(a.collection.archaeologyLevel) - nullableNumber(b.collection.archaeologyLevel);
+  }
+  if (collectionSort.key === "progress") result = a.progress - b.progress;
+
+  return (
+    result * direction ||
+    nullableNumber(a.collection.archaeologyLevel) - nullableNumber(b.collection.archaeologyLevel) ||
+    a.collection.name.localeCompare(b.collection.name)
+  );
+}
+
+function getOwnedArtefactMap(items) {
+  const owned = new Map();
+  for (const item of items) {
+    const name = item.restoredName || item.artefact;
+    const key = normalizeName(name);
+    const current = owned.get(key) || { name, quantity: 0 };
+    current.quantity += item.quantity;
+    owned.set(key, current);
+  }
+  return owned;
+}
+
+function makeCollectionArtefactsCell(artefacts, ownedArtefacts) {
+  const cell = document.createElement("td");
+  const grid = document.createElement("div");
+  grid.className = "collection-artefacts";
+
+  for (const artefact of artefacts) {
+    const owned = ownedArtefacts.get(normalizeName(artefact));
+    grid.append(makeCollectionArtefactIcon(artefact, owned?.quantity || 0));
+  }
+
+  cell.append(grid);
+  return cell;
+}
+
+function makeCollectionArtefactIcon(artefact, quantity) {
+  const reference = references.find((item) => normalizeName(item.restoredName || item.name) === normalizeName(artefact));
+  const tile = document.createElement("span");
+  tile.className = "collection-artefact";
+  if (!quantity) tile.classList.add("is-missing");
+  tile.title = quantity ? `${artefact}: ${quantity}` : `${artefact}: missing`;
+
+  if (reference?.icon) {
+    const image = document.createElement("img");
+    image.src = `data/${reference.icon}`;
+    image.alt = artefact;
+    image.loading = "lazy";
+    tile.append(image);
+  } else {
+    const fallback = document.createElement("span");
+    fallback.className = "collection-artefact-fallback";
+    fallback.textContent = artefact.slice(0, 2).toUpperCase();
+    tile.append(fallback);
+  }
+
+  const badge = document.createElement("span");
+  badge.className = "collection-artefact-count";
+  badge.textContent = String(quantity);
+  tile.append(badge);
+  return tile;
 }
 
 function rowReviewClass(detection, quantityWarning = quantityNeedsReview(detection)) {
