@@ -397,6 +397,10 @@ th:nth-child(5) {
   width: 86px;
 }
 
+th:nth-child(1) {
+  width: 260px;
+}
+
 td:nth-child(2),
 td:nth-child(6),
 td:nth-child(7),
