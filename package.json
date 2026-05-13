@@ -1,0 +1,9 @@
+{
+  "name": "rs3-archaeology-analyzer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "build:database": "node scripts/build-damaged-artifact-db.js"
+  }
+}

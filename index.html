@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RS3 Archaeology Analyzer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>RS3 Archaeology Analyzer</h1>
+        <p>Damaged artefact quantity detection from a RuneScape 3 screenshot.</p>
+      </div>
+      <a class="wiki-link" href="https://runescape.wiki/w/%28damaged%29" target="_blank" rel="noreferrer">Wiki reference</a>
+    </header>
+
+    <section class="toolbar" aria-label="Analysis controls">
+      <label class="file-control">
+        <span>Screenshot</span>
+        <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp">
+      </label>
+      <button id="loadDefault" type="button">Load Damaged_Items.png</button>
+      <button id="analyze" type="button">Analyze</button>
+      <button id="exportResults" type="button">Export</button>
+    </section>
+
+    <section class="summary" aria-label="Detected totals">
+      <div>
+        <span class="summary-label">Occupied slots</span>
+        <strong id="slotCount">0</strong>
+      </div>
+      <div>
+        <span class="summary-label">Detected quantity</span>
+        <strong id="quantityTotal">0</strong>
+      </div>
+      <div>
+        <span class="summary-label">Manual corrections</span>
+        <strong id="manualCount">0</strong>
+      </div>
+      <div>
+        <span class="summary-label">Reference icons</span>
+        <strong id="referenceCount">0</strong>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="image-panel">
+        <canvas id="previewCanvas" width="927" height="170"></canvas>
+      </div>
+
+      <div class="results-panel">
+        <div class="results-toolbar">
+          <label class="file-control">
+            <span>View</span>
+            <select id="viewMode">
+              <option value="position">Bank position</option>
+              <option value="level">Archaeology level</option>
+              <option value="theme">Theme</option>
+            </select>
+          </label>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Screenshot</th>
+              <th>Quantity</th>
+              <th>Processed</th>
+              <th>Reference</th>
+              <th>Artefact</th>
+              <th>Level</th>
+              <th>Theme</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody">
+            <tr>
+              <td colspan="7" class="empty">Loading reference database.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

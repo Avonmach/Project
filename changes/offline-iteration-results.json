@@ -1,0 +1,674 @@
+[
+    {
+        "Iteration":  "iteration-0-exported-original",
+        "Correct":  0,
+        "Total":  33,
+        "Accuracy":  0,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Legatus Maximus figurine",
+                                    "Score":  0.3237
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.4318
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "Lion trophy",
+                                    "Score":  0.4232
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "Quintessence counter",
+                                    "Score":  0.3849
+                                },
+                                {
+                                    "BankIndex":  10,
+                                    "Truth":  "\u0027Da Boss Man\u0027 sculpture",
+                                    "Predicted":  "Kal-i-kra chieftain crown",
+                                    "Score":  0.2842
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Quintessence counter",
+                                    "Score":  0.2876
+                                },
+                                {
+                                    "BankIndex":  12,
+                                    "Truth":  "Ekeleshuun blinder mask",
+                                    "Predicted":  "Ritual bell",
+                                    "Score":  0.3534
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Battle plans",
+                                    "Score":  0.3073
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-1-shape-only",
+        "Correct":  6,
+        "Total":  33,
+        "Accuracy":  18.18,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Homely totem",
+                                    "Score":  0.5726
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.7488
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.8281
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "Quintessence counter",
+                                    "Score":  0.6915
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Larupia trophy",
+                                    "Score":  0.4848
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Decorative vase",
+                                    "Score":  0.5481
+                                },
+                                {
+                                    "BankIndex":  15,
+                                    "Truth":  "Prototype gravimeter",
+                                    "Predicted":  "Venator light crossbow",
+                                    "Score":  0.634
+                                },
+                                {
+                                    "BankIndex":  18,
+                                    "Truth":  "Legatus Maximus figurine",
+                                    "Predicted":  "\u0027Animate Dead\u0027 spell scroll",
+                                    "Score":  0.4877
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-2-shape-edge",
+        "Correct":  5,
+        "Total":  33,
+        "Accuracy":  15.15,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Homely totem",
+                                    "Score":  0.4369
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.5569
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.6173
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "\u0027Animate Dead\u0027 spell scroll",
+                                    "Score":  0.5202
+                                },
+                                {
+                                    "BankIndex":  10,
+                                    "Truth":  "\u0027Da Boss Man\u0027 sculpture",
+                                    "Predicted":  "High priest mitre",
+                                    "Score":  0.345
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.3737
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Folded-arm figurine (male)(damaged)",
+                                    "Score":  0.4148
+                                },
+                                {
+                                    "BankIndex":  15,
+                                    "Truth":  "Prototype gravimeter",
+                                    "Predicted":  "Venator light crossbow",
+                                    "Score":  0.4759
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-3-shape-edge-descriptor",
+        "Correct":  3,
+        "Total":  33,
+        "Accuracy":  9.09,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Homely totem",
+                                    "Score":  0.4801
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.6232
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.6759
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "\u0027Animate Dead\u0027 spell scroll",
+                                    "Score":  0.5738
+                                },
+                                {
+                                    "BankIndex":  10,
+                                    "Truth":  "\u0027Da Boss Man\u0027 sculpture",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.4218
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.4406
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Folded-arm figurine (male)(damaged)",
+                                    "Score":  0.4737
+                                },
+                                {
+                                    "BankIndex":  15,
+                                    "Truth":  "Prototype gravimeter",
+                                    "Predicted":  "Beastkeeper helm",
+                                    "Score":  0.5476
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-4-restored-balanced",
+        "Correct":  3,
+        "Total":  33,
+        "Accuracy":  9.09,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Homely totem",
+                                    "Score":  0.4993
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.6381
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.6944
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "\u0027Smoke Cloud\u0027 spell scroll",
+                                    "Score":  0.5959
+                                },
+                                {
+                                    "BankIndex":  10,
+                                    "Truth":  "\u0027Da Boss Man\u0027 sculpture",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.4546
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.4729
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Folded-arm figurine (male)(damaged)",
+                                    "Score":  0.503
+                                },
+                                {
+                                    "BankIndex":  15,
+                                    "Truth":  "Prototype gravimeter",
+                                    "Predicted":  "Beastkeeper helm",
+                                    "Score":  0.5623
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-5-damaged-shape-added",
+        "Correct":  3,
+        "Total":  33,
+        "Accuracy":  9.09,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Homely totem",
+                                    "Score":  0.4957
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.6364
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.6932
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "\u0027Smoke Cloud\u0027 spell scroll",
+                                    "Score":  0.5947
+                                },
+                                {
+                                    "BankIndex":  10,
+                                    "Truth":  "\u0027Da Boss Man\u0027 sculpture",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.451
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.4705
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Folded-arm figurine (male)(damaged)",
+                                    "Score":  0.5012
+                                },
+                                {
+                                    "BankIndex":  15,
+                                    "Truth":  "Prototype gravimeter",
+                                    "Predicted":  "Beastkeeper helm",
+                                    "Score":  0.5609
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-6-damaged-heavy",
+        "Correct":  3,
+        "Total":  33,
+        "Accuracy":  9.09,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Homely totem",
+                                    "Score":  0.4831
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.6267
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.6831
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "\u0027Smoke Cloud\u0027 spell scroll",
+                                    "Score":  0.5839
+                                },
+                                {
+                                    "BankIndex":  10,
+                                    "Truth":  "\u0027Da Boss Man\u0027 sculpture",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.4346
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.4559
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Folded-arm figurine (male)(damaged)",
+                                    "Score":  0.488
+                                },
+                                {
+                                    "BankIndex":  15,
+                                    "Truth":  "Prototype gravimeter",
+                                    "Predicted":  "Beastkeeper helm",
+                                    "Score":  0.5523
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-7-damaged-only-shape",
+        "Correct":  8,
+        "Total":  33,
+        "Accuracy":  24.24,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.7488
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.8281
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "\u0027Incite Fear\u0027 spell scroll",
+                                    "Score":  0.6922
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Larupia trophy",
+                                    "Score":  0.4848
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Decorative vase",
+                                    "Score":  0.5481
+                                },
+                                {
+                                    "BankIndex":  15,
+                                    "Truth":  "Prototype gravimeter",
+                                    "Predicted":  "Beastkeeper helm",
+                                    "Score":  0.6436
+                                },
+                                {
+                                    "BankIndex":  18,
+                                    "Truth":  "Legatus Maximus figurine",
+                                    "Predicted":  "\u0027Incite Fear\u0027 spell scroll",
+                                    "Score":  0.49
+                                },
+                                {
+                                    "BankIndex":  21,
+                                    "Truth":  "Kal-i-kra chieftain crown",
+                                    "Predicted":  "High priest orb",
+                                    "Score":  0.5574
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-8-damaged-only-balanced",
+        "Correct":  7,
+        "Total":  33,
+        "Accuracy":  21.21,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.6366
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.686
+                                },
+                                {
+                                    "BankIndex":  10,
+                                    "Truth":  "\u0027Da Boss Man\u0027 sculpture",
+                                    "Predicted":  "High priest mitre",
+                                    "Score":  0.4283
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Primis Elementis standard",
+                                    "Score":  0.4543
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Folded-arm figurine (male)(damaged)",
+                                    "Score":  0.4892
+                                },
+                                {
+                                    "BankIndex":  15,
+                                    "Truth":  "Prototype gravimeter",
+                                    "Predicted":  "Beastkeeper helm",
+                                    "Score":  0.5648
+                                },
+                                {
+                                    "BankIndex":  18,
+                                    "Truth":  "Legatus Maximus figurine",
+                                    "Predicted":  "\u0027Incite Fear\u0027 spell scroll",
+                                    "Score":  0.4436
+                                },
+                                {
+                                    "BankIndex":  21,
+                                    "Truth":  "Kal-i-kra chieftain crown",
+                                    "Predicted":  "High priest orb",
+                                    "Score":  0.4943
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-9-descriptor-only",
+        "Correct":  0,
+        "Total":  33,
+        "Accuracy":  0,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Prototype godstaff",
+                                    "Score":  0.9287
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Xolo pickaxe",
+                                    "Score":  0.9654
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027Pandemonium\u0027 tapestry",
+                                    "Score":  0.9597
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "Dragon scalpel",
+                                    "Score":  0.9496
+                                },
+                                {
+                                    "BankIndex":  10,
+                                    "Truth":  "\u0027Da Boss Man\u0027 sculpture",
+                                    "Predicted":  "Kontos lance",
+                                    "Score":  0.9422
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Xolo spear",
+                                    "Score":  0.8535
+                                },
+                                {
+                                    "BankIndex":  12,
+                                    "Truth":  "Ekeleshuun blinder mask",
+                                    "Predicted":  "Centurion\u0027s dress sword",
+                                    "Score":  0.9829
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Ritual dagger",
+                                    "Score":  0.86
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-10-color-light-only",
+        "Correct":  0,
+        "Total":  33,
+        "Accuracy":  0,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Dragon scalpel",
+                                    "Score":  0.8843
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Order of Dis robes",
+                                    "Score":  0.9406
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.9246
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "Order of Dis robes",
+                                    "Score":  0.9385
+                                },
+                                {
+                                    "BankIndex":  10,
+                                    "Truth":  "\u0027Da Boss Man\u0027 sculpture",
+                                    "Predicted":  "Vigorem vial",
+                                    "Score":  0.9301
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "\u0027Pandemonium\u0027 tapestry",
+                                    "Score":  0.9377
+                                },
+                                {
+                                    "BankIndex":  12,
+                                    "Truth":  "Ekeleshuun blinder mask",
+                                    "Predicted":  "The Book of Blood",
+                                    "Score":  0.9258
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Ritual dagger",
+                                    "Score":  0.9276
+                                }
+                            ]
+    },
+    {
+        "Iteration":  "iteration-11-max-damaged-restored-shape",
+        "Correct":  7,
+        "Total":  33,
+        "Accuracy":  21.21,
+        "ExampleFailures":  [
+                                {
+                                    "BankIndex":  1,
+                                    "Truth":  "Engraved ring of kinship",
+                                    "Predicted":  "Homely totem",
+                                    "Score":  0.5641
+                                },
+                                {
+                                    "BankIndex":  3,
+                                    "Truth":  "Curse tablet",
+                                    "Predicted":  "Thorobshuun battle standard",
+                                    "Score":  0.7488
+                                },
+                                {
+                                    "BankIndex":  7,
+                                    "Truth":  "Keshik drum",
+                                    "Predicted":  "\u0027The Serpent\u0027s Fall\u0027 carving",
+                                    "Score":  0.8281
+                                },
+                                {
+                                    "BankIndex":  9,
+                                    "Truth":  "\u0027Exsanguinate\u0027 spell scroll",
+                                    "Predicted":  "\u0027Incite Fear\u0027 spell scroll",
+                                    "Score":  0.6915
+                                },
+                                {
+                                    "BankIndex":  11,
+                                    "Truth":  "Model chariot",
+                                    "Predicted":  "Larupia trophy",
+                                    "Score":  0.4848
+                                },
+                                {
+                                    "BankIndex":  13,
+                                    "Truth":  "\u0027Lust\u0027 metal sculpture",
+                                    "Predicted":  "Decorative vase",
+                                    "Score":  0.5481
+                                },
+                                {
+                                    "BankIndex":  15,
+                                    "Truth":  "Prototype gravimeter",
+                                    "Predicted":  "Beastkeeper helm",
+                                    "Score":  0.6385
+                                },
+                                {
+                                    "BankIndex":  18,
+                                    "Truth":  "Legatus Maximus figurine",
+                                    "Predicted":  "\u0027Incite Fear\u0027 spell scroll",
+                                    "Score":  0.4888
+                                }
+                            ]
+    }
+]
