@@ -1879,7 +1879,6 @@ function renderDetections() {
     arrows.append(up, down);
     stepper.append(input, arrows);
     quantityCell.append(stepper);
-    quantityCell.append(makeQuantityDiagnostics(detection));
 
     detection.rowElements = {
       row,
@@ -2040,19 +2039,6 @@ function applyQuantityChange(detection, quantity, source) {
     quantityConfidence: detection.quantityConfidence,
     source
   };
-}
-
-function makeQuantityDiagnostics(detection) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "quantity-diagnostics";
-  const options = detection.quantityAlternatives?.length
-    ? detection.quantityAlternatives
-    : [{ quantity: detection.quantity, confidence: detection.quantityConfidence }];
-  wrapper.textContent = options
-    .slice(0, 4)
-    .map((option, index) => `${index === 0 ? "Precision" : "Alt"} ${option.quantity}: ${percent(option.confidence)}`)
-    .join(" | ");
-  return wrapper;
 }
 
 function isInteractiveRowTarget(target) {
