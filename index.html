@@ -84,7 +84,15 @@
 
       <div class="results-panel surface-panel">
         <div class="panel-heading results-heading">
-          <h2>Artefacts</h2>
+          <div class="results-title-block">
+            <h2 id="resultsTitle">Damaged Artefacts</h2>
+            <nav class="result-tabs" aria-label="Artefact result views">
+              <button class="result-tab" type="button" data-results-tab="overview" aria-selected="false">Overview</button>
+              <button class="result-tab is-active" type="button" data-results-tab="damaged" aria-selected="true">Damaged Artefacts</button>
+              <button class="result-tab" type="button" data-results-tab="restored" aria-selected="false">Restored Artefacts</button>
+              <button class="result-tab" type="button" data-results-tab="materials" aria-selected="false">Materials</button>
+            </nav>
+          </div>
           <div class="results-toolbar">
             <label class="file-control">
               <span>Search</span>
@@ -111,7 +119,10 @@
             </label>
           </div>
         </div>
-        <div class="table-wrap">
+        <div id="overviewPanel" class="tab-panel overview-panel" data-results-panel="overview" hidden>
+          <p class="empty">Analyze a screenshot to create an overview.</p>
+        </div>
+        <div id="damagedPanel" class="tab-panel table-wrap" data-results-panel="damaged">
           <table>
           <thead>
             <tr>
@@ -132,6 +143,12 @@
             </tr>
           </tbody>
           </table>
+        </div>
+        <div id="restoredPanel" class="tab-panel overview-panel" data-results-panel="restored" hidden>
+          <p class="empty">Analyze a screenshot to list restored artefacts.</p>
+        </div>
+        <div id="materialsPanel" class="tab-panel overview-panel" data-results-panel="materials" hidden>
+          <p class="empty">Material recipe data is not available in the local database yet.</p>
         </div>
       </div>
     </section>
