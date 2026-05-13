@@ -10,20 +10,26 @@
   <main class="app-shell">
     <header class="topbar">
       <div>
-        <h1>RS3 Archaeology Analyzer</h1>
-        <p>Damaged artefact quantity detection from a RuneScape 3 screenshot.</p>
+        <span class="eyebrow">Calculator: Archaeology</span>
+        <h1>Restoring artefacts</h1>
+        <p>Import a bank screenshot, review damaged artefacts, and build a restoration list.</p>
       </div>
-      <a class="wiki-link" href="https://runescape.wiki/w/%28damaged%29" target="_blank" rel="noreferrer">Wiki reference</a>
+      <a class="wiki-link" href="https://runescape.wiki/w/Calculator:Archaeology/Restoring_artefacts" target="_blank" rel="noreferrer">RuneScape Wiki calculator</a>
     </header>
 
-    <section class="toolbar" aria-label="Analysis controls">
-      <label class="file-control">
-        <span>Screenshot</span>
-        <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp">
-      </label>
-      <button id="loadDefault" type="button">Load Damaged_Items.png</button>
-      <button id="analyze" type="button">Analyze</button>
-      <button id="exportResults" type="button">Export</button>
+    <section class="calculator-panel" aria-label="Analysis controls">
+      <div class="panel-heading">
+        <h2>Input</h2>
+      </div>
+      <div class="toolbar">
+        <label class="file-control">
+          <span>Screenshot</span>
+          <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp">
+        </label>
+        <button id="loadDefault" type="button">Load Damaged_Items.png</button>
+        <button id="analyze" type="button">Analyze</button>
+        <button id="exportResults" type="button">Export</button>
+      </div>
     </section>
 
     <section class="summary" aria-label="Detected totals">
@@ -46,39 +52,87 @@
     </section>
 
     <section class="workspace">
-      <div class="image-panel">
+      <div class="image-panel calculator-panel">
+        <div class="panel-heading">
+          <h2>Screenshot</h2>
+        </div>
         <canvas id="previewCanvas" width="927" height="170"></canvas>
       </div>
 
-      <div class="results-panel">
-        <div class="results-toolbar">
-          <label class="file-control">
-            <span>View</span>
-            <select id="viewMode">
-              <option value="position">Bank position</option>
-              <option value="level">Archaeology level</option>
-              <option value="theme">Theme</option>
-            </select>
-          </label>
+      <aside class="plan-panel calculator-panel" aria-label="Restoration plan">
+        <div class="panel-heading">
+          <h2>Restoration plan</h2>
         </div>
-        <table>
+        <div class="plan-stats">
+          <div>
+            <span class="summary-label">Visible quantity</span>
+            <strong id="visibleCount">0</strong>
+          </div>
+          <div>
+            <span class="summary-label">Needs review</span>
+            <strong id="reviewCount">0</strong>
+          </div>
+          <div>
+            <span class="summary-label">Highest level</span>
+            <strong id="highestLevel">0</strong>
+          </div>
+        </div>
+        <div id="planBody" class="plan-body">
+          <p class="empty">Analyze a screenshot to populate the restoration plan.</p>
+        </div>
+      </aside>
+
+      <div class="results-panel calculator-panel">
+        <div class="panel-heading results-heading">
+          <h2>Artefacts</h2>
+          <div class="results-toolbar">
+            <label class="file-control">
+              <span>Search</span>
+              <input id="artefactSearch" type="search" placeholder="Artefact, culture, site">
+            </label>
+            <label class="file-control">
+              <span>Culture</span>
+              <select id="cultureFilter">
+                <option value="">All cultures</option>
+              </select>
+            </label>
+            <label class="file-control">
+              <span>View</span>
+              <select id="viewMode">
+                <option value="position">Bank position</option>
+                <option value="level">Archaeology level</option>
+                <option value="theme">Culture</option>
+                <option value="site">Dig site</option>
+              </select>
+            </label>
+            <label class="review-toggle">
+              <input id="reviewOnly" type="checkbox">
+              <span>Review only</span>
+            </label>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
           <thead>
             <tr>
-              <th>Screenshot</th>
               <th>Quantity</th>
-              <th>Processed</th>
-              <th>Reference</th>
               <th>Artefact</th>
               <th>Level</th>
-              <th>Theme</th>
+              <th>Culture</th>
+              <th>Dig site</th>
+              <th>Status</th>
+              <th>Screenshot</th>
+              <th>Processed</th>
+              <th>Reference</th>
             </tr>
           </thead>
           <tbody id="resultsBody">
             <tr>
-              <td colspan="7" class="empty">Loading reference database.</td>
+              <td colspan="9" class="empty">Loading reference database.</td>
             </tr>
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </section>
   </main>

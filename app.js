@@ -10,6 +10,13 @@ const slotCountEl = document.getElementById("slotCount");
 const quantityTotalEl = document.getElementById("quantityTotal");
 const manualCountEl = document.getElementById("manualCount");
 const referenceCountEl = document.getElementById("referenceCount");
+const visibleCountEl = document.getElementById("visibleCount");
+const reviewCountEl = document.getElementById("reviewCount");
+const highestLevelEl = document.getElementById("highestLevel");
+const planBody = document.getElementById("planBody");
+const artefactSearch = document.getElementById("artefactSearch");
+const cultureFilter = document.getElementById("cultureFilter");
+const reviewOnly = document.getElementById("reviewOnly");
 
 const MATCH_SIZE = 32;
 const PREVIEW_SIZE = 48;
@@ -52,6 +59,9 @@ let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
 loadDefaultButton.addEventListener("click", () => loadImageFromUrl("Damaged_Items.png"));
 analyzeButton.addEventListener("click", analyzeCurrentImage);
 viewMode.addEventListener("change", renderDetections);
+artefactSearch.addEventListener("input", renderDetections);
+cultureFilter.addEventListener("change", renderDetections);
+reviewOnly.addEventListener("change", renderDetections);
 document.addEventListener("click", (event) => {
   for (const menu of document.querySelectorAll(".correction-menu[open]")) {
     if (!menu.contains(event.target)) menu.open = false;
@@ -1774,19 +1784,31 @@ function renderDetections() {
   if (!detections.length) {
     drawEmptyState("No occupied artefact slots detected.");
     updateTotals();
+    renderRestorationPlan([]);
     return;
   }
 
+  updateFilterOptions();
+  const visibleDetections = filteredDetections();
   resultsBody.replaceChildren();
-  for (const detection of sortedDetections()) {
+  if (!visibleDetections.length) {
+    drawEmptyState("No artefacts match the current filters.");
+    updateTotals();
+    renderRestorationPlan([]);
+    return;
+  }
+
+  for (const detection of visibleDetections) {
     const row = document.createElement("tr");
-    const previewCell = document.createElement("td");
     const quantityCell = document.createElement("td");
-    const processedCell = document.createElement("td");
-    const referenceCell = document.createElement("td");
     const nameCell = document.createElement("td");
     const levelCell = document.createElement("td");
     const themeCell = document.createElement("td");
+    const siteCell = document.createElement("td");
+    const statusCell = document.createElement("td");
+    const previewCell = document.createElement("td");
+    const processedCell = document.createElement("td");
+    const referenceCell = document.createElement("td");
     const input = document.createElement("input");
     const quantityWarning = quantityNeedsReview(detection);
 
@@ -1822,6 +1844,8 @@ function renderDetections() {
 
     levelCell.textContent = detection.archaeologyLevel ?? "";
     themeCell.textContent = detection.culture || "";
+    siteCell.textContent = detection.digSite || "";
+    statusCell.append(makeStatusPill(detection, quantityWarning));
 
     input.className = "qty-input";
     if (quantityWarning) input.classList.add("quantity-warning-input");
@@ -1863,22 +1887,133 @@ function renderDetections() {
       referenceCell,
       nameCell,
       levelCell,
-      themeCell
+      themeCell,
+      siteCell,
+      statusCell
     };
 
     row.append(
-      previewCell,
       quantityCell,
-      processedCell,
-      referenceCell,
       nameCell,
       levelCell,
-      themeCell
+      themeCell,
+      siteCell,
+      statusCell,
+      previewCell,
+      processedCell,
+      referenceCell
     );
     resultsBody.append(row);
   }
 
   updateTotals();
+  renderRestorationPlan(visibleDetections);
+}
+
+function makeStatusPill(detection, quantityWarning = quantityNeedsReview(detection)) {
+  const status = document.createElement("span");
+  status.className = "status-pill";
+  if (detection.corrected && detection.manual) {
+    status.classList.add("checked");
+    status.textContent = "Checked";
+  } else if (detection.ambiguousMatch || quantityWarning) {
+    status.classList.add("review");
+    status.textContent = "Review";
+  } else {
+    status.textContent = "Ready";
+  }
+  return status;
+}
+
+function filteredDetections() {
+  return sortedDetections().filter((detection) => matchesDetectionFilters(detection));
+}
+
+function matchesDetectionFilters(detection) {
+  const query = artefactSearch.value.trim().toLowerCase();
+  const culture = cultureFilter.value;
+  if (culture && detection.culture !== culture) return false;
+  if (reviewOnly.checked && !(detection.ambiguousMatch || quantityNeedsReview(detection))) return false;
+  if (!query) return true;
+  return [
+    detection.restoredName,
+    detection.artefact,
+    detection.culture,
+    detection.digSite,
+    detection.archaeologyLevel
+  ]
+    .filter((value) => value !== null && value !== undefined)
+    .join(" ")
+    .toLowerCase()
+    .includes(query);
+}
+
+function updateFilterOptions() {
+  const current = cultureFilter.value;
+  const cultures = [...new Set(detections.map((detection) => detection.culture).filter(Boolean))].sort();
+  cultureFilter.replaceChildren(new Option("All cultures", ""));
+  for (const culture of cultures) cultureFilter.append(new Option(culture, culture));
+  if (cultures.includes(current)) cultureFilter.value = current;
+}
+
+function renderRestorationPlan(items) {
+  const selectedQuantity = items.reduce((sum, detection) => sum + detection.quantity, 0);
+  const reviewCount = detections.filter((detection) => detection.ambiguousMatch || quantityNeedsReview(detection)).length;
+  const levels = items.map((detection) => detection.archaeologyLevel).filter(Number.isFinite);
+
+  visibleCountEl.textContent = String(selectedQuantity);
+  reviewCountEl.textContent = String(reviewCount);
+  highestLevelEl.textContent = levels.length ? String(Math.max(...levels)) : "0";
+
+  planBody.replaceChildren();
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty";
+    empty.textContent = detections.length ? "No visible artefacts for the current filters." : "Analyze a screenshot to populate the restoration plan.";
+    planBody.append(empty);
+    return;
+  }
+
+  planBody.append(
+    makePlanTable("By culture", groupQuantity(items, "culture")),
+    makePlanTable("By dig site", groupQuantity(items, "digSite"))
+  );
+}
+
+function groupQuantity(items, key) {
+  const groups = new Map();
+  for (const detection of items) {
+    const name = detection[key] || "Unknown";
+    groups.set(name, (groups.get(name) || 0) + detection.quantity);
+  }
+  return [...groups.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+}
+
+function makePlanTable(captionText, rows) {
+  const table = document.createElement("table");
+  table.className = "plan-table";
+  const caption = document.createElement("caption");
+  caption.textContent = captionText;
+  const head = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  const nameHead = document.createElement("th");
+  const qtyHead = document.createElement("th");
+  nameHead.textContent = "Group";
+  qtyHead.textContent = "Qty";
+  headRow.append(nameHead, qtyHead);
+  head.append(headRow);
+  const body = document.createElement("tbody");
+  for (const [name, quantity] of rows) {
+    const row = document.createElement("tr");
+    const nameCell = document.createElement("td");
+    const quantityCell = document.createElement("td");
+    nameCell.textContent = name;
+    quantityCell.textContent = String(quantity);
+    row.append(nameCell, quantityCell);
+    body.append(row);
+  }
+  table.append(caption, head, body);
+  return table;
 }
 
 function rowReviewClass(detection, quantityWarning = quantityNeedsReview(detection)) {
@@ -1961,6 +2096,8 @@ function markQuantityManual(quantityCell) {
   const row = quantityCell.closest("tr");
   const detection = detections.find((item) => item.rowElements?.quantityCell === quantityCell);
   if (row && detection) row.className = rowReviewClass(detection);
+  if (detection?.rowElements?.statusCell) detection.rowElements.statusCell.replaceChildren(makeStatusPill(detection));
+  if (detections.length) renderRestorationPlan(filteredDetections());
 }
 
 function makeRecognitionInfo(detection) {
@@ -2201,6 +2338,9 @@ function updateDetectionRow(detection) {
   elements.nameCell.append(makeRecognitionInfo(detection));
   elements.levelCell.textContent = detection.archaeologyLevel ?? "";
   elements.themeCell.textContent = detection.culture || "";
+  if (elements.siteCell) elements.siteCell.textContent = detection.digSite || "";
+  if (elements.statusCell) elements.statusCell.replaceChildren(makeStatusPill(detection));
+  renderRestorationPlan(filteredDetections());
 }
 
 function sortedDetections() {
@@ -2218,6 +2358,15 @@ function sortedDetections() {
     return items.sort(
       (a, b) =>
         String(a.culture || "Unknown").localeCompare(String(b.culture || "Unknown")) ||
+        nullableNumber(a.archaeologyLevel) - nullableNumber(b.archaeologyLevel) ||
+        sortDetectionName(a).localeCompare(sortDetectionName(b)) ||
+        a.bankIndex - b.bankIndex
+    );
+  }
+  if (mode === "site") {
+    return items.sort(
+      (a, b) =>
+        String(a.digSite || "Unknown").localeCompare(String(b.digSite || "Unknown")) ||
         nullableNumber(a.archaeologyLevel) - nullableNumber(b.archaeologyLevel) ||
         sortDetectionName(a).localeCompare(sortDetectionName(b)) ||
         a.bankIndex - b.bankIndex
@@ -2241,7 +2390,7 @@ function drawEmptyState(message) {
   const row = document.createElement("tr");
   const cell = document.createElement("td");
   cell.className = "empty";
-  cell.colSpan = 7;
+  cell.colSpan = 9;
   cell.textContent = message;
   row.append(cell);
   resultsBody.append(row);
@@ -2253,6 +2402,7 @@ function updateTotals() {
   slotCountEl.textContent = String(detections.length);
   quantityTotalEl.textContent = String(total);
   manualCountEl.textContent = String(manual);
+  if (detections.length) renderRestorationPlan(filteredDetections());
 }
 
 function exportResults() {
