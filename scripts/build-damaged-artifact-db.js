@@ -130,7 +130,7 @@ function numberField(value) {
 }
 
 function toRestoredTitle(title) {
-  return title.replace(/ \(damaged\)$/i, "");
+  return title.replace(/\s*\(damaged\)$/i, "");
 }
 
 async function getPageInventoryIconSource(title, allowDamaged = true) {

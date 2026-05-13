@@ -22,6 +22,7 @@ const resultTabButtons = [...document.querySelectorAll("[data-results-tab]")];
 const resultTabPanels = [...document.querySelectorAll("[data-results-panel]")];
 const overviewPanel = document.getElementById("overviewPanel");
 const restoredPanel = document.getElementById("restoredPanel");
+const storagePanel = document.getElementById("storagePanel");
 const materialsPanel = document.getElementById("materialsPanel");
 
 const MATCH_SIZE = 32;
@@ -45,7 +46,11 @@ const PREVIEW_BRIGHTNESS = 1.45;
 let loadedImage = null;
 let detections = [];
 let references = [];
+let archaeologyReference = { materials: [], artefactRecipes: [], collections: [] };
+let recipeByRestoredName = new Map();
+let materialByName = new Map();
 let activeResultsTab = "damaged";
+const screenshotRequestedTabs = new Set();
 
 const DIGIT_TEMPLATE_WIDTH = 3;
 const DIGIT_TEMPLATE_HEIGHT = 5;
@@ -66,6 +71,7 @@ const RESULT_TAB_TITLES = {
   overview: "Overview",
   damaged: "Damaged Artefacts",
   restored: "Restored Artefacts",
+  storage: "Storage",
   materials: "Materials"
 };
 
@@ -99,6 +105,7 @@ async function initialize() {
   drawEmptyState("Loading reference database.");
   await loadQuantityFontTemplates();
   await loadReferences();
+  await loadArchaeologyReference();
   await loadImageFromUrl("Damaged_Items.png");
   analyzeButton.disabled = false;
   drawEmptyState("Image and references loaded. Click Analyze.");
@@ -178,6 +185,24 @@ async function loadReferences() {
   );
 
   referenceCountEl.textContent = String(references.length);
+}
+
+async function loadArchaeologyReference() {
+  try {
+    const response = await fetch("data/archaeology-reference.json");
+    archaeologyReference = await response.json();
+    recipeByRestoredName = new Map(
+      (archaeologyReference.artefactRecipes || []).map((recipe) => [normalizeName(recipe.restoredName), recipe])
+    );
+    materialByName = new Map(
+      (archaeologyReference.materials || []).map((material) => [normalizeName(material.name), material])
+    );
+  } catch (error) {
+    console.warn("Material and collection reference data is unavailable.", error);
+    archaeologyReference = { materials: [], artefactRecipes: [], collections: [] };
+    recipeByRestoredName = new Map();
+    materialByName = new Map();
+  }
 }
 
 function loadImageFromUrl(src) {
@@ -1983,13 +2008,21 @@ function setActiveResultsTab(tab) {
   }
 
   renderResultsTabContent();
+  requestTabScreenshot(tab);
 }
 
 function renderResultsTabContent() {
   const items = filteredDetections();
   if (activeResultsTab === "overview") renderOverviewTab(items);
   if (activeResultsTab === "restored") renderRestoredTab(items);
+  if (activeResultsTab === "storage") renderStorageTab(items);
   if (activeResultsTab === "materials") renderMaterialsTab(items);
+}
+
+function requestTabScreenshot(tab) {
+  if (!["restored", "materials"].includes(tab) || screenshotRequestedTabs.has(tab)) return;
+  screenshotRequestedTabs.add(tab);
+  imageInput.click();
 }
 
 function renderOverviewTab(items) {
@@ -2021,7 +2054,7 @@ function renderOverviewTab(items) {
     makePlanTable("By dig site", groupQuantity(items, "digSite"))
   );
 
-  overviewPanel.append(cards, groups);
+  overviewPanel.append(cards, groups, makeCollectionOverview(items));
 }
 
 function renderRestoredTab(items) {
@@ -2031,7 +2064,7 @@ function renderRestoredTab(items) {
     return;
   }
 
-  const rows = aggregateRestoredArtefacts(items);
+  const rows = sortRestoredRows(aggregateRestoredArtefacts(items));
   if (!rows.length) {
     restoredPanel.append(makeEmptyMessage("No restored artefacts match the current filters."));
     return;
@@ -2061,20 +2094,75 @@ function renderRestoredTab(items) {
 
 function renderMaterialsTab(items) {
   materialsPanel.replaceChildren();
-  const text = detections.length
-    ? "Material recipe data is not available in the local database yet. This tab is ready for material totals once recipe data is added."
-    : "Analyze a screenshot to prepare material totals.";
-  materialsPanel.append(makeEmptyMessage(text));
-  if (!detections.length) return;
+  if (!detections.length) {
+    materialsPanel.append(makeEmptyMessage("Analyze a screenshot to calculate needed restoration materials."));
+    return;
+  }
+
+  const summary = document.createElement("div");
+  summary.className = "overview-grid";
+  const materialRows = calculateMaterialTotals(items);
+  summary.append(
+    makeOverviewCard("Artefact quantity", items.reduce((sum, detection) => sum + detection.quantity, 0)),
+    makeOverviewCard("Unique artefacts", aggregateRestoredArtefacts(items).length),
+    makeOverviewCard("Needed materials", materialRows.length),
+    makeOverviewCard("Recipe records", archaeologyReference.artefactRecipes?.length || 0)
+  );
+
+  if (!materialRows.length) {
+    materialsPanel.append(summary, makeEmptyMessage("No material recipes match the current artefacts."));
+    return;
+  }
+
+  const table = document.createElement("table");
+  table.className = "secondary-table materials-table";
+  table.append(makeTableHead(["Material", "Needed", "Used by artefacts"]));
+  const body = document.createElement("tbody");
+
+  for (const row of sortMaterialRows(materialRows)) {
+    const tr = document.createElement("tr");
+    tr.append(makeMaterialCell(row), makeTextCell(row.quantity, "number-cell"), makeTextCell(row.artefacts.join(", ")));
+    body.append(tr);
+  }
+
+  table.append(body);
+  materialsPanel.append(summary, table);
+}
+
+function renderStorageTab(items) {
+  storagePanel.replaceChildren();
+  const materials = [...(archaeologyReference.materials || [])].sort((a, b) => a.name.localeCompare(b.name));
+  if (!materials.length) {
+    storagePanel.append(makeEmptyMessage("Material reference data is not available."));
+    return;
+  }
 
   const summary = document.createElement("div");
   summary.className = "overview-grid";
   summary.append(
-    makeOverviewCard("Artefact quantity", items.reduce((sum, detection) => sum + detection.quantity, 0)),
-    makeOverviewCard("Unique artefacts", aggregateRestoredArtefacts(items).length),
-    makeOverviewCard("Recipe records", 0)
+    makeOverviewCard("Known materials", materials.length),
+    makeOverviewCard("Needed now", calculateMaterialTotals(items).length),
+    makeOverviewCard("Storage matched", 0)
   );
-  materialsPanel.prepend(summary);
+
+  const table = document.createElement("table");
+  table.className = "secondary-table materials-table";
+  table.append(makeTableHead(["Material", "Wiki page"]));
+  const body = document.createElement("tbody");
+
+  for (const material of materials) {
+    const tr = document.createElement("tr");
+    const linkCell = makeLinkedTextCell(material.name, material.wikiPage);
+    tr.append(makeMaterialCell({ name: material.name }), linkCell);
+    body.append(tr);
+  }
+
+  table.append(body);
+  storagePanel.append(
+    summary,
+    makeEmptyMessage("Storage screenshot recognition is ready to be added on top of this material database."),
+    table
+  );
 }
 
 function updateFilterOptions() {
@@ -2183,6 +2271,61 @@ function makeTextCell(value, className = "") {
   return cell;
 }
 
+function makeLinkedTextCell(label, href) {
+  const cell = document.createElement("td");
+  if (!href) {
+    cell.textContent = label;
+    return cell;
+  }
+  const link = document.createElement("a");
+  link.className = "artifact-link";
+  link.href = href;
+  link.target = "_blank";
+  link.rel = "noreferrer";
+  link.textContent = label;
+  cell.append(link);
+  return cell;
+}
+
+function makeMaterialCell(row) {
+  const material = materialByName.get(normalizeName(row.name));
+  const cell = document.createElement("td");
+  cell.className = "material-cell";
+  if (material?.icon) {
+    const image = document.createElement("img");
+    image.src = `data/${material.icon}`;
+    image.alt = "";
+    image.loading = "lazy";
+    cell.append(image);
+  }
+  const label = material?.wikiPage ? document.createElement("a") : document.createElement("span");
+  label.textContent = row.name;
+  if (material?.wikiPage) {
+    label.className = "artifact-link";
+    label.href = material.wikiPage;
+    label.target = "_blank";
+    label.rel = "noreferrer";
+  }
+  cell.append(label);
+  return cell;
+}
+
+function calculateMaterialTotals(items) {
+  const totals = new Map();
+  for (const detection of items) {
+    const recipe = recipeByRestoredName.get(normalizeName(detection.restoredName || detection.artefact));
+    if (!recipe?.materials?.length) continue;
+    for (const material of recipe.materials) {
+      const key = normalizeName(material.name);
+      const current = totals.get(key) || { name: material.name, quantity: 0, artefacts: new Set() };
+      current.quantity += material.quantity * detection.quantity;
+      current.artefacts.add(detection.restoredName || detection.artefact);
+      totals.set(key, current);
+    }
+  }
+  return [...totals.values()].map((row) => ({ ...row, artefacts: [...row.artefacts].sort() }));
+}
+
 function aggregateRestoredArtefacts(items) {
   const groups = new Map();
   for (const detection of items) {
@@ -2193,6 +2336,7 @@ function aggregateRestoredArtefacts(items) {
         damagedName: detection.artefact,
         level: detection.archaeologyLevel,
         culture: detection.culture,
+        digSite: detection.digSite,
         quantity: 0,
         needsReview: false
       };
@@ -2201,10 +2345,79 @@ function aggregateRestoredArtefacts(items) {
     groups.set(key, current);
   }
   return [...groups.values()].sort(
-    (a, b) =>
-      nullableNumber(a.level) - nullableNumber(b.level) ||
-      String(a.restoredName).localeCompare(String(b.restoredName))
+    (a, b) => String(a.restoredName).localeCompare(String(b.restoredName))
   );
+}
+
+function sortRestoredRows(rows) {
+  const mode = viewMode.value;
+  return [...rows].sort((a, b) => {
+    if (mode === "level") {
+      return nullableNumber(a.level) - nullableNumber(b.level) || a.restoredName.localeCompare(b.restoredName);
+    }
+    if (mode === "theme") {
+      return String(a.culture || "Unknown").localeCompare(String(b.culture || "Unknown")) || a.restoredName.localeCompare(b.restoredName);
+    }
+    if (mode === "site") {
+      return String(a.digSite || "Unknown").localeCompare(String(b.digSite || "Unknown")) || a.restoredName.localeCompare(b.restoredName);
+    }
+    return a.restoredName.localeCompare(b.restoredName);
+  });
+}
+
+function sortMaterialRows(rows) {
+  const mode = viewMode.value;
+  return [...rows].sort((a, b) => {
+    if (mode === "level" || mode === "position") return b.quantity - a.quantity || a.name.localeCompare(b.name);
+    if (mode === "theme" || mode === "site") return a.name.localeCompare(b.name);
+    return a.name.localeCompare(b.name);
+  });
+}
+
+function makeCollectionOverview(items) {
+  const section = document.createElement("div");
+  section.className = "collection-overview";
+  const selectedArtefacts = new Set(items.map((item) => normalizeName(item.restoredName || item.artefact)));
+  const rows = (archaeologyReference.collections || [])
+    .map((collection) => {
+      const matched = collection.artefacts.filter((artefact) => selectedArtefacts.has(normalizeName(artefact)));
+      return { collection, matched };
+    })
+    .filter((row) => row.matched.length)
+    .sort(
+      (a, b) =>
+        b.matched.length - a.matched.length ||
+        nullableNumber(a.collection.archaeologyLevel) - nullableNumber(b.collection.archaeologyLevel) ||
+        a.collection.name.localeCompare(b.collection.name)
+    )
+    .slice(0, 12);
+
+  const title = document.createElement("h3");
+  title.textContent = "Matching collections";
+  section.append(title);
+
+  if (!rows.length) {
+    section.append(makeEmptyMessage("No collection matches for the current artefacts."));
+    return section;
+  }
+
+  const table = document.createElement("table");
+  table.className = "secondary-table";
+  table.append(makeTableHead(["Collection", "Collector", "Level", "Matched artefacts"]));
+  const body = document.createElement("tbody");
+  for (const row of rows) {
+    const tr = document.createElement("tr");
+    tr.append(
+      makeLinkedTextCell(row.collection.name, row.collection.wikiPage),
+      makeTextCell(row.collection.collector || ""),
+      makeTextCell(row.collection.archaeologyLevel ?? ""),
+      makeTextCell(`${row.matched.length}/${row.collection.artefactCount || row.collection.artefacts.length}`)
+    );
+    body.append(tr);
+  }
+  table.append(body);
+  section.append(table);
+  return section;
 }
 
 function rowReviewClass(detection, quantityWarning = quantityNeedsReview(detection)) {
@@ -2561,6 +2774,13 @@ function sortDetectionName(item) {
 
 function nullableNumber(value) {
   return Number.isFinite(value) ? value : 9999;
+}
+
+function normalizeName(value) {
+  return String(value || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
 }
 
 function drawEmptyState(message) {

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "build:database": "node scripts/build-damaged-artifact-db.js"
+    "build:database": "node scripts/build-damaged-artifact-db.js",
+    "build:archaeology-reference": "node scripts/build-archaeology-reference-db.js"
   }
 }

@@ -1,0 +1,6530 @@
+{
+  "source": "https://runescape.wiki/",
+  "generatedAt": "2026-05-13T23:00:42.031Z",
+  "counts": {
+    "materials": 44,
+    "artefactRecipes": 218,
+    "collections": 74
+  },
+  "materials": [
+    {
+      "name": "Aetherium alloy",
+      "wikiPage": "https://runescape.wiki/w/Aetherium_alloy",
+      "icon": "material-icons/aetherium-alloy.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Aetherium_alloy_detail.png/64px-Aetherium_alloy_detail.png?90ff7",
+      "pageId": 752677
+    },
+    {
+      "name": "Ancient vis",
+      "wikiPage": "https://runescape.wiki/w/Ancient_vis",
+      "icon": "material-icons/ancient-vis.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Ancient_vis_detail.png/64px-Ancient_vis_detail.png?1f78b",
+      "pageId": 752657
+    },
+    {
+      "name": "Animal furs",
+      "wikiPage": "https://runescape.wiki/w/Animal_furs",
+      "icon": "material-icons/animal-furs.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Animal_furs_detail.png/64px-Animal_furs_detail.png?dab16",
+      "pageId": 752666
+    },
+    {
+      "name": "Armadylean yellow",
+      "wikiPage": "https://runescape.wiki/w/Armadylean_yellow",
+      "icon": "material-icons/armadylean-yellow.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Armadylean_yellow_detail.png/64px-Armadylean_yellow_detail.png?f6b20",
+      "pageId": 752667
+    },
+    {
+      "name": "Blood of Orcus",
+      "wikiPage": "https://runescape.wiki/w/Blood_of_Orcus",
+      "icon": "material-icons/blood-of-orcus.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Blood_of_Orcus_detail.png/64px-Blood_of_Orcus_detail.png?1f78b",
+      "pageId": 752960
+    },
+    {
+      "name": "Cadmium red",
+      "wikiPage": "https://runescape.wiki/w/Cadmium_red",
+      "icon": "material-icons/cadmium-red.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Cadmium_red_detail.png/64px-Cadmium_red_detail.png?eb79b",
+      "pageId": 752656
+    },
+    {
+      "name": "Carbon black",
+      "wikiPage": "https://runescape.wiki/w/Carbon_black",
+      "icon": "material-icons/carbon-black.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Carbon_black_detail.png/64px-Carbon_black_detail.png?388da",
+      "pageId": 780020
+    },
+    {
+      "name": "Chaotic brimstone",
+      "wikiPage": "https://runescape.wiki/w/Chaotic_brimstone",
+      "icon": "material-icons/chaotic-brimstone.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Chaotic_brimstone_detail.png/64px-Chaotic_brimstone_detail.png?cba28",
+      "pageId": 752661
+    },
+    {
+      "name": "Cobalt blue",
+      "wikiPage": "https://runescape.wiki/w/Cobalt_blue",
+      "icon": "material-icons/cobalt-blue.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Cobalt_blue_detail.png/64px-Cobalt_blue_detail.png?90038",
+      "pageId": 752655
+    },
+    {
+      "name": "Compass rose",
+      "wikiPage": "https://runescape.wiki/w/Compass_rose",
+      "icon": "material-icons/compass-rose.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Compass_rose_detail.png/64px-Compass_rose_detail.png?7e08d",
+      "pageId": 780021
+    },
+    {
+      "name": "Demonhide",
+      "wikiPage": "https://runescape.wiki/w/Demonhide",
+      "icon": "material-icons/demonhide.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Demonhide_detail.png/64px-Demonhide_detail.png?69467",
+      "pageId": 752961
+    },
+    {
+      "name": "Dragon metal",
+      "wikiPage": "https://runescape.wiki/w/Dragon_metal",
+      "icon": "material-icons/dragon-metal.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Dragon_metal_detail.png/64px-Dragon_metal_detail.png?71e30",
+      "pageId": 4895
+    },
+    {
+      "name": "Everlight silvthril",
+      "wikiPage": "https://runescape.wiki/w/Everlight_silvthril",
+      "icon": "material-icons/everlight-silvthril.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Everlight_silvthril_detail.png/64px-Everlight_silvthril_detail.png?a1201",
+      "pageId": 752659
+    },
+    {
+      "name": "Eye of Dagon",
+      "wikiPage": "https://runescape.wiki/w/Eye_of_Dagon",
+      "icon": "material-icons/eye-of-dagon.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Eye_of_Dagon_detail.png/64px-Eye_of_Dagon_detail.png?160bf",
+      "pageId": 752662
+    },
+    {
+      "name": "Felt",
+      "wikiPage": "https://runescape.wiki/w/Felt",
+      "icon": "material-icons/felt.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Felt_detail.png/64px-Felt_detail.png?1b881",
+      "pageId": 780022
+    },
+    {
+      "name": "Fossilised bone",
+      "wikiPage": "https://runescape.wiki/w/Fossilised_bone",
+      "icon": "material-icons/fossilised-bone.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Fossilised_bone_detail.png/64px-Fossilised_bone_detail.png?90ff7",
+      "pageId": 752673
+    },
+    {
+      "name": "Goldrune",
+      "wikiPage": "https://runescape.wiki/w/Goldrune",
+      "icon": "material-icons/goldrune.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Goldrune_detail.png/64px-Goldrune_detail.png?d51f4",
+      "pageId": 752649
+    },
+    {
+      "name": "Hellfire metal",
+      "wikiPage": "https://runescape.wiki/w/Hellfire_metal",
+      "icon": "material-icons/hellfire-metal.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Hellfire_metal_detail.png/64px-Hellfire_metal_detail.png?160bf",
+      "pageId": 752663
+    },
+    {
+      "name": "Imperial iron",
+      "wikiPage": "https://runescape.wiki/w/Imperial_iron",
+      "icon": "material-icons/imperial-iron.png",
+      "sourceIcon": "https://runescape.wiki/images/Imperial_iron.png?5aab3",
+      "pageId": 753611
+    },
+    {
+      "name": "Imperial steel",
+      "wikiPage": "https://runescape.wiki/w/Imperial_steel",
+      "icon": "material-icons/imperial-steel.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Imperial_steel_detail.png/64px-Imperial_steel_detail.png?a1201",
+      "pageId": 752648
+    },
+    {
+      "name": "Keramos",
+      "wikiPage": "https://runescape.wiki/w/Keramos",
+      "icon": "material-icons/keramos.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Keramos_detail.png/64px-Keramos_detail.png?27df0",
+      "pageId": 752650
+    },
+    {
+      "name": "Leather scraps",
+      "wikiPage": "https://runescape.wiki/w/Leather_scraps",
+      "icon": "material-icons/leather-scraps.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Leather_scraps_detail.png/64px-Leather_scraps_detail.png?10076",
+      "pageId": 752653
+    },
+    {
+      "name": "Malachite green",
+      "wikiPage": "https://runescape.wiki/w/Malachite_green",
+      "icon": "material-icons/malachite-green.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Malachite_green_detail.png/64px-Malachite_green_detail.png?7d097",
+      "pageId": 752668
+    },
+    {
+      "name": "Mark of the Kyzaj",
+      "wikiPage": "https://runescape.wiki/w/Mark_of_the_Kyzaj",
+      "icon": "material-icons/mark-of-the-kyzaj.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Mark_of_the_Kyzaj_detail.png/64px-Mark_of_the_Kyzaj_detail.png?07907",
+      "pageId": 752669
+    },
+    {
+      "name": "Materials (Archaeology)",
+      "wikiPage": "https://runescape.wiki/w/Materials_(Archaeology)",
+      "icon": "material-icons/materials-archaeology.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Eye_of_Dagon_detail.png/64px-Eye_of_Dagon_detail.png?160bf",
+      "pageId": 753023
+    },
+    {
+      "name": "Orgone",
+      "wikiPage": "https://runescape.wiki/w/Orgone",
+      "icon": "material-icons/orgone.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Orgone_detail.png/64px-Orgone_detail.png?d32b9",
+      "pageId": 780023
+    },
+    {
+      "name": "Orthenglass",
+      "wikiPage": "https://runescape.wiki/w/Orthenglass",
+      "icon": "material-icons/orthenglass.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Orthenglass_detail.png/64px-Orthenglass_detail.png?5debd",
+      "pageId": 752651
+    },
+    {
+      "name": "Pigments",
+      "wikiPage": "https://runescape.wiki/w/Pigments",
+      "icon": "material-icons/pigments.png",
+      "sourceIcon": "https://runescape.wiki/images/Archaeology_-_Mysteries_achievement_icon.png?2ff86",
+      "pageId": 952550
+    },
+    {
+      "name": "Purpleheart wood",
+      "wikiPage": "https://runescape.wiki/w/Purpleheart_wood",
+      "icon": "material-icons/purpleheart-wood.png",
+      "sourceIcon": "https://runescape.wiki/images/Purpleheart_wood_detail.png?5ebfd",
+      "pageId": 753612
+    },
+    {
+      "name": "Quintessence",
+      "wikiPage": "https://runescape.wiki/w/Quintessence",
+      "icon": "material-icons/quintessence.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Quintessence_detail.png/64px-Quintessence_detail.png?1e9e8",
+      "pageId": 752678
+    },
+    {
+      "name": "Samite silk",
+      "wikiPage": "https://runescape.wiki/w/Samite_silk",
+      "icon": "material-icons/samite-silk.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Samite_silk_detail.png/64px-Samite_silk_detail.png?f6f14",
+      "pageId": 752685
+    },
+    {
+      "name": "Soapstone",
+      "wikiPage": "https://runescape.wiki/w/Soapstone",
+      "icon": "material-icons/soapstone.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Soapstone_detail.png/64px-Soapstone_detail.png?cee9b",
+      "pageId": 752679
+    },
+    {
+      "name": "Star of Saradomin",
+      "wikiPage": "https://runescape.wiki/w/Star_of_Saradomin",
+      "icon": "material-icons/star-of-saradomin.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Star_of_Saradomin_detail.png/64px-Star_of_Saradomin_detail.png?e50ab",
+      "pageId": 752660
+    },
+    {
+      "name": "Stormguard steel",
+      "wikiPage": "https://runescape.wiki/w/Stormguard_steel",
+      "icon": "material-icons/stormguard-steel.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Stormguard_steel_detail.png/64px-Stormguard_steel_detail.png?7d3e1",
+      "pageId": 752664
+    },
+    {
+      "name": "Third Age iron",
+      "wikiPage": "https://runescape.wiki/w/Third_Age_iron",
+      "icon": "material-icons/third-age-iron.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Third_Age_iron_detail.png/64px-Third_Age_iron_detail.png?631f7",
+      "pageId": 752644
+    },
+    {
+      "name": "Tyrian purple",
+      "wikiPage": "https://runescape.wiki/w/Tyrian_purple",
+      "icon": "material-icons/tyrian-purple.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Tyrian_purple_detail.png/64px-Tyrian_purple_detail.png?5a1c5",
+      "pageId": 752658
+    },
+    {
+      "name": "Vellum",
+      "wikiPage": "https://runescape.wiki/w/Vellum",
+      "icon": "material-icons/vellum.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Vellum_detail.png/64px-Vellum_detail.png?08fa7",
+      "pageId": 752654
+    },
+    {
+      "name": "Vulcanised rubber",
+      "wikiPage": "https://runescape.wiki/w/Vulcanised_rubber",
+      "icon": "material-icons/vulcanised-rubber.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Vulcanised_rubber_detail.png/64px-Vulcanised_rubber_detail.png?24730",
+      "pageId": 752670
+    },
+    {
+      "name": "Warforged bronze",
+      "wikiPage": "https://runescape.wiki/w/Warforged_bronze",
+      "icon": "material-icons/warforged-bronze.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Warforged_bronze_detail.png/64px-Warforged_bronze_detail.png?08771",
+      "pageId": 752672
+    },
+    {
+      "name": "White marble",
+      "wikiPage": "https://runescape.wiki/w/White_marble",
+      "icon": "material-icons/white-marble.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/White_marble_detail.png/64px-White_marble_detail.png?38801",
+      "pageId": 752652
+    },
+    {
+      "name": "White oak",
+      "wikiPage": "https://runescape.wiki/w/White_oak",
+      "icon": "material-icons/white-oak.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/White_oak_detail.png/64px-White_oak_detail.png?35aa5",
+      "pageId": 752645
+    },
+    {
+      "name": "Wings of War",
+      "wikiPage": "https://runescape.wiki/w/Wings_of_War",
+      "icon": "material-icons/wings-of-war.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Wings_of_War_detail.png/64px-Wings_of_War_detail.png?e5fe2",
+      "pageId": 752665
+    },
+    {
+      "name": "Yu'biusk clay",
+      "wikiPage": "https://runescape.wiki/w/Yu%27biusk_clay",
+      "icon": "material-icons/yubiusk-clay.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Yu%27biusk_clay_detail.png/64px-Yu%27biusk_clay_detail.png?1e9e8",
+      "pageId": 752675
+    },
+    {
+      "name": "Zarosian insignia",
+      "wikiPage": "https://runescape.wiki/w/Zarosian_insignia",
+      "icon": "material-icons/zarosian-insignia.png",
+      "sourceIcon": "https://runescape.wiki/images/thumb/Zarosian_insignia_detail.png/64px-Zarosian_insignia_detail.png?3539c",
+      "pageId": 752647
+    }
+  ],
+  "artefactRecipes": [
+    {
+      "damagedName": "'Animate Dead' spell scroll (damaged)",
+      "restoredName": "'Animate Dead' spell scroll",
+      "wikiPage": "https://runescape.wiki/w/'Animate_Dead'_spell_scroll",
+      "archaeologyLevel": 107,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Vellum",
+          "quantity": 40
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 24
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 40
+        }
+      ],
+      "experience": 27000
+    },
+    {
+      "damagedName": "'Consensus ad Idem' painting (damaged)",
+      "restoredName": "'Consensus ad Idem' painting",
+      "wikiPage": "https://runescape.wiki/w/'Consensus_ad_Idem'_painting",
+      "archaeologyLevel": 74,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "White oak",
+          "quantity": 10
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 10
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 50
+        }
+      ],
+      "experience": 5600
+    },
+    {
+      "damagedName": "'Da Boss Man' sculpture (damaged)",
+      "restoredName": "'Da Boss Man' sculpture",
+      "wikiPage": "https://runescape.wiki/w/'Da_Boss_Man'_sculpture",
+      "archaeologyLevel": 119,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Yu'biusk clay",
+          "quantity": 50
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 44
+        },
+        {
+          "name": "Soapstone",
+          "quantity": 44
+        }
+      ],
+      "experience": 45000
+    },
+    {
+      "damagedName": "'Disorder' painting (damaged)",
+      "restoredName": "'Disorder' painting",
+      "wikiPage": "https://runescape.wiki/w/'Disorder'_painting",
+      "archaeologyLevel": 24,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 6
+        },
+        {
+          "name": "White oak",
+          "quantity": 6
+        },
+        {
+          "name": "Vellum",
+          "quantity": 6
+        },
+        {
+          "name": "Cadmium red",
+          "quantity": 14
+        }
+      ],
+      "experience": 646.2
+    },
+    {
+      "damagedName": "'Exsanguinate' spell scroll (damaged)",
+      "restoredName": "'Exsanguinate' spell scroll",
+      "wikiPage": "https://runescape.wiki/w/'Exsanguinate'_spell_scroll",
+      "archaeologyLevel": 86,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Vellum",
+          "quantity": 40
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 36
+        }
+      ],
+      "experience": 9333.3
+    },
+    {
+      "damagedName": "'Forged in War' sculpture (damaged)",
+      "restoredName": "'Forged in War' sculpture",
+      "wikiPage": "https://runescape.wiki/w/'Forged_in_War'_sculpture",
+      "archaeologyLevel": 100,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 50
+        },
+        {
+          "name": "Yu'biusk clay",
+          "quantity": 42
+        }
+      ],
+      "experience": 18666.7
+    },
+    {
+      "damagedName": "'Friendship bracelet' (damaged)",
+      "restoredName": "'Friendship bracelet'",
+      "wikiPage": "https://runescape.wiki/w/'Friendship_bracelet'",
+      "archaeologyLevel": 87,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Soapstone",
+          "quantity": 30
+        },
+        {
+          "name": "Felt",
+          "quantity": 46
+        }
+      ],
+      "experience": 9722.2
+    },
+    {
+      "damagedName": "'Frying pan' (damaged)",
+      "restoredName": "'Frying pan'",
+      "wikiPage": "https://runescape.wiki/w/'Frying_pan'",
+      "archaeologyLevel": 42,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 20
+        },
+        {
+          "name": "White marble",
+          "quantity": 24
+        }
+      ],
+      "experience": 1073.3
+    },
+    {
+      "damagedName": "'Hallowed Be the Everlight' painting (damaged)",
+      "restoredName": "'Hallowed Be the Everlight' painting",
+      "wikiPage": "https://runescape.wiki/w/'Hallowed_Be_the_Everlight'_painting",
+      "archaeologyLevel": 105,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Cobalt blue",
+          "quantity": 52
+        },
+        {
+          "name": "White oak",
+          "quantity": 16
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 16
+        },
+        {
+          "name": "Vellum",
+          "quantity": 16
+        }
+      ],
+      "experience": 24500
+    },
+    {
+      "damagedName": "'Incite Fear' spell scroll (damaged)",
+      "restoredName": "'Incite Fear' spell scroll",
+      "wikiPage": "https://runescape.wiki/w/'Incite_Fear'_spell_scroll",
+      "archaeologyLevel": 58,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Vellum",
+          "quantity": 20
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 18
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 18
+        }
+      ],
+      "experience": 2193.3
+    },
+    {
+      "damagedName": "'Lust' metal sculpture (damaged)",
+      "restoredName": "'Lust' metal sculpture",
+      "wikiPage": "https://runescape.wiki/w/'Lust'_metal_sculpture",
+      "archaeologyLevel": 65,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 16
+        },
+        {
+          "name": "Eye of Dagon",
+          "quantity": 24
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 24
+        }
+      ],
+      "experience": 3500
+    },
+    {
+      "damagedName": "'Nosorog!' sculpture (damaged)",
+      "restoredName": "'Nosorog!' sculpture",
+      "wikiPage": "https://runescape.wiki/w/'Nosorog!'_sculpture",
+      "archaeologyLevel": 94,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Yu'biusk clay",
+          "quantity": 30
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 24
+        },
+        {
+          "name": "Warforged bronze",
+          "quantity": 30
+        }
+      ],
+      "experience": 13333.3
+    },
+    {
+      "damagedName": "'Pandemonium' tapestry (damaged)",
+      "restoredName": "'Pandemonium' tapestry",
+      "wikiPage": "https://runescape.wiki/w/'Pandemonium'_tapestry",
+      "archaeologyLevel": 89,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "White oak",
+          "quantity": 12
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 12
+        },
+        {
+          "name": "Vellum",
+          "quantity": 12
+        },
+        {
+          "name": "Cadmium red",
+          "quantity": 42
+        }
+      ],
+      "experience": 10500
+    },
+    {
+      "damagedName": "'Possession' metal sculpture (damaged)",
+      "restoredName": "'Possession' metal sculpture",
+      "wikiPage": "https://runescape.wiki/w/'Possession'_metal_sculpture",
+      "archaeologyLevel": 104,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Eye of Dagon",
+          "quantity": 24
+        },
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 30
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 44
+        }
+      ],
+      "experience": 23333.3
+    },
+    {
+      "damagedName": "'Prima Legio' painting (damaged)",
+      "restoredName": "'Prima Legio' painting",
+      "wikiPage": "https://runescape.wiki/w/'Prima_Legio'_painting",
+      "archaeologyLevel": 118,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "White oak",
+          "quantity": 20
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 20
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 74
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 20
+        }
+      ],
+      "experience": 43333.3
+    },
+    {
+      "damagedName": "'Raksha' idol (damaged)",
+      "restoredName": "'Raksha' idol",
+      "wikiPage": "https://runescape.wiki/w/'Raksha'_idol",
+      "archaeologyLevel": 120,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 56
+        },
+        {
+          "name": "Dragon metal",
+          "quantity": 44
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 40
+        }
+      ],
+      "experience": 46666.7
+    },
+    {
+      "damagedName": "'Smoke Cloud' spell scroll (damaged)",
+      "restoredName": "'Smoke Cloud' spell scroll",
+      "wikiPage": "https://runescape.wiki/w/'Smoke_Cloud'_spell_scroll",
+      "archaeologyLevel": 100,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Vellum",
+          "quantity": 40
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 20
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 32
+        }
+      ],
+      "experience": 18666.7
+    },
+    {
+      "damagedName": "'Solem in Umbra' painting (damaged)",
+      "restoredName": "'Solem in Umbra' painting",
+      "wikiPage": "https://runescape.wiki/w/'Solem_in_Umbra'_painting",
+      "archaeologyLevel": 25,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 8
+        },
+        {
+          "name": "White oak",
+          "quantity": 10
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 14
+        }
+      ],
+      "experience": 664.1
+    },
+    {
+      "damagedName": "'The Enlightened Soul' scroll (damaged)",
+      "restoredName": "'The Enlightened Soul' scroll",
+      "wikiPage": "https://runescape.wiki/w/'The_Enlightened_Soul'_scroll",
+      "archaeologyLevel": 109,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Star of Saradomin",
+          "quantity": 50
+        },
+        {
+          "name": "Vellum",
+          "quantity": 60
+        }
+      ],
+      "experience": 29666.7
+    },
+    {
+      "damagedName": "'The Eudoxian Elements' tablet (damaged)",
+      "restoredName": "'The Eudoxian Elements' tablet",
+      "wikiPage": "https://runescape.wiki/w/'The_Eudoxian_Elements'_tablet",
+      "archaeologyLevel": 109,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "White marble",
+          "quantity": 60
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 50
+        }
+      ],
+      "experience": 29666.7
+    },
+    {
+      "damagedName": "'The Lake of Fire' painting (damaged)",
+      "restoredName": "'The Lake of Fire' painting",
+      "wikiPage": "https://runescape.wiki/w/'The_Lake_of_Fire'_painting",
+      "archaeologyLevel": 65,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 10
+        },
+        {
+          "name": "White oak",
+          "quantity": 10
+        },
+        {
+          "name": "Vellum",
+          "quantity": 10
+        },
+        {
+          "name": "Cadmium red",
+          "quantity": 34
+        }
+      ],
+      "experience": 3500
+    },
+    {
+      "damagedName": "'The Lord of Light' painting (damaged)",
+      "restoredName": "'The Lord of Light' painting",
+      "wikiPage": "https://runescape.wiki/w/'The_Lord_of_Light'_painting",
+      "archaeologyLevel": 105,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Cobalt blue",
+          "quantity": 52
+        },
+        {
+          "name": "White oak",
+          "quantity": 16
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 16
+        },
+        {
+          "name": "Vellum",
+          "quantity": 16
+        }
+      ],
+      "experience": 24500
+    },
+    {
+      "damagedName": "'The Pride of Padosan' painting (damaged)",
+      "restoredName": "'The Pride of Padosan' painting",
+      "wikiPage": "https://runescape.wiki/w/'The_Pride_of_Padosan'_painting",
+      "archaeologyLevel": 105,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Cobalt blue",
+          "quantity": 52
+        },
+        {
+          "name": "White oak",
+          "quantity": 16
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 16
+        },
+        {
+          "name": "Vellum",
+          "quantity": 16
+        }
+      ],
+      "experience": 24500
+    },
+    {
+      "damagedName": "'The Serpent's Fall' carving (damaged)",
+      "restoredName": "'The Serpent's Fall' carving",
+      "wikiPage": "https://runescape.wiki/w/'The_Serpent's_Fall'_carving",
+      "archaeologyLevel": 67,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Vellum",
+          "quantity": 16
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 24
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 12
+        },
+        {
+          "name": "White oak",
+          "quantity": 12
+        }
+      ],
+      "experience": 3966.7
+    },
+    {
+      "damagedName": "'Torment' metal sculpture (damaged)",
+      "restoredName": "'Torment' metal sculpture",
+      "wikiPage": "https://runescape.wiki/w/'Torment'_metal_sculpture",
+      "archaeologyLevel": 89,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Eye of Dagon",
+          "quantity": 20
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 20
+        },
+        {
+          "name": "Hellfire metal",
+          "quantity": 38
+        }
+      ],
+      "experience": 10500
+    },
+    {
+      "damagedName": "Amphora (damaged)",
+      "restoredName": "Amphora",
+      "wikiPage": "https://runescape.wiki/w/Amphora",
+      "archaeologyLevel": 92,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 34
+        },
+        {
+          "name": "Keramos",
+          "quantity": 46
+        }
+      ],
+      "experience": 11666.7
+    },
+    {
+      "damagedName": "Ancient globe (damaged)",
+      "restoredName": "Ancient globe",
+      "wikiPage": "https://runescape.wiki/w/Ancient_globe",
+      "archaeologyLevel": 118,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "White oak",
+          "quantity": 20
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 54
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 60
+        }
+      ],
+      "experience": 43333.3
+    },
+    {
+      "damagedName": "Ancient magic tablet (damaged)",
+      "restoredName": "Ancient magic tablet",
+      "wikiPage": "https://runescape.wiki/w/Ancient_magic_tablet",
+      "archaeologyLevel": 107,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Ancient vis",
+          "quantity": 40
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 64
+        }
+      ],
+      "experience": 27000
+    },
+    {
+      "damagedName": "Ancient timepiece (damaged)",
+      "restoredName": "Ancient timepiece",
+      "wikiPage": "https://runescape.wiki/w/Ancient_timepiece",
+      "archaeologyLevel": 47,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 12
+        },
+        {
+          "name": "Imperial steel",
+          "quantity": 16
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 18
+        }
+      ],
+      "experience": 1423.3
+    },
+    {
+      "damagedName": "Apex cap (damaged)",
+      "restoredName": "Apex cap",
+      "wikiPage": "https://runescape.wiki/w/Apex_cap",
+      "archaeologyLevel": 60,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 28
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 12
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 20
+        }
+      ],
+      "experience": 2333.3
+    },
+    {
+      "damagedName": "Avian song-egg player (damaged)",
+      "restoredName": "Avian song-egg player",
+      "wikiPage": "https://runescape.wiki/w/Avian_song-egg_player",
+      "archaeologyLevel": 76,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Stormguard steel",
+          "quantity": 36
+        },
+        {
+          "name": "Armadylean yellow",
+          "quantity": 32
+        }
+      ],
+      "experience": 6066.7
+    },
+    {
+      "damagedName": "Aviansie dreamcoat (damaged)",
+      "restoredName": "Aviansie dreamcoat",
+      "wikiPage": "https://runescape.wiki/w/Aviansie_dreamcoat",
+      "archaeologyLevel": 81,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Armadylean yellow",
+          "quantity": 20
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 30
+        },
+        {
+          "name": "Animal furs",
+          "quantity": 22
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Balarak's sash brush (damaged)",
+      "restoredName": "Balarak's sash brush",
+      "wikiPage": "https://runescape.wiki/w/Balarak's_sash_brush",
+      "archaeologyLevel": null,
+      "culture": null,
+      "digSite": null,
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 60
+        },
+        {
+          "name": "Carbon black",
+          "quantity": 120
+        },
+        {
+          "name": "Felt",
+          "quantity": 120
+        }
+      ],
+      "experience": 36666.6
+    },
+    {
+      "damagedName": "Battle plans (damaged)",
+      "restoredName": "Battle plans",
+      "wikiPage": "https://runescape.wiki/w/Battle_plans",
+      "archaeologyLevel": 118,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Vellum",
+          "quantity": 40
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 60
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 34
+        }
+      ],
+      "experience": 43333.3
+    },
+    {
+      "damagedName": "Beastkeeper helm (damaged)",
+      "restoredName": "Beastkeeper helm",
+      "wikiPage": "https://runescape.wiki/w/Beastkeeper_helm",
+      "archaeologyLevel": 94,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 16
+        },
+        {
+          "name": "Vulcanised rubber",
+          "quantity": 24
+        },
+        {
+          "name": "Animal furs",
+          "quantity": 20
+        },
+        {
+          "name": "Fossilised bone",
+          "quantity": 24
+        }
+      ],
+      "experience": 13333.3
+    },
+    {
+      "damagedName": "Blackfire lance (damaged)",
+      "restoredName": "Blackfire lance",
+      "wikiPage": "https://runescape.wiki/w/Blackfire_lance",
+      "archaeologyLevel": 103,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Aetherium alloy",
+          "quantity": 50
+        },
+        {
+          "name": "Quintessence",
+          "quantity": 46
+        }
+      ],
+      "experience": 22166.7
+    },
+    {
+      "damagedName": "Branding iron (damaged)",
+      "restoredName": "Branding iron",
+      "wikiPage": "https://runescape.wiki/w/Branding_iron",
+      "archaeologyLevel": 45,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 14
+        },
+        {
+          "name": "Eye of Dagon",
+          "quantity": 12
+        },
+        {
+          "name": "Hellfire metal",
+          "quantity": 20
+        }
+      ],
+      "experience": 1283.3
+    },
+    {
+      "damagedName": "Bronze Dominion medal (damaged)",
+      "restoredName": "Bronze Dominion medal",
+      "wikiPage": "https://runescape.wiki/w/Bronze_Dominion_medal",
+      "archaeologyLevel": 69,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 36
+        },
+        {
+          "name": "Star of Saradomin",
+          "quantity": 26
+        }
+      ],
+      "experience": 4433.3
+    },
+    {
+      "damagedName": "Castle gatestone (damaged)",
+      "restoredName": "Castle gatestone",
+      "wikiPage": "https://runescape.wiki/w/Castle_gatestone",
+      "archaeologyLevel": 73,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 36
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 32
+        }
+      ],
+      "experience": 5366.7
+    },
+    {
+      "damagedName": "Centurion's dress sword (damaged)",
+      "restoredName": "Centurion's dress sword",
+      "wikiPage": "https://runescape.wiki/w/Centurion's_dress_sword",
+      "archaeologyLevel": 1,
+      "culture": "Miscellaneous",
+      "digSite": "Archaeology Guild",
+      "materials": [
+        {
+          "name": "Imperial iron",
+          "quantity": 5
+        },
+        {
+          "name": "Purpleheart wood",
+          "quantity": 5
+        }
+      ],
+      "experience": 250
+    },
+    {
+      "damagedName": "Centurion's seal (damaged)",
+      "restoredName": "Centurion's seal",
+      "wikiPage": "https://runescape.wiki/w/Centurion's_seal",
+      "archaeologyLevel": null,
+      "culture": "Miscellaneous",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 6
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 2
+        }
+      ],
+      "experience": 430.8
+    },
+    {
+      "damagedName": "Ceremonial dragonkin device (damaged)",
+      "restoredName": "Ceremonial dragonkin device",
+      "wikiPage": "https://runescape.wiki/w/Ceremonial_dragonkin_device",
+      "archaeologyLevel": 70,
+      "culture": "Miscellaneous",
+      "digSite": "None",
+      "materials": [
+        {
+          "name": "Orthenglass",
+          "quantity": 66
+        }
+      ],
+      "experience": 4666.7
+    },
+    {
+      "damagedName": "Ceremonial mace (damaged)",
+      "restoredName": "Ceremonial mace",
+      "wikiPage": "https://runescape.wiki/w/Ceremonial_mace",
+      "archaeologyLevel": 74,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 20
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 20
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 28
+        }
+      ],
+      "experience": 5600
+    },
+    {
+      "damagedName": "Ceremonial plume (damaged)",
+      "restoredName": "Ceremonial plume",
+      "wikiPage": "https://runescape.wiki/w/Ceremonial_plume",
+      "archaeologyLevel": 81,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Armadylean yellow",
+          "quantity": 38
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 34
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Ceremonial unicorn ornament (damaged)",
+      "restoredName": "Ceremonial unicorn ornament",
+      "wikiPage": "https://runescape.wiki/w/Ceremonial_unicorn_ornament",
+      "archaeologyLevel": 48,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Keramos",
+          "quantity": 26
+        },
+        {
+          "name": "Cobalt blue",
+          "quantity": 20
+        }
+      ],
+      "experience": 1493.3
+    },
+    {
+      "damagedName": "Ceremonial unicorn saddle (damaged)",
+      "restoredName": "Ceremonial unicorn saddle",
+      "wikiPage": "https://runescape.wiki/w/Ceremonial_unicorn_saddle",
+      "archaeologyLevel": 48,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Leather scraps",
+          "quantity": 24
+        },
+        {
+          "name": "Cobalt blue",
+          "quantity": 22
+        }
+      ],
+      "experience": 1493.3
+    },
+    {
+      "damagedName": "Chaos Elemental trophy (damaged)",
+      "restoredName": "Chaos Elemental trophy",
+      "wikiPage": "https://runescape.wiki/w/Chaos_Elemental_trophy",
+      "archaeologyLevel": 110,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 52
+        },
+        {
+          "name": "White oak",
+          "quantity": 30
+        },
+        {
+          "name": "Hellfire metal",
+          "quantity": 30
+        }
+      ],
+      "experience": 31000
+    },
+    {
+      "damagedName": "Chaos star (damaged)",
+      "restoredName": "Chaos star",
+      "wikiPage": "https://runescape.wiki/w/Chaos_star",
+      "archaeologyLevel": 68,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 28
+        },
+        {
+          "name": "Hellfire metal",
+          "quantity": 36
+        }
+      ],
+      "experience": 4200
+    },
+    {
+      "damagedName": "Chuluu stone (damaged)",
+      "restoredName": "Chuluu stone",
+      "wikiPage": "https://runescape.wiki/w/Chuluu_stone",
+      "archaeologyLevel": 118,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Aetherium alloy",
+          "quantity": 40
+        },
+        {
+          "name": "Quintessence",
+          "quantity": 30
+        },
+        {
+          "name": "Soapstone",
+          "quantity": 40
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 24
+        }
+      ],
+      "experience": 43333.3
+    },
+    {
+      "damagedName": "Comfort gatestone (damaged)",
+      "restoredName": "Comfort gatestone",
+      "wikiPage": "https://runescape.wiki/w/Comfort_gatestone",
+      "archaeologyLevel": 107,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Orthenglass",
+          "quantity": 40
+        },
+        {
+          "name": "Orgone",
+          "quantity": 34
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 30
+        }
+      ],
+      "experience": 27000
+    },
+    {
+      "damagedName": "Crest of Dagon (damaged)",
+      "restoredName": "Crest of Dagon",
+      "wikiPage": "https://runescape.wiki/w/Crest_of_Dagon",
+      "archaeologyLevel": 24,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 14
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 18
+        }
+      ],
+      "experience": 646.2
+    },
+    {
+      "damagedName": "Curse tablet (damaged)",
+      "restoredName": "Curse tablet",
+      "wikiPage": "https://runescape.wiki/w/Curse_tablet",
+      "archaeologyLevel": 60,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 16
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 12
+        },
+        {
+          "name": "Soapstone",
+          "quantity": 20
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 12
+        }
+      ],
+      "experience": 2333.3
+    },
+    {
+      "damagedName": "Dayguard shield (damaged)",
+      "restoredName": "Dayguard shield",
+      "wikiPage": "https://runescape.wiki/w/Dayguard_shield",
+      "archaeologyLevel": 95,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Stormguard steel",
+          "quantity": 36
+        },
+        {
+          "name": "Wings of War",
+          "quantity": 28
+        },
+        {
+          "name": "White oak",
+          "quantity": 20
+        }
+      ],
+      "experience": 14166.7
+    },
+    {
+      "damagedName": "Death mask (damaged)",
+      "restoredName": "Death mask",
+      "wikiPage": "https://runescape.wiki/w/Death_mask",
+      "archaeologyLevel": 99,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 56
+        },
+        {
+          "name": "Soapstone",
+          "quantity": 34
+        }
+      ],
+      "experience": 17500
+    },
+    {
+      "damagedName": "Decorative amphora (damaged)",
+      "restoredName": "Decorative amphora",
+      "wikiPage": "https://runescape.wiki/w/Decorative_amphora",
+      "archaeologyLevel": 63,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Tyrian purple",
+          "quantity": 16
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 18
+        },
+        {
+          "name": "Soapstone",
+          "quantity": 28
+        }
+      ],
+      "experience": 3033.3
+    },
+    {
+      "damagedName": "Decorative vase (damaged)",
+      "restoredName": "Decorative vase",
+      "wikiPage": "https://runescape.wiki/w/Decorative_vase",
+      "archaeologyLevel": 72,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "White marble",
+          "quantity": 36
+        },
+        {
+          "name": "Cobalt blue",
+          "quantity": 30
+        }
+      ],
+      "experience": 5133.3
+    },
+    {
+      "damagedName": "Dominarian device (damaged)",
+      "restoredName": "Dominarian device",
+      "wikiPage": "https://runescape.wiki/w/Dominarian_device",
+      "archaeologyLevel": 84,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 30
+        },
+        {
+          "name": "Keramos",
+          "quantity": 22
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 22
+        }
+      ],
+      "experience": 8555.6
+    },
+    {
+      "damagedName": "Dominion discus (damaged)",
+      "restoredName": "Dominion discus",
+      "wikiPage": "https://runescape.wiki/w/Dominion_discus",
+      "archaeologyLevel": 61,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Keramos",
+          "quantity": 34
+        },
+        {
+          "name": "Star of Saradomin",
+          "quantity": 28
+        }
+      ],
+      "experience": 2566.7
+    },
+    {
+      "damagedName": "Dominion javelin (damaged)",
+      "restoredName": "Dominion javelin",
+      "wikiPage": "https://runescape.wiki/w/Dominion_javelin",
+      "archaeologyLevel": 61,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Keramos",
+          "quantity": 32
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 30
+        }
+      ],
+      "experience": 2566.7
+    },
+    {
+      "damagedName": "Dominion pelte shield (damaged)",
+      "restoredName": "Dominion pelte shield",
+      "wikiPage": "https://runescape.wiki/w/Dominion_pelte_shield",
+      "archaeologyLevel": 61,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Star of Saradomin",
+          "quantity": 34
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 28
+        }
+      ],
+      "experience": 2566.7
+    },
+    {
+      "damagedName": "Dominion torch (damaged)",
+      "restoredName": "Dominion torch",
+      "wikiPage": "https://runescape.wiki/w/Dominion_torch",
+      "archaeologyLevel": 69,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 12
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 12
+        },
+        {
+          "name": "Everlight silvthril",
+          "quantity": 20
+        },
+        {
+          "name": "Star of Saradomin",
+          "quantity": 18
+        }
+      ],
+      "experience": 4433.3
+    },
+    {
+      "damagedName": "Dorgeshuun spear (damaged)",
+      "restoredName": "Dorgeshuun spear",
+      "wikiPage": "https://runescape.wiki/w/Dorgeshuun_spear",
+      "archaeologyLevel": 100,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 50
+        },
+        {
+          "name": "White oak",
+          "quantity": 42
+        }
+      ],
+      "experience": 18666.7
+    },
+    {
+      "damagedName": "Doru spear (damaged)",
+      "restoredName": "Doru spear",
+      "wikiPage": "https://runescape.wiki/w/Doru_spear",
+      "archaeologyLevel": 117,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 70
+        },
+        {
+          "name": "White oak",
+          "quantity": 62
+        }
+      ],
+      "experience": 41666.7
+    },
+    {
+      "damagedName": "Dragon burner (damaged)",
+      "restoredName": "Dragon burner",
+      "wikiPage": "https://runescape.wiki/w/Dragon_burner",
+      "archaeologyLevel": 102,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 52
+        },
+        {
+          "name": "Orgone",
+          "quantity": 42
+        }
+      ],
+      "experience": 21000
+    },
+    {
+      "damagedName": "Dragon scalpel (damaged)",
+      "restoredName": "Dragon scalpel",
+      "wikiPage": "https://runescape.wiki/w/Dragon_scalpel",
+      "archaeologyLevel": 101,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 52
+        },
+        {
+          "name": "Felt",
+          "quantity": 42
+        }
+      ],
+      "experience": 19833.3
+    },
+    {
+      "damagedName": "Dragonkin calendar (damaged)",
+      "restoredName": "Dragonkin calendar",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_calendar",
+      "archaeologyLevel": 99,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 34
+        },
+        {
+          "name": "Carbon black",
+          "quantity": 28
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 28
+        }
+      ],
+      "experience": 17500
+    },
+    {
+      "damagedName": "Dragonkin device (damaged)",
+      "restoredName": "Dragonkin device",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_device",
+      "archaeologyLevel": 50,
+      "culture": "None",
+      "digSite": "None",
+      "materials": [
+        {
+          "name": "Orthenglass",
+          "quantity": 50
+        }
+      ],
+      "experience": 600
+    },
+    {
+      "damagedName": "Dragonkin staff (damaged)",
+      "restoredName": "Dragonkin staff",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_staff",
+      "archaeologyLevel": 99,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 56
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 34
+        }
+      ],
+      "experience": 17500
+    },
+    {
+      "damagedName": "Dragonkin tablet (damaged)",
+      "restoredName": "Dragonkin tablet",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_tablet",
+      "archaeologyLevel": 50,
+      "culture": "None",
+      "digSite": "None",
+      "materials": [
+        {
+          "name": "Orthenglass",
+          "quantity": 50
+        }
+      ],
+      "experience": 600
+    },
+    {
+      "damagedName": "Drogokishuun hook sword (damaged)",
+      "restoredName": "Drogokishuun hook sword",
+      "wikiPage": "https://runescape.wiki/w/Drogokishuun_hook_sword",
+      "archaeologyLevel": 110,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 44
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 36
+        },
+        {
+          "name": "Fossilised bone",
+          "quantity": 32
+        }
+      ],
+      "experience": 31000
+    },
+    {
+      "damagedName": "Ekeleshuun blinder mask (damaged)",
+      "restoredName": "Ekeleshuun blinder mask",
+      "wikiPage": "https://runescape.wiki/w/Ekeleshuun_blinder_mask",
+      "archaeologyLevel": 76,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Vulcanised rubber",
+          "quantity": 24
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 20
+        },
+        {
+          "name": "Vellum",
+          "quantity": 24
+        }
+      ],
+      "experience": 6066.7
+    },
+    {
+      "damagedName": "Engraved ring of kinship (damaged)",
+      "restoredName": "Engraved ring of kinship",
+      "wikiPage": "https://runescape.wiki/w/Engraved_ring_of_kinship",
+      "archaeologyLevel": 73,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 28
+        },
+        {
+          "name": "Dragon metal",
+          "quantity": 40
+        }
+      ],
+      "experience": 5366.7
+    },
+    {
+      "damagedName": "Everlight harp (damaged)",
+      "restoredName": "Everlight harp",
+      "wikiPage": "https://runescape.wiki/w/Everlight_harp",
+      "archaeologyLevel": 51,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 30
+        },
+        {
+          "name": "White oak",
+          "quantity": 22
+        }
+      ],
+      "experience": 1703.3
+    },
+    {
+      "damagedName": "Everlight trumpet (damaged)",
+      "restoredName": "Everlight trumpet",
+      "wikiPage": "https://runescape.wiki/w/Everlight_trumpet",
+      "archaeologyLevel": 51,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 28
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 24
+        }
+      ],
+      "experience": 1703.3
+    },
+    {
+      "damagedName": "Everlight violin (damaged)",
+      "restoredName": "Everlight violin",
+      "wikiPage": "https://runescape.wiki/w/Everlight_violin",
+      "archaeologyLevel": 51,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Star of Saradomin",
+          "quantity": 16
+        },
+        {
+          "name": "White oak",
+          "quantity": 20
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 16
+        }
+      ],
+      "experience": 1703.3
+    },
+    {
+      "damagedName": "Excavator portal mine (damaged)",
+      "restoredName": "Excavator portal mine",
+      "wikiPage": "https://runescape.wiki/w/Excavator_portal_mine",
+      "archaeologyLevel": 77,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 36
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 34
+        }
+      ],
+      "experience": 6300
+    },
+    {
+      "damagedName": "Exploratory totem (damaged)",
+      "restoredName": "Exploratory totem",
+      "wikiPage": "https://runescape.wiki/w/Exploratory_totem",
+      "archaeologyLevel": 77,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 34
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 36
+        }
+      ],
+      "experience": 6300
+    },
+    {
+      "damagedName": "Fishing trident (damaged)",
+      "restoredName": "Fishing trident",
+      "wikiPage": "https://runescape.wiki/w/Fishing_trident",
+      "archaeologyLevel": 84,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Star of Saradomin",
+          "quantity": 22
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 30
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 22
+        }
+      ],
+      "experience": 8555.6
+    },
+    {
+      "damagedName": "Flat cap (damaged)",
+      "restoredName": "Flat cap",
+      "wikiPage": "https://runescape.wiki/w/Flat_cap",
+      "archaeologyLevel": 111,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Armadylean yellow",
+          "quantity": 60
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 54
+        }
+      ],
+      "experience": 32333.3
+    },
+    {
+      "damagedName": "Folded-arm figurine (female)(damaged)",
+      "restoredName": "Folded-arm figurine (female)",
+      "wikiPage": "https://runescape.wiki/w/Folded-arm_figurine_(female)",
+      "archaeologyLevel": 56,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "White marble",
+          "quantity": 30
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 24
+        }
+      ],
+      "experience": 2053.3
+    },
+    {
+      "damagedName": "Folded-arm figurine (male)(damaged)",
+      "restoredName": "Folded-arm figurine (male)",
+      "wikiPage": "https://runescape.wiki/w/Folded-arm_figurine_(male)",
+      "archaeologyLevel": 56,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "White marble",
+          "quantity": 30
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 24
+        }
+      ],
+      "experience": 2053.3
+    },
+    {
+      "damagedName": "Funerary urn of blood (damaged)",
+      "restoredName": "Funerary urn of blood",
+      "wikiPage": "https://runescape.wiki/w/Funerary_urn_of_blood",
+      "archaeologyLevel": 66,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Soapstone",
+          "quantity": 30
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 14
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 20
+        }
+      ],
+      "experience": 3773.3
+    },
+    {
+      "damagedName": "Funerary urn of ice (damaged)",
+      "restoredName": "Funerary urn of ice",
+      "wikiPage": "https://runescape.wiki/w/Funerary_urn_of_ice",
+      "archaeologyLevel": 63,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Soapstone",
+          "quantity": 28
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 14
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 20
+        }
+      ],
+      "experience": 3033.3
+    },
+    {
+      "damagedName": "Funerary urn of miasma (damaged)",
+      "restoredName": "Funerary urn of miasma",
+      "wikiPage": "https://runescape.wiki/w/Funerary_urn_of_miasma",
+      "archaeologyLevel": 67,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Soapstone",
+          "quantity": 30
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 14
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 20
+        }
+      ],
+      "experience": 3966.7
+    },
+    {
+      "damagedName": "Funerary urn of shadow (damaged)",
+      "restoredName": "Funerary urn of shadow",
+      "wikiPage": "https://runescape.wiki/w/Funerary_urn_of_shadow",
+      "archaeologyLevel": 60,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Soapstone",
+          "quantity": 26
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 14
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 20
+        }
+      ],
+      "experience": 2333.3
+    },
+    {
+      "damagedName": "Funerary urn of smoke (damaged)",
+      "restoredName": "Funerary urn of smoke",
+      "wikiPage": "https://runescape.wiki/w/Funerary_urn_of_smoke",
+      "archaeologyLevel": 62,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Soapstone",
+          "quantity": 28
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 14
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 20
+        }
+      ],
+      "experience": 2800
+    },
+    {
+      "damagedName": "Garagorshuun anchor (damaged)",
+      "restoredName": "Garagorshuun anchor",
+      "wikiPage": "https://runescape.wiki/w/Garagorshuun_anchor",
+      "archaeologyLevel": 97,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 32
+        },
+        {
+          "name": "Mark of the Kyzaj",
+          "quantity": 26
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 30
+        }
+      ],
+      "experience": 15833.3
+    },
+    {
+      "damagedName": "Gladiator helmet (damaged)",
+      "restoredName": "Gladiator helmet",
+      "wikiPage": "https://runescape.wiki/w/Gladiator_helmet",
+      "archaeologyLevel": 66,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 30
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 16
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 18
+        }
+      ],
+      "experience": 3773.3
+    },
+    {
+      "damagedName": "Gladiator sword (damaged)",
+      "restoredName": "Gladiator sword",
+      "wikiPage": "https://runescape.wiki/w/Gladiator_sword",
+      "archaeologyLevel": 66,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 30
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 18
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 16
+        }
+      ],
+      "experience": 3773.3
+    },
+    {
+      "damagedName": "Gold dish (damaged)",
+      "restoredName": "Gold dish",
+      "wikiPage": "https://runescape.wiki/w/Gold_dish",
+      "archaeologyLevel": 120,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 86
+        },
+        {
+          "name": "Dragon metal",
+          "quantity": 54
+        }
+      ],
+      "experience": 46666.7
+    },
+    {
+      "damagedName": "Golden projection 'needle' (damaged)",
+      "restoredName": "Golden projection 'needle'",
+      "wikiPage": "https://runescape.wiki/w/Golden_projection_'needle'",
+      "archaeologyLevel": 103,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 36
+        },
+        {
+          "name": "Dragon metal",
+          "quantity": 60
+        }
+      ],
+      "experience": 22166.7
+    },
+    {
+      "damagedName": "Golden scarab (damaged)",
+      "restoredName": "Golden scarab",
+      "wikiPage": "https://runescape.wiki/w/Golden_scarab",
+      "archaeologyLevel": null,
+      "culture": null,
+      "digSite": null,
+      "materials": [],
+      "experience": null
+    },
+    {
+      "damagedName": "Golem heart (damaged)",
+      "restoredName": "Golem heart",
+      "wikiPage": "https://runescape.wiki/w/Golem_heart",
+      "archaeologyLevel": 98,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Aetherium alloy",
+          "quantity": 34
+        },
+        {
+          "name": "Quintessence",
+          "quantity": 24
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 16
+        },
+        {
+          "name": "Soapstone",
+          "quantity": 16
+        }
+      ],
+      "experience": 16666.7
+    },
+    {
+      "damagedName": "Golem instruction (damaged)",
+      "restoredName": "Golem instruction",
+      "wikiPage": "https://runescape.wiki/w/Golem_instruction",
+      "archaeologyLevel": 98,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Quintessence",
+          "quantity": 46
+        },
+        {
+          "name": "Vellum",
+          "quantity": 44
+        }
+      ],
+      "experience": 16666.7
+    },
+    {
+      "damagedName": "Greater demon mask (damaged)",
+      "restoredName": "Greater demon mask",
+      "wikiPage": "https://runescape.wiki/w/Greater_demon_mask",
+      "archaeologyLevel": 29,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 6
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 6
+        },
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 8
+        },
+        {
+          "name": "Demonhide",
+          "quantity": 12
+        }
+      ],
+      "experience": 735.9
+    },
+    {
+      "damagedName": "Halak's cube (damaged)",
+      "restoredName": "Halak's cube",
+      "wikiPage": "https://runescape.wiki/w/Halak's_cube",
+      "archaeologyLevel": 107,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Compass rose",
+          "quantity": 36
+        },
+        {
+          "name": "Carbon black",
+          "quantity": 40
+        },
+        {
+          "name": "Orgone",
+          "quantity": 28
+        }
+      ],
+      "experience": 27000
+    },
+    {
+      "damagedName": "Hallowed lantern (damaged)",
+      "restoredName": "Hallowed lantern",
+      "wikiPage": "https://runescape.wiki/w/Hallowed_lantern",
+      "archaeologyLevel": 42,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 20
+        },
+        {
+          "name": "Keramos",
+          "quantity": 24
+        }
+      ],
+      "experience": 1073.3
+    },
+    {
+      "damagedName": "Hand of the Ancients (damaged)",
+      "restoredName": "Hand of the Ancients",
+      "wikiPage": "https://runescape.wiki/w/Hand_of_the_Ancients",
+      "archaeologyLevel": 62,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Blood of Orcus",
+          "quantity": 12
+        },
+        {
+          "name": "White oak",
+          "quantity": 18
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 14
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 18
+        }
+      ],
+      "experience": 2800
+    },
+    {
+      "damagedName": "Hawkeye lens multi-vision scope (damaged)",
+      "restoredName": "Hawkeye lens multi-vision scope",
+      "wikiPage": "https://runescape.wiki/w/Hawkeye_lens_multi-vision_scope",
+      "archaeologyLevel": 85,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Stormguard steel",
+          "quantity": 40
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 34
+        }
+      ],
+      "experience": 8944.4
+    },
+    {
+      "damagedName": "Hellfire haladie (damaged)",
+      "restoredName": "Hellfire haladie",
+      "wikiPage": "https://runescape.wiki/w/Hellfire_haladie",
+      "archaeologyLevel": 98,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Hellfire metal",
+          "quantity": 44
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 26
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 20
+        }
+      ],
+      "experience": 16666.7
+    },
+    {
+      "damagedName": "Hellfire katar (damaged)",
+      "restoredName": "Hellfire katar",
+      "wikiPage": "https://runescape.wiki/w/Hellfire_katar",
+      "archaeologyLevel": 98,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Hellfire metal",
+          "quantity": 50
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 40
+        }
+      ],
+      "experience": 16666.7
+    },
+    {
+      "damagedName": "Hellfire zaghnal (damaged)",
+      "restoredName": "Hellfire zaghnal",
+      "wikiPage": "https://runescape.wiki/w/Hellfire_zaghnal",
+      "archaeologyLevel": 98,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Hellfire metal",
+          "quantity": 38
+        },
+        {
+          "name": "White oak",
+          "quantity": 26
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 26
+        }
+      ],
+      "experience": 16666.7
+    },
+    {
+      "damagedName": "High priest crozier (damaged)",
+      "restoredName": "High priest crozier",
+      "wikiPage": "https://runescape.wiki/w/High_priest_crozier",
+      "archaeologyLevel": 89,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Mark of the Kyzaj",
+          "quantity": 26
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 24
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 28
+        }
+      ],
+      "experience": 10500
+    },
+    {
+      "damagedName": "High priest mitre (damaged)",
+      "restoredName": "High priest mitre",
+      "wikiPage": "https://runescape.wiki/w/High_priest_mitre",
+      "archaeologyLevel": 89,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Mark of the Kyzaj",
+          "quantity": 26
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 24
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 28
+        }
+      ],
+      "experience": 10500
+    },
+    {
+      "damagedName": "High priest orb (damaged)",
+      "restoredName": "High priest orb",
+      "wikiPage": "https://runescape.wiki/w/High_priest_orb",
+      "archaeologyLevel": 89,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Mark of the Kyzaj",
+          "quantity": 26
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 24
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 28
+        }
+      ],
+      "experience": 10500
+    },
+    {
+      "damagedName": "Hobgoblin mansticker (damaged)",
+      "restoredName": "Hobgoblin mansticker",
+      "wikiPage": "https://runescape.wiki/w/Hobgoblin_mansticker",
+      "archaeologyLevel": 110,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 66
+        },
+        {
+          "name": "Fossilised bone",
+          "quantity": 46
+        }
+      ],
+      "experience": 31000
+    },
+    {
+      "damagedName": "Homely totem (damaged)",
+      "restoredName": "Homely totem",
+      "wikiPage": "https://runescape.wiki/w/Homely_totem",
+      "archaeologyLevel": 87,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Soapstone",
+          "quantity": 36
+        },
+        {
+          "name": "Felt",
+          "quantity": 40
+        }
+      ],
+      "experience": 9722.2
+    },
+    {
+      "damagedName": "Hookah pipe (damaged)",
+      "restoredName": "Hookah pipe",
+      "wikiPage": "https://runescape.wiki/w/Hookah_pipe",
+      "archaeologyLevel": 20,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 10
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 12
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 8
+        }
+      ],
+      "experience": 574.4
+    },
+    {
+      "damagedName": "Horogothgar cooking pot (damaged)",
+      "restoredName": "Horogothgar cooking pot",
+      "wikiPage": "https://runescape.wiki/w/Horogothgar_cooking_pot",
+      "archaeologyLevel": 119,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Yu'biusk clay",
+          "quantity": 60
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 38
+        },
+        {
+          "name": "Soapstone",
+          "quantity": 40
+        }
+      ],
+      "experience": 45000
+    },
+    {
+      "damagedName": "Huzamogaarb chaos crown (damaged)",
+      "restoredName": "Huzamogaarb chaos crown",
+      "wikiPage": "https://runescape.wiki/w/Huzamogaarb_chaos_crown",
+      "archaeologyLevel": 104,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 44
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 34
+        },
+        {
+          "name": "Eye of Dagon",
+          "quantity": 20
+        }
+      ],
+      "experience": 23333.3
+    },
+    {
+      "damagedName": "Idithuun horn ring (damaged)",
+      "restoredName": "Idithuun horn ring",
+      "wikiPage": "https://runescape.wiki/w/Idithuun_horn_ring",
+      "archaeologyLevel": 94,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Yu'biusk clay",
+          "quantity": 40
+        },
+        {
+          "name": "Vulcanised rubber",
+          "quantity": 44
+        }
+      ],
+      "experience": 13333.3
+    },
+    {
+      "damagedName": "Ikovian gerege (damaged)",
+      "restoredName": "Ikovian gerege",
+      "wikiPage": "https://runescape.wiki/w/Ikovian_gerege",
+      "archaeologyLevel": 70,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 36
+        },
+        {
+          "name": "Wings of War",
+          "quantity": 30
+        }
+      ],
+      "experience": 4666.7
+    },
+    {
+      "damagedName": "Imp mask (damaged)",
+      "restoredName": "Imp mask",
+      "wikiPage": "https://runescape.wiki/w/Imp_mask",
+      "archaeologyLevel": 29,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Leather scraps",
+          "quantity": 10
+        },
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 10
+        },
+        {
+          "name": "Demonhide",
+          "quantity": 12
+        }
+      ],
+      "experience": 735.9
+    },
+    {
+      "damagedName": "Infula robes (damaged)",
+      "restoredName": "Infula robes",
+      "wikiPage": "https://runescape.wiki/w/Infula_robes",
+      "archaeologyLevel": 62,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 26
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 12
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 12
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 12
+        }
+      ],
+      "experience": 2800
+    },
+    {
+      "damagedName": "Inquisitor's ceremonial armour (damaged)",
+      "restoredName": "Inquisitor's ceremonial armour",
+      "wikiPage": "https://runescape.wiki/w/Inquisitor's_ceremonial_armour",
+      "archaeologyLevel": 64,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Leather scraps",
+          "quantity": 14
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 30
+        },
+        {
+          "name": "Tyrian purple",
+          "quantity": 18
+        }
+      ],
+      "experience": 3266.7
+    },
+    {
+      "damagedName": "Inquisitor's ceremonial mask (damaged)",
+      "restoredName": "Inquisitor's ceremonial mask",
+      "wikiPage": "https://runescape.wiki/w/Inquisitor's_ceremonial_mask",
+      "archaeologyLevel": 64,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Ancient vis",
+          "quantity": 14
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 12
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 14
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 22
+        }
+      ],
+      "experience": 3266.7
+    },
+    {
+      "damagedName": "Inquisitor's seal (damaged)",
+      "restoredName": "Inquisitor's seal",
+      "wikiPage": "https://runescape.wiki/w/Inquisitor's_seal",
+      "archaeologyLevel": 64,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Tyrian purple",
+          "quantity": 14
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 20
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 14
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 14
+        }
+      ],
+      "experience": 3266.7
+    },
+    {
+      "damagedName": "Kal-i-kra chieftain crown (damaged)",
+      "restoredName": "Kal-i-kra chieftain crown",
+      "wikiPage": "https://runescape.wiki/w/Kal-i-kra_chieftain_crown",
+      "archaeologyLevel": 115,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Yu'biusk clay",
+          "quantity": 66
+        },
+        {
+          "name": "Animal furs",
+          "quantity": 60
+        }
+      ],
+      "experience": 38333.3
+    },
+    {
+      "damagedName": "Kal-i-kra mace (damaged)",
+      "restoredName": "Kal-i-kra mace",
+      "wikiPage": "https://runescape.wiki/w/Kal-i-kra_mace",
+      "archaeologyLevel": 115,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Vulcanised rubber",
+          "quantity": 42
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 44
+        },
+        {
+          "name": "Fossilised bone",
+          "quantity": 40
+        }
+      ],
+      "experience": 38333.3
+    },
+    {
+      "damagedName": "Kal-i-kra warhorn (damaged)",
+      "restoredName": "Kal-i-kra warhorn",
+      "wikiPage": "https://runescape.wiki/w/Kal-i-kra_warhorn",
+      "archaeologyLevel": 115,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Vulcanised rubber",
+          "quantity": 44
+        },
+        {
+          "name": "Fossilised bone",
+          "quantity": 42
+        },
+        {
+          "name": "Animal furs",
+          "quantity": 40
+        }
+      ],
+      "experience": 38333.3
+    },
+    {
+      "damagedName": "Kantharos cup (damaged)",
+      "restoredName": "Kantharos cup",
+      "wikiPage": "https://runescape.wiki/w/Kantharos_cup",
+      "archaeologyLevel": 72,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 30
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 36
+        }
+      ],
+      "experience": 5133.3
+    },
+    {
+      "damagedName": "Keshik drum (damaged)",
+      "restoredName": "Keshik drum",
+      "wikiPage": "https://runescape.wiki/w/Keshik_drum",
+      "archaeologyLevel": 76,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Wings of War",
+          "quantity": 16
+        },
+        {
+          "name": "Animal furs",
+          "quantity": 16
+        },
+        {
+          "name": "White oak",
+          "quantity": 20
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 16
+        }
+      ],
+      "experience": 6066.7
+    },
+    {
+      "damagedName": "Kilaya (damaged)",
+      "restoredName": "Kilaya",
+      "wikiPage": "https://runescape.wiki/w/Kilaya",
+      "archaeologyLevel": 96,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 46
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 40
+        }
+      ],
+      "experience": 15000
+    },
+    {
+      "damagedName": "Kontos lance (damaged)",
+      "restoredName": "Kontos lance",
+      "wikiPage": "https://runescape.wiki/w/Kontos_lance",
+      "archaeologyLevel": 117,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 70
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 62
+        }
+      ],
+      "experience": 41666.7
+    },
+    {
+      "damagedName": "Kopis dagger (damaged)",
+      "restoredName": "Kopis dagger",
+      "wikiPage": "https://runescape.wiki/w/Kopis_dagger",
+      "archaeologyLevel": 100,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 50
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 42
+        }
+      ],
+      "experience": 18666.7
+    },
+    {
+      "damagedName": "Larupia trophy (damaged)",
+      "restoredName": "Larupia trophy",
+      "wikiPage": "https://runescape.wiki/w/Larupia_trophy",
+      "archaeologyLevel": 81,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Cadmium red",
+          "quantity": 18
+        },
+        {
+          "name": "Animal furs",
+          "quantity": 28
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 26
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Legatus Maximus figurine (damaged)",
+      "restoredName": "Legatus Maximus figurine",
+      "wikiPage": "https://runescape.wiki/w/Legatus_Maximus_figurine",
+      "archaeologyLevel": 25,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 8
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 14
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 10
+        }
+      ],
+      "experience": 664.1
+    },
+    {
+      "damagedName": "Legatus pendant (damaged)",
+      "restoredName": "Legatus pendant",
+      "wikiPage": "https://runescape.wiki/w/Legatus_pendant",
+      "archaeologyLevel": 47,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 16
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 18
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 12
+        }
+      ],
+      "experience": 1423.3
+    },
+    {
+      "damagedName": "Legionary gladius (damaged)",
+      "restoredName": "Legionary gladius",
+      "wikiPage": "https://runescape.wiki/w/Legionary_gladius",
+      "archaeologyLevel": 12,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 10
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 6
+        },
+        {
+          "name": "Imperial steel",
+          "quantity": 12
+        }
+      ],
+      "experience": 430.8
+    },
+    {
+      "damagedName": "Legionary square shield (damaged)",
+      "restoredName": "Legionary square shield",
+      "wikiPage": "https://runescape.wiki/w/Legionary_square_shield",
+      "archaeologyLevel": 12,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 8
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 8
+        },
+        {
+          "name": "Imperial steel",
+          "quantity": 12
+        }
+      ],
+      "experience": 430.8
+    },
+    {
+      "damagedName": "Lesser demon mask (damaged)",
+      "restoredName": "Lesser demon mask",
+      "wikiPage": "https://runescape.wiki/w/Lesser_demon_mask",
+      "archaeologyLevel": 29,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Leather scraps",
+          "quantity": 6
+        },
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 8
+        },
+        {
+          "name": "Demonhide",
+          "quantity": 12
+        },
+        {
+          "name": "Cadmium red",
+          "quantity": 6
+        }
+      ],
+      "experience": 735.9
+    },
+    {
+      "damagedName": "Lingam stone (damaged)",
+      "restoredName": "Lingam stone",
+      "wikiPage": "https://runescape.wiki/w/Lingam_stone",
+      "archaeologyLevel": 108,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 44
+        },
+        {
+          "name": "Carbon black",
+          "quantity": 30
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 32
+        }
+      ],
+      "experience": 28333.3
+    },
+    {
+      "damagedName": "Lion trophy (damaged)",
+      "restoredName": "Lion trophy",
+      "wikiPage": "https://runescape.wiki/w/Lion_trophy",
+      "archaeologyLevel": 81,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Cadmium red",
+          "quantity": 18
+        },
+        {
+          "name": "Animal furs",
+          "quantity": 28
+        },
+        {
+          "name": "White oak",
+          "quantity": 26
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Loarnab rod (damaged)",
+      "restoredName": "Loarnab rod",
+      "wikiPage": "https://runescape.wiki/w/Loarnab_rod",
+      "archaeologyLevel": 63,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "White oak",
+          "quantity": 28
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 16
+        },
+        {
+          "name": "Imperial steel",
+          "quantity": 18
+        }
+      ],
+      "experience": 3033.3
+    },
+    {
+      "damagedName": "Manacles (damaged)",
+      "restoredName": "Manacles",
+      "wikiPage": "https://runescape.wiki/w/Manacles",
+      "archaeologyLevel": 45,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 14
+        },
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 18
+        },
+        {
+          "name": "Eye of Dagon",
+          "quantity": 14
+        }
+      ],
+      "experience": 1283.3
+    },
+    {
+      "damagedName": "Master control (damaged)",
+      "restoredName": "Master control",
+      "wikiPage": "https://runescape.wiki/w/Master_control",
+      "archaeologyLevel": 108,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 30
+        },
+        {
+          "name": "Carbon black",
+          "quantity": 32
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 44
+        }
+      ],
+      "experience": 28333.3
+    },
+    {
+      "damagedName": "Meditation pipe (damaged)",
+      "restoredName": "Meditation pipe",
+      "wikiPage": "https://runescape.wiki/w/Meditation_pipe",
+      "archaeologyLevel": 106,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 60
+        },
+        {
+          "name": "Dragon metal",
+          "quantity": 40
+        }
+      ],
+      "experience": 25666.7
+    },
+    {
+      "damagedName": "Model chariot (damaged)",
+      "restoredName": "Model chariot",
+      "wikiPage": "https://runescape.wiki/w/Model_chariot",
+      "archaeologyLevel": 67,
+      "culture": "Zarosian",
+      "digSite": "Senntisten",
+      "materials": [
+        {
+          "name": "Vellum",
+          "quantity": 12
+        },
+        {
+          "name": "Imperial steel",
+          "quantity": 18
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 20
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 14
+        }
+      ],
+      "experience": 3966.7
+    },
+    {
+      "damagedName": "Morin khuur (damaged)",
+      "restoredName": "Morin khuur",
+      "wikiPage": "https://runescape.wiki/w/Morin_khuur",
+      "archaeologyLevel": 76,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Armadylean yellow",
+          "quantity": 36
+        },
+        {
+          "name": "White oak",
+          "quantity": 32
+        }
+      ],
+      "experience": 6066.7
+    },
+    {
+      "damagedName": "Narogoshuun 'Hob-da-Gob' ball (damaged)",
+      "restoredName": "Narogoshuun 'Hob-da-Gob' ball",
+      "wikiPage": "https://runescape.wiki/w/Narogoshuun_'Hob-da-Gob'_ball",
+      "archaeologyLevel": 76,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Vulcanised rubber",
+          "quantity": 36
+        },
+        {
+          "name": "Mark of the Kyzaj",
+          "quantity": 32
+        }
+      ],
+      "experience": 6066.7
+    },
+    {
+      "damagedName": "Necromantic focus (damaged)",
+      "restoredName": "Necromantic focus",
+      "wikiPage": "https://runescape.wiki/w/Necromantic_focus",
+      "archaeologyLevel": 86,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 20
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 26
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 30
+        }
+      ],
+      "experience": 9333.3
+    },
+    {
+      "damagedName": "Night owl flight goggles (damaged)",
+      "restoredName": "Night owl flight goggles",
+      "wikiPage": "https://runescape.wiki/w/Night_owl_flight_goggles",
+      "archaeologyLevel": 111,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Armadylean yellow",
+          "quantity": 44
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 40
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 30
+        }
+      ],
+      "experience": 32333.3
+    },
+    {
+      "damagedName": "Nightguard shield (damaged)",
+      "restoredName": "Nightguard shield",
+      "wikiPage": "https://runescape.wiki/w/Nightguard_shield",
+      "archaeologyLevel": 103,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Stormguard steel",
+          "quantity": 30
+        },
+        {
+          "name": "Wings of War",
+          "quantity": 36
+        },
+        {
+          "name": "White oak",
+          "quantity": 30
+        }
+      ],
+      "experience": 22166.7
+    },
+    {
+      "damagedName": "Ogre Kyzaj axe (damaged)",
+      "restoredName": "Ogre Kyzaj axe",
+      "wikiPage": "https://runescape.wiki/w/Ogre_Kyzaj_axe",
+      "archaeologyLevel": 81,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 28
+        },
+        {
+          "name": "Mark of the Kyzaj",
+          "quantity": 20
+        },
+        {
+          "name": "Fossilised bone",
+          "quantity": 24
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Opulent wine goblet (damaged)",
+      "restoredName": "Opulent wine goblet",
+      "wikiPage": "https://runescape.wiki/w/Opulent_wine_goblet",
+      "archaeologyLevel": 20,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 14
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 16
+        }
+      ],
+      "experience": 574.4
+    },
+    {
+      "damagedName": "Order of Dis robes (damaged)",
+      "restoredName": "Order of Dis robes",
+      "wikiPage": "https://runescape.wiki/w/Order_of_Dis_robes",
+      "archaeologyLevel": 36,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 16
+        },
+        {
+          "name": "Cadmium red",
+          "quantity": 10
+        },
+        {
+          "name": "Eye of Dagon",
+          "quantity": 14
+        }
+      ],
+      "experience": 861.5
+    },
+    {
+      "damagedName": "Ork cleaver sword (damaged)",
+      "restoredName": "Ork cleaver sword",
+      "wikiPage": "https://runescape.wiki/w/Ork_cleaver_sword",
+      "archaeologyLevel": 81,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 36
+        },
+        {
+          "name": "Fossilised bone",
+          "quantity": 36
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Orthenglass flask (damaged)",
+      "restoredName": "Orthenglass flask",
+      "wikiPage": "https://runescape.wiki/w/Orthenglass_flask",
+      "archaeologyLevel": 102,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 34
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 60
+        }
+      ],
+      "experience": 21000
+    },
+    {
+      "damagedName": "Ourg megahitter (damaged)",
+      "restoredName": "Ourg megahitter",
+      "wikiPage": "https://runescape.wiki/w/Ourg_megahitter",
+      "archaeologyLevel": 97,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "White oak",
+          "quantity": 20
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 20
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 26
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 22
+        }
+      ],
+      "experience": 15833.3
+    },
+    {
+      "damagedName": "Ourg tower/goblin cower shield (damaged)",
+      "restoredName": "Ourg tower/goblin cower shield",
+      "wikiPage": "https://runescape.wiki/w/Ourg_tower%2Fgoblin_cower_shield",
+      "archaeologyLevel": 97,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Mark of the Kyzaj",
+          "quantity": 20
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 26
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 22
+        },
+        {
+          "name": "White oak",
+          "quantity": 20
+        }
+      ],
+      "experience": 15833.3
+    },
+    {
+      "damagedName": "Pasaha (damaged)",
+      "restoredName": "Pasaha",
+      "wikiPage": "https://runescape.wiki/w/Pasaha",
+      "archaeologyLevel": 90,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Felt",
+          "quantity": 40
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 38
+        }
+      ],
+      "experience": 10888.9
+    },
+    {
+      "damagedName": "Patera bowl (damaged)",
+      "restoredName": "Patera bowl",
+      "wikiPage": "https://runescape.wiki/w/Patera_bowl",
+      "archaeologyLevel": 72,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Keramos",
+          "quantity": 36
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 30
+        }
+      ],
+      "experience": 5133.3
+    },
+    {
+      "damagedName": "Peacocking parasol (damaged)",
+      "restoredName": "Peacocking parasol",
+      "wikiPage": "https://runescape.wiki/w/Peacocking_parasol",
+      "archaeologyLevel": 81,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Armadylean yellow",
+          "quantity": 22
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 30
+        },
+        {
+          "name": "White oak",
+          "quantity": 20
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Personal totem (damaged)",
+      "restoredName": "Personal totem",
+      "wikiPage": "https://runescape.wiki/w/Personal_totem",
+      "archaeologyLevel": 106,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 48
+        },
+        {
+          "name": "Carbon black",
+          "quantity": 26
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 26
+        }
+      ],
+      "experience": 25666.7
+    },
+    {
+      "damagedName": "Plant seed satchel (damaged)",
+      "restoredName": "Plant seed satchel",
+      "wikiPage": "https://runescape.wiki/w/Plant_seed_satchel",
+      "archaeologyLevel": 78,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Felt",
+          "quantity": 28
+        },
+        {
+          "name": "Carbon black",
+          "quantity": 28
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 14
+        }
+      ],
+      "experience": 6533.3
+    },
+    {
+      "damagedName": "Pontifex censer (damaged)",
+      "restoredName": "Pontifex censer",
+      "wikiPage": "https://runescape.wiki/w/Pontifex_censer",
+      "archaeologyLevel": 81,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 20
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 20
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 32
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Pontifex crozier (damaged)",
+      "restoredName": "Pontifex crozier",
+      "wikiPage": "https://runescape.wiki/w/Pontifex_crozier",
+      "archaeologyLevel": 81,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 20
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 20
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 32
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Pontifex Maximus figurine (damaged)",
+      "restoredName": "Pontifex Maximus figurine",
+      "wikiPage": "https://runescape.wiki/w/Pontifex_Maximus_figurine",
+      "archaeologyLevel": 74,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Zarosian insignia",
+          "quantity": 24
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 16
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 28
+        }
+      ],
+      "experience": 5600
+    },
+    {
+      "damagedName": "Pontifex mitre (damaged)",
+      "restoredName": "Pontifex mitre",
+      "wikiPage": "https://runescape.wiki/w/Pontifex_mitre",
+      "archaeologyLevel": 81,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 32
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 20
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 20
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Pontifex signet ring (damaged)",
+      "restoredName": "Pontifex signet ring",
+      "wikiPage": "https://runescape.wiki/w/Pontifex_signet_ring",
+      "archaeologyLevel": 58,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 16
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 18
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 22
+        }
+      ],
+      "experience": 2193.3
+    },
+    {
+      "damagedName": "Portable phylactery (damaged)",
+      "restoredName": "Portable phylactery",
+      "wikiPage": "https://runescape.wiki/w/Portable_phylactery",
+      "archaeologyLevel": 107,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 48
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 36
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 20
+        }
+      ],
+      "experience": 27000
+    },
+    {
+      "damagedName": "Portable portal generator (damaged)",
+      "restoredName": "Portable portal generator",
+      "wikiPage": "https://runescape.wiki/w/Portable_portal_generator",
+      "archaeologyLevel": 113,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 50
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 36
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 34
+        }
+      ],
+      "experience": 35000
+    },
+    {
+      "damagedName": "Praetorian hood (damaged)",
+      "restoredName": "Praetorian hood",
+      "wikiPage": "https://runescape.wiki/w/Praetorian_hood",
+      "archaeologyLevel": 114,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Ancient vis",
+          "quantity": 36
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 48
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 40
+        }
+      ],
+      "experience": 36666.7
+    },
+    {
+      "damagedName": "Praetorian robes (damaged)",
+      "restoredName": "Praetorian robes",
+      "wikiPage": "https://runescape.wiki/w/Praetorian_robes",
+      "archaeologyLevel": 114,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Ancient vis",
+          "quantity": 30
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 54
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 40
+        }
+      ],
+      "experience": 36666.7
+    },
+    {
+      "damagedName": "Praetorian staff (damaged)",
+      "restoredName": "Praetorian staff",
+      "wikiPage": "https://runescape.wiki/w/Praetorian_staff",
+      "archaeologyLevel": 114,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 36
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 58
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 30
+        }
+      ],
+      "experience": 36666.7
+    },
+    {
+      "damagedName": "Primis Elementis standard (damaged)",
+      "restoredName": "Primis Elementis standard",
+      "wikiPage": "https://runescape.wiki/w/Primis_Elementis_standard",
+      "archaeologyLevel": 12,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 16
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 12
+        }
+      ],
+      "experience": 430.8
+    },
+    {
+      "damagedName": "Projection attuner (damaged)",
+      "restoredName": "Projection attuner",
+      "wikiPage": "https://runescape.wiki/w/Projection_attuner",
+      "archaeologyLevel": 103,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 28
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 28
+        },
+        {
+          "name": "Dragon metal",
+          "quantity": 40
+        }
+      ],
+      "experience": 22166.7
+    },
+    {
+      "damagedName": "Protective goggles (damaged)",
+      "restoredName": "Protective goggles",
+      "wikiPage": "https://runescape.wiki/w/Protective_goggles",
+      "archaeologyLevel": 101,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Felt",
+          "quantity": 42
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 52
+        }
+      ],
+      "experience": 19833.3
+    },
+    {
+      "damagedName": "Prototype godbow (damaged)",
+      "restoredName": "Prototype godbow",
+      "wikiPage": "https://runescape.wiki/w/Prototype_godbow",
+      "archaeologyLevel": 112,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Aetherium alloy",
+          "quantity": 50
+        },
+        {
+          "name": "Quintessence",
+          "quantity": 34
+        },
+        {
+          "name": "Wings of War",
+          "quantity": 34
+        }
+      ],
+      "experience": 33666.7
+    },
+    {
+      "damagedName": "Prototype godstaff (damaged)",
+      "restoredName": "Prototype godstaff",
+      "wikiPage": "https://runescape.wiki/w/Prototype_godstaff",
+      "archaeologyLevel": 112,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Aetherium alloy",
+          "quantity": 50
+        },
+        {
+          "name": "Quintessence",
+          "quantity": 34
+        },
+        {
+          "name": "Wings of War",
+          "quantity": 34
+        }
+      ],
+      "experience": 33666.7
+    },
+    {
+      "damagedName": "Prototype godsword (damaged)",
+      "restoredName": "Prototype godsword",
+      "wikiPage": "https://runescape.wiki/w/Prototype_godsword",
+      "archaeologyLevel": 112,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Aetherium alloy",
+          "quantity": 50
+        },
+        {
+          "name": "Wings of War",
+          "quantity": 34
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 34
+        }
+      ],
+      "experience": 33666.7
+    },
+    {
+      "damagedName": "Prototype gravimeter (damaged)",
+      "restoredName": "Prototype gravimeter",
+      "wikiPage": "https://runescape.wiki/w/Prototype_gravimeter",
+      "archaeologyLevel": 91,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Quintessence",
+          "quantity": 34
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 20
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 26
+        }
+      ],
+      "experience": 11277.8
+    },
+    {
+      "damagedName": "Quintessence counter (damaged)",
+      "restoredName": "Quintessence counter",
+      "wikiPage": "https://runescape.wiki/w/Quintessence_counter",
+      "archaeologyLevel": 118,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Quintessence",
+          "quantity": 54
+        },
+        {
+          "name": "Stormguard steel",
+          "quantity": 40
+        },
+        {
+          "name": "White oak",
+          "quantity": 40
+        }
+      ],
+      "experience": 43333.3
+    },
+    {
+      "damagedName": "Rekeshuun war tether (damaged)",
+      "restoredName": "Rekeshuun war tether",
+      "wikiPage": "https://runescape.wiki/w/Rekeshuun_war_tether",
+      "archaeologyLevel": 76,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 20
+        },
+        {
+          "name": "Vulcanised rubber",
+          "quantity": 22
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 26
+        }
+      ],
+      "experience": 6066.7
+    },
+    {
+      "damagedName": "Ritual bell (damaged)",
+      "restoredName": "Ritual bell",
+      "wikiPage": "https://runescape.wiki/w/Ritual_bell",
+      "archaeologyLevel": 90,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 40
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 38
+        }
+      ],
+      "experience": 10888.9
+    },
+    {
+      "damagedName": "Ritual dagger (damaged)",
+      "restoredName": "Ritual dagger",
+      "wikiPage": "https://runescape.wiki/w/Ritual_dagger",
+      "archaeologyLevel": 36,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 16
+        },
+        {
+          "name": "Hellfire metal",
+          "quantity": 24
+        }
+      ],
+      "experience": 861.5
+    },
+    {
+      "damagedName": "Rod of Asclepius (damaged)",
+      "restoredName": "Rod of Asclepius",
+      "wikiPage": "https://runescape.wiki/w/Rod_of_Asclepius",
+      "archaeologyLevel": 92,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "White marble",
+          "quantity": 30
+        },
+        {
+          "name": "Star of Saradomin",
+          "quantity": 24
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 26
+        }
+      ],
+      "experience": 11666.7
+    },
+    {
+      "damagedName": "Saragorgak star crown (damaged)",
+      "restoredName": "Saragorgak star crown",
+      "wikiPage": "https://runescape.wiki/w/Saragorgak_star_crown",
+      "archaeologyLevel": 104,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Warforged bronze",
+          "quantity": 44
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 34
+        },
+        {
+          "name": "Star of Saradomin",
+          "quantity": 20
+        }
+      ],
+      "experience": 23333.3
+    },
+    {
+      "damagedName": "She-wolf trophy (damaged)",
+      "restoredName": "She-wolf trophy",
+      "wikiPage": "https://runescape.wiki/w/She-wolf_trophy",
+      "archaeologyLevel": 81,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 26
+        },
+        {
+          "name": "Cadmium red",
+          "quantity": 18
+        },
+        {
+          "name": "Animal furs",
+          "quantity": 28
+        }
+      ],
+      "experience": 7388.9
+    },
+    {
+      "damagedName": "Silver Dominion medal (damaged)",
+      "restoredName": "Silver Dominion medal",
+      "wikiPage": "https://runescape.wiki/w/Silver_Dominion_medal",
+      "archaeologyLevel": 69,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 36
+        },
+        {
+          "name": "Star of Saradomin",
+          "quantity": 26
+        }
+      ],
+      "experience": 4433.3
+    },
+    {
+      "damagedName": "Singing bowl (damaged)",
+      "restoredName": "Singing bowl",
+      "wikiPage": "https://runescape.wiki/w/Singing_bowl",
+      "archaeologyLevel": 106,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 60
+        },
+        {
+          "name": "Dragon metal",
+          "quantity": 40
+        }
+      ],
+      "experience": 25666.7
+    },
+    {
+      "damagedName": "Snuff box (damaged)",
+      "restoredName": "Snuff box",
+      "wikiPage": "https://runescape.wiki/w/Snuff_box",
+      "archaeologyLevel": 78,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Soapstone",
+          "quantity": 20
+        },
+        {
+          "name": "Carbon black",
+          "quantity": 30
+        },
+        {
+          "name": "Felt",
+          "quantity": 20
+        }
+      ],
+      "experience": 6533.3
+    },
+    {
+      "damagedName": "Songbird recorder (damaged)",
+      "restoredName": "Songbird recorder",
+      "wikiPage": "https://runescape.wiki/w/Songbird_recorder",
+      "archaeologyLevel": 91,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Stormguard steel",
+          "quantity": 44
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 36
+        }
+      ],
+      "experience": 11277.8
+    },
+    {
+      "damagedName": "Spent summoning charm (damaged)",
+      "restoredName": "Spent summoning charm",
+      "wikiPage": "https://runescape.wiki/w/Spent_summoning_charm",
+      "archaeologyLevel": 87,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Orgone",
+          "quantity": 46
+        },
+        {
+          "name": "Felt",
+          "quantity": 30
+        }
+      ],
+      "experience": 9722.2
+    },
+    {
+      "damagedName": "Spherical astrolabe (damaged)",
+      "restoredName": "Spherical astrolabe",
+      "wikiPage": "https://runescape.wiki/w/Spherical_astrolabe",
+      "archaeologyLevel": 118,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Aetherium alloy",
+          "quantity": 46
+        },
+        {
+          "name": "Armadylean yellow",
+          "quantity": 40
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 48
+        }
+      ],
+      "experience": 43333.3
+    },
+    {
+      "damagedName": "Spiked dog collar (damaged)",
+      "restoredName": "Spiked dog collar",
+      "wikiPage": "https://runescape.wiki/w/Spiked_dog_collar",
+      "archaeologyLevel": 68,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 24
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 24
+        },
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 16
+        }
+      ],
+      "experience": 4200
+    },
+    {
+      "damagedName": "Storage totem (damaged)",
+      "restoredName": "Storage totem",
+      "wikiPage": "https://runescape.wiki/w/Storage_totem",
+      "archaeologyLevel": 78,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 36
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 34
+        }
+      ],
+      "experience": 6533.3
+    },
+    {
+      "damagedName": "Stormguard gerege (damaged)",
+      "restoredName": "Stormguard gerege",
+      "wikiPage": "https://runescape.wiki/w/Stormguard_gerege",
+      "archaeologyLevel": 95,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Stormguard steel",
+          "quantity": 36
+        },
+        {
+          "name": "Wings of War",
+          "quantity": 28
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 20
+        }
+      ],
+      "experience": 14166.7
+    },
+    {
+      "damagedName": "Talon-3 razor wing (damaged)",
+      "restoredName": "Talon-3 razor wing",
+      "wikiPage": "https://runescape.wiki/w/Talon-3_razor_wing",
+      "archaeologyLevel": 85,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Aetherium alloy",
+          "quantity": 40
+        },
+        {
+          "name": "Wings of War",
+          "quantity": 34
+        }
+      ],
+      "experience": 8944.4
+    },
+    {
+      "damagedName": "The Book of Blood (damaged)",
+      "restoredName": "The Book of Blood",
+      "wikiPage": "https://runescape.wiki/w/The_Book_of_Blood",
+      "archaeologyLevel": null,
+      "culture": "None",
+      "digSite": "None",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 20
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 26
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 30
+        }
+      ],
+      "experience": 9333.3
+    },
+    {
+      "damagedName": "The Book of Ice (damaged)",
+      "restoredName": "The Book of Ice",
+      "wikiPage": "https://runescape.wiki/w/The_Book_of_Ice",
+      "archaeologyLevel": null,
+      "culture": "None",
+      "digSite": "None",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 20
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 26
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 30
+        }
+      ],
+      "experience": 9333.3
+    },
+    {
+      "damagedName": "The Book of Shadow (damaged)",
+      "restoredName": "The Book of Shadow",
+      "wikiPage": "https://runescape.wiki/w/The_Book_of_Shadow",
+      "archaeologyLevel": null,
+      "culture": "None",
+      "digSite": "None",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 20
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 26
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 30
+        }
+      ],
+      "experience": 9333.3
+    },
+    {
+      "damagedName": "The Book of Smoke (damaged)",
+      "restoredName": "The Book of Smoke",
+      "wikiPage": "https://runescape.wiki/w/The_Book_of_Smoke",
+      "archaeologyLevel": null,
+      "culture": "None",
+      "digSite": "None",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 20
+        },
+        {
+          "name": "Blood of Orcus",
+          "quantity": 26
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 30
+        }
+      ],
+      "experience": 9333.3
+    },
+    {
+      "damagedName": "Thorobshuun battle standard (damaged)",
+      "restoredName": "Thorobshuun battle standard",
+      "wikiPage": "https://runescape.wiki/w/Thorobshuun_battle_standard",
+      "archaeologyLevel": 83,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Mark of the Kyzaj",
+          "quantity": 16
+        },
+        {
+          "name": "Malachite green",
+          "quantity": 22
+        },
+        {
+          "name": "White oak",
+          "quantity": 16
+        },
+        {
+          "name": "Samite silk",
+          "quantity": 20
+        }
+      ],
+      "experience": 8166.7
+    },
+    {
+      "damagedName": "Toy glider (damaged)",
+      "restoredName": "Toy glider",
+      "wikiPage": "https://runescape.wiki/w/Toy_glider",
+      "archaeologyLevel": 70,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Stormguard steel",
+          "quantity": 36
+        },
+        {
+          "name": "White oak",
+          "quantity": 30
+        }
+      ],
+      "experience": 4666.7
+    },
+    {
+      "damagedName": "Toy war golem (damaged)",
+      "restoredName": "Toy war golem",
+      "wikiPage": "https://runescape.wiki/w/Toy_war_golem",
+      "archaeologyLevel": 70,
+      "culture": "Armadylean",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 36
+        },
+        {
+          "name": "White oak",
+          "quantity": 30
+        }
+      ],
+      "experience": 4666.7
+    },
+    {
+      "damagedName": "Trishula (damaged)",
+      "restoredName": "Trishula",
+      "wikiPage": "https://runescape.wiki/w/Trishula",
+      "archaeologyLevel": 104,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Hellfire metal",
+          "quantity": 48
+        },
+        {
+          "name": "Eye of Dagon",
+          "quantity": 30
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 20
+        }
+      ],
+      "experience": 23333.3
+    },
+    {
+      "damagedName": "Tsutsaroth helm (damaged)",
+      "restoredName": "Tsutsaroth helm",
+      "wikiPage": "https://runescape.wiki/w/Tsutsaroth_helm",
+      "archaeologyLevel": 116,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Hellfire metal",
+          "quantity": 50
+        },
+        {
+          "name": "Eye of Dagon",
+          "quantity": 40
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 40
+        }
+      ],
+      "experience": 40000
+    },
+    {
+      "damagedName": "Tsutsaroth pauldron (damaged)",
+      "restoredName": "Tsutsaroth pauldron",
+      "wikiPage": "https://runescape.wiki/w/Tsutsaroth_pauldron",
+      "archaeologyLevel": 116,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Hellfire metal",
+          "quantity": 40
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 50
+        },
+        {
+          "name": "Eye of Dagon",
+          "quantity": 40
+        }
+      ],
+      "experience": 40000
+    },
+    {
+      "damagedName": "Tsutsaroth piercing (damaged)",
+      "restoredName": "Tsutsaroth piercing",
+      "wikiPage": "https://runescape.wiki/w/Tsutsaroth_piercing",
+      "archaeologyLevel": 104,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Hellfire metal",
+          "quantity": 44
+        },
+        {
+          "name": "Chaotic brimstone",
+          "quantity": 30
+        },
+        {
+          "name": "Cadmium red",
+          "quantity": 24
+        }
+      ],
+      "experience": 23333.3
+    },
+    {
+      "damagedName": "Tsutsaroth urumi (damaged)",
+      "restoredName": "Tsutsaroth urumi",
+      "wikiPage": "https://runescape.wiki/w/Tsutsaroth_urumi",
+      "archaeologyLevel": 116,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Hellfire metal",
+          "quantity": 50
+        },
+        {
+          "name": "Eye of Dagon",
+          "quantity": 40
+        },
+        {
+          "name": "Third Age iron",
+          "quantity": 40
+        }
+      ],
+      "experience": 40000
+    },
+    {
+      "damagedName": "Vazara (damaged)",
+      "restoredName": "Vazara",
+      "wikiPage": "https://runescape.wiki/w/Vazara",
+      "archaeologyLevel": 96,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 30
+        },
+        {
+          "name": "Compass rose",
+          "quantity": 28
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 28
+        }
+      ],
+      "experience": 15000
+    },
+    {
+      "damagedName": "Venator dagger (damaged)",
+      "restoredName": "Venator dagger",
+      "wikiPage": "https://runescape.wiki/w/Venator_dagger",
+      "archaeologyLevel": 5,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 16
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 12
+        }
+      ],
+      "experience": 305.1
+    },
+    {
+      "damagedName": "Venator light crossbow (damaged)",
+      "restoredName": "Venator light crossbow",
+      "wikiPage": "https://runescape.wiki/w/Venator_light_crossbow",
+      "archaeologyLevel": 5,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 12
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 16
+        }
+      ],
+      "experience": 305.1
+    },
+    {
+      "damagedName": "Vigorem vial (damaged)",
+      "restoredName": "Vigorem vial",
+      "wikiPage": "https://runescape.wiki/w/Vigorem_vial",
+      "archaeologyLevel": 100,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Imperial steel",
+          "quantity": 54
+        },
+        {
+          "name": "Ancient vis",
+          "quantity": 38
+        }
+      ],
+      "experience": 18666.7
+    },
+    {
+      "damagedName": "Virius trophy (damaged)",
+      "restoredName": "Virius trophy",
+      "wikiPage": "https://runescape.wiki/w/Virius_trophy",
+      "archaeologyLevel": 110,
+      "culture": "Zamorakian",
+      "digSite": "Infernal Source",
+      "materials": [
+        {
+          "name": "Demonhide",
+          "quantity": 44
+        },
+        {
+          "name": "White oak",
+          "quantity": 34
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 34
+        }
+      ],
+      "experience": 31000
+    },
+    {
+      "damagedName": "Warped trinket (damaged)",
+      "restoredName": "Warped trinket",
+      "wikiPage": "https://runescape.wiki/w/Warped_trinket",
+      "archaeologyLevel": 113,
+      "culture": "Dragonkin",
+      "digSite": "Daemonheim",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 30
+        },
+        {
+          "name": "Orthenglass",
+          "quantity": 30
+        },
+        {
+          "name": "Soapstone",
+          "quantity": 30
+        },
+        {
+          "name": "Goldrune",
+          "quantity": 30
+        }
+      ],
+      "experience": 35000
+    },
+    {
+      "damagedName": "Wingsuit v1 (damaged)",
+      "restoredName": "Wingsuit v1",
+      "wikiPage": "https://runescape.wiki/w/Wingsuit_v1",
+      "archaeologyLevel": 76,
+      "culture": "Miscellaneous",
+      "digSite": "Stormguard Citadel",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 40
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 20
+        },
+        {
+          "name": "Stormguard steel",
+          "quantity": 9
+        },
+        {
+          "name": "Armadylean yellow",
+          "quantity": 1
+        }
+      ],
+      "experience": 10000
+    },
+    {
+      "damagedName": "Xiphos short sword (damaged)",
+      "restoredName": "Xiphos short sword",
+      "wikiPage": "https://runescape.wiki/w/Xiphos_short_sword",
+      "archaeologyLevel": 100,
+      "culture": "Saradominist",
+      "digSite": "Everlight",
+      "materials": [
+        {
+          "name": "Everlight silvthril",
+          "quantity": 46
+        },
+        {
+          "name": "Leather scraps",
+          "quantity": 46
+        }
+      ],
+      "experience": 18666.7
+    },
+    {
+      "damagedName": "Xolo hard hat (damaged)",
+      "restoredName": "Xolo hard hat",
+      "wikiPage": "https://runescape.wiki/w/Xolo_hard_hat",
+      "archaeologyLevel": 113,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 54
+        },
+        {
+          "name": "Dragon metal",
+          "quantity": 66
+        }
+      ],
+      "experience": 35000
+    },
+    {
+      "damagedName": "Xolo pickaxe (damaged)",
+      "restoredName": "Xolo pickaxe",
+      "wikiPage": "https://runescape.wiki/w/Xolo_pickaxe",
+      "archaeologyLevel": 113,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 36
+        },
+        {
+          "name": "Dragon metal",
+          "quantity": 50
+        },
+        {
+          "name": "Orgone",
+          "quantity": 34
+        }
+      ],
+      "experience": 35000
+    },
+    {
+      "damagedName": "Xolo shield (damaged)",
+      "restoredName": "Xolo shield",
+      "wikiPage": "https://runescape.wiki/w/Xolo_shield",
+      "archaeologyLevel": 119,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Goldrune",
+          "quantity": 52
+        },
+        {
+          "name": "Orgone",
+          "quantity": 44
+        },
+        {
+          "name": "Felt",
+          "quantity": 42
+        }
+      ],
+      "experience": 45000
+    },
+    {
+      "damagedName": "Xolo spear (damaged)",
+      "restoredName": "Xolo spear",
+      "wikiPage": "https://runescape.wiki/w/Xolo_spear",
+      "archaeologyLevel": 119,
+      "culture": "Dragonkin",
+      "digSite": "Orthen",
+      "materials": [
+        {
+          "name": "Dragon metal",
+          "quantity": 74
+        },
+        {
+          "name": "Orgone",
+          "quantity": 64
+        }
+      ],
+      "experience": 45000
+    },
+    {
+      "damagedName": "Yurkolgokh stink grenade (damaged)",
+      "restoredName": "Yurkolgokh stink grenade",
+      "wikiPage": "https://runescape.wiki/w/Yurkolgokh_stink_grenade",
+      "archaeologyLevel": 83,
+      "culture": "Bandosian",
+      "digSite": "Warforge",
+      "materials": [
+        {
+          "name": "Yu'biusk clay",
+          "quantity": 38
+        },
+        {
+          "name": "Vulcanised rubber",
+          "quantity": 36
+        }
+      ],
+      "experience": 8166.7
+    },
+    {
+      "damagedName": "Zaros effigy (damaged)",
+      "restoredName": "Zaros effigy",
+      "wikiPage": "https://runescape.wiki/w/Zaros_effigy",
+      "archaeologyLevel": 17,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Samite silk",
+          "quantity": 8
+        },
+        {
+          "name": "White oak",
+          "quantity": 10
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 12
+        }
+      ],
+      "experience": 520.5
+    },
+    {
+      "damagedName": "Zarosian ewer (damaged)",
+      "restoredName": "Zarosian ewer",
+      "wikiPage": "https://runescape.wiki/w/Zarosian_ewer",
+      "archaeologyLevel": 93,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 52
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 30
+        }
+      ],
+      "experience": 12500
+    },
+    {
+      "damagedName": "Zarosian stein (damaged)",
+      "restoredName": "Zarosian stein",
+      "wikiPage": "https://runescape.wiki/w/Zarosian_stein",
+      "archaeologyLevel": 93,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 16
+        },
+        {
+          "name": "Imperial steel",
+          "quantity": 36
+        },
+        {
+          "name": "Zarosian insignia",
+          "quantity": 30
+        }
+      ],
+      "experience": 12500
+    },
+    {
+      "damagedName": "Zarosian training dummy (damaged)",
+      "restoredName": "Zarosian training dummy",
+      "wikiPage": "https://runescape.wiki/w/Zarosian_training_dummy",
+      "archaeologyLevel": 17,
+      "culture": "Zarosian",
+      "digSite": "Kharid-et",
+      "materials": [
+        {
+          "name": "Third Age iron",
+          "quantity": 16
+        },
+        {
+          "name": "White oak",
+          "quantity": 14
+        }
+      ],
+      "experience": 520.5
+    }
+  ],
+  "collections": [
+    {
+      "name": "Museum - Zarosian I",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zarosian_I",
+      "archaeologyLevel": 25,
+      "collector": "Velucia",
+      "artefactCount": 9,
+      "chronotes": 2635,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Venator dagger",
+        "Venator light crossbow",
+        "Primis Elementis standard",
+        "Legionary gladius",
+        "Legionary square shield",
+        "Zaros effigy",
+        "Zarosian training dummy",
+        "Legatus Maximus figurine",
+        "'Solem in Umbra' painting"
+      ],
+      "pageId": 755562
+    },
+    {
+      "name": "Zarosian I",
+      "wikiPage": "https://runescape.wiki/w/Zarosian_I",
+      "archaeologyLevel": 25,
+      "collector": "Soran, Emissary of Zaros",
+      "artefactCount": 9,
+      "chronotes": 2108,
+      "firstReward": "Seal of the Praefectus Praetorio",
+      "recurringReward": "20 pylon batteries",
+      "artefacts": [
+        "Venator dagger",
+        "Venator light crossbow",
+        "Primis Elementis standard",
+        "Legionary gladius",
+        "Legionary square shield",
+        "Zaros effigy",
+        "Zarosian training dummy",
+        "Legatus Maximus figurine",
+        "'Solem in Umbra' painting"
+      ],
+      "pageId": 755889
+    },
+    {
+      "name": "Museum - Zamorakian I",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zamorakian_I",
+      "archaeologyLevel": 36,
+      "collector": "Velucia",
+      "artefactCount": 9,
+      "chronotes": 3242,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Hookah pipe",
+        "Opulent wine goblet",
+        "Crest of Dagon",
+        "'Disorder' painting",
+        "Imp mask",
+        "Lesser demon mask",
+        "Greater demon mask",
+        "Order of Dis robes",
+        "Ritual dagger"
+      ],
+      "pageId": 755566
+    },
+    {
+      "name": "Zamorakian I",
+      "wikiPage": "https://runescape.wiki/w/Zamorakian_I",
+      "archaeologyLevel": 36,
+      "collector": "Isaura",
+      "artefactCount": 9,
+      "chronotes": 2594,
+      "firstReward": "Abyssal thread",
+      "recurringReward": null,
+      "artefacts": [
+        "Hookah pipe",
+        "Opulent wine goblet",
+        "Crest of Dagon",
+        "'Disorder' painting",
+        "Imp mask",
+        "Lesser demon mask",
+        "Greater demon mask",
+        "Order of Dis robes",
+        "Ritual dagger"
+      ],
+      "pageId": 755891
+    },
+    {
+      "name": "Museum - Saradominist I",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Saradominist_I",
+      "archaeologyLevel": 56,
+      "collector": "Velucia",
+      "artefactCount": 9,
+      "chronotes": 4997,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "'Frying pan'",
+        "Hallowed lantern",
+        "Ceremonial unicorn ornament",
+        "Ceremonial unicorn saddle",
+        "Everlight harp",
+        "Everlight trumpet",
+        "Everlight violin",
+        "Folded-arm figurine (female)",
+        "Folded-arm figurine (male)"
+      ],
+      "pageId": 755570
+    },
+    {
+      "name": "Saradominist I",
+      "wikiPage": "https://runescape.wiki/w/Saradominist_I",
+      "archaeologyLevel": 56,
+      "collector": "Sir Atcha",
+      "artefactCount": 9,
+      "chronotes": 3998,
+      "firstReward": "Lock of hair",
+      "recurringReward": null,
+      "artefacts": [
+        "'Frying pan'",
+        "Hallowed lantern",
+        "Ceremonial unicorn ornament",
+        "Ceremonial unicorn saddle",
+        "Everlight harp",
+        "Everlight trumpet",
+        "Everlight violin",
+        "Folded-arm figurine (female)",
+        "Folded-arm figurine (male)"
+      ],
+      "pageId": 755903
+    },
+    {
+      "name": "Museum - Zarosian V",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zarosian_V",
+      "archaeologyLevel": 62,
+      "collector": "Velucia",
+      "artefactCount": 6,
+      "chronotes": 4117,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Apex cap",
+        "Curse tablet",
+        "Funerary urn of shadow",
+        "Infula robes",
+        "Funerary urn of smoke",
+        "Hand of the Ancients"
+      ],
+      "pageId": 835782
+    },
+    {
+      "name": "Finery of the Inquisition",
+      "wikiPage": "https://runescape.wiki/w/Finery_of_the_Inquisition",
+      "archaeologyLevel": 64,
+      "collector": "Eblis",
+      "artefactCount": 3,
+      "chronotes": 1686,
+      "firstReward": "A random tier 2 Elder Trove",
+      "recurringReward": null,
+      "artefacts": [
+        "Inquisitor's ceremonial armour",
+        "Inquisitor's ceremonial mask",
+        "Inquisitor's seal"
+      ],
+      "pageId": 835786
+    },
+    {
+      "name": "Museum - Zarosian VI",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zarosian_VI",
+      "archaeologyLevel": 64,
+      "collector": "Velucia",
+      "artefactCount": 6,
+      "chronotes": 4207,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Decorative amphora",
+        "Funerary urn of ice",
+        "Loarnab rod",
+        "Inquisitor's ceremonial armour",
+        "Inquisitor's ceremonial mask",
+        "Inquisitor's seal"
+      ],
+      "pageId": 835783
+    },
+    {
+      "name": "Entertaining the Masses",
+      "wikiPage": "https://runescape.wiki/w/Entertaining_the_Masses",
+      "archaeologyLevel": 67,
+      "collector": "Eblis",
+      "artefactCount": 4,
+      "chronotes": 2302,
+      "firstReward": "A random tier 2 Elder Trove",
+      "recurringReward": null,
+      "artefacts": [
+        "Decorative amphora",
+        "Gladiator helmet",
+        "Gladiator sword",
+        "Model chariot"
+      ],
+      "pageId": 835785
+    },
+    {
+      "name": "Museum - Zarosian VII",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zarosian_VII",
+      "archaeologyLevel": 67,
+      "collector": "Velucia",
+      "artefactCount": 6,
+      "chronotes": 4357,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Gladiator helmet",
+        "Gladiator sword",
+        "Funerary urn of blood",
+        "Funerary urn of miasma",
+        "Model chariot",
+        "'The Serpent's Fall' carving"
+      ],
+      "pageId": 835784
+    },
+    {
+      "name": "Religious Iconography",
+      "wikiPage": "https://runescape.wiki/w/Religious_Iconography",
+      "archaeologyLevel": 67,
+      "collector": "Eblis",
+      "artefactCount": 4,
+      "chronotes": 2240,
+      "firstReward": "A random tier 2 Elder Trove",
+      "recurringReward": null,
+      "artefacts": [
+        "Apex cap",
+        "Infula robes",
+        "Loarnab rod",
+        "'The Serpent's Fall' carving"
+      ],
+      "pageId": 835787
+    },
+    {
+      "name": "Urns of the Empire",
+      "wikiPage": "https://runescape.wiki/w/Urns_of_the_Empire",
+      "archaeologyLevel": 67,
+      "collector": "Eblis",
+      "artefactCount": 5,
+      "chronotes": 2820,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Funerary urn of shadow",
+        "Funerary urn of smoke",
+        "Funerary urn of ice",
+        "Funerary urn of blood",
+        "Funerary urn of miasma"
+      ],
+      "pageId": 835788
+    },
+    {
+      "name": "Blingy Fings",
+      "wikiPage": "https://runescape.wiki/w/Blingy_Fings",
+      "archaeologyLevel": 69,
+      "collector": "Chief Tess",
+      "artefactCount": 5,
+      "chronotes": 2484,
+      "firstReward": null,
+      "recurringReward": "20 robust glass",
+      "artefacts": [
+        "Ancient timepiece",
+        "Legatus pendant",
+        "Pontifex signet ring",
+        "Bronze Dominion medal",
+        "Silver Dominion medal"
+      ],
+      "pageId": 755852
+    },
+    {
+      "name": "Museum - Saradominist II",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Saradominist_II",
+      "archaeologyLevel": 72,
+      "collector": "Velucia",
+      "artefactCount": 9,
+      "chronotes": 6502,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Dominion discus",
+        "Dominion javelin",
+        "Dominion pelte shield",
+        "Bronze Dominion medal",
+        "Silver Dominion medal",
+        "Dominion torch",
+        "Decorative vase",
+        "Kantharos cup",
+        "Patera bowl"
+      ],
+      "pageId": 755571
+    },
+    {
+      "name": "Saradominist II",
+      "wikiPage": "https://runescape.wiki/w/Saradominist_II",
+      "archaeologyLevel": 72,
+      "collector": "Sir Atcha",
+      "artefactCount": 9,
+      "chronotes": 5202,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Dominion discus",
+        "Dominion javelin",
+        "Dominion pelte shield",
+        "Bronze Dominion medal",
+        "Silver Dominion medal",
+        "Dominion torch",
+        "Decorative vase",
+        "Kantharos cup",
+        "Patera bowl"
+      ],
+      "pageId": 755905
+    },
+    {
+      "name": "Dragonkin V",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_V",
+      "archaeologyLevel": 77,
+      "collector": "Sharrigan",
+      "artefactCount": 4,
+      "chronotes": 2532,
+      "firstReward": null,
+      "recurringReward": "2 large dungeoneering token boxes",
+      "artefacts": [
+        "Castle gatestone",
+        "Engraved ring of kinship",
+        "Exploratory totem",
+        "Excavator portal mine"
+      ],
+      "pageId": 1003563
+    },
+    {
+      "name": "Museum - Dragonkin V",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Dragonkin_V",
+      "archaeologyLevel": 77,
+      "collector": "Velucia",
+      "artefactCount": 4,
+      "chronotes": 3165,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Castle gatestone",
+        "Engraved ring of kinship",
+        "Exploratory totem",
+        "Excavator portal mine"
+      ],
+      "pageId": 1003908
+    },
+    {
+      "name": "Armadylean I",
+      "wikiPage": "https://runescape.wiki/w/Armadylean_I",
+      "archaeologyLevel": 81,
+      "collector": "Lowse",
+      "artefactCount": 9,
+      "chronotes": 5688,
+      "firstReward": "King Oberon's moonshroom spores",
+      "recurringReward": "50 torn blueprint fragments (Howl's workshop)",
+      "artefacts": [
+        "Ikovian gerege",
+        "Toy glider",
+        "Toy war golem",
+        "Avian song-egg player",
+        "Keshik drum",
+        "Morin khuur",
+        "Aviansie dreamcoat",
+        "Ceremonial plume",
+        "Peacocking parasol"
+      ],
+      "pageId": 755904
+    },
+    {
+      "name": "Museum - Armadylean I",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Armadylean_I",
+      "archaeologyLevel": 81,
+      "collector": "Velucia",
+      "artefactCount": 9,
+      "chronotes": 7110,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Ikovian gerege",
+        "Toy glider",
+        "Toy war golem",
+        "Avian song-egg player",
+        "Keshik drum",
+        "Morin khuur",
+        "Aviansie dreamcoat",
+        "Ceremonial plume",
+        "Peacocking parasol"
+      ],
+      "pageId": 755574
+    },
+    {
+      "name": "Museum - Zamorakian II",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zamorakian_II",
+      "archaeologyLevel": 81,
+      "collector": "Velucia",
+      "artefactCount": 9,
+      "chronotes": 6432,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Branding iron",
+        "Manacles",
+        "'The Lake of Fire' painting",
+        "'Lust' metal sculpture",
+        "Chaos star",
+        "Spiked dog collar",
+        "Larupia trophy",
+        "Lion trophy",
+        "She-wolf trophy"
+      ],
+      "pageId": 755567
+    },
+    {
+      "name": "Museum - Zarosian II",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zarosian_II",
+      "archaeologyLevel": 81,
+      "collector": "Velucia",
+      "artefactCount": 10,
+      "chronotes": 7165,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Ancient timepiece",
+        "Legatus pendant",
+        "'Incite Fear' spell scroll",
+        "Pontifex signet ring",
+        "Ceremonial mace",
+        "Pontifex Maximus figurine",
+        "'Consensus ad Idem' painting",
+        "Pontifex censer",
+        "Pontifex crozier",
+        "Pontifex mitre"
+      ],
+      "pageId": 755563
+    },
+    {
+      "name": "Smoky Fings",
+      "wikiPage": "https://runescape.wiki/w/Smoky_Fings",
+      "archaeologyLevel": 81,
+      "collector": "Chief Tess",
+      "artefactCount": 5,
+      "chronotes": 2204,
+      "firstReward": "Oo'glog Wellspring",
+      "recurringReward": "40 robust glass",
+      "artefacts": [
+        "Hookah pipe",
+        "Opulent wine goblet",
+        "Everlight trumpet",
+        "Dominion torch",
+        "Pontifex censer"
+      ],
+      "pageId": 755849
+    },
+    {
+      "name": "Zamorakian II",
+      "wikiPage": "https://runescape.wiki/w/Zamorakian_II",
+      "archaeologyLevel": 81,
+      "collector": "Isaura",
+      "artefactCount": 9,
+      "chronotes": 5146,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Branding iron",
+        "Manacles",
+        "'The Lake of Fire' painting",
+        "'Lust' metal sculpture",
+        "Chaos star",
+        "Spiked dog collar",
+        "Larupia trophy",
+        "Lion trophy",
+        "She-wolf trophy"
+      ],
+      "pageId": 755897
+    },
+    {
+      "name": "Zarosian II",
+      "wikiPage": "https://runescape.wiki/w/Zarosian_II",
+      "archaeologyLevel": 81,
+      "collector": "Soran, Emissary of Zaros",
+      "artefactCount": 10,
+      "chronotes": 5732,
+      "firstReward": null,
+      "recurringReward": "50 Kharid-et pylon batteries",
+      "artefacts": [
+        "Ancient timepiece",
+        "Legatus pendant",
+        "'Incite Fear' spell scroll",
+        "Pontifex signet ring",
+        "Ceremonial mace",
+        "Pontifex Maximus figurine",
+        "'Consensus ad Idem' painting",
+        "Pontifex censer",
+        "Pontifex crozier",
+        "Pontifex mitre"
+      ],
+      "pageId": 755892
+    },
+    {
+      "name": "Green Gobbo Goodies I",
+      "wikiPage": "https://runescape.wiki/w/Green_Gobbo_Goodies_I",
+      "archaeologyLevel": 83,
+      "collector": "General Wartface",
+      "artefactCount": 5,
+      "chronotes": 3252,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Ekeleshuun blinder mask",
+        "Narogoshuun 'Hob-da-Gob' ball",
+        "Rekeshuun war tether",
+        "Thorobshuun battle standard",
+        "Yurkolgokh stink grenade"
+      ],
+      "pageId": 755880
+    },
+    {
+      "name": "Dragonkin VI",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_VI",
+      "archaeologyLevel": 87,
+      "collector": "Sharrigan",
+      "artefactCount": 6,
+      "chronotes": 4056,
+      "firstReward": "Pastkeeper's tapestry",
+      "recurringReward": null,
+      "artefacts": [
+        "Storage totem",
+        "Plant seed satchel",
+        "Snuff box",
+        "Spent summoning charm",
+        "'Friendship bracelet'",
+        "Homely totem"
+      ],
+      "pageId": 1003564
+    },
+    {
+      "name": "Museum - Dragonkin VI",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Dragonkin_VI",
+      "archaeologyLevel": 87,
+      "collector": "Velucia",
+      "artefactCount": 6,
+      "chronotes": 5070,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Storage totem",
+        "Plant seed satchel",
+        "Snuff box",
+        "Spent summoning charm",
+        "'Friendship bracelet'",
+        "Homely totem"
+      ],
+      "pageId": 1003933
+    },
+    {
+      "name": "Anarchic Abstraction",
+      "wikiPage": "https://runescape.wiki/w/Anarchic_Abstraction",
+      "archaeologyLevel": 89,
+      "collector": "Art Critic Jacques",
+      "artefactCount": 3,
+      "chronotes": 1574,
+      "firstReward": "Replica Zamorakian art",
+      "recurringReward": null,
+      "artefacts": [
+        "'Disorder' painting",
+        "'The Lake of Fire' painting",
+        "'Pandemonium' tapestry"
+      ],
+      "pageId": 755561
+    },
+    {
+      "name": "Hitty Fings",
+      "wikiPage": "https://runescape.wiki/w/Hitty_Fings",
+      "archaeologyLevel": 89,
+      "collector": "Chief Tess",
+      "artefactCount": 5,
+      "chronotes": 5136,
+      "firstReward": null,
+      "recurringReward": "40 robust glass",
+      "artefacts": [
+        "Ceremonial mace",
+        "Pontifex crozier",
+        "Fishing trident",
+        "High priest crozier",
+        "High priest orb"
+      ],
+      "pageId": 755851
+    },
+    {
+      "name": "Museum - Bandosian I",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Bandosian_I",
+      "archaeologyLevel": 89,
+      "collector": "Velucia",
+      "artefactCount": 10,
+      "chronotes": 8445,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Ekeleshuun blinder mask",
+        "Narogoshuun 'Hob-da-Gob' ball",
+        "Rekeshuun war tether",
+        "Ogre Kyzaj axe",
+        "Ork cleaver sword",
+        "Thorobshuun battle standard",
+        "Yurkolgokh stink grenade",
+        "High priest crozier",
+        "High priest mitre",
+        "High priest orb"
+      ],
+      "pageId": 755577
+    },
+    {
+      "name": "Desperate for Artefacts",
+      "wikiPage": "https://runescape.wiki/w/Desperate_for_Artefacts",
+      "archaeologyLevel": 90,
+      "collector": "Giles",
+      "artefactCount": 2,
+      "chronotes": 1335,
+      "firstReward": "Cosmic pyramid",
+      "recurringReward": "No",
+      "artefacts": [
+        "Ceremonial dragonkin device",
+        "Ceremonial dragonkin tablet"
+      ],
+      "pageId": 769177
+    },
+    {
+      "name": "Wise Am the Music Man",
+      "wikiPage": "https://runescape.wiki/w/Wise_Am_the_Music_Man",
+      "archaeologyLevel": 91,
+      "collector": "Wise Old Man",
+      "artefactCount": 7,
+      "chronotes": 4024,
+      "firstReward": "Koschei's needle",
+      "recurringReward": null,
+      "artefacts": [
+        "Everlight harp",
+        "Everlight trumpet",
+        "Everlight violin",
+        "Avian song-egg player",
+        "Keshik drum",
+        "Morin khuur",
+        "Songbird recorder"
+      ],
+      "pageId": 755874
+    },
+    {
+      "name": "Showy Fings",
+      "wikiPage": "https://runescape.wiki/w/Showy_Fings",
+      "archaeologyLevel": 92,
+      "collector": "Chief Tess",
+      "artefactCount": 6,
+      "chronotes": 3158,
+      "firstReward": null,
+      "recurringReward": "40 robust glass",
+      "artefacts": [
+        "Crest of Dagon",
+        "Legatus Maximus figurine",
+        "'Lust' metal sculpture",
+        "Pontifex Maximus figurine",
+        "Ceremonial plume",
+        "Rod of Asclepius"
+      ],
+      "pageId": 755850
+    },
+    {
+      "name": "Red Rum Relics I",
+      "wikiPage": "https://runescape.wiki/w/Red_Rum_Relics_I",
+      "archaeologyLevel": 94,
+      "collector": "General Bentnoze",
+      "artefactCount": 4,
+      "chronotes": 2884,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Ork cleaver sword",
+        "Ogre Kyzaj axe",
+        "Beastkeeper helm",
+        "'Nosorog!' sculpture"
+      ],
+      "pageId": 755863
+    },
+    {
+      "name": "Green Gobbo Goodies II",
+      "wikiPage": "https://runescape.wiki/w/Green_Gobbo_Goodies_II",
+      "archaeologyLevel": 97,
+      "collector": "General Wartface",
+      "artefactCount": 5,
+      "chronotes": 3758,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "High priest crozier",
+        "High priest mitre",
+        "High priest orb",
+        "Idithuun horn ring",
+        "Garagorshuun anchor"
+      ],
+      "pageId": 755882
+    },
+    {
+      "name": "Armadylean II",
+      "wikiPage": "https://runescape.wiki/w/Armadylean_II",
+      "archaeologyLevel": 98,
+      "collector": "Lowse",
+      "artefactCount": 8,
+      "chronotes": 6068,
+      "firstReward": null,
+      "recurringReward": "75 torn blueprint fragments (Howl's workshop)",
+      "artefacts": [
+        "Hawkeye lens multi-vision scope",
+        "Talon-3 razor wing",
+        "Prototype gravimeter",
+        "Songbird recorder",
+        "Dayguard shield",
+        "Stormguard gerege",
+        "Golem heart",
+        "Golem instruction"
+      ],
+      "pageId": 755906
+    },
+    {
+      "name": "Museum - Armadylean II",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Armadylean_II",
+      "archaeologyLevel": 98,
+      "collector": "Velucia",
+      "artefactCount": 8,
+      "chronotes": 7585,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Hawkeye lens multi-vision scope",
+        "Talon-3 razor wing",
+        "Prototype gravimeter",
+        "Songbird recorder",
+        "Dayguard shield",
+        "Stormguard gerege",
+        "Golem heart",
+        "Golem instruction"
+      ],
+      "pageId": 755575
+    },
+    {
+      "name": "Dragonkin I",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_I",
+      "archaeologyLevel": 99,
+      "collector": "Sharrigan",
+      "artefactCount": 7,
+      "chronotes": 5524,
+      "firstReward": null,
+      "recurringReward": "6 Anachronia resource packs",
+      "artefacts": [
+        "Pasaha",
+        "Ritual bell",
+        "Kilaya",
+        "Vazara",
+        "Death mask",
+        "Dragonkin calendar",
+        "Dragonkin staff"
+      ],
+      "pageId": 780116
+    },
+    {
+      "name": "Museum - Dragonkin I",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Dragonkin_I",
+      "archaeologyLevel": 99,
+      "collector": "Velucia",
+      "artefactCount": 7,
+      "chronotes": 6905,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Pasaha",
+        "Ritual bell",
+        "Kilaya",
+        "Vazara",
+        "Death mask",
+        "Dragonkin calendar",
+        "Dragonkin staff"
+      ],
+      "pageId": 780160
+    },
+    {
+      "name": "Museum - Bandosian II",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Bandosian_II",
+      "archaeologyLevel": 100,
+      "collector": "Velucia",
+      "artefactCount": 8,
+      "chronotes": 8057,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Beastkeeper helm",
+        "Idithuun horn ring",
+        "'Nosorog!' sculpture",
+        "Ourg megahitter",
+        "Ourg tower/goblin cower shield",
+        "Garagorshuun anchor",
+        "Dorgeshuun spear",
+        "'Forged in War' sculpture"
+      ],
+      "pageId": 755578
+    },
+    {
+      "name": "Museum - Saradominist III",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Saradominist_III",
+      "archaeologyLevel": 100,
+      "collector": "Velucia",
+      "artefactCount": 6,
+      "chronotes": 5685,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Dominarian device",
+        "Fishing trident",
+        "Amphora",
+        "Rod of Asclepius|Kopis dagger",
+        "Xiphos short sword"
+      ],
+      "pageId": 755572
+    },
+    {
+      "name": "Saradominist III",
+      "wikiPage": "https://runescape.wiki/w/Saradominist_III",
+      "archaeologyLevel": 100,
+      "collector": "Sir Atcha",
+      "artefactCount": 6,
+      "chronotes": 4548,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Dominarian device",
+        "Fishing trident",
+        "Amphora",
+        "Rod of Asclepius",
+        "Kopis dagger",
+        "Xiphos short sword"
+      ],
+      "pageId": 755907
+    },
+    {
+      "name": "Dragonkin II",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_II",
+      "archaeologyLevel": 102,
+      "collector": "Sharrigan",
+      "artefactCount": 4,
+      "chronotes": 3444,
+      "firstReward": null,
+      "recurringReward": "75 rex skeleton fragments",
+      "artefacts": [
+        "Dragon scalpel",
+        "Protective goggles",
+        "Dragon burner",
+        "Orthenglass flask"
+      ],
+      "pageId": 780117
+    },
+    {
+      "name": "Museum - Dragonkin II",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Dragonkin_II",
+      "archaeologyLevel": 102,
+      "collector": "Velucia",
+      "artefactCount": 4,
+      "chronotes": 4305,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Dragon scalpel",
+        "Protective goggles",
+        "Dragon burner",
+        "Orthenglass flask"
+      ],
+      "pageId": 780164
+    },
+    {
+      "name": "Museum - Zamorakian III",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zamorakian_III",
+      "archaeologyLevel": 104,
+      "collector": "Velucia",
+      "artefactCount": 8,
+      "chronotes": 8260,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "'Torment' metal sculpture",
+        "'Pandemonium' tapestry",
+        "Hellfire haladie",
+        "Hellfire katar",
+        "Hellfire zaghnal",
+        "'Possession' metal sculpture",
+        "Trishula",
+        "Tsutsaroth piercing"
+      ],
+      "pageId": 755568
+    },
+    {
+      "name": "Zamorakian III",
+      "wikiPage": "https://runescape.wiki/w/Zamorakian_III",
+      "archaeologyLevel": 104,
+      "collector": "Isaura",
+      "artefactCount": 8,
+      "chronotes": 6608,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "'Torment' metal sculpture",
+        "'Pandemonium' tapestry",
+        "Hellfire haladie",
+        "Hellfire katar",
+        "Hellfire zaghnal",
+        "'Possession' metal sculpture",
+        "Trishula",
+        "Tsutsaroth piercing"
+      ],
+      "pageId": 755901
+    },
+    {
+      "name": "Radiant Renaissance",
+      "wikiPage": "https://runescape.wiki/w/Radiant_Renaissance",
+      "archaeologyLevel": 105,
+      "collector": "Art Critic Jacques",
+      "artefactCount": 3,
+      "chronotes": 2730,
+      "firstReward": "Replica Saradominist art",
+      "recurringReward": null,
+      "artefacts": [
+        "'Hallowed Be the Everlight' painting",
+        "'The Lord of Light' painting",
+        "'The Pride of Padosan' painting"
+      ],
+      "pageId": 755560
+    },
+    {
+      "name": "Imperial Sorcery",
+      "wikiPage": "https://runescape.wiki/w/Imperial_Sorcery",
+      "archaeologyLevel": 107,
+      "collector": "Eblis",
+      "artefactCount": 8,
+      "chronotes": 5742,
+      "firstReward": "A random tier 2 Elder Trove",
+      "recurringReward": null,
+      "artefacts": [
+        "'Incite Fear' spell scroll",
+        "Curse tablet",
+        "Hand of the Ancients",
+        "'Exsanguinate' spell scroll",
+        "Necromantic focus",
+        "'Smoke Cloud' spell scroll",
+        "Ancient magic tablet",
+        "'Animate Dead' spell scroll"
+      ],
+      "pageId": 835789
+    },
+    {
+      "name": "Museum - Zarosian III",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zarosian_III",
+      "archaeologyLevel": 107,
+      "collector": "Velucia",
+      "artefactCount": 9,
+      "chronotes": 9302,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "'Exsanguinate' spell scroll",
+        "Necromantic focus",
+        "Zarosian ewer",
+        "Zarosian stein",
+        "'Smoke Cloud' spell scroll",
+        "Vigorem vial",
+        "Ancient magic tablet",
+        "'Animate Dead' spell scroll",
+        "Portable phylactery"
+      ],
+      "pageId": 755564
+    },
+    {
+      "name": "Zarosian III",
+      "wikiPage": "https://runescape.wiki/w/Zarosian_III",
+      "archaeologyLevel": 107,
+      "collector": "Soran, Emissary of Zaros",
+      "artefactCount": 9,
+      "chronotes": 7442,
+      "firstReward": null,
+      "recurringReward": "100 Kharid-et pylon batteries",
+      "artefacts": [
+        "'Exsanguinate' spell scroll",
+        "Necromantic focus",
+        "Zarosian ewer",
+        "Zarosian stein",
+        "'Smoke Cloud' spell scroll",
+        "Vigorem vial",
+        "Ancient magic tablet",
+        "'Animate Dead' spell scroll",
+        "Portable phylactery"
+      ],
+      "pageId": 755894
+    },
+    {
+      "name": "Dragonkin III",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_III",
+      "archaeologyLevel": 108,
+      "collector": "Sharrigan",
+      "artefactCount": 5,
+      "chronotes": 4652,
+      "firstReward": "Kaladanda",
+      "recurringReward": null,
+      "artefacts": [
+        "Meditation pipe",
+        "Personal totem",
+        "Singing bowl",
+        "Lingam stone",
+        "Master control"
+      ],
+      "pageId": 780118
+    },
+    {
+      "name": "Museum - Dragonkin III",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Dragonkin_III",
+      "archaeologyLevel": 108,
+      "collector": "Velucia",
+      "artefactCount": 5,
+      "chronotes": 5815,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Meditation pipe",
+        "Personal totem",
+        "Singing bowl",
+        "Lingam stone",
+        "Master control"
+      ],
+      "pageId": 780168
+    },
+    {
+      "name": "Red Rum Relics II",
+      "wikiPage": "https://runescape.wiki/w/Red_Rum_Relics_II",
+      "archaeologyLevel": 110,
+      "collector": "General Bentnoze",
+      "artefactCount": 4,
+      "chronotes": 3468,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Ourg megahitter",
+        "Ourg tower/goblin cower shield",
+        "'Forged in War' sculpture",
+        "Hobgoblin mansticker"
+      ],
+      "pageId": 755864
+    },
+    {
+      "name": "Dragonkin VII",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_VII",
+      "archaeologyLevel": 113,
+      "collector": "Sharrigan",
+      "artefactCount": 6,
+      "chronotes": 5772,
+      "firstReward": null,
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Projection attuner",
+        "Golden projection 'needle'",
+        "Comfort gatestone",
+        "Halak's cube",
+        "Portable portal generator",
+        "Warped trinket"
+      ],
+      "pageId": 1003565
+    },
+    {
+      "name": "Museum - Dragonkin VII",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Dragonkin_VII",
+      "archaeologyLevel": 113,
+      "collector": "Velucia",
+      "artefactCount": 6,
+      "chronotes": 7215,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Projection attuner",
+        "Golden projection 'needle'",
+        "Comfort gatestone",
+        "Halak's cube",
+        "Portable portal generator",
+        "Warped trinket"
+      ],
+      "pageId": 1003942
+    },
+    {
+      "name": "Hat Problem",
+      "wikiPage": "https://runescape.wiki/w/Hat_Problem",
+      "archaeologyLevel": 114,
+      "collector": "Wise Old Man",
+      "artefactCount": 7,
+      "chronotes": 6775,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Imp mask",
+        "Ekeleshuun blinder mask",
+        "High priest mitre",
+        "Beastkeeper helm",
+        "Huzamogaarb chaos crown",
+        "Flat cap",
+        "Praetorian hood"
+      ],
+      "pageId": 755877
+    },
+    {
+      "name": "Hat Hoarder",
+      "wikiPage": "https://runescape.wiki/w/Hat_Hoarder",
+      "archaeologyLevel": 116,
+      "collector": "Wise Old Man",
+      "artefactCount": 7,
+      "chronotes": 5995,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Lesser demon mask",
+        "Greater demon mask",
+        "Ceremonial unicorn ornament",
+        "Pontifex mitre",
+        "Saragorgak star crown",
+        "Kal-i-kra chieftain crown",
+        "Tsutsaroth helm"
+      ],
+      "pageId": 755878
+    },
+    {
+      "name": "Museum - Zamorakian IV",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zamorakian_IV",
+      "archaeologyLevel": 116,
+      "collector": "Velucia",
+      "artefactCount": 5,
+      "chronotes": 6792,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Chaos Elemental trophy",
+        "Virius trophy",
+        "Tsutsaroth helm",
+        "Tsutsaroth pauldron",
+        "Tsutsaroth urumi"
+      ],
+      "pageId": 755569
+    },
+    {
+      "name": "Zamorakian IV",
+      "wikiPage": "https://runescape.wiki/w/Zamorakian_IV",
+      "archaeologyLevel": 116,
+      "collector": "Isaura",
+      "artefactCount": 5,
+      "chronotes": 5434,
+      "firstReward": "Ariadne's Diadem",
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Chaos Elemental trophy",
+        "Virius trophy",
+        "Tsutsaroth helm",
+        "Tsutsaroth pauldron",
+        "Tsutsaroth urumi"
+      ],
+      "pageId": 755902
+    },
+    {
+      "name": "Museum - Saradominist IV",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Saradominist_IV",
+      "archaeologyLevel": 117,
+      "collector": "Velucia",
+      "artefactCount": 7,
+      "chronotes": 8777,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "'Hallowed Be the Everlight' painting",
+        "'The Lord of Light' painting",
+        "'The Pride of Padosan' painting",
+        "'The Enlightened Soul' scroll",
+        "'The Eudoxian Elements' tablet",
+        "Doru spear",
+        "Kontos lance"
+      ],
+      "pageId": 755573
+    },
+    {
+      "name": "Saradominist IV",
+      "wikiPage": "https://runescape.wiki/w/Saradominist_IV",
+      "archaeologyLevel": 117,
+      "collector": "Sir Atcha",
+      "artefactCount": 7,
+      "chronotes": 7022,
+      "firstReward": "Petasos",
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "'Hallowed Be the Everlight' painting",
+        "'The Lord of Light' painting",
+        "'The Pride of Padosan' painting",
+        "'The Enlightened Soul' scroll",
+        "'The Eudoxian Elements' tablet",
+        "Doru spear",
+        "Kontos lance"
+      ],
+      "pageId": 755909
+    },
+    {
+      "name": "Armadylean III",
+      "wikiPage": "https://runescape.wiki/w/Armadylean_III",
+      "archaeologyLevel": 118,
+      "collector": "Lowse",
+      "artefactCount": 10,
+      "chronotes": 10468,
+      "firstReward": "Howl's Thinking Cap",
+      "recurringReward": "150 torn blueprint fragments (Howl's workshop)",
+      "artefacts": [
+        "Blackfire lance",
+        "Nightguard shield",
+        "Flat cap",
+        "Night owl flight goggles",
+        "Prototype godbow",
+        "Prototype godstaff",
+        "Prototype godsword",
+        "Chuluu stone",
+        "Quintessence counter",
+        "Spherical astrolabe"
+      ],
+      "pageId": 755910
+    },
+    {
+      "name": "Imperial Impressionism",
+      "wikiPage": "https://runescape.wiki/w/Imperial_Impressionism",
+      "archaeologyLevel": 118,
+      "collector": "Art Critic Jacques",
+      "artefactCount": 3,
+      "chronotes": 2086,
+      "firstReward": "Replica Zarosian art",
+      "recurringReward": null,
+      "artefacts": [
+        "'Solem in Umbra' painting",
+        "'Consensus ad Idem' painting",
+        "'Prima Legio' painting"
+      ],
+      "pageId": 755795
+    },
+    {
+      "name": "Magic Man",
+      "wikiPage": "https://runescape.wiki/w/Magic_Man",
+      "archaeologyLevel": 118,
+      "collector": "Wise Old Man",
+      "artefactCount": 10,
+      "chronotes": 8600,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Legatus Maximus figurine",
+        "Ritual dagger",
+        "Ancient timepiece",
+        "'Incite Fear' spell scroll",
+        "'Exsanguinate' spell scroll",
+        "High priest mitre",
+        "'Smoke Cloud' spell scroll",
+        "'Animate Dead' spell scroll",
+        "Portable phylactery",
+        "Chuluu stone"
+      ],
+      "pageId": 755879
+    },
+    {
+      "name": "Museum - Armadylean III",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Armadylean_III",
+      "archaeologyLevel": 118,
+      "collector": "Velucia",
+      "artefactCount": 10,
+      "chronotes": 13085,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Blackfire lance",
+        "Nightguard shield",
+        "Flat cap",
+        "Night owl flight goggles",
+        "Prototype godbow",
+        "Prototype godstaff",
+        "Prototype godsword",
+        "Chuluu stone",
+        "Quintessence counter",
+        "Spherical astrolabe"
+      ],
+      "pageId": 755576
+    },
+    {
+      "name": "Museum - Zarosian IV",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Zarosian_IV",
+      "archaeologyLevel": 118,
+      "collector": "Velucia",
+      "artefactCount": 6,
+      "chronotes": 8512,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Praetorian hood",
+        "Praetorian robes",
+        "Praetorian staff",
+        "Ancient globe",
+        "Battle plans",
+        "'Prima Legio' painting"
+      ],
+      "pageId": 755565
+    },
+    {
+      "name": "Zarosian IV",
+      "wikiPage": "https://runescape.wiki/w/Zarosian_IV",
+      "archaeologyLevel": 118,
+      "collector": "Soran, Emissary of Zaros",
+      "artefactCount": 6,
+      "chronotes": 6810,
+      "firstReward": "Inquisitor staff piece",
+      "recurringReward": "100 Kharid-et pylon batteries",
+      "artefacts": [
+        "Praetorian hood",
+        "Praetorian robes",
+        "Praetorian staff",
+        "Ancient globe",
+        "Battle plans",
+        "'Prima Legio' painting"
+      ],
+      "pageId": 755895
+    },
+    {
+      "name": "Green Gobbo Goodies III",
+      "wikiPage": "https://runescape.wiki/w/Green_Gobbo_Goodies_III",
+      "archaeologyLevel": 119,
+      "collector": "General Wartface",
+      "artefactCount": 6,
+      "chronotes": 6044,
+      "firstReward": "Helm of Terror (outside)",
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Dorgeshuun spear",
+        "Huzamogaarb chaos crown",
+        "Saragorgak star crown",
+        "Drogokishuun hook sword",
+        "Horogothgar cooking pot",
+        "'Da Boss Man' sculpture"
+      ],
+      "pageId": 755888
+    },
+    {
+      "name": "Knowledge is Power",
+      "wikiPage": "https://runescape.wiki/w/Knowledge_is_Power",
+      "archaeologyLevel": 119,
+      "collector": "Wise Old Man",
+      "artefactCount": 7,
+      "chronotes": 5584,
+      "firstReward": "Amascut's Enchanted Gem",
+      "recurringReward": null,
+      "artefacts": [
+        "Crest of Dagon",
+        "Ikovian gerege",
+        "Necromantic focus",
+        "Golem instruction",
+        "'The Enlightened Soul' scroll",
+        "'The Eudoxian Elements' tablet",
+        "'Da Boss Man' sculpture"
+      ],
+      "pageId": 755881
+    },
+    {
+      "name": "Museum - Bandosian III",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Bandosian_III",
+      "archaeologyLevel": 119,
+      "collector": "Velucia",
+      "artefactCount": 9,
+      "chronotes": 11925,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Huzamogaarb chaos crown",
+        "Saragorgak star crown",
+        "Drogokishuun hook sword",
+        "Hobgoblin mansticker",
+        "Kal-i-kra chieftain crown",
+        "Kal-i-kra mace",
+        "Kal-i-kra warhorn",
+        "'Da Boss Man' sculpture",
+        "Horogothgar cooking pot"
+      ],
+      "pageId": 755579
+    },
+    {
+      "name": "Red Rum Relics III",
+      "wikiPage": "https://runescape.wiki/w/Red_Rum_Relics_III",
+      "archaeologyLevel": 119,
+      "collector": "General Bentnoze",
+      "artefactCount": 4,
+      "chronotes": 4540,
+      "firstReward": "Helm of Terror (inside)",
+      "recurringReward": "Tetracompass piece",
+      "artefacts": [
+        "Kal-i-kra chieftain crown",
+        "Kal-i-kra mace",
+        "Kal-i-kra warhorn",
+        "'Da Boss Man' sculpture"
+      ],
+      "pageId": 755866
+    },
+    {
+      "name": "Dragonkin IV",
+      "wikiPage": "https://runescape.wiki/w/Dragonkin_IV",
+      "archaeologyLevel": 120,
+      "collector": "Sharrigan",
+      "artefactCount": 6,
+      "chronotes": 6980,
+      "firstReward": null,
+      "recurringReward": "150 rex skeleton fragments",
+      "artefacts": [
+        "Xolo hard hat",
+        "Xolo pickaxe",
+        "Xolo shield",
+        "Xolo spear",
+        "Gold dish",
+        "'Raksha' idol"
+      ],
+      "pageId": 780119
+    },
+    {
+      "name": "Museum - Dragonkin IV",
+      "wikiPage": "https://runescape.wiki/w/Museum_-_Dragonkin_IV",
+      "archaeologyLevel": 120,
+      "collector": "Velucia",
+      "artefactCount": 6,
+      "chronotes": 8725,
+      "firstReward": null,
+      "recurringReward": null,
+      "artefacts": [
+        "Xolo hard hat",
+        "Xolo pickaxe",
+        "Xolo shield",
+        "Xolo spear",
+        "Gold dish",
+        "'Raksha' idol"
+      ],
+      "pageId": 780169
+    }
+  ]
+}
