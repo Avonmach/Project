@@ -2389,8 +2389,7 @@ function makeCollectionOverview(items) {
         b.matched.length - a.matched.length ||
         nullableNumber(a.collection.archaeologyLevel) - nullableNumber(b.collection.archaeologyLevel) ||
         a.collection.name.localeCompare(b.collection.name)
-    )
-    .slice(0, 12);
+    );
 
   const title = document.createElement("h3");
   title.textContent = "Matching collections";
@@ -2403,7 +2402,7 @@ function makeCollectionOverview(items) {
 
   const table = document.createElement("table");
   table.className = "secondary-table";
-  table.append(makeTableHead(["Collection", "Collector", "Level", "Matched artefacts"]));
+  table.append(makeTableHead(["Collection", "Collector", "Level", "Progress", "Matched artefacts"]));
   const body = document.createElement("tbody");
   for (const row of rows) {
     const tr = document.createElement("tr");
@@ -2411,7 +2410,8 @@ function makeCollectionOverview(items) {
       makeLinkedTextCell(row.collection.name, row.collection.wikiPage),
       makeTextCell(row.collection.collector || ""),
       makeTextCell(row.collection.archaeologyLevel ?? ""),
-      makeTextCell(`${row.matched.length}/${row.collection.artefactCount || row.collection.artefacts.length}`)
+      makeTextCell(`${row.matched.length}/${row.collection.artefactCount || row.collection.artefacts.length}`),
+      makeTextCell(row.matched.join(", "))
     );
     body.append(tr);
   }
