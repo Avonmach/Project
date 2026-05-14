@@ -989,13 +989,19 @@ function isBeforeLastDetectedItem(row, column, grid) {
 }
 
 function estimateBankGrid(imageData) {
-  const itemCenters = estimateItemCenters(imageData);
+  const bankContent = findBankContentArea(imageData);
+  const centerSearchArea = bankContent
+    ? { x: bankContent.x, y: bankContent.y + 8, w: bankContent.w, h: Math.max(1, bankContent.h - 8) }
+    : null;
+  const itemCenters = estimateItemCenters(imageData, centerSearchArea);
   const cell = getGridCellSize();
   const anchor = findFirstItemAnchor(itemCenters, cell);
   const x = Math.max(0, Math.round(anchor.x - cell / 2 + getGridOffsetX()));
   const y = Math.max(0, Math.round(anchor.y - cell / 2 + getGridOffsetY()));
-  const content = foregroundBounds(imageData);
-  content.maxX = Math.min(content.maxX, bankContentRightLimit(imageData));
+  const content = bankContent
+    ? { minX: bankContent.x, minY: bankContent.y, maxX: bankContent.x + bankContent.w - 1, maxY: bankContent.y + bankContent.h - 1 }
+    : foregroundBounds(imageData);
+  if (!bankContent) content.maxX = Math.min(content.maxX, bankContentRightLimit(imageData));
 
   const last = lastOccupiedGridCell(imageData, x, y, cell, content);
   return {
@@ -1007,6 +1013,45 @@ function estimateBankGrid(imageData) {
     lastOccupiedRow: last.row,
     lastOccupiedColumn: last.column
   };
+}
+
+function findBankContentArea(imageData) {
+  const { width, height, data } = imageData;
+  const framePixels = new Uint8Array(width * height);
+
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const offset = (y * width + x) * 4;
+      if (isFrameOrScrollbarPixel(data[offset], data[offset + 1], data[offset + 2])) framePixels[y * width + x] = 1;
+    }
+  }
+
+  const horizontalRuns = [];
+  for (let y = 0; y < height; y += 1) {
+    let count = 0;
+    for (let x = 0; x < width; x += 1) count += framePixels[y * width + x];
+    if (count > width * 0.45) horizontalRuns.push(y);
+  }
+
+  const verticalRuns = [];
+  for (let x = 0; x < width; x += 1) {
+    let count = 0;
+    for (let y = 0; y < height; y += 1) count += framePixels[y * width + x];
+    if (count > height * 0.45) verticalRuns.push(x);
+  }
+
+  const topCandidates = horizontalRuns.filter((y) => y > 20 && y < height * 0.35);
+  const bottomCandidates = horizontalRuns.filter((y) => y > height * 0.45);
+  const leftCandidates = verticalRuns.filter((x) => x < width * 0.2);
+  const rightCandidates = verticalRuns.filter((x) => x > width * 0.75);
+
+  const top = topCandidates.length ? Math.max(...topCandidates) + 1 : null;
+  const bottom = bottomCandidates.length ? Math.max(...bottomCandidates.filter((y) => y < height - 20)) - 1 : null;
+  const left = leftCandidates.length ? Math.min(...leftCandidates) + 1 : null;
+  const right = rightCandidates.length ? Math.max(...rightCandidates.filter((x) => x < width - 4)) - 1 : null;
+
+  if (top === null || bottom === null || left === null || right === null || bottom <= top || right <= left) return null;
+  return { x: left, y: top, w: right - left + 1, h: bottom - top + 1 };
 }
 
 function lastOccupiedGridCell(imageData, gridX, gridY, cell, content) {
@@ -1045,7 +1090,7 @@ function getGridRows(autoRows) {
 }
 
 function getGridColumns(autoColumns) {
-  return Math.max(1, autoColumns - 1);
+  return Math.max(1, autoColumns);
 }
 
 function findFirstItemAnchor(centers, cell) {
@@ -1060,12 +1105,16 @@ function findFirstItemAnchor(centers, cell) {
   return firstRow[0] || sorted[0];
 }
 
-function estimateItemCenters(imageData) {
+function estimateItemCenters(imageData, bounds = null) {
   const { width, height, data } = imageData;
   const mask = new Uint8Array(width * height);
+  const minX = bounds?.x ?? 0;
+  const minY = bounds?.y ?? 0;
+  const maxX = bounds ? bounds.x + bounds.w - 1 : width - 1;
+  const maxY = bounds ? bounds.y + bounds.h - 1 : height - 1;
 
-  for (let y = 0; y < height; y += 1) {
-    for (let x = 0; x < width; x += 1) {
+  for (let y = minY; y <= maxY; y += 1) {
+    for (let x = minX; x <= maxX; x += 1) {
       const offset = (y * width + x) * 4;
       if (isGridItemPixel(data[offset], data[offset + 1], data[offset + 2])) mask[y * width + x] = 1;
     }
