@@ -564,6 +564,7 @@ function makeFullShapeImageData(imageData, grid, mode = "damaged") {
       if (w <= 0 || h <= 0) continue;
 
       const backgroundColors = cellBackgroundColors(imageData, x, y, w, h, { includeSimilar: removeSimilarBackground });
+      const backgroundMask = removeSimilarBackground ? connectedCellBackgroundMask(imageData, x, y, w, h, backgroundColors) : null;
       for (let py = y; py < y + h; py += 1) {
         for (let px = x; px < x + w; px += 1) {
           const offset = (py * imageData.width + px) * 4;
@@ -571,9 +572,12 @@ function makeFullShapeImageData(imageData, grid, mode = "damaged") {
           const g = imageData.data[offset + 1];
           const b = imageData.data[offset + 2];
           const a = imageData.data[offset + 3];
+          const backgroundRemoved = backgroundMask
+            ? backgroundMask[(py - y) * w + (px - x)]
+            : matchesCellBackground(r, g, b, backgroundColors, removeSimilarBackground);
           const visible =
             a > 20 &&
-            !matchesCellBackground(r, g, b, backgroundColors, removeSimilarBackground) &&
+            !backgroundRemoved &&
             !isQuantityPixelInCell(r, g, b, px - x, py - y);
           out.data[offset] = 0;
           out.data[offset + 1] = 0;
@@ -627,6 +631,44 @@ function matchesCellBackground(r, g, b, backgroundColors, includeSimilar) {
   if (!includeSimilar) return backgroundColors.some((color) => sameColor(r, g, b, color));
   if (!isSlotBackgroundCandidate(r, g, b)) return false;
   return backgroundColors.some((color) => channelDistance(r, g, b, color) <= 5 && colorDistance(r, g, b, color) <= 14);
+}
+
+function connectedCellBackgroundMask(imageData, x, y, w, h, backgroundColors) {
+  const mask = new Uint8Array(w * h);
+  const queue = [];
+  const add = (localX, localY) => {
+    if (localX < 0 || localY < 0 || localX >= w || localY >= h) return;
+    const index = localY * w + localX;
+    if (mask[index]) return;
+    const offset = ((y + localY) * imageData.width + x + localX) * 4;
+    const r = imageData.data[offset];
+    const g = imageData.data[offset + 1];
+    const b = imageData.data[offset + 2];
+    if (!matchesCellBackground(r, g, b, backgroundColors, true)) return;
+    mask[index] = 1;
+    queue.push(index);
+  };
+
+  for (let px = 0; px < w; px += 1) {
+    add(px, 0);
+    add(px, h - 1);
+  }
+  for (let py = 1; py < h - 1; py += 1) {
+    add(0, py);
+    add(w - 1, py);
+  }
+
+  for (let i = 0; i < queue.length; i += 1) {
+    const index = queue[i];
+    const localX = index % w;
+    const localY = Math.floor(index / w);
+    add(localX + 1, localY);
+    add(localX - 1, localY);
+    add(localX, localY + 1);
+    add(localX, localY - 1);
+  }
+
+  return mask;
 }
 
 function colorDistance(r, g, b, color) {
