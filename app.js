@@ -245,12 +245,12 @@ function analyzeCurrentImage() {
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const grid = estimateBankGrid(imageData, { trimLastColumn: recognitionMode === "restored" });
   const boxes = detectItemBoxes(imageData, grid);
-  const shapeImageData = makeFullShapeImageData(imageData, grid);
+  const shapeImageData = makeFullShapeImageData(imageData, grid, recognitionMode);
 
   const analyzedDetections = boxes.map((box, index) => {
     const quantityResult = detectQuantity(imageData, box);
     const match = matchArtifact(shapeImageData, imageData, box, recognitionMode);
-    const preview = makePreviewCanvas(imageData, box);
+    const preview = makePreviewCanvas(imageData, box, { enhanceHover: recognitionMode !== "restored" });
     const processedPreview = makeProcessedCanvas(imageData, shapeImageData, box, { enhance: recognitionMode !== "restored" });
     const referencePreview = makeReferenceCanvas(match.item.image);
 
@@ -551,8 +551,9 @@ function fingerprintColorCrop(originalImageData, shapeImageData, box) {
   return toFingerprint(tempCtx.getImageData(0, 0, MATCH_SIZE, MATCH_SIZE), true);
 }
 
-function makeFullShapeImageData(imageData, grid) {
+function makeFullShapeImageData(imageData, grid, mode = "damaged") {
   const out = new ImageData(imageData.width, imageData.height);
+  const removeSimilarBackground = mode === "restored";
 
   for (let row = 0; row < grid.rows; row += 1) {
     for (let column = 0; column < grid.columns; column += 1) {
@@ -562,7 +563,7 @@ function makeFullShapeImageData(imageData, grid) {
       const h = Math.min(grid.cell, (grid.maxY ?? imageData.height - 1) - y + 1, imageData.height - y);
       if (w <= 0 || h <= 0) continue;
 
-      const backgroundColor = cellBackgroundColor(imageData, x, y, w, h);
+      const backgroundColors = cellBackgroundColors(imageData, x, y, w, h, { includeSimilar: removeSimilarBackground });
       for (let py = y; py < y + h; py += 1) {
         for (let px = x; px < x + w; px += 1) {
           const offset = (py * imageData.width + px) * 4;
@@ -570,7 +571,10 @@ function makeFullShapeImageData(imageData, grid) {
           const g = imageData.data[offset + 1];
           const b = imageData.data[offset + 2];
           const a = imageData.data[offset + 3];
-          const visible = a > 20 && !sameColor(r, g, b, backgroundColor) && !isQuantityPixel(r, g, b);
+          const visible =
+            a > 20 &&
+            !matchesCellBackground(r, g, b, backgroundColors, removeSimilarBackground) &&
+            !isQuantityPixelInCell(r, g, b, px - x, py - y);
           out.data[offset] = 0;
           out.data[offset + 1] = 0;
           out.data[offset + 2] = 0;
@@ -583,12 +587,13 @@ function makeFullShapeImageData(imageData, grid) {
   return out;
 }
 
-function cellBackgroundColor(imageData, x, y, w, h) {
+function cellBackgroundColors(imageData, x, y, w, h, options = {}) {
   const counts = new Map();
   const addSample = (px, py) => {
     const color = pixelColorAt(imageData, px, py);
     if (isQuantityPixel(color.r, color.g, color.b)) return;
     if (isFrameOrScrollbarPixel(color.r, color.g, color.b)) return;
+    if (!isSlotBackgroundCandidate(color.r, color.g, color.b)) return;
     const key = `${color.r},${color.g},${color.b}`;
     counts.set(key, (counts.get(key) ?? 0) + 1);
   };
@@ -604,10 +609,37 @@ function cellBackgroundColor(imageData, x, y, w, h) {
     }
   }
 
-  const best = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
-  if (!best) return pixelColorAt(imageData, x, y);
-  const [r, g, b] = best.split(",").map(Number);
-  return { r, g, b };
+  const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  if (!ranked.length) return [pixelColorAt(imageData, x, y)];
+
+  const minimumCount = options.includeSimilar ? Math.max(2, ranked[0][1] * 0.12) : ranked[0][1];
+  return ranked
+    .filter((entry) => entry[1] >= minimumCount)
+    .slice(0, options.includeSimilar ? 4 : 1)
+    .map(([key]) => {
+      const [r, g, b] = key.split(",").map(Number);
+      return { r, g, b };
+    });
+}
+
+function matchesCellBackground(r, g, b, backgroundColors, includeSimilar) {
+  if (!includeSimilar) return backgroundColors.some((color) => sameColor(r, g, b, color));
+  if (!isSlotBackgroundCandidate(r, g, b)) return false;
+  return backgroundColors.some((color) => colorDistance(r, g, b, color) <= 30);
+}
+
+function colorDistance(r, g, b, color) {
+  return Math.abs(r - color.r) + Math.abs(g - color.g) + Math.abs(b - color.b);
+}
+
+function isSlotBackgroundCandidate(r, g, b) {
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  return max >= 24 && max <= 95 && max - min <= 26 && r <= g + 18 && g <= r + 18;
+}
+
+function isQuantityPixelInCell(r, g, b, x, y) {
+  return x < 26 && y < 17 && isQuantityPixel(r, g, b);
 }
 
 function connectedGridBackgroundMask(imageData, grid, backgroundColor) {
@@ -1830,11 +1862,12 @@ function cropImageData(imageData, box) {
   });
 }
 
-function makePreviewCanvas(imageData, box) {
+function makePreviewCanvas(imageData, box, options = {}) {
   const preview = document.createElement("canvas");
   preview.width = PREVIEW_SIZE;
   preview.height = PREVIEW_SIZE;
   preview.className = "slot-preview";
+  if (options.enhanceHover === false) preview.classList.add("no-hover-enhance");
   const previewCtx = preview.getContext("2d");
   const temp = document.createElement("canvas");
   temp.width = box.w;
@@ -1874,6 +1907,7 @@ function makeProcessedCanvas(originalImageData, shapeImageData, box, options = {
   preview.width = PREVIEW_SIZE;
   preview.height = PREVIEW_SIZE;
   preview.className = "processed-preview";
+  if (!enhance) preview.classList.add("no-hover-enhance");
   const previewCtx = preview.getContext("2d");
   previewCtx.clearRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
   previewCtx.imageSmoothingEnabled = true;

@@ -701,6 +701,11 @@ tbody tr:has(.processed-preview:hover),
   z-index: 80;
 }
 
+.slot-preview.no-hover-enhance:hover,
+.processed-preview.no-hover-enhance:hover {
+  filter: none;
+}
+
 .processed-preview,
 .reference-preview {
   background: #ffffff;
