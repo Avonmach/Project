@@ -317,7 +317,7 @@ function analyzeCurrentImage() {
 
   applyUniqueArtefactAssignments(detections);
   renderDetections();
-  drawBoxes(detections, grid.contentArea);
+  drawBoxes(detections, grid.contentArea, grid.infinityArea);
 }
 
 function matchArtifact(shapeImageData, originalImageData, box, mode = "damaged") {
@@ -1011,7 +1011,8 @@ function estimateBankGrid(imageData) {
     rows: getGridRows(Math.max(1, Math.ceil((content.maxY - y + 1) / cell))),
     lastOccupiedRow: last.row,
     lastOccupiedColumn: last.column,
-    contentArea: bankContent
+    contentArea: bankContent,
+    infinityArea: bankContent?.infinity || null
   };
 }
 
@@ -1056,7 +1057,7 @@ function findBankContentArea(imageData) {
     const anchoredTop = findContentTopAfterInfinity(imageData, infinity) ?? infinity.y + infinity.h + 8;
     const anchoredRight = findContentRightBeforeScrollbar(imageData, anchoredTop, bottom) ?? right;
     if (bottom > anchoredTop && right > anchoredLeft) {
-      return { x: anchoredLeft, y: anchoredTop, w: anchoredRight - anchoredLeft + 1, h: bottom - anchoredTop + 1 };
+      return { x: anchoredLeft, y: anchoredTop, w: anchoredRight - anchoredLeft + 1, h: bottom - anchoredTop + 1, infinity };
     }
   }
 
@@ -1105,12 +1106,7 @@ function findContentTopAfterInfinity(imageData, infinity) {
 }
 
 function findContentLeftFromInfinity(imageData, infinity) {
-  const y = Math.min(imageData.height - 1, infinity.y + infinity.h + 16);
-  for (let x = Math.max(0, infinity.x - 16); x < Math.min(imageData.width, infinity.x + 24); x += 1) {
-    const offset = (y * imageData.width + x) * 4;
-    if (isBankContentBackgroundPixel(imageData.data[offset], imageData.data[offset + 1], imageData.data[offset + 2])) return x;
-  }
-  return null;
+  return Math.max(0, infinity.x - 10);
 }
 
 function findContentRightBeforeScrollbar(imageData, top, bottom) {
@@ -3230,12 +3226,17 @@ function exportBestMatch(match) {
   };
 }
 
-function drawBoxes(items, contentArea = null) {
+function drawBoxes(items, contentArea = null, infinityArea = null) {
   ctx.drawImage(loadedImage, 0, 0);
   if (contentArea) {
     ctx.lineWidth = 3;
     ctx.strokeStyle = "#ff2b2b";
     ctx.strokeRect(contentArea.x + 0.5, contentArea.y + 0.5, contentArea.w, contentArea.h);
+  }
+  if (infinityArea) {
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#ff2bff";
+    ctx.strokeRect(infinityArea.x + 0.5, infinityArea.y + 0.5, infinityArea.w, infinityArea.h);
   }
   ctx.lineWidth = 1;
   ctx.strokeStyle = "#25d984";
