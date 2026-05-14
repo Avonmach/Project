@@ -243,7 +243,7 @@ function analyzeCurrentImage() {
   const recognitionMode = activeResultsTab === "restored" ? "restored" : "damaged";
   ctx.drawImage(loadedImage, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const grid = estimateBankGrid(imageData);
+  const grid = estimateBankGrid(imageData, { trimLastColumn: recognitionMode === "restored" });
   const boxes = detectItemBoxes(imageData, grid);
   const shapeImageData = makeFullShapeImageData(imageData, grid);
 
@@ -561,7 +561,7 @@ function makeFullShapeImageData(imageData, grid) {
     const g = imageData.data[offset + 1];
     const b = imageData.data[offset + 2];
     const a = imageData.data[offset + 3];
-    const visible = a > 20 && !isGridBackgroundColor(r, g, b, backgroundColor) && !isQuantityPixel(r, g, b);
+    const visible = a > 20 && !sameColor(r, g, b, backgroundColor) && !isQuantityPixel(r, g, b);
     out.data[offset] = 0;
     out.data[offset + 1] = 0;
     out.data[offset + 2] = 0;
@@ -569,14 +569,6 @@ function makeFullShapeImageData(imageData, grid) {
   }
 
   return out;
-}
-
-function isGridBackgroundColor(r, g, b, backgroundColor) {
-  return sameColor(r, g, b, backgroundColor) || isBankContentBackgroundPixel(r, g, b) || colorDistance(r, g, b, backgroundColor) <= 18;
-}
-
-function colorDistance(r, g, b, color) {
-  return Math.abs(r - color.r) + Math.abs(g - color.g) + Math.abs(b - color.b);
 }
 
 function connectedGridBackgroundMask(imageData, grid, backgroundColor) {
@@ -1002,7 +994,7 @@ function isBeforeLastDetectedItem(row, column, grid) {
   return row < grid.lastOccupiedRow || (row === grid.lastOccupiedRow && column <= lastColumn);
 }
 
-function estimateBankGrid(imageData) {
+function estimateBankGrid(imageData, options = {}) {
   const bankContent = findBankContentArea(imageData);
   const centerSearchArea = bankContent
     ? { x: bankContent.x, y: bankContent.y + 8, w: bankContent.w, h: Math.max(1, bankContent.h - 8) }
@@ -1021,7 +1013,7 @@ function estimateBankGrid(imageData) {
   const contentRows = getGridRows(Math.max(1, Math.ceil((content.maxY - y + 1) / cell)));
   const itemExtent = gridExtentFromItemCenters(itemCenters, x, y, cell);
   const last = itemExtent || lastOccupiedGridCell(imageData, x, y, cell, content);
-  const columns = contentColumns;
+  const columns = Math.max(1, contentColumns - (options.trimLastColumn ? 1 : 0));
   const rows = itemExtent ? Math.min(contentRows, Math.max(1, itemExtent.row + 1)) : contentRows;
   return {
     x,
