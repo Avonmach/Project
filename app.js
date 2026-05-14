@@ -45,6 +45,10 @@ const QUANTITY_REVIEW_MARGIN = 0.03;
 const PREVIEW_BRIGHTNESS = 1.45;
 let loadedImage = null;
 let detections = [];
+const detectionsByMode = {
+  damaged: [],
+  restored: []
+};
 let references = [];
 let archaeologyReference = { materials: [], artefactRecipes: [], collections: [] };
 let recipeByRestoredName = new Map();
@@ -243,7 +247,7 @@ function analyzeCurrentImage() {
   const boxes = detectItemBoxes(imageData, grid);
   const shapeImageData = makeFullShapeImageData(imageData, grid);
 
-  detections = boxes.map((box, index) => {
+  const analyzedDetections = boxes.map((box, index) => {
     const quantityResult = detectQuantity(imageData, box);
     const match = matchArtifact(shapeImageData, imageData, box, recognitionMode);
     const preview = makePreviewCanvas(imageData, box);
@@ -315,6 +319,8 @@ function analyzeCurrentImage() {
     };
   });
 
+  detectionsByMode[recognitionMode] = analyzedDetections;
+  detections = analyzedDetections;
   applyUniqueArtefactAssignments(detections);
   renderDetections();
   drawBoxes(detections, grid.contentArea, grid.infinityArea);
@@ -1990,24 +1996,17 @@ function paintFingerprintMask(canvas, fingerprint) {
 
 function renderDetections() {
   if (!detections.length) {
-    drawEmptyState("No occupied artefact slots detected.");
+    if (activeResultsTab === "damaged") drawEmptyState("No occupied artefact slots detected.");
     updateTotals();
     renderRestorationPlan([]);
+    renderResultsTabContent();
     return;
   }
 
   updateFilterOptions();
   const visibleDetections = filteredDetections();
-  resultsBody.replaceChildren();
-  if (!visibleDetections.length) {
-    drawEmptyState("No artefacts match the current filters.");
-    updateTotals();
-    renderRestorationPlan([]);
-    return;
-  }
-
-  for (const detection of visibleDetections) {
-    resultsBody.append(makeDetectionTableRow(detection));
+  if (activeResultsTab === "damaged") {
+    renderDamagedTable(visibleDetections);
   }
 
   updateTotals();
@@ -2166,6 +2165,7 @@ function matchesDetectionFilters(detection) {
 function setActiveResultsTab(tab) {
   if (!RESULT_TAB_TITLES[tab]) return;
   activeResultsTab = tab;
+  detections = detectionsByMode[resultModeForTab(tab)];
   resultsTitle.textContent = RESULT_TAB_TITLES[tab];
 
   for (const button of resultTabButtons) {
@@ -2178,7 +2178,8 @@ function setActiveResultsTab(tab) {
     panel.hidden = panel.dataset.resultsPanel !== tab;
   }
 
-  if (tab === "damaged" && detections.length) renderDamagedTable(filteredDetections());
+  if (tab === "damaged") renderDamagedTable(filteredDetections());
+  updateTotals();
   renderResultsTabContent();
   requestTabScreenshot(tab);
 }
@@ -2191,8 +2192,16 @@ function renderResultsTabContent() {
   if (activeResultsTab === "materials") renderMaterialsTab(items);
 }
 
+function resultModeForTab(tab) {
+  return tab === "restored" ? "restored" : "damaged";
+}
+
 function renderDamagedTable(items) {
   resultsBody.replaceChildren();
+  if (!detections.length) {
+    drawEmptyState("Analyze a damaged artefact screenshot to populate this table.");
+    return;
+  }
   if (!items.length) {
     drawEmptyState("No artefacts match the current filters.");
     return;
@@ -2253,7 +2262,7 @@ function renderRestoredTab(items) {
   const wrap = document.createElement("div");
   wrap.className = "table-wrap";
   const table = document.createElement("table");
-  table.append(makeDetectionTableHead());
+  table.append(makeDetectionTableHead("restored"));
   const body = document.createElement("tbody");
   for (const detection of items) body.append(makeDetectionTableRow(cloneDetectionForTable(detection)));
   table.append(body);
@@ -2453,8 +2462,9 @@ function makeTableHead(labels) {
   return head;
 }
 
-function makeDetectionTableHead() {
-  return makeTableHead(["Artefact", "Level", "Culture", "Dig site", "Status", "Crop", "Guess", "Ref", "Quantity"]);
+function makeDetectionTableHead(mode = "damaged") {
+  const name = mode === "restored" ? "Restored artefact" : "Damaged artefact";
+  return makeTableHead([name, "Level", "Culture", "Dig site", "Status", "Crop", "Guess", "Ref", "Quantity"]);
 }
 
 function makeTextCell(value, className = "") {
