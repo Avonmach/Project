@@ -561,7 +561,7 @@ function makeFullShapeImageData(imageData, grid) {
     const g = imageData.data[offset + 1];
     const b = imageData.data[offset + 2];
     const a = imageData.data[offset + 3];
-    const visible = a > 20 && !sameColor(r, g, b, backgroundColor) && !isQuantityPixel(r, g, b);
+    const visible = a > 20 && !isGridBackgroundColor(r, g, b, backgroundColor) && !isQuantityPixel(r, g, b);
     out.data[offset] = 0;
     out.data[offset + 1] = 0;
     out.data[offset + 2] = 0;
@@ -569,6 +569,14 @@ function makeFullShapeImageData(imageData, grid) {
   }
 
   return out;
+}
+
+function isGridBackgroundColor(r, g, b, backgroundColor) {
+  return sameColor(r, g, b, backgroundColor) || isBankContentBackgroundPixel(r, g, b) || colorDistance(r, g, b, backgroundColor) <= 18;
+}
+
+function colorDistance(r, g, b, color) {
+  return Math.abs(r - color.r) + Math.abs(g - color.g) + Math.abs(b - color.b);
 }
 
 function connectedGridBackgroundMask(imageData, grid, backgroundColor) {
