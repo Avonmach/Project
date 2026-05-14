@@ -1669,7 +1669,11 @@ function makeQuantityDebug({ mode, strict, scanBox, yellowPixels, digitBoxes, re
       digit: match.digit,
       score: match.score,
       normalized: match.normalized,
-      options: (match.options || []).slice(0, 3).map((option) => ({ digit: option.digit, score: option.score }))
+      options: (match.options || []).slice(0, 3).map((option) => ({
+        digit: option.digit,
+        score: option.score,
+        template: digitTemplates[option.digit] || []
+      }))
     })),
     text,
     confidence
@@ -3014,9 +3018,18 @@ function makeQuantityDebugView(detection) {
   digitList.className = "quantity-debug-digits";
   if (debug.matches.length) {
     for (const match of debug.matches) {
-      const line = document.createElement("code");
+      const line = document.createElement("div");
+      line.className = "quantity-debug-match";
+      const summary = document.createElement("code");
       const options = match.options.map((option) => `${option.digit}:${percent(option.score)}`).join(" ");
-      line.textContent = `#${match.index} ${match.digit} ${percent(match.score)} ${match.normalized.join("/")} ${options}`;
+      summary.textContent = `#${match.index} ${match.digit} ${percent(match.score)} input ${match.normalized.join("/")} ${options}`;
+      line.append(summary);
+      const templates = document.createElement("div");
+      templates.className = "quantity-debug-templates";
+      for (const option of match.options) {
+        templates.append(makeQuantityTemplateView(option));
+      }
+      line.append(templates);
       digitList.append(line);
     }
   } else {
@@ -3027,6 +3040,24 @@ function makeQuantityDebugView(detection) {
 
   details.append(sourceLabel, sourceCanvas, maskLabel, canvas, meta, digitList);
   return details;
+}
+
+function makeQuantityTemplateView(option) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "quantity-debug-template";
+  const label = document.createElement("small");
+  label.textContent = `${option.digit} ${percent(option.score)}`;
+  const grid = document.createElement("div");
+  grid.className = "quantity-debug-template-grid";
+  for (const row of option.template || []) {
+    for (const value of row) {
+      const cell = document.createElement("span");
+      if (value === "1") cell.className = "is-on";
+      grid.append(cell);
+    }
+  }
+  wrapper.append(label, grid);
+  return wrapper;
 }
 
 function makeQuantitySourceCanvas(debug) {
