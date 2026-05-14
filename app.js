@@ -239,8 +239,8 @@ function analyzeCurrentImage() {
   const recognitionMode = activeResultsTab === "restored" ? "restored" : "damaged";
   ctx.drawImage(loadedImage, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const boxes = detectItemBoxes(imageData);
   const grid = estimateBankGrid(imageData);
+  const boxes = detectItemBoxes(imageData, grid);
   const shapeImageData = makeFullShapeImageData(imageData, grid);
 
   detections = boxes.map((box, index) => {
@@ -317,7 +317,7 @@ function analyzeCurrentImage() {
 
   applyUniqueArtefactAssignments(detections);
   renderDetections();
-  drawBoxes(detections);
+  drawBoxes(detections, grid.contentArea);
 }
 
 function matchArtifact(shapeImageData, originalImageData, box, mode = "damaged") {
@@ -965,8 +965,7 @@ function foregroundAlphaBounds(imageData) {
   return { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 };
 }
 
-function detectItemBoxes(imageData) {
-  const grid = estimateBankGrid(imageData);
+function detectItemBoxes(imageData, grid = estimateBankGrid(imageData)) {
   const boxes = [];
 
   for (let row = 0; row < grid.rows; row += 1) {
@@ -1011,7 +1010,8 @@ function estimateBankGrid(imageData) {
     columns: getGridColumns(Math.max(1, Math.ceil((content.maxX - x + 1) / cell))),
     rows: getGridRows(Math.max(1, Math.ceil((content.maxY - y + 1) / cell))),
     lastOccupiedRow: last.row,
-    lastOccupiedColumn: last.column
+    lastOccupiedColumn: last.column,
+    contentArea: bankContent
   };
 }
 
@@ -1049,9 +1049,58 @@ function findBankContentArea(imageData) {
   const bottom = bottomCandidates.length ? Math.max(...bottomCandidates.filter((y) => y < height - 20)) - 1 : null;
   const left = leftCandidates.length ? Math.min(...leftCandidates) + 1 : null;
   const right = rightCandidates.length ? Math.max(...rightCandidates.filter((x) => x < width - 4)) - 1 : null;
+  const infinity = findInfinitySymbolBounds(imageData);
+
+  if (infinity && bottom !== null && right !== null) {
+    const anchoredLeft = Math.max(0, infinity.x - 10);
+    const anchoredTop = findContentTopAfterInfinity(imageData, infinity) ?? infinity.y + infinity.h + 8;
+    if (bottom > anchoredTop && right > anchoredLeft) {
+      return { x: anchoredLeft, y: anchoredTop, w: right - anchoredLeft + 1, h: bottom - anchoredTop + 1 };
+    }
+  }
 
   if (top === null || bottom === null || left === null || right === null || bottom <= top || right <= left) return null;
   return { x: left, y: top, w: right - left + 1, h: bottom - top + 1 };
+}
+
+function findInfinitySymbolBounds(imageData) {
+  const { width, height, data } = imageData;
+  const maxX = Math.min(width - 1, 110);
+  const maxY = Math.min(height - 1, 95);
+  const minY = Math.min(maxY, 35);
+  const mask = new Uint8Array(width * height);
+
+  for (let y = minY; y <= maxY; y += 1) {
+    for (let x = 0; x <= maxX; x += 1) {
+      const offset = (y * width + x) * 4;
+      const r = data[offset];
+      const g = data[offset + 1];
+      const b = data[offset + 2];
+      const isInfinityPixel = r > 130 && g > 95 && b > 45 && r > b + 45 && !isFrameOrScrollbarPixel(r, g, b);
+      if (isInfinityPixel) mask[y * width + x] = 1;
+    }
+  }
+
+  return connectedComponents(dilate(mask, width, height, 1), width, height)
+    .filter((box) => box.x < 70 && box.y >= minY && box.w >= 14 && box.w <= 46 && box.h >= 10 && box.h <= 32)
+    .sort((a, b) => a.x - b.x || b.area - a.area)[0] || null;
+}
+
+function findContentTopAfterInfinity(imageData, infinity) {
+  const { width, height, data } = imageData;
+  const startY = Math.min(height - 1, infinity.y + infinity.h);
+  const endY = Math.min(height - 1, startY + 35);
+
+  for (let y = startY; y <= endY; y += 1) {
+    let framePixels = 0;
+    for (let x = 0; x < width; x += 1) {
+      const offset = (y * width + x) * 4;
+      if (isFrameOrScrollbarPixel(data[offset], data[offset + 1], data[offset + 2])) framePixels += 1;
+    }
+    if (framePixels > width * 0.45) return y + 1;
+  }
+
+  return null;
 }
 
 function lastOccupiedGridCell(imageData, gridX, gridY, cell, content) {
@@ -3142,8 +3191,13 @@ function exportBestMatch(match) {
   };
 }
 
-function drawBoxes(items) {
+function drawBoxes(items, contentArea = null) {
   ctx.drawImage(loadedImage, 0, 0);
+  if (contentArea) {
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#ff2b2b";
+    ctx.strokeRect(contentArea.x + 0.5, contentArea.y + 0.5, contentArea.w, contentArea.h);
+  }
   ctx.lineWidth = 1;
   ctx.strokeStyle = "#25d984";
   ctx.fillStyle = "rgba(37, 217, 132, 0.08)";
