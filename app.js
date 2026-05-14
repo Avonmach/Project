@@ -6,6 +6,7 @@ const analyzeButton = document.getElementById("analyze");
 const viewMode = document.getElementById("viewMode");
 const exportResultsButton = document.getElementById("exportResults");
 const resultsBody = document.getElementById("resultsBody");
+const restoredResultsBody = document.getElementById("restoredResultsBody");
 const slotCountEl = document.getElementById("slotCount");
 const quantityTotalEl = document.getElementById("quantityTotal");
 const manualCountEl = document.getElementById("manualCount");
@@ -21,7 +22,6 @@ const resultsTitle = document.getElementById("resultsTitle");
 const resultTabButtons = [...document.querySelectorAll("[data-results-tab]")];
 const resultTabPanels = [...document.querySelectorAll("[data-results-panel]")];
 const overviewPanel = document.getElementById("overviewPanel");
-const restoredPanel = document.getElementById("restoredPanel");
 const storagePanel = document.getElementById("storagePanel");
 const materialsPanel = document.getElementById("materialsPanel");
 
@@ -2287,46 +2287,28 @@ function renderOverviewTab(items) {
 }
 
 function renderRestoredTab(items) {
-  restoredPanel.replaceChildren();
+  restoredResultsBody.replaceChildren();
   if (!detections.length) {
-    restoredPanel.append(makeEmptyMessage("Upload and analyze a restored artefact screenshot to populate this table."));
+    drawTableEmptyState(restoredResultsBody, "Upload and analyze a restored artefact screenshot to populate this table.");
     return;
   }
 
   if (!items.length) {
-    restoredPanel.append(makeEmptyMessage("No restored artefacts match the current filters."));
+    drawTableEmptyState(restoredResultsBody, "No restored artefacts match the current filters.");
     return;
   }
 
-  const wrap = document.createElement("div");
-  wrap.className = "table-wrap";
-  const table = document.createElement("table");
-  table.append(makeDetectionTableHead("restored"));
-  const body = document.createElement("tbody");
-  for (const detection of items) body.append(makeDetectionTableRow(detection));
-  table.append(body);
-  wrap.append(table);
-  restoredPanel.append(wrap);
+  for (const detection of items) restoredResultsBody.append(makeDetectionTableRow(detection));
 }
 
-function cloneDetectionForTable(detection) {
-  return {
-    ...detection,
-    preview: cloneCanvas(detection.preview),
-    processedPreview: cloneCanvas(detection.processedPreview),
-    referencePreview: cloneCanvas(detection.referencePreview),
-    rowElements: null
-  };
-}
-
-function cloneCanvas(canvas) {
-  if (!(canvas instanceof HTMLCanvasElement)) return canvas;
-  const clone = document.createElement("canvas");
-  clone.width = canvas.width;
-  clone.height = canvas.height;
-  clone.className = canvas.className;
-  clone.getContext("2d").drawImage(canvas, 0, 0);
-  return clone;
+function drawTableEmptyState(body, message) {
+  const row = document.createElement("tr");
+  const cell = document.createElement("td");
+  cell.colSpan = 9;
+  cell.className = "empty";
+  cell.textContent = message;
+  row.append(cell);
+  body.append(row);
 }
 
 function renderMaterialsTab(items) {
@@ -2499,11 +2481,6 @@ function makeTableHead(labels) {
   }
   head.append(row);
   return head;
-}
-
-function makeDetectionTableHead(mode = "damaged") {
-  const name = mode === "restored" ? "Restored artefact" : "Damaged artefact";
-  return makeTableHead([name, "Level", "Culture", "Dig site", "Status", "Crop", "Guess", "Ref", "Quantity"]);
 }
 
 function makeTextCell(value, className = "") {
