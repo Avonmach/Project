@@ -972,8 +972,9 @@ function detectItemBoxes(imageData, grid = estimateBankGrid(imageData)) {
     for (let column = 0; column < grid.columns; column += 1) {
       const x = grid.x + column * grid.cell;
       const y = grid.y + row * grid.cell;
-      const w = Math.min(grid.cell, imageData.width - x);
-      const h = Math.min(grid.cell, imageData.height - y);
+      const w = Math.min(grid.cell, (grid.maxX ?? imageData.width - 1) - x + 1, imageData.width - x);
+      const h = Math.min(grid.cell, (grid.maxY ?? imageData.height - 1) - y + 1, imageData.height - y);
+      if (w <= 0 || h <= 0) continue;
       const box = { x, y, w, h, area: countCellForeground(imageData, x, y, w, h) };
       if (isOccupiedCell(imageData, box) || isBeforeLastDetectedItem(row, column, grid)) boxes.push(box);
     }
@@ -1002,18 +1003,36 @@ function estimateBankGrid(imageData) {
     : foregroundBounds(imageData);
   if (!bankContent) content.maxX = Math.min(content.maxX, bankContentRightLimit(imageData));
 
-  const last = lastOccupiedGridCell(imageData, x, y, cell, content);
+  const contentColumns = getGridColumns(Math.max(1, Math.ceil((content.maxX - x + 1) / cell)));
+  const contentRows = getGridRows(Math.max(1, Math.ceil((content.maxY - y + 1) / cell)));
+  const itemExtent = gridExtentFromItemCenters(itemCenters, x, y, cell);
+  const last = itemExtent || lastOccupiedGridCell(imageData, x, y, cell, content);
+  const columns = itemExtent ? Math.min(contentColumns, Math.max(1, itemExtent.column + 2)) : contentColumns;
+  const rows = itemExtent ? Math.min(contentRows, Math.max(1, itemExtent.row + 1)) : contentRows;
   return {
     x,
     y,
     cell,
-    columns: getGridColumns(Math.max(1, Math.ceil((content.maxX - x + 1) / cell))),
-    rows: getGridRows(Math.max(1, Math.ceil((content.maxY - y + 1) / cell))),
+    columns,
+    rows,
+    maxX: content.maxX,
+    maxY: content.maxY,
     lastOccupiedRow: last.row,
     lastOccupiedColumn: last.column,
     contentArea: bankContent,
     infinityArea: bankContent?.infinity || null
   };
+}
+
+function gridExtentFromItemCenters(centers, gridX, gridY, cell) {
+  let last = null;
+  for (const center of centers) {
+    const column = Math.floor((center.x - gridX) / cell);
+    const row = Math.floor((center.y - gridY) / cell);
+    if (column < 0 || row < 0) continue;
+    if (!last || row > last.row || (row === last.row && column > last.column)) last = { row, column };
+  }
+  return last;
 }
 
 function findBankContentArea(imageData) {
