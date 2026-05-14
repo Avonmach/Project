@@ -820,6 +820,16 @@ tbody tr:has(.processed-preview:hover),
   margin: 4px auto;
 }
 
+.quantity-debug-label {
+  color: var(--muted);
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: 4px;
+  text-align: center;
+}
+
 .quantity-debug-meta {
   color: var(--muted);
   display: block;

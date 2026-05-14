@@ -309,7 +309,7 @@ function analyzeCurrentImage() {
       originalQuantity: quantityResult.quantity,
       quantityConfidence: quantityResult.confidence,
       quantityAlternatives: quantityResult.alternatives,
-      quantityDebug: quantityResult.debug,
+      quantityDebug: attachQuantityDebugSource(quantityResult.debug, imageData),
       quantityCorrection: null,
       quantityManual: false,
       preview,
@@ -1676,6 +1676,14 @@ function makeQuantityDebug({ mode, strict, scanBox, yellowPixels, digitBoxes, re
   };
 }
 
+function attachQuantityDebugSource(debug, imageData) {
+  if (!debug) return debug;
+  return {
+    ...debug,
+    source: copyImageData(imageData, debug.scanBox)
+  };
+}
+
 function quantityAlternatives(matches) {
   const candidateDigits = matches.map((match) => {
     const options = match.options?.length ? match.options : [{ digit: match.digit, score: match.score }];
@@ -2985,6 +2993,13 @@ function makeQuantityDebugView(detection) {
     return details;
   }
 
+  const sourceLabel = document.createElement("small");
+  sourceLabel.className = "quantity-debug-label";
+  sourceLabel.textContent = "Source crop";
+  const sourceCanvas = makeQuantitySourceCanvas(debug);
+  const maskLabel = document.createElement("small");
+  maskLabel.className = "quantity-debug-label";
+  maskLabel.textContent = "Evaluated pixels";
   const canvas = makeQuantityDebugCanvas(debug);
   const meta = document.createElement("small");
   meta.className = "quantity-debug-meta";
@@ -3010,8 +3025,33 @@ function makeQuantityDebugView(detection) {
     digitList.append(line);
   }
 
-  details.append(canvas, meta, digitList);
+  details.append(sourceLabel, sourceCanvas, maskLabel, canvas, meta, digitList);
   return details;
+}
+
+function makeQuantitySourceCanvas(debug) {
+  const scale = 4;
+  const canvas = document.createElement("canvas");
+  canvas.className = "quantity-debug-canvas";
+  canvas.width = debug.scanBox.w * scale;
+  canvas.height = debug.scanBox.h * scale;
+  const context = canvas.getContext("2d");
+  context.imageSmoothingEnabled = false;
+
+  const source = document.createElement("canvas");
+  source.width = debug.scanBox.w;
+  source.height = debug.scanBox.h;
+  if (debug.source) source.getContext("2d").putImageData(debug.source, 0, 0);
+  context.drawImage(source, 0, 0, canvas.width, canvas.height);
+
+  for (const box of debug.rejectedBoxes) {
+    drawQuantityDebugBox(context, box, scale, "#b94a48");
+  }
+  for (const box of debug.digitBoxes) {
+    drawQuantityDebugBox(context, box, scale, "#44a3ff");
+  }
+
+  return canvas;
 }
 
 function makeQuantityDebugCanvas(debug) {
