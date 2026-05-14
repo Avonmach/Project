@@ -1690,8 +1690,8 @@ function collectYellowPixels(imageData, box, options = {}) {
   const { width, data } = imageData;
   const pixels = [];
   const strict = options.strict === true;
-  const limitX = Math.min(box.x + (strict ? 22 : 26), box.x + box.w);
-  const limitY = Math.min(box.y + (strict ? 14 : 17), box.y + box.h);
+  const limitX = Math.min(box.x + (strict ? 24 : 26), box.x + box.w);
+  const limitY = Math.min(box.y + 17, box.y + box.h);
   for (let y = box.y; y < limitY; y += 1) {
     for (let x = box.x; x < limitX; x += 1) {
       const offset = (y * width + x) * 4;
@@ -1711,7 +1711,7 @@ function isQuantityPixel(r, g, b) {
 }
 
 function isStrictQuantityTextPixel(r, g, b) {
-  return r >= 145 && g >= 120 && b <= 72 && r >= g - 8 && r <= g + 75;
+  return isQuantityPixel(r, g, b) && r <= g + 70 && (r + g) / 2 - b >= 58;
 }
 
 function isPlausibleQuantityDigitBox(pixels, box, strict = false) {
