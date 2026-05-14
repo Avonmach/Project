@@ -887,13 +887,13 @@ tbody tr:has(.processed-preview:hover),
 .quantity-debug-template-grid {
   display: grid;
   gap: 1px;
-  grid-template-columns: repeat(3, 5px);
+  grid-template-columns: repeat(5, 4px);
 }
 
 .quantity-debug-template-grid span {
   background: #d7dfdb;
-  height: 5px;
-  width: 5px;
+  height: 4px;
+  width: 4px;
 }
 
 .quantity-debug-template-grid .is-on {
