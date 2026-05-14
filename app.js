@@ -76,7 +76,7 @@ const RESULT_TAB_TITLES = {
   materials: "Materials"
 };
 
-loadDefaultButton.addEventListener("click", () => loadImageFromUrl("Damaged_Items.png"));
+loadDefaultButton.addEventListener("click", () => imageInput.click());
 analyzeButton.addEventListener("click", analyzeCurrentImage);
 viewMode.addEventListener("change", renderDetections);
 artefactSearch.addEventListener("input", renderDetections);
