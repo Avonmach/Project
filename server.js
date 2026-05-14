@@ -34,7 +34,8 @@ const server = http.createServer((request, response) => {
     }
 
     response.writeHead(200, {
-      "Content-Type": TYPES[path.extname(filePath).toLowerCase()] || "application/octet-stream"
+      "Content-Type": TYPES[path.extname(filePath).toLowerCase()] || "application/octet-stream",
+      "Cache-Control": "no-store, max-age=0"
     });
     response.end(data);
   });
