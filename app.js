@@ -1067,8 +1067,8 @@ function findBankContentArea(imageData) {
 
 function findInfinitySymbolBounds(imageData) {
   const { width, height, data } = imageData;
-  const maxX = Math.min(width - 1, 110);
-  const maxY = Math.min(height - 1, 95);
+  const maxX = Math.min(width - 1, 80);
+  const maxY = Math.min(height - 1, 90);
   const minY = Math.min(maxY, 35);
   const mask = new Uint8Array(width * height);
 
@@ -1078,14 +1078,21 @@ function findInfinitySymbolBounds(imageData) {
       const r = data[offset];
       const g = data[offset + 1];
       const b = data[offset + 2];
-      const isInfinityPixel = r > 130 && g > 95 && b > 45 && r > b + 45 && !isFrameOrScrollbarPixel(r, g, b);
+      const isInfinityPixel = r >= 90 && g >= 65 && b >= 30 && r > b + 25 && g > b + 8;
       if (isInfinityPixel) mask[y * width + x] = 1;
     }
   }
 
   return connectedComponents(dilate(mask, width, height, 1), width, height)
-    .filter((box) => box.x < 70 && box.y >= minY && box.w >= 14 && box.w <= 46 && box.h >= 10 && box.h <= 32)
-    .sort((a, b) => a.x - b.x || b.area - a.area)[0] || null;
+    .filter((box) => box.x >= 5 && box.x < 45 && box.y >= minY && box.w >= 16 && box.w <= 48 && box.h >= 10 && box.h <= 34)
+    .sort((a, b) => infinitySymbolScore(b) - infinitySymbolScore(a))[0] || null;
+}
+
+function infinitySymbolScore(box) {
+  const aspect = box.w / Math.max(1, box.h);
+  const aspectScore = 1 - Math.min(1, Math.abs(aspect - 1.9) / 1.9);
+  const positionScore = 1 - Math.min(1, (Math.abs(box.x - 18) + Math.abs(box.y - 52)) / 80);
+  return box.area + aspectScore * 120 + positionScore * 80;
 }
 
 function findContentTopAfterInfinity(imageData, infinity) {
