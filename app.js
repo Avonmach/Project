@@ -2382,7 +2382,8 @@ function makeCollectionOverview(items) {
   const rows = (archaeologyReference.collections || [])
     .map((collection) => {
       const matched = collection.artefacts.filter((artefact) => ownedArtefacts.has(normalizeName(artefact)));
-      return { collection, matched, progress: matched.length };
+      const total = collection.artefactCount || collection.artefacts.length || 1;
+      return { collection, matched, progress: matched.length, progressTotal: total, progressPercent: matched.length / total };
     })
     .filter((row) => row.matched.length)
     .sort(compareCollectionRows);
@@ -2397,7 +2398,8 @@ function makeCollectionOverview(items) {
   }
 
   const table = document.createElement("table");
-  table.className = "secondary-table";
+  table.className = "secondary-table collection-table";
+  table.append(makeCollectionColGroup());
   table.append(makeCollectionTableHead());
   const body = document.createElement("tbody");
   for (const row of rows) {
@@ -2406,7 +2408,7 @@ function makeCollectionOverview(items) {
       makeLinkedTextCell(row.collection.name, row.collection.wikiPage),
       makeTextCell(row.collection.collector || ""),
       makeTextCell(row.collection.archaeologyLevel ?? ""),
-      makeTextCell(`${row.progress}/${row.collection.artefactCount || row.collection.artefacts.length}`),
+      makeTextCell(`${row.progress}/${row.progressTotal} (${Math.round(row.progressPercent * 100)}%)`),
       makeCollectionArtefactsCell(row.collection.artefacts, ownedArtefacts)
     );
     body.append(tr);
@@ -2414,6 +2416,16 @@ function makeCollectionOverview(items) {
   table.append(body);
   section.append(table);
   return section;
+}
+
+function makeCollectionColGroup() {
+  const group = document.createElement("colgroup");
+  for (const className of ["collection-name-col", "collection-collector-col", "collection-level-col", "collection-progress-col", "collection-artefacts-col"]) {
+    const col = document.createElement("col");
+    col.className = className;
+    group.append(col);
+  }
+  return group;
 }
 
 function makeCollectionTableHead() {
@@ -2467,7 +2479,7 @@ function compareCollectionRows(a, b) {
   if (collectionSort.key === "level") {
     result = nullableNumber(a.collection.archaeologyLevel) - nullableNumber(b.collection.archaeologyLevel);
   }
-  if (collectionSort.key === "progress") result = a.progress - b.progress;
+  if (collectionSort.key === "progress") result = a.progressPercent - b.progressPercent || a.progress - b.progress;
 
   return (
     result * direction ||

@@ -378,7 +378,8 @@ input[type="search"] {
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
-  min-width: 220px;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .collection-artefact {
@@ -436,6 +437,30 @@ input[type="search"] {
   border-spacing: 0;
   table-layout: fixed;
   width: 100%;
+}
+
+.collection-table {
+  table-layout: fixed;
+}
+
+.collection-name-col {
+  width: 25%;
+}
+
+.collection-collector-col {
+  width: 13%;
+}
+
+.collection-level-col {
+  width: 8%;
+}
+
+.collection-progress-col {
+  width: 13%;
+}
+
+.collection-artefacts-col {
+  width: 41%;
 }
 
 .secondary-table th,
