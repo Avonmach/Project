@@ -248,7 +248,7 @@ function analyzeCurrentImage() {
   const shapeImageData = makeFullShapeImageData(imageData, grid, recognitionMode);
 
   const analyzedDetections = boxes.map((box, index) => {
-    const quantityResult = detectQuantity(imageData, box);
+    const quantityResult = detectQuantity(imageData, box, recognitionMode);
     const match = matchArtifact(shapeImageData, imageData, box, recognitionMode);
     const preview = makePreviewCanvas(imageData, box, { enhanceHover: recognitionMode !== "restored" });
     const processedPreview = makeProcessedCanvas(imageData, shapeImageData, box, { enhance: recognitionMode !== "restored" });
@@ -1614,12 +1614,13 @@ function expandBox(box, padding, width, height) {
   return { x, y, w: right - x, h: bottom - y, area: box.area };
 }
 
-function detectQuantity(imageData, box) {
-  const yellowPixels = collectYellowPixels(imageData, box);
+function detectQuantity(imageData, box, mode = "damaged") {
+  const strict = mode === "restored";
+  const yellowPixels = collectYellowPixels(imageData, box, { strict });
   if (yellowPixels.length < 4) return { quantity: 1, confidence: 0.65, alternatives: [{ quantity: 1, confidence: 0.65 }] };
 
   const digitBoxes = splitDigitBoxes(yellowPixels)
-    .filter((digitBox) => digitBox.w >= 2 && digitBox.h >= 4)
+    .filter((digitBox) => isPlausibleQuantityDigitBox(yellowPixels, digitBox, strict))
     .sort((a, b) => a.x - b.x);
 
   if (!digitBoxes.length) return { quantity: 1, confidence: 0.55, alternatives: [{ quantity: 1, confidence: 0.55 }] };
@@ -1629,8 +1630,9 @@ function detectQuantity(imageData, box) {
   const confidence = matches.reduce((sum, match) => sum + match.score, 0) / matches.length;
   const parsed = Number.parseInt(text, 10);
   const alternatives = quantityAlternatives(matches);
+  const minimumConfidence = strict ? 0.58 : 0.45;
 
-  if (!Number.isFinite(parsed) || parsed <= 0 || confidence < 0.45) {
+  if (!Number.isFinite(parsed) || parsed <= 0 || confidence < minimumConfidence) {
     return { quantity: 1, confidence: 0.35, alternatives: [{ quantity: 1, confidence: 0.35 }, ...alternatives] };
   }
 
@@ -1684,18 +1686,21 @@ function quantityAlternativeConfidenceGap(detection) {
   return Math.abs(options[0].confidence - options[1].confidence);
 }
 
-function collectYellowPixels(imageData, box) {
+function collectYellowPixels(imageData, box, options = {}) {
   const { width, data } = imageData;
   const pixels = [];
-  const limitX = Math.min(box.x + 26, box.x + box.w);
-  const limitY = Math.min(box.y + 17, box.y + box.h);
+  const strict = options.strict === true;
+  const limitX = Math.min(box.x + (strict ? 22 : 26), box.x + box.w);
+  const limitY = Math.min(box.y + (strict ? 14 : 17), box.y + box.h);
   for (let y = box.y; y < limitY; y += 1) {
     for (let x = box.x; x < limitX; x += 1) {
       const offset = (y * width + x) * 4;
       const r = data[offset];
       const g = data[offset + 1];
       const b = data[offset + 2];
-      if (isQuantityPixel(r, g, b)) pixels.push({ x: x - box.x, y: y - box.y });
+      if ((strict ? isStrictQuantityTextPixel(r, g, b) : isQuantityPixel(r, g, b))) {
+        pixels.push({ x: x - box.x, y: y - box.y });
+      }
     }
   }
   return pixels;
@@ -1703,6 +1708,19 @@ function collectYellowPixels(imageData, box) {
 
 function isQuantityPixel(r, g, b) {
   return r > 125 && g > 105 && b < 85 && r >= g - 20;
+}
+
+function isStrictQuantityTextPixel(r, g, b) {
+  return r >= 145 && g >= 120 && b <= 72 && r >= g - 8 && r <= g + 75;
+}
+
+function isPlausibleQuantityDigitBox(pixels, box, strict = false) {
+  if (box.w < 2 || box.h < 4) return false;
+  if (!strict) return true;
+  if (box.x > 19 || box.y > 10 || box.w > 6 || box.h > 10) return false;
+  const area = pixels.filter((pixel) => pixel.x >= box.x && pixel.x < box.x + box.w && pixel.y >= box.y && pixel.y < box.y + box.h).length;
+  const density = area / Math.max(1, box.w * box.h);
+  return area >= 4 && density >= 0.16 && density <= 0.78;
 }
 
 function splitDigitBoxes(pixels) {
