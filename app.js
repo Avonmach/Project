@@ -309,6 +309,7 @@ function analyzeCurrentImage() {
       originalQuantity: quantityResult.quantity,
       quantityConfidence: quantityResult.confidence,
       quantityAlternatives: quantityResult.alternatives,
+      quantityDebug: quantityResult.debug,
       quantityCorrection: null,
       quantityManual: false,
       preview,
@@ -1617,13 +1618,27 @@ function expandBox(box, padding, width, height) {
 function detectQuantity(imageData, box, mode = "damaged") {
   const strict = mode === "restored";
   const yellowPixels = collectYellowPixels(imageData, box, { strict });
-  if (yellowPixels.length < 4) return { quantity: 1, confidence: 0.65, alternatives: [{ quantity: 1, confidence: 0.65 }] };
+  const scanBox = quantityScanBox(box, strict);
+  if (yellowPixels.length < 4) {
+    return {
+      quantity: 1,
+      confidence: 0.65,
+      alternatives: [{ quantity: 1, confidence: 0.65 }],
+      debug: makeQuantityDebug({ mode, strict, scanBox, yellowPixels, digitBoxes: [], matches: [], text: "1", confidence: 0.65 })
+    };
+  }
 
-  const digitBoxes = splitDigitBoxes(yellowPixels)
-    .filter((digitBox) => isPlausibleQuantityDigitBox(yellowPixels, digitBox, strict))
-    .sort((a, b) => a.x - b.x);
+  const rawDigitBoxes = splitDigitBoxes(yellowPixels).sort((a, b) => a.x - b.x);
+  const digitBoxes = rawDigitBoxes.filter((digitBox) => isPlausibleQuantityDigitBox(yellowPixels, digitBox, strict));
 
-  if (!digitBoxes.length) return { quantity: 1, confidence: 0.55, alternatives: [{ quantity: 1, confidence: 0.55 }] };
+  if (!digitBoxes.length) {
+    return {
+      quantity: 1,
+      confidence: 0.55,
+      alternatives: [{ quantity: 1, confidence: 0.55 }],
+      debug: makeQuantityDebug({ mode, strict, scanBox, yellowPixels, digitBoxes, rejectedBoxes: rawDigitBoxes, matches: [], text: "1", confidence: 0.55 })
+    };
+  }
 
   const matches = digitBoxes.map((digitBox) => matchDigit(yellowPixels, digitBox));
   const text = matches.map((match) => match.digit).join("");
@@ -1631,12 +1646,34 @@ function detectQuantity(imageData, box, mode = "damaged") {
   const parsed = Number.parseInt(text, 10);
   const alternatives = quantityAlternatives(matches);
   const minimumConfidence = strict ? 0.58 : 0.45;
+  const debug = makeQuantityDebug({ mode, strict, scanBox, yellowPixels, digitBoxes, rejectedBoxes: rawDigitBoxes.filter((box) => !digitBoxes.includes(box)), matches, text, confidence });
 
   if (!Number.isFinite(parsed) || parsed <= 0 || confidence < minimumConfidence) {
-    return { quantity: 1, confidence: 0.35, alternatives: [{ quantity: 1, confidence: 0.35 }, ...alternatives] };
+    return { quantity: 1, confidence: 0.35, alternatives: [{ quantity: 1, confidence: 0.35 }, ...alternatives], debug };
   }
 
-  return { quantity: parsed, confidence, alternatives };
+  return { quantity: parsed, confidence, alternatives, debug };
+}
+
+function makeQuantityDebug({ mode, strict, scanBox, yellowPixels, digitBoxes, rejectedBoxes = [], matches, text, confidence }) {
+  return {
+    mode,
+    strict,
+    scanBox,
+    pixelCount: yellowPixels.length,
+    pixels: yellowPixels.map((pixel) => ({ x: pixel.x, y: pixel.y })),
+    digitBoxes: digitBoxes.map((box) => ({ ...box })),
+    rejectedBoxes: rejectedBoxes.map((box) => ({ ...box })),
+    matches: matches.map((match, index) => ({
+      index: index + 1,
+      digit: match.digit,
+      score: match.score,
+      normalized: match.normalized,
+      options: (match.options || []).slice(0, 3).map((option) => ({ digit: option.digit, score: option.score }))
+    })),
+    text,
+    confidence
+  };
 }
 
 function quantityAlternatives(matches) {
@@ -1690,10 +1727,9 @@ function collectYellowPixels(imageData, box, options = {}) {
   const { width, data } = imageData;
   const pixels = [];
   const strict = options.strict === true;
-  const limitX = Math.min(box.x + (strict ? 24 : 26), box.x + box.w);
-  const limitY = Math.min(box.y + 17, box.y + box.h);
-  for (let y = box.y; y < limitY; y += 1) {
-    for (let x = box.x; x < limitX; x += 1) {
+  const scanBox = quantityScanBox(box, strict);
+  for (let y = scanBox.y; y < scanBox.y + scanBox.h; y += 1) {
+    for (let x = scanBox.x; x < scanBox.x + scanBox.w; x += 1) {
       const offset = (y * width + x) * 4;
       const r = data[offset];
       const g = data[offset + 1];
@@ -1704,6 +1740,15 @@ function collectYellowPixels(imageData, box, options = {}) {
     }
   }
   return pixels;
+}
+
+function quantityScanBox(box, strict = false) {
+  return {
+    x: box.x,
+    y: box.y,
+    w: Math.min(strict ? 24 : 26, box.w),
+    h: Math.min(17, box.h)
+  };
 }
 
 function isQuantityPixel(r, g, b) {
@@ -1803,6 +1848,7 @@ function matchDigit(pixels, box) {
   }
 
   const adjusted = adjustCommonQuantityMistakes(best, scores, normalized);
+  adjusted.normalized = normalized;
   adjusted.options = digitOptions(scores, adjusted);
   return adjusted;
 }
@@ -2240,7 +2286,7 @@ function makeDetectionTableRow(detection) {
     });
     arrows.append(up, down);
     stepper.append(input, arrows);
-    quantityCell.append(stepper);
+    quantityCell.append(stepper, makeQuantityDebugView(detection));
 
     detection.rowElements = {
       row,
@@ -2922,6 +2968,83 @@ function makeQuantityButton(label, onClick) {
     event.preventDefault();
   });
   return button;
+}
+
+function makeQuantityDebugView(detection) {
+  const debug = detection.quantityDebug;
+  const details = document.createElement("details");
+  details.className = "quantity-debug";
+  const summary = document.createElement("summary");
+  summary.textContent = "OCR";
+  details.append(summary);
+
+  if (!debug) {
+    const empty = document.createElement("small");
+    empty.textContent = "No OCR data";
+    details.append(empty);
+    return details;
+  }
+
+  const canvas = makeQuantityDebugCanvas(debug);
+  const meta = document.createElement("small");
+  meta.className = "quantity-debug-meta";
+  meta.textContent = [
+    `${debug.mode}${debug.strict ? " strict" : ""}`,
+    `scan ${debug.scanBox.w}x${debug.scanBox.h}`,
+    `${debug.pixelCount} px`,
+    `read ${debug.text || "none"} (${percent(debug.confidence)})`
+  ].join(" | ");
+
+  const digitList = document.createElement("div");
+  digitList.className = "quantity-debug-digits";
+  if (debug.matches.length) {
+    for (const match of debug.matches) {
+      const line = document.createElement("code");
+      const options = match.options.map((option) => `${option.digit}:${percent(option.score)}`).join(" ");
+      line.textContent = `#${match.index} ${match.digit} ${percent(match.score)} ${match.normalized.join("/")} ${options}`;
+      digitList.append(line);
+    }
+  } else {
+    const line = document.createElement("code");
+    line.textContent = "no accepted digit boxes";
+    digitList.append(line);
+  }
+
+  details.append(canvas, meta, digitList);
+  return details;
+}
+
+function makeQuantityDebugCanvas(debug) {
+  const scale = 4;
+  const canvas = document.createElement("canvas");
+  canvas.className = "quantity-debug-canvas";
+  canvas.width = debug.scanBox.w * scale;
+  canvas.height = debug.scanBox.h * scale;
+  const context = canvas.getContext("2d");
+  context.imageSmoothingEnabled = false;
+  context.fillStyle = "#1f2529";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  context.fillStyle = "#f3d14a";
+  for (const pixel of debug.pixels) {
+    if (pixel.x >= debug.scanBox.w || pixel.y >= debug.scanBox.h) continue;
+    context.fillRect(pixel.x * scale, pixel.y * scale, scale, scale);
+  }
+
+  for (const box of debug.rejectedBoxes) {
+    drawQuantityDebugBox(context, box, scale, "#b94a48");
+  }
+  for (const box of debug.digitBoxes) {
+    drawQuantityDebugBox(context, box, scale, "#44a3ff");
+  }
+
+  return canvas;
+}
+
+function drawQuantityDebugBox(context, box, scale, color) {
+  context.strokeStyle = color;
+  context.lineWidth = 1;
+  context.strokeRect(box.x * scale + 0.5, box.y * scale + 0.5, box.w * scale - 1, box.h * scale - 1);
 }
 
 function markQuantityManual(quantityCell) {
