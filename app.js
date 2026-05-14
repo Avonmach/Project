@@ -236,6 +236,7 @@ function loadImageElement(src) {
 function analyzeCurrentImage() {
   if (!loadedImage || !references.length) return;
 
+  const recognitionMode = activeResultsTab === "restored" ? "restored" : "damaged";
   ctx.drawImage(loadedImage, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const boxes = detectItemBoxes(imageData);
@@ -244,9 +245,9 @@ function analyzeCurrentImage() {
 
   detections = boxes.map((box, index) => {
     const quantityResult = detectQuantity(imageData, box);
-    const match = matchArtifact(shapeImageData, imageData, box);
+    const match = matchArtifact(shapeImageData, imageData, box, recognitionMode);
     const preview = makePreviewCanvas(imageData, box);
-    const processedPreview = makeProcessedCanvas(imageData, shapeImageData, box);
+    const processedPreview = makeProcessedCanvas(imageData, shapeImageData, box, { enhance: recognitionMode !== "restored" });
     const referencePreview = makeReferenceCanvas(match.item.image);
 
     return {
@@ -278,6 +279,7 @@ function analyzeCurrentImage() {
       ambiguousMatch: match.ambiguous,
       matchGap: match.matchGap,
       topMatches: match.candidates,
+      recognitionMode,
       originalPrediction: {
         damagedName: match.item.name,
         restoredName: match.item.restoredName,
@@ -318,7 +320,7 @@ function analyzeCurrentImage() {
   drawBoxes(detections);
 }
 
-function matchArtifact(shapeImageData, originalImageData, box) {
+function matchArtifact(shapeImageData, originalImageData, box, mode = "damaged") {
   const cropFingerprint = fingerprintCrop(shapeImageData, box);
   const colorFingerprint = fingerprintColorCrop(originalImageData, shapeImageData, box);
   let best = { item: references[0], score: 0, restoredScore: 0, damagedScore: 0, shapeScore: 0, colorScore: 0 };
@@ -330,10 +332,10 @@ function matchArtifact(shapeImageData, originalImageData, box) {
 
   for (const item of references) {
     const restored = compareFingerprints(cropFingerprint, item.fingerprint);
-    const damaged = item.damagedFingerprint ? compareFingerprints(cropFingerprint, item.damagedFingerprint) : null;
+    const damaged = mode === "restored" ? null : item.damagedFingerprint ? compareFingerprints(cropFingerprint, item.damagedFingerprint) : null;
     const restoredColor = histogramChiAltSimilarity(colorFingerprint, item.fingerprint);
-    const damagedColor = item.damagedFingerprint ? histogramChiAltSimilarity(colorFingerprint, item.damagedFingerprint) : 0;
-    const shapeScore = damaged?.shape ?? restored.shape;
+    const damagedColor = damaged ? histogramChiAltSimilarity(colorFingerprint, item.damagedFingerprint) : 0;
+    const shapeScore = mode === "restored" ? restored.shape : damaged?.shape ?? restored.shape;
     const colorExistenceScore = damaged ? Math.max(restoredColor, damagedColor) : restoredColor;
     const colorPositionScore = damaged ? Math.max(restored.color, damaged.color) : restored.color;
     scores.push({
@@ -384,10 +386,12 @@ function matchArtifact(shapeImageData, originalImageData, box) {
   const matchGap = secondBest ? best.score - secondBest.score : 1;
   const ambiguous = Boolean(secondBest && matchGap <= AMBIGUOUS_FINAL_MARGIN);
   const referenceFingerprint =
-    best.item.damagedFingerprint && best.damagedScore >= best.restoredScore ? best.item.damagedFingerprint : best.item.fingerprint;
+    mode !== "restored" && best.item.damagedFingerprint && best.damagedScore >= best.restoredScore
+      ? best.item.damagedFingerprint
+      : best.item.fingerprint;
   return {
     ...best,
-    referenceUsed: best.damagedScore > best.restoredScore ? "damaged" : "restored",
+    referenceUsed: mode !== "restored" && best.damagedScore > best.restoredScore ? "damaged" : "restored",
     scoringWeights: best.scoringWeights,
     ambiguous,
     matchGap,
@@ -1638,7 +1642,8 @@ function makePreviewCanvas(imageData, box) {
   return preview;
 }
 
-function makeProcessedCanvas(originalImageData, shapeImageData, box) {
+function makeProcessedCanvas(originalImageData, shapeImageData, box, options = {}) {
+  const enhance = options.enhance !== false;
   const iconBox = getIconMatchBox(box);
   const originalCrop = copyImageData(originalImageData, iconBox);
   const shapeCrop = copyImageData(shapeImageData, iconBox);
@@ -1647,10 +1652,12 @@ function makeProcessedCanvas(originalImageData, shapeImageData, box) {
 
   for (let i = 0; i < originalCrop.data.length; i += 4) {
     if (shapeCrop.data[i + 3] <= 20) continue;
-    const enhanced = enhancePreviewColor(originalCrop.data[i], originalCrop.data[i + 1], originalCrop.data[i + 2]);
-    masked.data[i] = enhanced.r;
-    masked.data[i + 1] = enhanced.g;
-    masked.data[i + 2] = enhanced.b;
+    const color = enhance
+      ? enhancePreviewColor(originalCrop.data[i], originalCrop.data[i + 1], originalCrop.data[i + 2])
+      : { r: originalCrop.data[i], g: originalCrop.data[i + 1], b: originalCrop.data[i + 2] };
+    masked.data[i] = color.r;
+    masked.data[i + 1] = color.g;
+    masked.data[i + 2] = color.b;
     masked.data[i + 3] = 255;
   }
 
@@ -1841,6 +1848,15 @@ function renderDetections() {
   }
 
   for (const detection of visibleDetections) {
+    resultsBody.append(makeDetectionTableRow(detection));
+  }
+
+  updateTotals();
+  renderRestorationPlan(visibleDetections);
+  renderResultsTabContent();
+}
+
+function makeDetectionTableRow(detection) {
     const row = document.createElement("tr");
     const quantityCell = document.createElement("td");
     const nameCell = document.createElement("td");
@@ -1947,12 +1963,7 @@ function renderDetections() {
       processedCell,
       quantityCell
     );
-    resultsBody.append(row);
-  }
-
-  updateTotals();
-  renderRestorationPlan(visibleDetections);
-  renderResultsTabContent();
+    return row;
 }
 
 function makeStatusPill(detection, quantityWarning = quantityNeedsReview(detection)) {
@@ -2008,6 +2019,7 @@ function setActiveResultsTab(tab) {
     panel.hidden = panel.dataset.resultsPanel !== tab;
   }
 
+  if (tab === "damaged") renderDetections();
   renderResultsTabContent();
   requestTabScreenshot(tab);
 }
@@ -2061,36 +2073,24 @@ function renderOverviewTab(items) {
 function renderRestoredTab(items) {
   restoredPanel.replaceChildren();
   if (!detections.length) {
-    restoredPanel.append(makeEmptyMessage("Analyze a screenshot to list restored artefacts."));
+    restoredPanel.append(makeEmptyMessage("Upload and analyze a restored artefact screenshot to populate this table."));
     return;
   }
 
-  const rows = sortRestoredRows(aggregateRestoredArtefacts(items));
-  if (!rows.length) {
+  if (!items.length) {
     restoredPanel.append(makeEmptyMessage("No restored artefacts match the current filters."));
     return;
   }
 
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap";
   const table = document.createElement("table");
-  table.className = "secondary-table";
-  table.append(makeTableHead(["Restored artefact", "Damaged source", "Level", "Culture", "Status", "Quantity"]));
+  table.append(makeDetectionTableHead());
   const body = document.createElement("tbody");
-
-  for (const row of rows) {
-    const tr = document.createElement("tr");
-    tr.append(
-      makeTextCell(row.restoredName),
-      makeTextCell(row.damagedName),
-      makeTextCell(row.level ?? ""),
-      makeTextCell(row.culture || ""),
-      makeTextCell(row.needsReview ? "Review" : "Ready"),
-      makeTextCell(row.quantity, "number-cell")
-    );
-    body.append(tr);
-  }
-
+  for (const detection of items) body.append(makeDetectionTableRow(detection));
   table.append(body);
-  restoredPanel.append(table);
+  wrap.append(table);
+  restoredPanel.append(wrap);
 }
 
 function renderMaterialsTab(items) {
@@ -2263,6 +2263,10 @@ function makeTableHead(labels) {
   }
   head.append(row);
   return head;
+}
+
+function makeDetectionTableHead() {
+  return makeTableHead(["Artefact", "Level", "Culture", "Dig site", "Status", "Crop", "Ref", "Match", "Quantity"]);
 }
 
 function makeTextCell(value, className = "") {
@@ -2744,7 +2748,7 @@ function makeCorrectionOption(detection, item, score) {
   button.className = "correction-option";
 
   const image = document.createElement("img");
-  image.src = `data/${item.damagedIcon || item.icon}`;
+  image.src = `data/${detection.recognitionMode === "restored" ? item.icon : item.damagedIcon || item.icon}`;
   image.alt = "";
   image.loading = "lazy";
 
