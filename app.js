@@ -590,6 +590,7 @@ function makeFullShapeImageData(imageData, grid, mode = "damaged") {
 function cellBackgroundColors(imageData, x, y, w, h, options = {}) {
   const counts = new Map();
   const addSample = (px, py) => {
+    if (options.includeSimilar && !isCellBackgroundSamplePoint(px - x, py - y, w, h)) return;
     const color = pixelColorAt(imageData, px, py);
     if (isQuantityPixel(color.r, color.g, color.b)) return;
     if (isFrameOrScrollbarPixel(color.r, color.g, color.b)) return;
@@ -612,10 +613,10 @@ function cellBackgroundColors(imageData, x, y, w, h, options = {}) {
   const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
   if (!ranked.length) return [pixelColorAt(imageData, x, y)];
 
-  const minimumCount = options.includeSimilar ? Math.max(2, ranked[0][1] * 0.12) : ranked[0][1];
+  const minimumCount = options.includeSimilar ? Math.max(2, ranked[0][1] * 0.08) : ranked[0][1];
   return ranked
     .filter((entry) => entry[1] >= minimumCount)
-    .slice(0, options.includeSimilar ? 4 : 1)
+    .slice(0, options.includeSimilar ? 3 : 1)
     .map(([key]) => {
       const [r, g, b] = key.split(",").map(Number);
       return { r, g, b };
@@ -625,7 +626,7 @@ function cellBackgroundColors(imageData, x, y, w, h, options = {}) {
 function matchesCellBackground(r, g, b, backgroundColors, includeSimilar) {
   if (!includeSimilar) return backgroundColors.some((color) => sameColor(r, g, b, color));
   if (!isSlotBackgroundCandidate(r, g, b)) return false;
-  return backgroundColors.some((color) => colorDistance(r, g, b, color) <= 30);
+  return backgroundColors.some((color) => channelDistance(r, g, b, color) <= 5 && colorDistance(r, g, b, color) <= 14);
 }
 
 function colorDistance(r, g, b, color) {
@@ -635,7 +636,16 @@ function colorDistance(r, g, b, color) {
 function isSlotBackgroundCandidate(r, g, b) {
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
-  return max >= 24 && max <= 95 && max - min <= 26 && r <= g + 18 && g <= r + 18;
+  return max >= 24 && max <= 88 && max - min <= 18 && r <= g + 12 && g <= r + 12;
+}
+
+function channelDistance(r, g, b, color) {
+  return Math.max(Math.abs(r - color.r), Math.abs(g - color.g), Math.abs(b - color.b));
+}
+
+function isCellBackgroundSamplePoint(x, y, w, h) {
+  const band = Math.max(6, Math.floor(Math.min(w, h) * 0.18));
+  return x < band || y < band || x >= w - band || y >= h - band;
 }
 
 function isQuantityPixelInCell(r, g, b, x, y) {
