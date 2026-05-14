@@ -552,23 +552,64 @@ function fingerprintColorCrop(originalImageData, shapeImageData, box) {
 }
 
 function makeFullShapeImageData(imageData, grid) {
-  const backgroundColor = pixelColorAt(imageData, grid.x, grid.y);
   const out = new ImageData(imageData.width, imageData.height);
 
-  for (let i = 0; i < imageData.width * imageData.height; i += 1) {
-    const offset = i * 4;
-    const r = imageData.data[offset];
-    const g = imageData.data[offset + 1];
-    const b = imageData.data[offset + 2];
-    const a = imageData.data[offset + 3];
-    const visible = a > 20 && !sameColor(r, g, b, backgroundColor) && !isQuantityPixel(r, g, b);
-    out.data[offset] = 0;
-    out.data[offset + 1] = 0;
-    out.data[offset + 2] = 0;
-    out.data[offset + 3] = visible ? 255 : 0;
+  for (let row = 0; row < grid.rows; row += 1) {
+    for (let column = 0; column < grid.columns; column += 1) {
+      const x = grid.x + column * grid.cell;
+      const y = grid.y + row * grid.cell;
+      const w = Math.min(grid.cell, (grid.maxX ?? imageData.width - 1) - x + 1, imageData.width - x);
+      const h = Math.min(grid.cell, (grid.maxY ?? imageData.height - 1) - y + 1, imageData.height - y);
+      if (w <= 0 || h <= 0) continue;
+
+      const backgroundColor = cellBackgroundColor(imageData, x, y, w, h);
+      for (let py = y; py < y + h; py += 1) {
+        for (let px = x; px < x + w; px += 1) {
+          const offset = (py * imageData.width + px) * 4;
+          const r = imageData.data[offset];
+          const g = imageData.data[offset + 1];
+          const b = imageData.data[offset + 2];
+          const a = imageData.data[offset + 3];
+          const visible = a > 20 && !sameColor(r, g, b, backgroundColor) && !isQuantityPixel(r, g, b);
+          out.data[offset] = 0;
+          out.data[offset + 1] = 0;
+          out.data[offset + 2] = 0;
+          out.data[offset + 3] = visible ? 255 : 0;
+        }
+      }
+    }
   }
 
   return out;
+}
+
+function cellBackgroundColor(imageData, x, y, w, h) {
+  const counts = new Map();
+  const addSample = (px, py) => {
+    const color = pixelColorAt(imageData, px, py);
+    if (isQuantityPixel(color.r, color.g, color.b)) return;
+    const key = `${color.r},${color.g},${color.b}`;
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  };
+  const minX = x;
+  const maxX = x + w - 1;
+  const minY = y;
+  const maxY = y + h - 1;
+  const step = 2;
+
+  for (let px = minX; px <= maxX; px += step) {
+    addSample(px, minY);
+    addSample(px, maxY);
+  }
+  for (let py = minY + step; py < maxY; py += step) {
+    addSample(minX, py);
+    addSample(maxX, py);
+  }
+
+  const best = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
+  if (!best) return pixelColorAt(imageData, x, y);
+  const [r, g, b] = best.split(",").map(Number);
+  return { r, g, b };
 }
 
 function connectedGridBackgroundMask(imageData, grid, backgroundColor) {
