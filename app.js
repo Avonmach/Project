@@ -79,6 +79,10 @@ const RESULT_TAB_TITLES = {
   storage: "Storage",
   materials: "Materials"
 };
+const DEFAULT_SCREENSHOTS = {
+  damaged: "Damaged_Items.png",
+  restored: "Items#.png"
+};
 
 loadDefaultButton.addEventListener("click", () => imageInput.click());
 analyzeButton.addEventListener("click", analyzeCurrentImage);
@@ -111,7 +115,7 @@ async function initialize() {
   await loadQuantityFontTemplates();
   await loadReferences();
   await loadArchaeologyReference();
-  await loadImageFromUrl("Damaged_Items.png");
+  await loadImageFromUrl(DEFAULT_SCREENSHOTS.damaged);
   analyzeButton.disabled = false;
   drawEmptyState("Image and references loaded. Click Analyze.");
 }
@@ -2413,6 +2417,10 @@ function renderDamagedTable(items) {
 function requestTabScreenshot(tab) {
   if (!["restored", "materials"].includes(tab) || screenshotRequestedTabs.has(tab)) return;
   screenshotRequestedTabs.add(tab);
+  if (tab === "restored") {
+    loadImageFromUrl(DEFAULT_SCREENSHOTS.restored);
+    return;
+  }
   imageInput.click();
 }
 
