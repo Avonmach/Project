@@ -995,8 +995,8 @@ function estimateBankGrid(imageData) {
   const itemCenters = estimateItemCenters(imageData, centerSearchArea);
   const cell = getGridCellSize();
   const anchor = findFirstItemAnchor(itemCenters, cell);
-  const x = Math.max(0, Math.round(anchor.x - cell / 2 + getGridOffsetX()));
-  const y = Math.max(0, Math.round(anchor.y - cell / 2 + getGridOffsetY()));
+  const x = bankContent ? bankContent.x : Math.max(0, Math.round(anchor.x - cell / 2 + getGridOffsetX()));
+  const y = bankContent ? bankContent.y : Math.max(0, Math.round(anchor.y - cell / 2 + getGridOffsetY()));
   const content = bankContent
     ? { minX: bankContent.x, minY: bankContent.y, maxX: bankContent.x + bankContent.w - 1, maxY: bankContent.y + bankContent.h - 1 }
     : foregroundBounds(imageData);
