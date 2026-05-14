@@ -588,6 +588,7 @@ function cellBackgroundColor(imageData, x, y, w, h) {
   const addSample = (px, py) => {
     const color = pixelColorAt(imageData, px, py);
     if (isQuantityPixel(color.r, color.g, color.b)) return;
+    if (isFrameOrScrollbarPixel(color.r, color.g, color.b)) return;
     const key = `${color.r},${color.g},${color.b}`;
     counts.set(key, (counts.get(key) ?? 0) + 1);
   };
@@ -597,13 +598,10 @@ function cellBackgroundColor(imageData, x, y, w, h) {
   const maxY = y + h - 1;
   const step = 2;
 
-  for (let px = minX; px <= maxX; px += step) {
-    addSample(px, minY);
-    addSample(px, maxY);
-  }
-  for (let py = minY + step; py < maxY; py += step) {
-    addSample(minX, py);
-    addSample(maxX, py);
+  for (let py = minY; py <= maxY; py += step) {
+    for (let px = minX; px <= maxX; px += step) {
+      addSample(px, py);
+    }
   }
 
   const best = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
@@ -2305,7 +2303,7 @@ function renderRestoredTab(items) {
   const table = document.createElement("table");
   table.append(makeDetectionTableHead("restored"));
   const body = document.createElement("tbody");
-  for (const detection of items) body.append(makeDetectionTableRow(cloneDetectionForTable(detection)));
+  for (const detection of items) body.append(makeDetectionTableRow(detection));
   table.append(body);
   wrap.append(table);
   restoredPanel.append(wrap);
