@@ -2044,9 +2044,9 @@ function makeDetectionTableRow(detection) {
       "review-border",
       detection.ambiguousMatch && !(detection.corrected && detection.manual)
     );
-    referenceCell.append(makeReferenceCorrectionDropdown(detection));
     previewCell.append(detection.preview);
     processedCell.append(detection.processedPreview);
+    referenceCell.append(makeReferenceCorrectionDropdown(detection));
 
     if (detection.wikiPage) {
       const link = document.createElement("a");
@@ -2118,8 +2118,8 @@ function makeDetectionTableRow(detection) {
       siteCell,
       statusCell,
       previewCell,
-      referenceCell,
       processedCell,
+      referenceCell,
       quantityCell
     );
     return row;
@@ -2178,7 +2178,7 @@ function setActiveResultsTab(tab) {
     panel.hidden = panel.dataset.resultsPanel !== tab;
   }
 
-  if (tab === "damaged") renderDetections();
+  if (tab === "damaged" && detections.length) renderDamagedTable(filteredDetections());
   renderResultsTabContent();
   requestTabScreenshot(tab);
 }
@@ -2189,6 +2189,15 @@ function renderResultsTabContent() {
   if (activeResultsTab === "restored") renderRestoredTab(items);
   if (activeResultsTab === "storage") renderStorageTab(items);
   if (activeResultsTab === "materials") renderMaterialsTab(items);
+}
+
+function renderDamagedTable(items) {
+  resultsBody.replaceChildren();
+  if (!items.length) {
+    drawEmptyState("No artefacts match the current filters.");
+    return;
+  }
+  for (const detection of items) resultsBody.append(makeDetectionTableRow(detection));
 }
 
 function requestTabScreenshot(tab) {
@@ -2246,10 +2255,30 @@ function renderRestoredTab(items) {
   const table = document.createElement("table");
   table.append(makeDetectionTableHead());
   const body = document.createElement("tbody");
-  for (const detection of items) body.append(makeDetectionTableRow(detection));
+  for (const detection of items) body.append(makeDetectionTableRow(cloneDetectionForTable(detection)));
   table.append(body);
   wrap.append(table);
   restoredPanel.append(wrap);
+}
+
+function cloneDetectionForTable(detection) {
+  return {
+    ...detection,
+    preview: cloneCanvas(detection.preview),
+    processedPreview: cloneCanvas(detection.processedPreview),
+    referencePreview: cloneCanvas(detection.referencePreview),
+    rowElements: null
+  };
+}
+
+function cloneCanvas(canvas) {
+  if (!(canvas instanceof HTMLCanvasElement)) return canvas;
+  const clone = document.createElement("canvas");
+  clone.width = canvas.width;
+  clone.height = canvas.height;
+  clone.className = canvas.className;
+  clone.getContext("2d").drawImage(canvas, 0, 0);
+  return clone;
 }
 
 function renderMaterialsTab(items) {
@@ -2425,7 +2454,7 @@ function makeTableHead(labels) {
 }
 
 function makeDetectionTableHead() {
-  return makeTableHead(["Artefact", "Level", "Culture", "Dig site", "Status", "Crop", "Ref", "Match", "Quantity"]);
+  return makeTableHead(["Artefact", "Level", "Culture", "Dig site", "Status", "Crop", "Guess", "Ref", "Quantity"]);
 }
 
 function makeTextCell(value, className = "") {
