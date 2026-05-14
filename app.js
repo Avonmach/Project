@@ -1007,7 +1007,7 @@ function estimateBankGrid(imageData) {
   const contentRows = getGridRows(Math.max(1, Math.ceil((content.maxY - y + 1) / cell)));
   const itemExtent = gridExtentFromItemCenters(itemCenters, x, y, cell);
   const last = itemExtent || lastOccupiedGridCell(imageData, x, y, cell, content);
-  const columns = itemExtent ? Math.min(contentColumns, Math.max(1, itemExtent.column + 2)) : contentColumns;
+  const columns = contentColumns;
   const rows = itemExtent ? Math.min(contentRows, Math.max(1, itemExtent.row + 1)) : contentRows;
   return {
     x,
