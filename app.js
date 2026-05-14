@@ -1052,10 +1052,11 @@ function findBankContentArea(imageData) {
   const infinity = findInfinitySymbolBounds(imageData);
 
   if (infinity && bottom !== null && right !== null) {
-    const anchoredLeft = Math.max(0, infinity.x - 10);
+    const anchoredLeft = findContentLeftFromInfinity(imageData, infinity) ?? Math.max(0, infinity.x - 10);
     const anchoredTop = findContentTopAfterInfinity(imageData, infinity) ?? infinity.y + infinity.h + 8;
+    const anchoredRight = findContentRightBeforeScrollbar(imageData, anchoredTop, bottom) ?? right;
     if (bottom > anchoredTop && right > anchoredLeft) {
-      return { x: anchoredLeft, y: anchoredTop, w: right - anchoredLeft + 1, h: bottom - anchoredTop + 1 };
+      return { x: anchoredLeft, y: anchoredTop, w: anchoredRight - anchoredLeft + 1, h: bottom - anchoredTop + 1 };
     }
   }
 
@@ -1088,19 +1089,57 @@ function findInfinitySymbolBounds(imageData) {
 
 function findContentTopAfterInfinity(imageData, infinity) {
   const { width, height, data } = imageData;
-  const startY = Math.min(height - 1, infinity.y + infinity.h);
-  const endY = Math.min(height - 1, startY + 35);
+  const startY = Math.min(height - 1, infinity.y + infinity.h + 8);
+  const endY = Math.min(height - 1, startY + 60);
 
   for (let y = startY; y <= endY; y += 1) {
-    let framePixels = 0;
+    let contentPixels = 0;
     for (let x = 0; x < width; x += 1) {
       const offset = (y * width + x) * 4;
-      if (isFrameOrScrollbarPixel(data[offset], data[offset + 1], data[offset + 2])) framePixels += 1;
+      if (isBankContentBackgroundPixel(data[offset], data[offset + 1], data[offset + 2])) contentPixels += 1;
     }
-    if (framePixels > width * 0.45) return y + 1;
+    if (contentPixels > width * 0.55) return y;
   }
 
   return null;
+}
+
+function findContentLeftFromInfinity(imageData, infinity) {
+  const y = Math.min(imageData.height - 1, infinity.y + infinity.h + 16);
+  for (let x = Math.max(0, infinity.x - 16); x < Math.min(imageData.width, infinity.x + 24); x += 1) {
+    const offset = (y * imageData.width + x) * 4;
+    if (isBankContentBackgroundPixel(imageData.data[offset], imageData.data[offset + 1], imageData.data[offset + 2])) return x;
+  }
+  return null;
+}
+
+function findContentRightBeforeScrollbar(imageData, top, bottom) {
+  const { width, data } = imageData;
+  const minY = Math.max(0, top);
+  const maxY = Math.min(imageData.height - 1, bottom);
+  let runEnd = null;
+
+  for (let x = width - 1; x >= Math.floor(width * 0.75); x -= 1) {
+    let scrollbarPixels = 0;
+    for (let y = minY; y <= maxY; y += 1) {
+      const offset = (y * width + x) * 4;
+      const r = data[offset];
+      const g = data[offset + 1];
+      const b = data[offset + 2];
+      if (r > 145 && g > 100 && b > 45 && r > b + 45) scrollbarPixels += 1;
+    }
+    if (scrollbarPixels > (maxY - minY + 1) * 0.35) {
+      if (runEnd === null) runEnd = x;
+      continue;
+    }
+    if (runEnd !== null) return Math.max(0, x - 2);
+  }
+
+  return null;
+}
+
+function isBankContentBackgroundPixel(r, g, b) {
+  return Math.abs(r - 48) <= 8 && Math.abs(g - 43) <= 8 && Math.abs(b - 38) <= 8;
 }
 
 function lastOccupiedGridCell(imageData, gridX, gridY, cell, content) {
