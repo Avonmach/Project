@@ -81,7 +81,7 @@ const RESULT_TAB_TITLES = {
 };
 const DEFAULT_SCREENSHOTS = {
   damaged: "Damaged_Items.png",
-  restored: "Items#.png"
+  restored: "Items%23.png"
 };
 
 loadDefaultButton.addEventListener("click", () => imageInput.click());
