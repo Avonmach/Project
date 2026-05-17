@@ -26,8 +26,7 @@ import {
   toScreenshotFingerprint,
   topLeftPixelColor
 } from "./domain/artefacts/fingerprint";
-import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
-import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
+import { detectQuantity, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { normalizeName } from "./domain/shared/format";
 import { loadImageElement } from "./infrastructure/browser/image-loader";
 import {
@@ -41,9 +40,9 @@ import {
   getGridCellSize,
   getGridOffsetX,
   getGridOffsetY,
-  isFrameOrScrollbarPixel
 } from "./infrastructure/image-processing/bank-grid";
-import { copyImageData, pixelColorAt } from "./infrastructure/image-processing/image-data";
+import { copyImageData } from "./infrastructure/image-processing/image-data";
+import { makeFullShapeImageData } from "./infrastructure/image-processing/shape-mask";
 import {
   applyResultTabSelection,
   connectResultTabButtons
@@ -458,182 +457,6 @@ function applyCandidatePrediction(detection, candidate) {
   const next = ordered.find((match, candidateIndex) => candidateIndex !== index);
   detection.matchGap = next ? candidate.score - next.score : 1;
   detection.ambiguousMatch = Boolean(next && detection.matchGap <= AMBIGUOUS_FINAL_MARGIN);
-}
-
-function makeFullShapeImageData(imageData, grid, mode = "damaged") {
-  const out = new ImageData(imageData.width, imageData.height);
-  const removeSimilarBackground = mode === "restored";
-
-  for (let row = 0; row < grid.rows; row += 1) {
-    for (let column = 0; column < grid.columns; column += 1) {
-      const x = grid.x + column * grid.cell;
-      const y = grid.y + row * grid.cell;
-      const w = Math.min(grid.cell, (grid.maxX ?? imageData.width - 1) - x + 1, imageData.width - x);
-      const h = Math.min(grid.cell, (grid.maxY ?? imageData.height - 1) - y + 1, imageData.height - y);
-      if (w <= 0 || h <= 0) continue;
-
-      const backgroundColors = cellBackgroundColors(imageData, x, y, w, h, { includeSimilar: removeSimilarBackground });
-      const backgroundMask = removeSimilarBackground ? connectedCellBackgroundMask(imageData, x, y, w, h, backgroundColors) : null;
-      for (let py = y; py < y + h; py += 1) {
-        for (let px = x; px < x + w; px += 1) {
-          const offset = (py * imageData.width + px) * 4;
-          const r = imageData.data[offset];
-          const g = imageData.data[offset + 1];
-          const b = imageData.data[offset + 2];
-          const a = imageData.data[offset + 3];
-          const backgroundRemoved = backgroundMask
-            ? backgroundMask[(py - y) * w + (px - x)]
-            : matchesCellBackground(r, g, b, backgroundColors, removeSimilarBackground);
-          const visible =
-            a > 20 &&
-            !backgroundRemoved &&
-            !isQuantityPixelInCell(r, g, b, px - x, py - y);
-          out.data[offset] = 0;
-          out.data[offset + 1] = 0;
-          out.data[offset + 2] = 0;
-          out.data[offset + 3] = visible ? 255 : 0;
-        }
-      }
-    }
-  }
-
-  return out;
-}
-
-function cellBackgroundColors(imageData, x, y, w, h, options = {}) {
-  const counts = new Map();
-  const addSample = (px, py) => {
-    if (options.includeSimilar && !isCellBackgroundSamplePoint(px - x, py - y, w, h)) return;
-    const color = pixelColorAt(imageData, px, py);
-    if (isQuantityPixel(color.r, color.g, color.b)) return;
-    if (isFrameOrScrollbarPixel(color.r, color.g, color.b)) return;
-    if (!isSlotBackgroundCandidate(color.r, color.g, color.b)) return;
-    const key = `${color.r},${color.g},${color.b}`;
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  };
-  const minX = x;
-  const maxX = x + w - 1;
-  const minY = y;
-  const maxY = y + h - 1;
-  const step = 2;
-
-  for (let py = minY; py <= maxY; py += step) {
-    for (let px = minX; px <= maxX; px += step) {
-      addSample(px, py);
-    }
-  }
-
-  const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
-  if (!ranked.length) return [pixelColorAt(imageData, x, y)];
-
-  const minimumCount = options.includeSimilar ? Math.max(2, ranked[0][1] * 0.08) : ranked[0][1];
-  return ranked
-    .filter((entry) => entry[1] >= minimumCount)
-    .slice(0, options.includeSimilar ? 3 : 1)
-    .map(([key]) => {
-      const [r, g, b] = key.split(",").map(Number);
-      return { r, g, b };
-    });
-}
-
-function matchesCellBackground(r, g, b, backgroundColors, includeSimilar) {
-  if (!includeSimilar) return backgroundColors.some((color) => sameColor(r, g, b, color));
-  if (!isSlotBackgroundCandidate(r, g, b)) return false;
-  return backgroundColors.some((color) => channelDistance(r, g, b, color) <= 5 && colorDistance(r, g, b, color) <= 14);
-}
-
-function connectedCellBackgroundMask(imageData, x, y, w, h, backgroundColors) {
-  const mask = new Uint8Array(w * h);
-  const queue = [];
-  const add = (localX, localY) => {
-    if (localX < 0 || localY < 0 || localX >= w || localY >= h) return;
-    const index = localY * w + localX;
-    if (mask[index]) return;
-    const offset = ((y + localY) * imageData.width + x + localX) * 4;
-    const r = imageData.data[offset];
-    const g = imageData.data[offset + 1];
-    const b = imageData.data[offset + 2];
-    if (!matchesCellBackground(r, g, b, backgroundColors, true)) return;
-    mask[index] = 1;
-    queue.push(index);
-  };
-
-  for (let px = 0; px < w; px += 1) {
-    add(px, 0);
-    add(px, h - 1);
-  }
-  for (let py = 1; py < h - 1; py += 1) {
-    add(0, py);
-    add(w - 1, py);
-  }
-
-  for (let i = 0; i < queue.length; i += 1) {
-    const index = queue[i];
-    const localX = index % w;
-    const localY = Math.floor(index / w);
-    add(localX + 1, localY);
-    add(localX - 1, localY);
-    add(localX, localY + 1);
-    add(localX, localY - 1);
-  }
-
-  return mask;
-}
-
-function isSlotBackgroundCandidate(r, g, b) {
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  return max >= 24 && max <= 88 && max - min <= 18 && r <= g + 12 && g <= r + 12;
-}
-
-function isCellBackgroundSamplePoint(x, y, w, h) {
-  const band = Math.max(6, Math.floor(Math.min(w, h) * 0.18));
-  return x < band || y < band || x >= w - band || y >= h - band;
-}
-
-function isQuantityPixelInCell(r, g, b, x, y) {
-  return x < 26 && y < 17 && isQuantityPixel(r, g, b);
-}
-
-function connectedGridBackgroundMask(imageData, grid, backgroundColor) {
-  const { width, height, data } = imageData;
-  const mask = new Uint8Array(width * height);
-  const queue = [];
-  const minX = Math.max(0, grid.x);
-  const minY = Math.max(0, grid.y);
-  const maxX = Math.min(width - 1, grid.x + grid.columns * grid.cell - 1);
-  const maxY = Math.min(height - 1, grid.y + grid.rows * grid.cell - 1);
-
-  const add = (x, y) => {
-    if (x < minX || y < minY || x > maxX || y > maxY) return;
-    const index = y * width + x;
-    if (mask[index]) return;
-    const offset = index * 4;
-    if (!sameColor(data[offset], data[offset + 1], data[offset + 2], backgroundColor)) return;
-    mask[index] = 1;
-    queue.push(index);
-  };
-
-  for (let x = minX; x <= maxX; x += 1) {
-    add(x, minY);
-    add(x, maxY);
-  }
-  for (let y = minY + 1; y < maxY; y += 1) {
-    add(minX, y);
-    add(maxX, y);
-  }
-
-  for (let i = 0; i < queue.length; i += 1) {
-    const index = queue[i];
-    const x = index % width;
-    const y = Math.floor(index / width);
-    add(x + 1, y);
-    add(x - 1, y);
-    add(x, y + 1);
-    add(x, y - 1);
-  }
-
-  return mask;
 }
 
 function attachQuantityDebugSource(debug, imageData) {
