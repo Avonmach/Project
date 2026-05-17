@@ -2,12 +2,13 @@
 
 ## Current Scope
 
-This project is a local RuneScape 3 Archaeology Analyzer. It serves a browser UI with `npm start`, loads bank/inventory screenshots, detects damaged artefact slots, compares item crops against local RuneScape Wiki reference icons, reads yellow stack quantities, and exports analysis JSON for review.
+This project is a local RuneScape 3 Archaeology Analyzer. It serves a browser UI with Vite via `npm start`, loads bank/inventory screenshots, detects damaged artefact slots, compares item crops against local transparent RuneScape Wiki reference icons, reads visible yellow stack quantities, and exports analysis JSON for review.
 
 ## Important Files
 
-- `app.js` contains the browser-side detection, artefact matching, quantity OCR, correction UI, and export logic.
-- `server.js` serves the local static app on port 8080.
+- `src/main.ts` contains the migrated browser-side detection, artefact matching, quantity OCR, correction UI, and export logic. It is still the legacy monolith and currently has a temporary `// @ts-nocheck` marker until typed modules are extracted.
+- `vite.config.ts` configures the Vite development and preview server.
+- `server.js` is the legacy static file server and is available as `npm run serve:static`.
 - `data/damaged-artifacts.json` is the damaged artefact database.
 - `data/reference-icons/` contains downloaded reference icons used for matching.
 - `Damaged_Items.png` is the current main damaged artefact screenshot.
@@ -18,7 +19,7 @@ This project is a local RuneScape 3 Archaeology Analyzer. It serves a browser UI
 
 ## Quantity OCR Notes
 
-The current `app.js` quantity reader does not contain a special correction that rewrites two-digit numbers starting with `1`. It detects digits, joins them into text, and parses the result with `Number.parseInt`.
+The current `src/main.ts` quantity reader does not contain a special correction that rewrites two-digit numbers starting with `1`. It detects digits, joins them into text, and parses the result with `Number.parseInt`.
 
 The current per-digit quantity heuristics in `adjustCommonQuantityMistakes()` handle these cases:
 

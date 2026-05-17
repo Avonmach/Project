@@ -1,3 +1,4 @@
+// @ts-nocheck
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
 const imageInput = document.getElementById("imageInput");

@@ -147,6 +147,7 @@ Phase 2: TypeScript-ready build without behavior change
 - Move browser entry from `app.js` to `src/main.ts`.
 - Keep `index.html` and CSS behavior equivalent.
 - Do not introduce React/NestJS in this phase.
+- Temporary migration exception: `src/main.ts` may keep `// @ts-nocheck` while it is still the legacy monolith. Remove it as soon as focused typed modules are extracted.
 
 Phase 3: Extract pure modules
 

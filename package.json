@@ -3,8 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node server.js",
+    "start": "vite --host 127.0.0.1",
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build && node scripts/copy-vite-static-assets.js",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "serve:static": "node server.js",
     "build:database": "node scripts/build-damaged-artifact-db.js",
     "build:archaeology-reference": "node scripts/build-archaeology-reference-db.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
   }
 }
