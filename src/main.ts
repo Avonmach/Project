@@ -15,6 +15,7 @@ import { createResultsState } from "./presentation/state/results-state";
 import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
 import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from "./presentation/renderers/restored-tab";
 import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/renderers/materials-tab";
+import { renderStorageTab as renderStorageTabPanel } from "./presentation/renderers/storage-tab";
 
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -1980,39 +1981,17 @@ function renderMaterialsTab(items) {
 }
 
 function renderStorageTab(items) {
-  storagePanel.replaceChildren();
-  const materials = [...(archaeologyReference.materials || [])].sort((a, b) => a.name.localeCompare(b.name));
-  if (!materials.length) {
-    storagePanel.append(makeEmptyMessage("Material reference data is not available."));
-    return;
-  }
-
-  const summary = document.createElement("div");
-  summary.className = "overview-grid";
-  summary.append(
-    makeOverviewCard("Known materials", materials.length),
-    makeOverviewCard("Needed now", calculateMaterialTotals(items).length),
-    makeOverviewCard("Storage matched", 0)
-  );
-
-  const table = document.createElement("table");
-  table.className = "secondary-table materials-table";
-  table.append(makeTableHead(["Material", "Wiki page"]));
-  const body = document.createElement("tbody");
-
-  for (const material of materials) {
-    const tr = document.createElement("tr");
-    const linkCell = makeLinkedTextCell(material.name, material.wikiPage);
-    tr.append(makeMaterialCell({ name: material.name }), linkCell);
-    body.append(tr);
-  }
-
-  table.append(body);
-  storagePanel.append(
-    summary,
-    makeEmptyMessage("Storage screenshot recognition is ready to be added on top of this material database."),
-    table
-  );
+  renderStorageTabPanel({
+    panel: storagePanel,
+    visibleDetections: items,
+    materials: archaeologyReference.materials || [],
+    calculateMaterialTotals,
+    makeMaterialCell,
+    makeLinkedTextCell,
+    makeTableHead,
+    makeEmptyMessage,
+    makeOverviewCard
+  });
 }
 
 function updateFilterOptions() {
