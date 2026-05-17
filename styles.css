@@ -887,7 +887,6 @@ tbody tr:has(.processed-preview:hover),
 .quantity-debug-template-grid {
   display: grid;
   gap: 1px;
-  grid-template-columns: repeat(5, 4px);
 }
 
 .quantity-debug-template-grid span {

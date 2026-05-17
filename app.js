@@ -61,10 +61,10 @@ const DIGIT_TEMPLATE_WIDTH = 5;
 const DIGIT_TEMPLATE_HEIGHT = 8;
 const FALLBACK_DIGIT_TEMPLATES = {
   0: ["01110", "10001", "10011", "10101", "11001", "10001", "10001", "01110"],
-  1: ["00100", "01100", "00100", "00100", "00100", "00100", "00100", "01110"],
+  1: ["0100", "1100", "0100", "0100", "0100", "0100", "0100", "1110"],
   2: ["01110", "10001", "00001", "00010", "00100", "01000", "10000", "11111"],
   3: ["11110", "00001", "00001", "00110", "00001", "00001", "10001", "01110"],
-  4: ["00010", "00110", "01010", "10010", "11111", "00010", "00010", "00010"],
+  4: ["0010", "0110", "1010", "1010", "1111", "0010", "0010", "0010"],
   5: ["11111", "10000", "10000", "11110", "00001", "00001", "10001", "01110"],
   6: ["00110", "01000", "10000", "11110", "10001", "10001", "10001", "01110"],
   7: ["11111", "00001", "00010", "00010", "00100", "00100", "01000", "01000"],
@@ -123,7 +123,7 @@ async function initialize() {
 async function loadQuantityFontTemplates() {
   if (!("FontFace" in window)) return;
   try {
-    const face = new FontFace("RunescapeQuantityOCR", "url('runescape-chat-font/runescape-chat-font.otf')");
+    const face = new FontFace("RunescapeQuantityOCR", "url('runescape-small-07/runescape-small-07.otf')");
     await face.load();
     document.fonts.add(face);
     await document.fonts.ready;
@@ -144,8 +144,9 @@ function buildDigitTemplatesFromFont(fontFamily) {
 
 function renderDigitTemplate(digit, fontFamily) {
   const scale = 6;
+  const templateWidth = digitTemplateWidth(digit);
   const source = document.createElement("canvas");
-  source.width = DIGIT_TEMPLATE_WIDTH * scale;
+  source.width = templateWidth * scale;
   source.height = DIGIT_TEMPLATE_HEIGHT * scale;
   const sourceCtx = source.getContext("2d", { willReadFrequently: true });
   sourceCtx.clearRect(0, 0, source.width, source.height);
@@ -159,23 +160,27 @@ function renderDigitTemplate(digit, fontFamily) {
   if (!bounds) return FALLBACK_DIGIT_TEMPLATES[digit];
 
   const normalized = document.createElement("canvas");
-  normalized.width = DIGIT_TEMPLATE_WIDTH;
+  normalized.width = templateWidth;
   normalized.height = DIGIT_TEMPLATE_HEIGHT;
   const normalizedCtx = normalized.getContext("2d", { willReadFrequently: true });
   normalizedCtx.imageSmoothingEnabled = true;
   normalizedCtx.clearRect(0, 0, normalized.width, normalized.height);
-  normalizedCtx.drawImage(source, bounds.x, bounds.y, bounds.w, bounds.h, 0, 0, DIGIT_TEMPLATE_WIDTH, DIGIT_TEMPLATE_HEIGHT);
-  const normalizedData = normalizedCtx.getImageData(0, 0, DIGIT_TEMPLATE_WIDTH, DIGIT_TEMPLATE_HEIGHT).data;
+  normalizedCtx.drawImage(source, bounds.x, bounds.y, bounds.w, bounds.h, 0, 0, templateWidth, DIGIT_TEMPLATE_HEIGHT);
+  const normalizedData = normalizedCtx.getImageData(0, 0, templateWidth, DIGIT_TEMPLATE_HEIGHT).data;
   const rows = [];
   for (let y = 0; y < DIGIT_TEMPLATE_HEIGHT; y += 1) {
     let row = "";
-    for (let x = 0; x < DIGIT_TEMPLATE_WIDTH; x += 1) {
-      const offset = (y * DIGIT_TEMPLATE_WIDTH + x) * 4;
+    for (let x = 0; x < templateWidth; x += 1) {
+      const offset = (y * templateWidth + x) * 4;
       row += normalizedData[offset + 3] > 30 ? "1" : "0";
     }
     rows.push(row);
   }
   return rows;
+}
+
+function digitTemplateWidth(digit) {
+  return ["1", "4"].includes(String(digit)) ? 4 : DIGIT_TEMPLATE_WIDTH;
 }
 
 async function loadReferences() {
@@ -1676,7 +1681,9 @@ function makeQuantityDebug({ mode, strict, scanBox, yellowPixels, digitBoxes, re
       options: (match.options || []).slice(0, 3).map((option) => ({
         digit: option.digit,
         score: option.score,
-        template: digitTemplates[option.digit] || []
+        template: digitTemplates[option.digit] || [],
+        width: templateWidth(digitTemplates[option.digit] || []),
+        height: (digitTemplates[option.digit] || []).length
       }))
     })),
     text,
@@ -1853,20 +1860,29 @@ function pixelsToBox(pixels) {
 }
 
 function matchDigit(pixels, box) {
-  const normalized = normalizeDigit(pixels, box);
   let best = { digit: "1", score: 0 };
   const scores = {};
+  const normalizedByWidth = new Map();
+  const normalizedForWidth = (width) => {
+    if (!normalizedByWidth.has(width)) normalizedByWidth.set(width, normalizeDigit(pixels, box, width));
+    return normalizedByWidth.get(width);
+  };
 
   for (const [digit, template] of Object.entries(digitTemplates)) {
+    const normalized = normalizedForWidth(templateWidth(template));
     const score = shiftedTemplateScore(normalized, template);
     scores[digit] = score;
     if (score > best.score) best = { digit, score };
   }
 
-  const adjusted = adjustCommonQuantityMistakes(best, scores, normalized);
-  adjusted.normalized = normalized;
+  const adjusted = adjustCommonQuantityMistakes(best, scores, normalizedForWidth(DIGIT_TEMPLATE_WIDTH));
+  adjusted.normalized = normalizedForWidth(templateWidth(digitTemplates[adjusted.digit]));
   adjusted.options = digitOptions(scores, adjusted);
   return adjusted;
+}
+
+function templateWidth(template) {
+  return Math.max(1, ...(template || []).map((row) => row.length));
 }
 
 function digitOptions(scores, adjusted) {
@@ -1919,16 +1935,18 @@ function adjustCommonQuantityMistakes(best, scores, normalized) {
 
 function shiftedTemplateScore(normalized, template) {
   let best = 0;
+  const height = template.length;
+  const width = templateWidth(template);
   for (let shiftY = -1; shiftY <= 1; shiftY += 1) {
     for (let shiftX = -1; shiftX <= 1; shiftX += 1) {
       let same = 0;
       let total = 0;
-      for (let y = 0; y < DIGIT_TEMPLATE_HEIGHT; y += 1) {
-        for (let x = 0; x < DIGIT_TEMPLATE_WIDTH; x += 1) {
+      for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < width; x += 1) {
           const templateY = y - shiftY;
           const templateX = x - shiftX;
           const expected =
-            templateY >= 0 && templateY < DIGIT_TEMPLATE_HEIGHT && templateX >= 0 && templateX < DIGIT_TEMPLATE_WIDTH
+            templateY >= 0 && templateY < height && templateX >= 0 && templateX < width
               ? template[templateY][templateX]
               : "0";
           total += expected === "1" ? 2 : 1;
@@ -1941,8 +1959,8 @@ function shiftedTemplateScore(normalized, template) {
   return best;
 }
 
-function normalizeDigit(pixels, box) {
-  const grid = Array.from({ length: DIGIT_TEMPLATE_HEIGHT }, () => Array.from({ length: DIGIT_TEMPLATE_WIDTH }, () => "0"));
+function normalizeDigit(pixels, box, width = DIGIT_TEMPLATE_WIDTH) {
+  const grid = Array.from({ length: DIGIT_TEMPLATE_HEIGHT }, () => Array.from({ length: width }, () => "0"));
   const inside = new Set(
     pixels
       .filter((pixel) => pixel.x >= box.x && pixel.x < box.x + box.w && pixel.y >= box.y && pixel.y < box.y + box.h)
@@ -1950,11 +1968,11 @@ function normalizeDigit(pixels, box) {
   );
 
   for (let gy = 0; gy < DIGIT_TEMPLATE_HEIGHT; gy += 1) {
-    for (let gx = 0; gx < DIGIT_TEMPLATE_WIDTH; gx += 1) {
+    for (let gx = 0; gx < width; gx += 1) {
       let hits = 0;
       let samples = 0;
-      const startX = box.x + Math.floor((gx / DIGIT_TEMPLATE_WIDTH) * box.w);
-      const endX = box.x + Math.max(1, Math.floor(((gx + 1) / DIGIT_TEMPLATE_WIDTH) * box.w));
+      const startX = box.x + Math.floor((gx / width) * box.w);
+      const endX = box.x + Math.max(1, Math.floor(((gx + 1) / width) * box.w));
       const startY = box.y + Math.floor((gy / DIGIT_TEMPLATE_HEIGHT) * box.h);
       const endY = box.y + Math.max(1, Math.floor(((gy + 1) / DIGIT_TEMPLATE_HEIGHT) * box.h));
       for (let y = startY; y <= endY; y += 1) {
@@ -3053,11 +3071,15 @@ function makeQuantityDebugView(detection) {
 function makeQuantityTemplateView(option) {
   const wrapper = document.createElement("div");
   wrapper.className = "quantity-debug-template";
+  const template = option.template || [];
+  const width = option.width || templateWidth(template);
+  const height = option.height || template.length;
   const label = document.createElement("small");
-  label.textContent = `${option.digit} ${percent(option.score)}`;
+  label.textContent = `${option.digit} ${height}x${width} ${percent(option.score)}`;
   const grid = document.createElement("div");
   grid.className = "quantity-debug-template-grid";
-  for (const row of option.template || []) {
+  grid.style.gridTemplateColumns = `repeat(${width}, 4px)`;
+  for (const row of template) {
     for (const value of row) {
       const cell = document.createElement("span");
       if (value === "1") cell.className = "is-on";
