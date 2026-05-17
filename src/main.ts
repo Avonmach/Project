@@ -5,7 +5,8 @@ import {
   templateWidth
 } from "./domain/ocr/digit-templates";
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
-import { alphaBounds, copyImageData, cropImageData } from "./infrastructure/image-processing/image-data";
+import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
+import { alphaBounds, copyImageData, cropImageData, pixelColorAt } from "./infrastructure/image-processing/image-data";
 
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -626,18 +627,10 @@ function connectedCellBackgroundMask(imageData, x, y, w, h, backgroundColors) {
   return mask;
 }
 
-function colorDistance(r, g, b, color) {
-  return Math.abs(r - color.r) + Math.abs(g - color.g) + Math.abs(b - color.b);
-}
-
 function isSlotBackgroundCandidate(r, g, b) {
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   return max >= 24 && max <= 88 && max - min <= 18 && r <= g + 12 && g <= r + 12;
-}
-
-function channelDistance(r, g, b, color) {
-  return Math.max(Math.abs(r - color.r), Math.abs(g - color.g), Math.abs(b - color.b));
 }
 
 function isCellBackgroundSamplePoint(x, y, w, h) {
@@ -805,17 +798,6 @@ function topLeftPixelColor(imageData) {
     r: imageData.data[0],
     g: imageData.data[1],
     b: imageData.data[2]
-  };
-}
-
-function pixelColorAt(imageData, x, y) {
-  const safeX = Math.max(0, Math.min(imageData.width - 1, Math.round(x)));
-  const safeY = Math.max(0, Math.min(imageData.height - 1, Math.round(y)));
-  const offset = (safeY * imageData.width + safeX) * 4;
-  return {
-    r: imageData.data[offset],
-    g: imageData.data[offset + 1],
-    b: imageData.data[offset + 2]
   };
 }
 
@@ -1445,10 +1427,6 @@ function isForeground(r, g, b) {
 
 function isBankBackgroundPixel(r, g, b) {
   return r === 48 && g === 43 && b === 38;
-}
-
-function sameColor(r, g, b, color) {
-  return r === color.r && g === color.g && b === color.b;
 }
 
 function dilate(mask, width, height, radius) {

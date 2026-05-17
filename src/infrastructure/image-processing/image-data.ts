@@ -1,4 +1,5 @@
 import type { BoundingBox } from "../../domain/shared/geometry";
+import type { RgbColor } from "../../domain/shared/color";
 
 export function alphaBounds(imageData: ImageData, minimumAlpha = 40): BoundingBox | null {
   let minX = imageData.width;
@@ -43,4 +44,15 @@ export function cropImageData(imageData: ImageData, box: BoundingBox): ImageData
     w: box.w,
     h: box.h
   });
+}
+
+export function pixelColorAt(imageData: ImageData, x: number, y: number): RgbColor {
+  const safeX = Math.max(0, Math.min(imageData.width - 1, Math.round(x)));
+  const safeY = Math.max(0, Math.min(imageData.height - 1, Math.round(y)));
+  const offset = (safeY * imageData.width + safeX) * 4;
+  return {
+    r: imageData.data[offset],
+    g: imageData.data[offset + 1],
+    b: imageData.data[offset + 2]
+  };
 }
