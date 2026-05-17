@@ -16,6 +16,7 @@ import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/rend
 import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from "./presentation/renderers/restored-tab";
 import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/renderers/materials-tab";
 import { renderStorageTab as renderStorageTabPanel } from "./presentation/renderers/storage-tab";
+import { renderDamagedTab as renderDamagedTabPanel } from "./presentation/renderers/damaged-tab";
 import {
   makeDetectionTableRow as makeDetectionTableRowElement,
   makeStatusPill as makeDetectionStatusPill,
@@ -1822,16 +1823,13 @@ function renderResultsTabContent() {
 }
 
 function renderDamagedTable(items) {
-  resultsBody.replaceChildren();
-  if (!detections.length) {
-    drawEmptyState("Analyze a damaged artefact screenshot to populate this table.");
-    return;
-  }
-  if (!items.length) {
-    drawEmptyState("No artefacts match the current filters.");
-    return;
-  }
-  for (const detection of items) resultsBody.append(makeDetectionTableRow(detection));
+  renderDamagedTabPanel({
+    body: resultsBody,
+    allDetections: detections,
+    visibleDetections: items,
+    makeDetectionTableRow,
+    drawEmptyState
+  });
 }
 
 function requestTabScreenshot(tab) {
