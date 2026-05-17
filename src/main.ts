@@ -9,9 +9,9 @@ import { channelDistance, colorDistance, sameColor } from "./domain/shared/color
 import { alphaBounds, copyImageData, cropImageData, pixelColorAt } from "./infrastructure/image-processing/image-data";
 import {
   applyResultTabSelection,
-  connectResultTabButtons,
-  resultModeForTab
+  connectResultTabButtons
 } from "./presentation/tabs/results-tabs";
+import { createResultsState } from "./presentation/state/results-state";
 
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -59,16 +59,11 @@ const COLOR_SIMILAR_MARGIN = 0.03;
 const PREVIEW_BRIGHTNESS = 1.45;
 let loadedImage = null;
 let detections = [];
-const detectionsByMode = {
-  damaged: [],
-  restored: []
-};
 let references = [];
 let archaeologyReference = { materials: [], artefactRecipes: [], collections: [] };
 let recipeByRestoredName = new Map();
 let materialByName = new Map();
-let activeResultsTab = "damaged";
-const screenshotRequestedTabs = new Set();
+const resultsState = createResultsState();
 let collectionSort = { key: "progress", direction: "desc" };
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
@@ -191,7 +186,7 @@ function loadImageElement(src) {
 function analyzeCurrentImage() {
   if (!loadedImage || !references.length) return;
 
-  const recognitionMode = activeResultsTab === "restored" ? "restored" : "damaged";
+  const recognitionMode = resultsState.activeTab === "restored" ? "restored" : "damaged";
   ctx.drawImage(loadedImage, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const grid = estimateBankGrid(imageData, { trimLastColumn: recognitionMode === "restored" });
@@ -271,8 +266,7 @@ function analyzeCurrentImage() {
     };
   });
 
-  detectionsByMode[recognitionMode] = analyzedDetections;
-  detections = analyzedDetections;
+  detections = resultsState.setDetectionsForMode(recognitionMode, analyzedDetections);
   applyUniqueArtefactAssignments(detections);
   renderDetections();
   drawBoxes(detections, grid.contentArea, grid.infinityArea);
@@ -1737,7 +1731,7 @@ function paintFingerprintMask(canvas, fingerprint) {
 
 function renderDetections() {
   if (!detections.length) {
-    if (activeResultsTab === "damaged") drawEmptyState("No occupied artefact slots detected.");
+    if (resultsState.activeTab === "damaged") drawEmptyState("No occupied artefact slots detected.");
     updateTotals();
     renderRestorationPlan([]);
     renderResultsTabContent();
@@ -1746,7 +1740,7 @@ function renderDetections() {
 
   updateFilterOptions();
   const visibleDetections = filteredDetections();
-  if (activeResultsTab === "damaged") {
+  if (resultsState.activeTab === "damaged") {
     renderDamagedTable(visibleDetections);
   }
 
@@ -1904,8 +1898,7 @@ function matchesDetectionFilters(detection) {
 }
 
 function setActiveResultsTab(tab) {
-  activeResultsTab = tab;
-  detections = detectionsByMode[resultModeForTab(tab)];
+  detections = resultsState.setActiveTab(tab);
   applyResultTabSelection({ tab, title: resultsTitle, buttons: resultTabButtons, panels: resultTabPanels });
 
   if (tab === "damaged") renderDamagedTable(filteredDetections());
@@ -1916,10 +1909,10 @@ function setActiveResultsTab(tab) {
 
 function renderResultsTabContent() {
   const items = filteredDetections();
-  if (activeResultsTab === "overview") renderOverviewTab(items);
-  if (activeResultsTab === "restored") renderRestoredTab(items);
-  if (activeResultsTab === "storage") renderStorageTab(items);
-  if (activeResultsTab === "materials") renderMaterialsTab(items);
+  if (resultsState.activeTab === "overview") renderOverviewTab(items);
+  if (resultsState.activeTab === "restored") renderRestoredTab(items);
+  if (resultsState.activeTab === "storage") renderStorageTab(items);
+  if (resultsState.activeTab === "materials") renderMaterialsTab(items);
 }
 
 function renderDamagedTable(items) {
@@ -1936,8 +1929,7 @@ function renderDamagedTable(items) {
 }
 
 function requestTabScreenshot(tab) {
-  if (!["restored", "materials"].includes(tab) || screenshotRequestedTabs.has(tab)) return;
-  screenshotRequestedTabs.add(tab);
+  if (!resultsState.shouldRequestScreenshot(tab)) return;
   if (tab === "restored") {
     loadImageFromUrl(DEFAULT_SCREENSHOTS.restored);
     return;
