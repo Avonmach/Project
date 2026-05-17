@@ -4,11 +4,12 @@ This document is the project reference for future readability, architecture, and
 
 ## Current project state
 
-- The project is currently plain JavaScript, HTML, and CSS.
-- `app.js` contains most frontend behavior: image loading, slot detection, OCR, artefact matching, correction UI, export logic, and rendering.
-- `server.js` is not a real application backend. It is a small static file server for local development.
+- The project is a Vite + TypeScript frontend with vanilla DOM rendering.
+- `src/main.ts` is still the legacy coordinator and temporarily keeps `// @ts-nocheck` while behavior is moved into typed modules.
+- OCR templates, quantity OCR, shared color/format helpers, image-data helpers, result state, result tabs, and several renderers already live in focused modules under `src/`.
+- There is no real application backend. The local server/dev server is only for serving the frontend and static assets.
 - Data is local JSON and local image assets under `data/`.
-- The first architecture goal should be readability and testability, not introducing framework complexity too early.
+- The current architecture goal is incremental readability and testability without introducing React, Next.js, or NestJS before there is a concrete need.
 
 ## Recommended Patterns.dev patterns
 
@@ -143,16 +144,16 @@ Phase 1: Documentation and safety
 
 Phase 2: TypeScript-ready build without behavior change
 
-- Add Vite and TypeScript configuration.
-- Move browser entry from `app.js` to `src/main.ts`.
-- Keep `index.html` and CSS behavior equivalent.
+- Done: Vite and TypeScript configuration exist.
+- Done: browser entry moved to `src/main.ts`.
+- Continue keeping `index.html` and CSS behavior equivalent.
 - Do not introduce React/NestJS in this phase.
-- Temporary migration exception: `src/main.ts` may keep `// @ts-nocheck` while it is still the legacy monolith. Remove it as soon as focused typed modules are extracted.
+- Temporary migration exception: `src/main.ts` may keep `// @ts-nocheck` while it is still the legacy coordinator. Remove it as soon as focused typed modules cover the remaining behavior.
 
 Phase 3: Extract pure modules
 
-- Extract OCR digit templates and matching into `src/domain/ocr/`.
-- Extract image/canvas helpers into `src/infrastructure/image-processing/`.
+- Done/in progress: extract OCR digit templates and quantity OCR into `src/domain/ocr/`.
+- Done/in progress: extract image/canvas helpers into `src/infrastructure/image-processing/`.
 - Extract artefact matching into `src/domain/artefacts/`.
 - Add focused tests for OCR and matching helpers.
 
@@ -163,7 +164,7 @@ Phase 4: Extract application use cases
 
 Phase 5: Improve presentation structure
 
-- Split table rendering, OCR debug rendering, correction menus, tabs, and summary cards.
+- Done/in progress: split table rendering, OCR debug rendering, correction menus, tabs, and summary cards.
 - Decide whether vanilla TypeScript remains enough or React would now pay for itself.
 
 Phase 6: Backend decision

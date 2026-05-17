@@ -5,6 +5,7 @@ import {
 } from "./domain/ocr/digit-templates";
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
+import { normalizeName, nullableNumber, percent } from "./domain/shared/format";
 import { alphaBounds, copyImageData, cropImageData, pixelColorAt } from "./infrastructure/image-processing/image-data";
 import {
   applyResultTabSelection,
@@ -2274,10 +2275,6 @@ function makeRecognitionInfo(detection) {
   return wrapper;
 }
 
-function percent(value) {
-  return `${Math.round((value || 0) * 100)}%`;
-}
-
 function bestMatchLabel(match) {
   if (!match?.item) return "none";
   return `${match.item.restoredName || match.item.name} ${percent(match.score)}`;
@@ -2418,17 +2415,6 @@ function sortedDetections() {
 function sortDetectionName(item) {
   return String(item.restoredName || item.artefact)
     .replace(/['"]/g, "")
-    .toLowerCase();
-}
-
-function nullableNumber(value) {
-  return Number.isFinite(value) ? value : 9999;
-}
-
-function normalizeName(value) {
-  return String(value || "")
-    .replace(/\s+/g, " ")
-    .trim()
     .toLowerCase();
 }
 

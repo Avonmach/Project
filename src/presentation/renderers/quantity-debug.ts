@@ -1,4 +1,5 @@
 import { templateWidth } from "../../domain/ocr/digit-templates";
+import { percent } from "../../domain/shared/format";
 
 interface QuantityDebugBox {
   readonly x: number;
@@ -181,8 +182,4 @@ function drawQuantityDebugBox(context: CanvasRenderingContext2D, box: QuantityDe
   context.strokeStyle = color;
   context.lineWidth = 1;
   context.strokeRect(box.x * scale + 0.5, box.y * scale + 0.5, box.w * scale - 1, box.h * scale - 1);
-}
-
-function percent(value: number | null | undefined): string {
-  return `${Math.round((value || 0) * 100)}%`;
 }
