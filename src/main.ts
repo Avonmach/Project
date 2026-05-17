@@ -7,6 +7,7 @@ import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
   calculateMaterialTotals as calculateMaterialTotalsForRecipes
 } from "./application/calculate-materials/material-totals";
+import { createAnalysisExportPayload, exportBestMatch } from "./application/export-analysis/analysis-export";
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
 import { normalizeName, nullableNumber, percent } from "./domain/shared/format";
@@ -2257,8 +2258,9 @@ function updateTotals() {
 }
 
 function exportResults() {
-  const payload = {
-    exportedAt: new Date().toISOString(),
+  const exportedAt = new Date().toISOString();
+  const payload = createAnalysisExportPayload({
+    exportedAt,
     image: loadedImage
       ? {
           width: loadedImage.naturalWidth,
@@ -2273,150 +2275,18 @@ function exportResults() {
       rows: null,
       columns: null
     },
-    totals: {
-      slots: detections.length,
-      quantity: detections.reduce((sum, detection) => sum + detection.quantity, 0),
-      quantityCorrections: detections.filter((detection) => detection.quantityManual).length,
-      manualCorrections: detections.filter((detection) => detection.manual || detection.corrected).length
-    },
-    training: {
-      correctedArtefacts: detections.filter((detection) => detection.corrected).length,
-      correctedQuantities: detections.filter((detection) => detection.quantityManual).length,
-      quantityLabels: detections
-        .filter((detection) => detection.quantityManual)
-        .map((detection) => ({
-          bankIndex: detection.bankIndex,
-          bankRow: detection.bankRow,
-          bankColumn: detection.bankColumn,
-          box: detection.box,
-          originalQuantity: detection.originalQuantity,
-          detectedQuantity: detection.originalQuantity,
-          correctedQuantity: detection.quantity,
-          quantityConfidence: detection.quantityConfidence,
-          quantityAlternatives: detection.quantityAlternatives,
-          correction: detection.quantityCorrection
-        })),
-      labels: detections
-        .filter((detection) => detection.corrected)
-        .map((detection) => ({
-          bankIndex: detection.bankIndex,
-          bankRow: detection.bankRow,
-          bankColumn: detection.bankColumn,
-          box: detection.box,
-          corrected: detection.correction,
-          originalPrediction: detection.originalPrediction,
-          topMatches: (detection.topMatches || []).map((match) => ({
-            damagedName: match.item.name,
-            restoredName: match.item.restoredName,
-            score: match.score,
-            shapeScore: match.shapeScore,
-            colorScore: match.colorScore,
-            colorExistenceScore: match.colorExistenceScore,
-            colorPositionScore: match.colorPositionScore,
-            scoringWeights: match.scoringWeights,
-            restoredScore: match.restoredScore,
-            damagedScore: match.damagedScore
-          }))
-        }))
-    },
-    detections: detections.map((detection) => ({
-      bankIndex: detection.bankIndex,
-      bankRow: detection.bankRow,
-      bankColumn: detection.bankColumn,
-      box: detection.box,
-      quantity: detection.quantity,
-      originalQuantity: detection.originalQuantity,
-      quantityConfidence: detection.quantityConfidence,
-      quantityAlternatives: detection.quantityAlternatives,
-      correctedQuantity: detection.quantityManual,
-      quantityCorrection: detection.quantityCorrection,
-      correctedArtefact: detection.corrected,
-      originalPrediction: detection.originalPrediction,
-      correction: detection.correction,
-      trainingLabel: detection.corrected
-        ? {
-            input: {
-              bankIndex: detection.bankIndex,
-              bankRow: detection.bankRow,
-              bankColumn: detection.bankColumn,
-              box: detection.box,
-              originalQuantity: detection.originalQuantity,
-              quantity: detection.quantity
-            },
-            label: {
-              damagedName: detection.correction.damagedName,
-              restoredName: detection.correction.restoredName,
-              archaeologyLevel: detection.correction.archaeologyLevel,
-              culture: detection.correction.culture
-            },
-            previousPrediction: detection.originalPrediction
-          }
-        : null,
-      selected: {
-        damagedName: detection.artefact,
-        restoredName: detection.restoredName,
-        archaeologyLevel: detection.archaeologyLevel,
-        culture: detection.culture,
-        digSite: detection.digSite,
-        wikiPage: detection.wikiPage,
-        damagedWikiPage: detection.damagedWikiPage
-      },
-      ambiguousMatch: detection.ambiguousMatch,
-      matchGap: detection.matchGap,
-      scores: {
-        selectedShape: detection.shapeScore,
-        selectedColor: detection.colorScore,
-        selectedColorExistence: detection.colorExistenceScore,
-        selectedColorPosition: detection.colorPositionScore,
-        selectedRestored: detection.restoredScore,
-        selectedDamaged: detection.damagedScore,
-        selectedMain: detection.matchScore,
-        referenceUsed: detection.referenceUsed,
-        weights: detection.scoringWeights
-      },
-      algorithmBest: {
-        shape: exportBestMatch(detection.algorithmBest?.shape),
-        color: exportBestMatch(detection.algorithmBest?.color),
-        restored: exportBestMatch(detection.algorithmBest?.restored),
-        damaged: exportBestMatch(detection.algorithmBest?.damaged)
-      },
-      topMatches: (detection.topMatches || []).map((match) => ({
-        damagedName: match.item.name,
-        restoredName: match.item.restoredName,
-        score: match.score,
-        shapeScore: match.shapeScore,
-        colorScore: match.colorScore,
-        colorExistenceScore: match.colorExistenceScore,
-        colorPositionScore: match.colorPositionScore,
-        scoringWeights: match.scoringWeights,
-        restoredScore: match.restoredScore,
-        damagedScore: match.damagedScore,
-        archaeologyLevel: match.item.archaeologyLevel,
-        culture: match.item.culture
-      }))
-    }))
-  };
+    detections
+  });
 
   const blob = new Blob([`${JSON.stringify(payload, null, 2)}\n`], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `rs3-archaeology-analysis-${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
+  link.download = `rs3-archaeology-analysis-${exportedAt.replace(/[:.]/g, "-")}.json`;
   document.body.append(link);
   link.click();
   link.remove();
   URL.revokeObjectURL(url);
-}
-
-function exportBestMatch(match) {
-  if (!match?.item) return null;
-  return {
-    damagedName: match.item.name,
-    restoredName: match.item.restoredName,
-    score: match.score,
-    archaeologyLevel: match.item.archaeologyLevel,
-    culture: match.item.culture
-  };
 }
 
 function drawBoxes(items, contentArea = null, infinityArea = null) {

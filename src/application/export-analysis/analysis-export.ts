@@ -1,0 +1,232 @@
+interface ExportImageInfo {
+  readonly width: number;
+  readonly height: number;
+  readonly source: string;
+}
+
+interface ExportGridInfo {
+  readonly offsetX: number;
+  readonly offsetY: number;
+  readonly cellSize: number;
+  readonly rows: number | null;
+  readonly columns: number | null;
+}
+
+interface ExportReferenceItem {
+  readonly name: string;
+  readonly restoredName?: string | null;
+  readonly archaeologyLevel?: number | null;
+  readonly culture?: string | null;
+}
+
+interface ExportMatch {
+  readonly item?: ExportReferenceItem | null;
+  readonly score?: number;
+  readonly shapeScore?: number;
+  readonly colorScore?: number;
+  readonly colorExistenceScore?: number;
+  readonly colorPositionScore?: number;
+  readonly scoringWeights?: unknown;
+  readonly restoredScore?: number;
+  readonly damagedScore?: number;
+}
+
+interface ExportDetection {
+  readonly bankIndex: number;
+  readonly bankRow?: number;
+  readonly bankColumn?: number;
+  readonly box: unknown;
+  readonly quantity: number;
+  readonly originalQuantity?: number;
+  readonly quantityConfidence?: number;
+  readonly quantityAlternatives?: unknown;
+  readonly quantityManual?: boolean;
+  readonly quantityCorrection?: unknown;
+  readonly manual?: boolean;
+  readonly corrected?: boolean;
+  readonly correction?: {
+    readonly damagedName?: string;
+    readonly restoredName?: string | null;
+    readonly archaeologyLevel?: number | null;
+    readonly culture?: string | null;
+  };
+  readonly originalPrediction?: unknown;
+  readonly artefact: string;
+  readonly restoredName?: string | null;
+  readonly archaeologyLevel?: number | null;
+  readonly culture?: string | null;
+  readonly digSite?: string | null;
+  readonly wikiPage?: string | null;
+  readonly damagedWikiPage?: string | null;
+  readonly ambiguousMatch?: boolean;
+  readonly matchGap?: number;
+  readonly shapeScore?: number;
+  readonly colorScore?: number;
+  readonly colorExistenceScore?: number;
+  readonly colorPositionScore?: number;
+  readonly restoredScore?: number;
+  readonly damagedScore?: number;
+  readonly matchScore?: number;
+  readonly referenceUsed?: unknown;
+  readonly scoringWeights?: unknown;
+  readonly algorithmBest?: {
+    readonly shape?: ExportMatch | null;
+    readonly color?: ExportMatch | null;
+    readonly restored?: ExportMatch | null;
+    readonly damaged?: ExportMatch | null;
+  };
+  readonly topMatches?: readonly ExportMatch[];
+}
+
+export interface AnalysisExportOptions<TDetection extends ExportDetection> {
+  readonly exportedAt: string;
+  readonly image: ExportImageInfo | null;
+  readonly grid: ExportGridInfo;
+  readonly detections: readonly TDetection[];
+}
+
+export function createAnalysisExportPayload<TDetection extends ExportDetection>({
+  exportedAt,
+  image,
+  grid,
+  detections
+}: AnalysisExportOptions<TDetection>): unknown {
+  return {
+    exportedAt,
+    image,
+    grid,
+    totals: {
+      slots: detections.length,
+      quantity: detections.reduce((sum, detection) => sum + detection.quantity, 0),
+      quantityCorrections: detections.filter((detection) => detection.quantityManual).length,
+      manualCorrections: detections.filter((detection) => detection.manual || detection.corrected).length
+    },
+    training: {
+      correctedArtefacts: detections.filter((detection) => detection.corrected).length,
+      correctedQuantities: detections.filter((detection) => detection.quantityManual).length,
+      quantityLabels: detections
+        .filter((detection) => detection.quantityManual)
+        .map((detection) => ({
+          bankIndex: detection.bankIndex,
+          bankRow: detection.bankRow,
+          bankColumn: detection.bankColumn,
+          box: detection.box,
+          originalQuantity: detection.originalQuantity,
+          detectedQuantity: detection.originalQuantity,
+          correctedQuantity: detection.quantity,
+          quantityConfidence: detection.quantityConfidence,
+          quantityAlternatives: detection.quantityAlternatives,
+          correction: detection.quantityCorrection
+        })),
+      labels: detections
+        .filter((detection) => detection.corrected)
+        .map((detection) => ({
+          bankIndex: detection.bankIndex,
+          bankRow: detection.bankRow,
+          bankColumn: detection.bankColumn,
+          box: detection.box,
+          corrected: detection.correction,
+          originalPrediction: detection.originalPrediction,
+          topMatches: (detection.topMatches || []).map((match) => ({
+            damagedName: match.item?.name,
+            restoredName: match.item?.restoredName,
+            score: match.score,
+            shapeScore: match.shapeScore,
+            colorScore: match.colorScore,
+            colorExistenceScore: match.colorExistenceScore,
+            colorPositionScore: match.colorPositionScore,
+            scoringWeights: match.scoringWeights,
+            restoredScore: match.restoredScore,
+            damagedScore: match.damagedScore
+          }))
+        }))
+    },
+    detections: detections.map((detection) => ({
+      bankIndex: detection.bankIndex,
+      bankRow: detection.bankRow,
+      bankColumn: detection.bankColumn,
+      box: detection.box,
+      quantity: detection.quantity,
+      originalQuantity: detection.originalQuantity,
+      quantityConfidence: detection.quantityConfidence,
+      quantityAlternatives: detection.quantityAlternatives,
+      correctedQuantity: detection.quantityManual,
+      quantityCorrection: detection.quantityCorrection,
+      correctedArtefact: detection.corrected,
+      originalPrediction: detection.originalPrediction,
+      correction: detection.correction,
+      trainingLabel: detection.corrected
+        ? {
+            input: {
+              bankIndex: detection.bankIndex,
+              bankRow: detection.bankRow,
+              bankColumn: detection.bankColumn,
+              box: detection.box,
+              originalQuantity: detection.originalQuantity,
+              quantity: detection.quantity
+            },
+            label: {
+              damagedName: detection.correction?.damagedName,
+              restoredName: detection.correction?.restoredName,
+              archaeologyLevel: detection.correction?.archaeologyLevel,
+              culture: detection.correction?.culture
+            },
+            previousPrediction: detection.originalPrediction
+          }
+        : null,
+      selected: {
+        damagedName: detection.artefact,
+        restoredName: detection.restoredName,
+        archaeologyLevel: detection.archaeologyLevel,
+        culture: detection.culture,
+        digSite: detection.digSite,
+        wikiPage: detection.wikiPage,
+        damagedWikiPage: detection.damagedWikiPage
+      },
+      ambiguousMatch: detection.ambiguousMatch,
+      matchGap: detection.matchGap,
+      scores: {
+        selectedShape: detection.shapeScore,
+        selectedColor: detection.colorScore,
+        selectedColorExistence: detection.colorExistenceScore,
+        selectedColorPosition: detection.colorPositionScore,
+        selectedRestored: detection.restoredScore,
+        selectedDamaged: detection.damagedScore,
+        selectedMain: detection.matchScore,
+        referenceUsed: detection.referenceUsed,
+        weights: detection.scoringWeights
+      },
+      algorithmBest: {
+        shape: exportBestMatch(detection.algorithmBest?.shape),
+        color: exportBestMatch(detection.algorithmBest?.color),
+        restored: exportBestMatch(detection.algorithmBest?.restored),
+        damaged: exportBestMatch(detection.algorithmBest?.damaged)
+      },
+      topMatches: (detection.topMatches || []).map((match) => ({
+        damagedName: match.item?.name,
+        restoredName: match.item?.restoredName,
+        score: match.score,
+        shapeScore: match.shapeScore,
+        colorScore: match.colorScore,
+        colorExistenceScore: match.colorExistenceScore,
+        colorPositionScore: match.colorPositionScore,
+        scoringWeights: match.scoringWeights,
+        restoredScore: match.restoredScore,
+        damagedScore: match.damagedScore,
+        archaeologyLevel: match.item?.archaeologyLevel,
+        culture: match.item?.culture
+      }))
+    }))
+  };
+}
+
+export function exportBestMatch(match: ExportMatch | null | undefined): unknown {
+  if (!match?.item) return null;
+  return {
+    damagedName: match.item.name,
+    restoredName: match.item.restoredName,
+    score: match.score,
+    archaeologyLevel: match.item.archaeologyLevel,
+    culture: match.item.culture
+  };
+}
