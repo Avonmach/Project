@@ -10,6 +10,7 @@ import {
 import { applyCandidatePrediction as applyCandidatePredictionRule } from "./application/correct-detection/candidate-prediction";
 import { applyQuantityChange as applyQuantityCorrection } from "./application/correct-detection/quantity-correction";
 import { applyReferenceCorrection as applyReferenceCorrectionRule } from "./application/correct-detection/reference-correction";
+import { findUniqueArtefactAssignments } from "./application/correct-detection/unique-artefact-assignments";
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
 import { createAnalysisExportPayload, exportBestMatch } from "./application/export-analysis/analysis-export";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
@@ -320,22 +321,9 @@ function matchArtifact(shapeImageData, originalImageData, box, mode = "damaged")
 }
 
 function applyUniqueArtefactAssignments(items) {
-  const used = new Set();
-  const byConfidence = [...items].sort((a, b) => b.matchScore - a.matchScore || a.bankIndex - b.bankIndex);
-
-  for (const detection of byConfidence) {
-    const candidate = (detection.topMatches || []).find((match) => {
-      const key = artefactKey(match.item);
-      return key && !used.has(key);
-    });
-    if (!candidate) continue;
+  for (const { detection, candidate } of findUniqueArtefactAssignments(items)) {
     applyCandidatePrediction(detection, candidate);
-    used.add(artefactKey(candidate.item));
   }
-}
-
-function artefactKey(item) {
-  return (item?.restoredName || item?.name || "").toLowerCase();
 }
 
 function applyCandidatePrediction(detection, candidate) {
