@@ -9,9 +9,13 @@ import {
 } from "./application/calculate-materials/material-totals";
 import { createAnalysisExportPayload, exportBestMatch } from "./application/export-analysis/analysis-export";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
+import {
+  sortMaterialRows as sortMaterialRowsForMode,
+  sortRestoredRows as sortRestoredRowsForMode
+} from "./application/sort-results/result-row-sorting";
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
-import { normalizeName, nullableNumber } from "./domain/shared/format";
+import { normalizeName } from "./domain/shared/format";
 import { getIconMatchBox } from "./domain/shared/geometry";
 import { loadImageElement } from "./infrastructure/browser/image-loader";
 import {
@@ -34,6 +38,7 @@ import { makeCollectionOverview as makeCollectionOverviewElement } from "./prese
 import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentation/renderers/restoration-plan";
 import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentation/renderers/recognition-info";
 import { renderSummaryTotals } from "./presentation/renderers/summary-totals";
+import { makeMaterialCell as makeMaterialCellElement } from "./presentation/renderers/material-cell";
 import {
   makeBackgroundRemovedCanvas,
   makeCroppedShapeCanvas,
@@ -1706,51 +1711,15 @@ function renderRestorationPlan(items) {
 }
 
 function makeMaterialCell(row) {
-  const material = materialByName.get(normalizeName(row.name));
-  const cell = document.createElement("td");
-  cell.className = "material-cell";
-  if (material?.icon) {
-    const image = document.createElement("img");
-    image.src = `data/${material.icon}`;
-    image.alt = "";
-    image.loading = "lazy";
-    cell.append(image);
-  }
-  const label = material?.wikiPage ? document.createElement("a") : document.createElement("span");
-  label.textContent = row.name;
-  if (material?.wikiPage) {
-    label.className = "artifact-link";
-    label.href = material.wikiPage;
-    label.target = "_blank";
-    label.rel = "noreferrer";
-  }
-  cell.append(label);
-  return cell;
+  return makeMaterialCellElement(row, materialByName);
 }
 
 function sortRestoredRows(rows) {
-  const mode = viewMode.value;
-  return [...rows].sort((a, b) => {
-    if (mode === "level") {
-      return nullableNumber(a.level) - nullableNumber(b.level) || a.restoredName.localeCompare(b.restoredName);
-    }
-    if (mode === "theme") {
-      return String(a.culture || "Unknown").localeCompare(String(b.culture || "Unknown")) || a.restoredName.localeCompare(b.restoredName);
-    }
-    if (mode === "site") {
-      return String(a.digSite || "Unknown").localeCompare(String(b.digSite || "Unknown")) || a.restoredName.localeCompare(b.restoredName);
-    }
-    return a.restoredName.localeCompare(b.restoredName);
-  });
+  return sortRestoredRowsForMode(rows, viewMode.value);
 }
 
 function sortMaterialRows(rows) {
-  const mode = viewMode.value;
-  return [...rows].sort((a, b) => {
-    if (mode === "level" || mode === "position") return b.quantity - a.quantity || a.name.localeCompare(b.name);
-    if (mode === "theme" || mode === "site") return a.name.localeCompare(b.name);
-    return a.name.localeCompare(b.name);
-  });
+  return sortMaterialRowsForMode(rows, viewMode.value);
 }
 
 function makeCollectionOverview(items) {
