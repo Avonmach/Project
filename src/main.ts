@@ -42,6 +42,7 @@ import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentat
 import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentation/renderers/recognition-info";
 import { renderSummaryTotals } from "./presentation/renderers/summary-totals";
 import { makeMaterialCell as makeMaterialCellElement } from "./presentation/renderers/material-cell";
+import { drawAnalysisOverlay } from "./presentation/renderers/analysis-overlay";
 import {
   makeBackgroundRemovedCanvas,
   makeCroppedShapeCanvas,
@@ -1878,22 +1879,5 @@ function exportResults() {
 }
 
 function drawBoxes(items, contentArea = null, infinityArea = null) {
-  ctx.drawImage(loadedImage, 0, 0);
-  if (contentArea) {
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "#ff2b2b";
-    ctx.strokeRect(contentArea.x + 0.5, contentArea.y + 0.5, contentArea.w, contentArea.h);
-  }
-  if (infinityArea) {
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "#ff2bff";
-    ctx.strokeRect(infinityArea.x + 0.5, infinityArea.y + 0.5, infinityArea.w, infinityArea.h);
-  }
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "#25d984";
-  ctx.fillStyle = "rgba(37, 217, 132, 0.08)";
-  for (const item of items) {
-    ctx.fillRect(item.box.x, item.box.y, item.box.w, item.box.h);
-    ctx.strokeRect(item.box.x + 0.5, item.box.y + 0.5, item.box.w, item.box.h);
-  }
+  drawAnalysisOverlay({ context: ctx, image: loadedImage, items, contentArea, infinityArea });
 }
