@@ -1,18 +1,9 @@
+import type { BoundingBox, PixelPoint } from "../shared/geometry";
+import { alphaBounds } from "../../infrastructure/image-processing/image-data";
+
 export type Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 export type DigitTemplate = readonly string[];
 export type DigitTemplateMap = Record<Digit, DigitTemplate>;
-
-export interface PixelPoint {
-  readonly x: number;
-  readonly y: number;
-}
-
-export interface BoundingBox {
-  readonly x: number;
-  readonly y: number;
-  readonly w: number;
-  readonly h: number;
-}
 
 export const DIGIT_TEMPLATE_WIDTH = 5;
 export const DIGIT_TEMPLATE_HEIGHT = 8;
@@ -122,7 +113,7 @@ function renderDigitTemplate(digit: Digit, fontFamily: string): string[] {
   sourceCtx.fillText(digit, -1, -2);
 
   const imageData = sourceCtx.getImageData(0, 0, source.width, source.height);
-  const bounds = alphaBounds(imageData);
+  const bounds = alphaBounds(imageData, 1);
   if (!bounds) return [...FALLBACK_DIGIT_TEMPLATES[digit]];
 
   const normalized = document.createElement("canvas");
@@ -145,25 +136,4 @@ function renderDigitTemplate(digit: Digit, fontFamily: string): string[] {
     rows.push(row);
   }
   return rows;
-}
-
-function alphaBounds(imageData: ImageData): BoundingBox | null {
-  let minX = imageData.width;
-  let minY = imageData.height;
-  let maxX = -1;
-  let maxY = -1;
-
-  for (let y = 0; y < imageData.height; y += 1) {
-    for (let x = 0; x < imageData.width; x += 1) {
-      const alpha = imageData.data[(y * imageData.width + x) * 4 + 3];
-      if (alpha <= 0) continue;
-      minX = Math.min(minX, x);
-      minY = Math.min(minY, y);
-      maxX = Math.max(maxX, x);
-      maxY = Math.max(maxY, y);
-    }
-  }
-
-  if (maxX < minX || maxY < minY) return null;
-  return { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 };
 }
