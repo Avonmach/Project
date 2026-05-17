@@ -17,6 +17,13 @@ import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/re
 import { renderStorageTab as renderStorageTabPanel } from "./presentation/renderers/storage-tab";
 import { renderDamagedTab as renderDamagedTabPanel } from "./presentation/renderers/damaged-tab";
 import {
+  makeEmptyMessage,
+  makeLinkedTextCell,
+  makeOverviewCard,
+  makeTableHead,
+  makeTextCell
+} from "./presentation/renderers/table-elements";
+import {
   makeDetectionTableRow as makeDetectionTableRowElement,
   makeStatusPill as makeDetectionStatusPill,
   rowReviewClass as detectionRowReviewClass
@@ -1960,60 +1967,6 @@ function makePlanTable(captionText, rows) {
   }
   table.append(caption, head, body);
   return table;
-}
-
-function makeOverviewCard(label, value) {
-  const card = document.createElement("div");
-  card.className = "overview-card";
-  const labelEl = document.createElement("span");
-  labelEl.className = "summary-label";
-  labelEl.textContent = label;
-  const valueEl = document.createElement("strong");
-  valueEl.textContent = String(value);
-  card.append(labelEl, valueEl);
-  return card;
-}
-
-function makeEmptyMessage(message) {
-  const empty = document.createElement("p");
-  empty.className = "empty";
-  empty.textContent = message;
-  return empty;
-}
-
-function makeTableHead(labels) {
-  const head = document.createElement("thead");
-  const row = document.createElement("tr");
-  for (const label of labels) {
-    const cell = document.createElement("th");
-    cell.textContent = label;
-    row.append(cell);
-  }
-  head.append(row);
-  return head;
-}
-
-function makeTextCell(value, className = "") {
-  const cell = document.createElement("td");
-  if (className) cell.className = className;
-  cell.textContent = String(value);
-  return cell;
-}
-
-function makeLinkedTextCell(label, href) {
-  const cell = document.createElement("td");
-  if (!href) {
-    cell.textContent = label;
-    return cell;
-  }
-  const link = document.createElement("a");
-  link.className = "artifact-link";
-  link.href = href;
-  link.target = "_blank";
-  link.rel = "noreferrer";
-  link.textContent = label;
-  cell.append(link);
-  return cell;
 }
 
 function makeMaterialCell(row) {
