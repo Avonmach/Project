@@ -13,6 +13,7 @@ import {
 } from "./presentation/tabs/results-tabs";
 import { createResultsState } from "./presentation/state/results-state";
 import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
+import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from "./presentation/renderers/restored-tab";
 
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -1952,28 +1953,12 @@ function renderOverviewTab(items) {
 }
 
 function renderRestoredTab(items) {
-  restoredResultsBody.replaceChildren();
-  if (!detections.length) {
-    drawTableEmptyState(restoredResultsBody, "Upload and analyze a restored artefact screenshot to populate this table.");
-    return;
-  }
-
-  if (!items.length) {
-    drawTableEmptyState(restoredResultsBody, "No restored artefacts match the current filters.");
-    return;
-  }
-
-  for (const detection of items) restoredResultsBody.append(makeDetectionTableRow(detection));
-}
-
-function drawTableEmptyState(body, message) {
-  const row = document.createElement("tr");
-  const cell = document.createElement("td");
-  cell.colSpan = 9;
-  cell.className = "empty";
-  cell.textContent = message;
-  row.append(cell);
-  body.append(row);
+  renderRestoredTabPanel({
+    body: restoredResultsBody,
+    allDetections: detections,
+    visibleDetections: items,
+    makeDetectionTableRow
+  });
 }
 
 function renderMaterialsTab(items) {
