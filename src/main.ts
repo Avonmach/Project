@@ -21,6 +21,7 @@ import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from
 import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/renderers/materials-tab";
 import { renderStorageTab as renderStorageTabPanel } from "./presentation/renderers/storage-tab";
 import { renderDamagedTab as renderDamagedTabPanel } from "./presentation/renderers/damaged-tab";
+import { makeCollectionOverview as makeCollectionOverviewElement } from "./presentation/renderers/collection-overview";
 import {
   makeEmptyMessage,
   makeLinkedTextCell,
@@ -2023,169 +2024,19 @@ function sortMaterialRows(rows) {
 }
 
 function makeCollectionOverview(items) {
-  const section = document.createElement("div");
-  section.className = "collection-overview";
-  const ownedArtefacts = getOwnedArtefactMap(items);
-  const rows = (archaeologyReference.collections || [])
-    .map((collection) => {
-      const matched = collection.artefacts.filter((artefact) => ownedArtefacts.has(normalizeName(artefact)));
-      const total = collection.artefactCount || collection.artefacts.length || 1;
-      return { collection, matched, progress: matched.length, progressTotal: total, progressPercent: matched.length / total };
-    })
-    .filter((row) => row.matched.length)
-    .sort(compareCollectionRows);
-
-  const title = document.createElement("h3");
-  title.textContent = "Matching collections";
-  section.append(title);
-
-  if (!rows.length) {
-    section.append(makeEmptyMessage("No collection matches for the current artefacts."));
-    return section;
-  }
-
-  const table = document.createElement("table");
-  table.className = "secondary-table collection-table";
-  table.append(makeCollectionColGroup());
-  table.append(makeCollectionTableHead());
-  const body = document.createElement("tbody");
-  for (const row of rows) {
-    const tr = document.createElement("tr");
-    tr.append(
-      makeLinkedTextCell(row.collection.name, row.collection.wikiPage),
-      makeTextCell(row.collection.collector || ""),
-      makeTextCell(row.collection.archaeologyLevel ?? ""),
-      makeTextCell(`${row.progress}/${row.progressTotal} (${Math.round(row.progressPercent * 100)}%)`),
-      makeCollectionArtefactsCell(row.collection.artefacts, ownedArtefacts)
-    );
-    body.append(tr);
-  }
-  table.append(body);
-  section.append(table);
-  return section;
-}
-
-function makeCollectionColGroup() {
-  const group = document.createElement("colgroup");
-  for (const className of ["collection-name-col", "collection-collector-col", "collection-level-col", "collection-progress-col", "collection-artefacts-col"]) {
-    const col = document.createElement("col");
-    col.className = className;
-    group.append(col);
-  }
-  return group;
-}
-
-function makeCollectionTableHead() {
-  const columns = [
-    ["name", "Collection"],
-    ["collector", "Collector"],
-    ["level", "Level"],
-    ["progress", "Progress"],
-    [null, "Artefacts"]
-  ];
-  const head = document.createElement("thead");
-  const row = document.createElement("tr");
-
-  for (const [key, label] of columns) {
-    const cell = document.createElement("th");
-    if (!key) {
-      cell.textContent = label;
-      row.append(cell);
-      continue;
-    }
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "table-sort";
-    button.textContent = label;
-    if (collectionSort.key === key) {
-      button.classList.add("is-active");
-      button.dataset.direction = collectionSort.direction;
-    }
-    button.addEventListener("click", () => {
-      collectionSort = {
-        key,
-        direction: collectionSort.key === key && collectionSort.direction === "asc" ? "desc" : "asc"
-      };
+  return makeCollectionOverviewElement({
+    items,
+    collections: archaeologyReference.collections || [],
+    references,
+    collectionSort,
+    onSortChange: (sort) => {
+      collectionSort = sort;
       renderResultsTabContent();
-    });
-    cell.append(button);
-    row.append(cell);
-  }
-
-  head.append(row);
-  return head;
-}
-
-function compareCollectionRows(a, b) {
-  const direction = collectionSort.direction === "asc" ? 1 : -1;
-  let result = 0;
-  if (collectionSort.key === "name") result = a.collection.name.localeCompare(b.collection.name);
-  if (collectionSort.key === "collector") {
-    result = String(a.collection.collector || "").localeCompare(String(b.collection.collector || ""));
-  }
-  if (collectionSort.key === "level") {
-    result = nullableNumber(a.collection.archaeologyLevel) - nullableNumber(b.collection.archaeologyLevel);
-  }
-  if (collectionSort.key === "progress") result = a.progressPercent - b.progressPercent || a.progress - b.progress;
-
-  return (
-    result * direction ||
-    nullableNumber(a.collection.archaeologyLevel) - nullableNumber(b.collection.archaeologyLevel) ||
-    a.collection.name.localeCompare(b.collection.name)
-  );
-}
-
-function getOwnedArtefactMap(items) {
-  const owned = new Map();
-  for (const item of items) {
-    const name = item.restoredName || item.artefact;
-    const key = normalizeName(name);
-    const current = owned.get(key) || { name, quantity: 0 };
-    current.quantity += item.quantity;
-    owned.set(key, current);
-  }
-  return owned;
-}
-
-function makeCollectionArtefactsCell(artefacts, ownedArtefacts) {
-  const cell = document.createElement("td");
-  const grid = document.createElement("div");
-  grid.className = "collection-artefacts";
-
-  for (const artefact of artefacts) {
-    const owned = ownedArtefacts.get(normalizeName(artefact));
-    grid.append(makeCollectionArtefactIcon(artefact, owned?.quantity || 0));
-  }
-
-  cell.append(grid);
-  return cell;
-}
-
-function makeCollectionArtefactIcon(artefact, quantity) {
-  const reference = references.find((item) => normalizeName(item.restoredName || item.name) === normalizeName(artefact));
-  const tile = document.createElement("span");
-  tile.className = "collection-artefact";
-  if (!quantity) tile.classList.add("is-missing");
-  tile.title = quantity ? `${artefact}: ${quantity}` : `${artefact}: missing`;
-
-  if (reference?.icon) {
-    const image = document.createElement("img");
-    image.src = `data/${reference.icon}`;
-    image.alt = artefact;
-    image.loading = "lazy";
-    tile.append(image);
-  } else {
-    const fallback = document.createElement("span");
-    fallback.className = "collection-artefact-fallback";
-    fallback.textContent = artefact.slice(0, 2).toUpperCase();
-    tile.append(fallback);
-  }
-
-  const badge = document.createElement("span");
-  badge.className = "collection-artefact-count";
-  badge.textContent = String(quantity);
-  tile.append(badge);
-  return tile;
+    },
+    makeEmptyMessage,
+    makeLinkedTextCell,
+    makeTextCell
+  });
 }
 
 function rowReviewClass(detection, quantityWarning = quantityNeedsReview(detection)) {
