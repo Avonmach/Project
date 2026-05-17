@@ -33,6 +33,7 @@ import { renderDamagedTab as renderDamagedTabPanel } from "./presentation/render
 import { makeCollectionOverview as makeCollectionOverviewElement } from "./presentation/renderers/collection-overview";
 import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentation/renderers/restoration-plan";
 import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentation/renderers/recognition-info";
+import { renderSummaryTotals } from "./presentation/renderers/summary-totals";
 import {
   makeBackgroundRemovedCanvas,
   makeCroppedShapeCanvas,
@@ -1923,11 +1924,12 @@ function drawEmptyState(message) {
 }
 
 function updateTotals() {
-  const total = detections.reduce((sum, detection) => sum + detection.quantity, 0);
-  const manual = detections.filter((detection) => detection.manual).length;
-  slotCountEl.textContent = String(detections.length);
-  quantityTotalEl.textContent = String(total);
-  manualCountEl.textContent = String(manual);
+  renderSummaryTotals({
+    detections,
+    slotCountElement: slotCountEl,
+    quantityTotalElement: quantityTotalEl,
+    manualCountElement: manualCountEl
+  });
   if (detections.length) renderRestorationPlan(filteredDetections());
   renderResultsTabContent();
 }
