@@ -5,7 +5,7 @@ import {
   templateWidth
 } from "./domain/ocr/digit-templates";
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
-import { alphaBounds } from "./infrastructure/image-processing/image-data";
+import { alphaBounds, copyImageData, cropImageData } from "./infrastructure/image-processing/image-data";
 
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -1554,30 +1554,6 @@ function attachQuantityDebugSource(debug, imageData) {
     ...debug,
     source: copyImageData(imageData, debug.scanBox)
   };
-}
-
-function copyImageData(imageData, box) {
-  const crop = new ImageData(box.w, box.h);
-  for (let y = 0; y < box.h; y += 1) {
-    for (let x = 0; x < box.w; x += 1) {
-      const source = ((box.y + y) * imageData.width + box.x + x) * 4;
-      const target = (y * box.w + x) * 4;
-      crop.data[target] = imageData.data[source];
-      crop.data[target + 1] = imageData.data[source + 1];
-      crop.data[target + 2] = imageData.data[source + 2];
-      crop.data[target + 3] = imageData.data[source + 3];
-    }
-  }
-  return crop;
-}
-
-function cropImageData(imageData, box) {
-  return copyImageData(imageData, {
-    x: box.x,
-    y: box.y,
-    w: box.w,
-    h: box.h
-  });
 }
 
 function makePreviewCanvas(imageData, box, options = {}) {
