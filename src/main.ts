@@ -8,6 +8,7 @@ import {
   calculateMaterialTotals as calculateMaterialTotalsForRecipes
 } from "./application/calculate-materials/material-totals";
 import { createAnalysisExportPayload, exportBestMatch } from "./application/export-analysis/analysis-export";
+import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
 import { normalizeName, nullableNumber, percent } from "./domain/shared/format";
@@ -1796,26 +1797,12 @@ function makeStatusPill(detection, quantityWarning = quantityNeedsReview(detecti
 }
 
 function filteredDetections() {
-  return sortedDetections().filter((detection) => matchesDetectionFilters(detection));
-}
-
-function matchesDetectionFilters(detection) {
-  const query = artefactSearch.value.trim().toLowerCase();
-  const culture = cultureFilter.value;
-  if (culture && detection.culture !== culture) return false;
-  if (reviewOnly.checked && !(detection.ambiguousMatch || quantityNeedsReview(detection))) return false;
-  if (!query) return true;
-  return [
-    detection.restoredName,
-    detection.artefact,
-    detection.culture,
-    detection.digSite,
-    detection.archaeologyLevel
-  ]
-    .filter((value) => value !== null && value !== undefined)
-    .join(" ")
-    .toLowerCase()
-    .includes(query);
+  return filterAndSortDetections(detections, viewMode.value, {
+    query: artefactSearch.value,
+    culture: cultureFilter.value,
+    reviewOnly: reviewOnly.checked,
+    quantityNeedsReview
+  });
 }
 
 function setActiveResultsTab(tab) {
@@ -2195,44 +2182,6 @@ function updateDetectionRow(detection) {
   if (elements.siteCell) elements.siteCell.textContent = detection.digSite || "";
   if (elements.statusCell) elements.statusCell.replaceChildren(makeStatusPill(detection));
   renderRestorationPlan(filteredDetections());
-}
-
-function sortedDetections() {
-  const mode = viewMode.value;
-  const items = [...detections];
-  if (mode === "level") {
-    return items.sort(
-      (a, b) =>
-        nullableNumber(a.archaeologyLevel) - nullableNumber(b.archaeologyLevel) ||
-        sortDetectionName(a).localeCompare(sortDetectionName(b)) ||
-        a.bankIndex - b.bankIndex
-    );
-  }
-  if (mode === "theme") {
-    return items.sort(
-      (a, b) =>
-        String(a.culture || "Unknown").localeCompare(String(b.culture || "Unknown")) ||
-        nullableNumber(a.archaeologyLevel) - nullableNumber(b.archaeologyLevel) ||
-        sortDetectionName(a).localeCompare(sortDetectionName(b)) ||
-        a.bankIndex - b.bankIndex
-    );
-  }
-  if (mode === "site") {
-    return items.sort(
-      (a, b) =>
-        String(a.digSite || "Unknown").localeCompare(String(b.digSite || "Unknown")) ||
-        nullableNumber(a.archaeologyLevel) - nullableNumber(b.archaeologyLevel) ||
-        sortDetectionName(a).localeCompare(sortDetectionName(b)) ||
-        a.bankIndex - b.bankIndex
-    );
-  }
-  return items.sort((a, b) => a.bankIndex - b.bankIndex);
-}
-
-function sortDetectionName(item) {
-  return String(item.restoredName || item.artefact)
-    .replace(/['"]/g, "")
-    .toLowerCase();
 }
 
 function drawEmptyState(message) {
