@@ -7,6 +7,11 @@ import {
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
 import { alphaBounds, copyImageData, cropImageData, pixelColorAt } from "./infrastructure/image-processing/image-data";
+import {
+  applyResultTabSelection,
+  connectResultTabButtons,
+  resultModeForTab
+} from "./presentation/tabs/results-tabs";
 
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -67,13 +72,6 @@ const screenshotRequestedTabs = new Set();
 let collectionSort = { key: "progress", direction: "desc" };
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
-const RESULT_TAB_TITLES = {
-  overview: "Overview",
-  damaged: "Damaged Artefacts",
-  restored: "Restored Artefacts",
-  storage: "Storage",
-  materials: "Materials"
-};
 const DEFAULT_SCREENSHOTS = {
   damaged: "Damaged_Items.png",
   restored: "Items%23.png"
@@ -85,9 +83,7 @@ viewMode.addEventListener("change", renderDetections);
 artefactSearch.addEventListener("input", renderDetections);
 cultureFilter.addEventListener("change", renderDetections);
 reviewOnly.addEventListener("change", renderDetections);
-for (const button of resultTabButtons) {
-  button.addEventListener("click", () => setActiveResultsTab(button.dataset.resultsTab));
-}
+connectResultTabButtons(resultTabButtons, setActiveResultsTab);
 document.addEventListener("click", (event) => {
   for (const menu of document.querySelectorAll(".correction-menu[open]")) {
     if (!menu.contains(event.target)) menu.open = false;
@@ -1908,20 +1904,9 @@ function matchesDetectionFilters(detection) {
 }
 
 function setActiveResultsTab(tab) {
-  if (!RESULT_TAB_TITLES[tab]) return;
   activeResultsTab = tab;
   detections = detectionsByMode[resultModeForTab(tab)];
-  resultsTitle.textContent = RESULT_TAB_TITLES[tab];
-
-  for (const button of resultTabButtons) {
-    const active = button.dataset.resultsTab === tab;
-    button.classList.toggle("is-active", active);
-    button.setAttribute("aria-selected", String(active));
-  }
-
-  for (const panel of resultTabPanels) {
-    panel.hidden = panel.dataset.resultsPanel !== tab;
-  }
+  applyResultTabSelection({ tab, title: resultsTitle, buttons: resultTabButtons, panels: resultTabPanels });
 
   if (tab === "damaged") renderDamagedTable(filteredDetections());
   updateTotals();
@@ -1935,10 +1920,6 @@ function renderResultsTabContent() {
   if (activeResultsTab === "restored") renderRestoredTab(items);
   if (activeResultsTab === "storage") renderStorageTab(items);
   if (activeResultsTab === "materials") renderMaterialsTab(items);
-}
-
-function resultModeForTab(tab) {
-  return tab === "restored" ? "restored" : "damaged";
 }
 
 function renderDamagedTable(items) {
