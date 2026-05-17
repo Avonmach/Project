@@ -12,6 +12,7 @@ import {
   connectResultTabButtons
 } from "./presentation/tabs/results-tabs";
 import { createResultsState } from "./presentation/state/results-state";
+import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
 
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -1938,35 +1939,16 @@ function requestTabScreenshot(tab) {
 }
 
 function renderOverviewTab(items) {
-  overviewPanel.replaceChildren();
-  if (!detections.length) {
-    overviewPanel.append(makeEmptyMessage("Analyze a screenshot to create an overview."));
-    return;
-  }
-
-  const totalQuantity = items.reduce((sum, detection) => sum + detection.quantity, 0);
-  const reviewCount = items.filter((detection) => detection.ambiguousMatch || quantityNeedsReview(detection)).length;
-  const manualCount = items.filter((detection) => detection.manual || detection.quantityManual).length;
-  const levels = items.map((detection) => detection.archaeologyLevel).filter(Number.isFinite);
-
-  const cards = document.createElement("div");
-  cards.className = "overview-grid";
-  cards.append(
-    makeOverviewCard("Visible slots", items.length),
-    makeOverviewCard("Visible quantity", totalQuantity),
-    makeOverviewCard("Needs review", reviewCount),
-    makeOverviewCard("Manual checks", manualCount),
-    makeOverviewCard("Highest level", levels.length ? Math.max(...levels) : 0)
-  );
-
-  const groups = document.createElement("div");
-  groups.className = "overview-tables";
-  groups.append(
-    makePlanTable("By culture", groupQuantity(items, "culture")),
-    makePlanTable("By dig site", groupQuantity(items, "digSite"))
-  );
-
-  overviewPanel.append(cards, groups, makeCollectionOverview(items));
+  renderOverviewTabPanel({
+    panel: overviewPanel,
+    allDetections: detections,
+    visibleDetections: items,
+    quantityNeedsReview,
+    makeEmptyMessage,
+    makeOverviewCard,
+    makePlanTable,
+    makeCollectionOverview
+  });
 }
 
 function renderRestoredTab(items) {
