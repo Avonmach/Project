@@ -17,15 +17,12 @@ import {
   sortRestoredRows as sortRestoredRowsForMode
 } from "./application/sort-results/result-row-sorting";
 import {
-  compareFingerprints,
-  fingerprintColorCrop,
-  fingerprintCrop,
   fingerprintReference,
-  histogramChiAltSimilarity,
   removeBackground,
   toScreenshotFingerprint,
   topLeftPixelColor
 } from "./domain/artefacts/fingerprint";
+import { matchArtifact as matchArtefactAgainstReferences } from "./domain/artefacts/matching";
 import { detectQuantity, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { normalizeName } from "./domain/shared/format";
 import { loadImageElement } from "./infrastructure/browser/image-loader";
@@ -113,18 +110,7 @@ const overviewPanel = document.getElementById("overviewPanel");
 const storagePanel = document.getElementById("storagePanel");
 const materialsPanel = document.getElementById("materialsPanel");
 
-const LOW_CONFIDENCE = 0.6;
-const REVIEW_CONFIDENCE = 0.75;
-const DAMAGED_FALLBACK_CONFIDENCE = 0.6;
-const SHAPE_SCORE_WEIGHT = 0.8;
-const COLOR_SCORE_WEIGHT = 0.2;
-const CROWDED_SHAPE_COLOR_WEIGHT = 0.6;
-const SHAPE_CROWD_MARGIN = 0.015;
-const SHAPE_CROWD_COUNT = 5;
 const AMBIGUOUS_FINAL_MARGIN = 0.025;
-const COLOR_POSITION_WEIGHT = 0.25;
-const COLOR_SIMILAR_MARGIN = 0.03;
-const PREVIEW_BRIGHTNESS = 1.45;
 let loadedImage = null;
 let detections = [];
 let references = [];
@@ -329,86 +315,7 @@ function analyzeCurrentImage() {
 }
 
 function matchArtifact(shapeImageData, originalImageData, box, mode = "damaged") {
-  const cropFingerprint = fingerprintCrop(shapeImageData, box);
-  const colorFingerprint = fingerprintColorCrop(originalImageData, shapeImageData, box);
-  let best = { item: references[0], score: 0, restoredScore: 0, damagedScore: 0, shapeScore: 0, colorScore: 0 };
-  let bestShape = { item: references[0], score: 0 };
-  let bestRestored = { item: references[0], score: 0 };
-  let bestDamaged = { item: references[0], score: 0 };
-  let bestColor = { item: references[0], score: 0 };
-  const scores = [];
-
-  for (const item of references) {
-    const restored = compareFingerprints(cropFingerprint, item.fingerprint);
-    const damaged = mode === "restored" ? null : item.damagedFingerprint ? compareFingerprints(cropFingerprint, item.damagedFingerprint) : null;
-    const restoredColor = histogramChiAltSimilarity(colorFingerprint, item.fingerprint);
-    const damagedColor = damaged ? histogramChiAltSimilarity(colorFingerprint, item.damagedFingerprint) : 0;
-    const shapeScore = mode === "restored" ? restored.shape : damaged?.shape ?? restored.shape;
-    const colorExistenceScore = damaged ? Math.max(restoredColor, damagedColor) : restoredColor;
-    const colorPositionScore = damaged ? Math.max(restored.color, damaged.color) : restored.color;
-    scores.push({
-      item,
-      score: 0,
-      restoredScore: restored.total,
-      damagedScore: damaged?.total ?? 0,
-      shapeScore,
-      colorScore: colorExistenceScore,
-      colorExistenceScore,
-      colorPositionScore,
-      overlapScore: damaged?.overlap ?? restored.overlap
-    });
-    if (restored.shape > bestShape.score) bestShape = { item, score: restored.shape };
-    if (restored.total > bestRestored.score) bestRestored = { item, score: restored.total };
-    if (damaged && damaged.total > bestDamaged.score) bestDamaged = { item, score: damaged.total };
-    if (colorExistenceScore > bestColor.score) bestColor = { item, score: colorExistenceScore };
-  }
-
-  const topColorScore = Math.max(...scores.map((candidate) => candidate.colorExistenceScore));
-  const similarColorCount = scores.filter((candidate) => topColorScore - candidate.colorExistenceScore <= COLOR_SIMILAR_MARGIN).length;
-  if (similarColorCount >= SHAPE_CROWD_COUNT) {
-    for (const candidate of scores) {
-      candidate.colorScore =
-        candidate.colorExistenceScore * (1 - COLOR_POSITION_WEIGHT) + candidate.colorPositionScore * COLOR_POSITION_WEIGHT;
-    }
-  }
-
-  const topShapeScore = Math.max(...scores.map((candidate) => candidate.shapeScore));
-  const crowdedShapeCount = scores.filter((candidate) => topShapeScore - candidate.shapeScore <= SHAPE_CROWD_MARGIN).length;
-  const colorWeight = crowdedShapeCount >= SHAPE_CROWD_COUNT ? CROWDED_SHAPE_COLOR_WEIGHT : COLOR_SCORE_WEIGHT;
-  const shapeWeight = 1 - colorWeight;
-  for (const candidate of scores) {
-    candidate.score = candidate.shapeScore * shapeWeight + candidate.colorScore * colorWeight;
-    candidate.scoringWeights = {
-      shape: shapeWeight,
-      color: colorWeight,
-      crowdedShapeCount,
-      colorExistence: similarColorCount >= SHAPE_CROWD_COUNT ? 1 - COLOR_POSITION_WEIGHT : 1,
-      colorPosition: similarColorCount >= SHAPE_CROWD_COUNT ? COLOR_POSITION_WEIGHT : 0,
-      similarColorCount
-    };
-  }
-
-  scores.sort((a, b) => b.score - a.score);
-  best = scores[0] ?? best;
-  const secondBest = scores[1] ?? null;
-  const matchGap = secondBest ? best.score - secondBest.score : 1;
-  const ambiguous = Boolean(secondBest && matchGap <= AMBIGUOUS_FINAL_MARGIN);
-  const referenceFingerprint =
-    mode !== "restored" && best.item.damagedFingerprint && best.damagedScore >= best.restoredScore
-      ? best.item.damagedFingerprint
-      : best.item.fingerprint;
-  return {
-    ...best,
-    referenceUsed: mode !== "restored" && best.damagedScore > best.restoredScore ? "damaged" : "restored",
-    scoringWeights: best.scoringWeights,
-    ambiguous,
-    matchGap,
-    cropFingerprint,
-    referenceFingerprint,
-    finalShapeScore: best.shapeScore,
-    algorithmBest: { shape: bestShape, restored: bestRestored, damaged: bestDamaged, color: bestColor },
-    candidates: scores.slice(0, 10)
-  };
+  return matchArtefactAgainstReferences(shapeImageData, originalImageData, box, references, mode);
 }
 
 function applyUniqueArtefactAssignments(items) {
