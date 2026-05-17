@@ -7,6 +7,7 @@ import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
   calculateMaterialTotals as calculateMaterialTotalsForRecipes
 } from "./application/calculate-materials/material-totals";
+import { applyCandidatePrediction as applyCandidatePredictionRule } from "./application/correct-detection/candidate-prediction";
 import { applyQuantityChange as applyQuantityCorrection } from "./application/correct-detection/quantity-correction";
 import { applyReferenceCorrection as applyReferenceCorrectionRule } from "./application/correct-detection/reference-correction";
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
@@ -338,32 +339,8 @@ function artefactKey(item) {
 }
 
 function applyCandidatePrediction(detection, candidate) {
-  const item = candidate.item;
-  detection.artefact = item.name;
-  detection.wikiPage = item.restoredWikiPage || item.wikiPage;
-  detection.damagedWikiPage = item.wikiPage;
-  detection.restoredName = item.restoredName;
-  detection.restoredWikiPage = item.restoredWikiPage;
-  detection.archaeologyLevel = item.archaeologyLevel;
-  detection.culture = item.culture;
-  detection.digSite = item.digSite;
-  detection.matchName = item.restoredName || item.name;
-  detection.matchScore = candidate.score;
-  detection.shapeScore = candidate.shapeScore;
-  detection.colorScore = candidate.colorScore;
-  detection.colorExistenceScore = candidate.colorExistenceScore;
-  detection.colorPositionScore = candidate.colorPositionScore;
-  detection.restoredScore = candidate.restoredScore;
-  detection.damagedScore = candidate.damagedScore;
-  detection.overlapScore = candidate.overlapScore;
-  detection.scoringWeights = candidate.scoringWeights;
-  detection.referenceUsed = candidate.damagedScore > candidate.restoredScore ? "damaged" : "restored";
-  detection.referencePreview = makeReferenceCanvas(item.image);
-  const ordered = detection.topMatches || [];
-  const index = ordered.indexOf(candidate);
-  const next = ordered.find((match, candidateIndex) => candidateIndex !== index);
-  detection.matchGap = next ? candidate.score - next.score : 1;
-  detection.ambiguousMatch = Boolean(next && detection.matchGap <= AMBIGUOUS_FINAL_MARGIN);
+  applyCandidatePredictionRule(detection, candidate, AMBIGUOUS_FINAL_MARGIN);
+  detection.referencePreview = makeReferenceCanvas(candidate.item.image);
 }
 
 function attachQuantityDebugSource(debug, imageData) {
