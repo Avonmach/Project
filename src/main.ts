@@ -24,10 +24,12 @@ import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/re
 import { renderStorageTab as renderStorageTabPanel } from "./presentation/renderers/storage-tab";
 import { renderDamagedTab as renderDamagedTabPanel } from "./presentation/renderers/damaged-tab";
 import { makeCollectionOverview as makeCollectionOverviewElement } from "./presentation/renderers/collection-overview";
+import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentation/renderers/restoration-plan";
 import {
   makeEmptyMessage,
   makeLinkedTextCell,
   makeOverviewCard,
+  makePlanTable,
   makeTableHead,
   makeTextCell
 } from "./presentation/renderers/table-elements";
@@ -1904,63 +1906,15 @@ function updateFilterOptions() {
 }
 
 function renderRestorationPlan(items) {
-  const selectedQuantity = items.reduce((sum, detection) => sum + detection.quantity, 0);
-  const reviewCount = detections.filter((detection) => detection.ambiguousMatch || quantityNeedsReview(detection)).length;
-  const levels = items.map((detection) => detection.archaeologyLevel).filter(Number.isFinite);
-
-  visibleCountEl.textContent = String(selectedQuantity);
-  reviewCountEl.textContent = String(reviewCount);
-  highestLevelEl.textContent = levels.length ? String(Math.max(...levels)) : "0";
-
-  planBody.replaceChildren();
-  if (!items.length) {
-    const empty = document.createElement("p");
-    empty.className = "empty";
-    empty.textContent = detections.length ? "No visible artefacts for the current filters." : "Analyze a screenshot to populate the restoration plan.";
-    planBody.append(empty);
-    return;
-  }
-
-  planBody.append(
-    makePlanTable("By culture", groupQuantity(items, "culture")),
-    makePlanTable("By dig site", groupQuantity(items, "digSite"))
-  );
-}
-
-function groupQuantity(items, key) {
-  const groups = new Map();
-  for (const detection of items) {
-    const name = detection[key] || "Unknown";
-    groups.set(name, (groups.get(name) || 0) + detection.quantity);
-  }
-  return [...groups.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-}
-
-function makePlanTable(captionText, rows) {
-  const table = document.createElement("table");
-  table.className = "plan-table";
-  const caption = document.createElement("caption");
-  caption.textContent = captionText;
-  const head = document.createElement("thead");
-  const headRow = document.createElement("tr");
-  const nameHead = document.createElement("th");
-  const qtyHead = document.createElement("th");
-  nameHead.textContent = "Group";
-  qtyHead.textContent = "Qty";
-  headRow.append(nameHead, qtyHead);
-  head.append(headRow);
-  const body = document.createElement("tbody");
-  for (const [name, quantity] of rows) {
-    const row = document.createElement("tr");
-    const nameCell = document.createElement("td");
-    const quantityCell = document.createElement("td");
-    nameCell.textContent = name;
-    quantityCell.textContent = String(quantity);
-    row.append(nameCell, quantityCell);
-    body.append(row);
-  }
-  table.append(caption, head, body);
-  return table;
+  renderRestorationPlanPanel({
+    body: planBody,
+    visibleCountElement: visibleCountEl,
+    reviewCountElement: reviewCountEl,
+    highestLevelElement: highestLevelEl,
+    allDetections: detections,
+    visibleDetections: items,
+    quantityNeedsReview
+  });
 }
 
 function makeMaterialCell(row) {

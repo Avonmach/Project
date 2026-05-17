@@ -51,3 +51,30 @@ export function makeLinkedTextCell(label: string, href?: string | null): HTMLTab
   cell.append(link);
   return cell;
 }
+
+export function makePlanTable(captionText: string, rows: readonly [string, number][]): HTMLTableElement {
+  const table = document.createElement("table");
+  table.className = "plan-table";
+  const caption = document.createElement("caption");
+  caption.textContent = captionText;
+  const head = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  const nameHead = document.createElement("th");
+  const qtyHead = document.createElement("th");
+  nameHead.textContent = "Group";
+  qtyHead.textContent = "Qty";
+  headRow.append(nameHead, qtyHead);
+  head.append(headRow);
+  const body = document.createElement("tbody");
+  for (const [name, quantity] of rows) {
+    const row = document.createElement("tr");
+    const nameCell = document.createElement("td");
+    const quantityCell = document.createElement("td");
+    nameCell.textContent = name;
+    quantityCell.textContent = String(quantity);
+    row.append(nameCell, quantityCell);
+    body.append(row);
+  }
+  table.append(caption, head, body);
+  return table;
+}
