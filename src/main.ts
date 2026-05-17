@@ -8,6 +8,7 @@ import {
   calculateMaterialTotals as calculateMaterialTotalsForRecipes
 } from "./application/calculate-materials/material-totals";
 import { applyQuantityChange as applyQuantityCorrection } from "./application/correct-detection/quantity-correction";
+import { applyReferenceCorrection as applyReferenceCorrectionRule } from "./application/correct-detection/reference-correction";
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
 import { createAnalysisExportPayload, exportBestMatch } from "./application/export-analysis/analysis-export";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
@@ -1779,43 +1780,8 @@ function makeReferenceCorrectionDropdown(detection) {
 }
 
 function applyReferenceCorrection(detection, item, score) {
-  const correctedAt = new Date().toISOString();
-  detection.artefact = item.name;
-  detection.wikiPage = item.restoredWikiPage || item.wikiPage;
-  detection.damagedWikiPage = item.wikiPage;
-  detection.restoredName = item.restoredName;
-  detection.restoredWikiPage = item.restoredWikiPage;
-  detection.archaeologyLevel = item.archaeologyLevel;
-  detection.culture = item.culture;
-  detection.digSite = item.digSite;
-  detection.matchName = item.restoredName || item.name;
-  detection.matchScore = score ?? 1;
-  detection.shapeScore = score ?? 1;
-  detection.colorScore = score ?? 1;
-  detection.colorExistenceScore = score ?? 1;
-  detection.colorPositionScore = score ?? 1;
-  detection.restoredScore = score ?? 1;
-  detection.damagedScore = score ?? 1;
-  detection.ambiguousMatch = false;
-  detection.matchGap = 1;
-  detection.algorithmBest = {
-    shape: { item, score: score ?? 1 },
-    color: { item, score: score ?? 1 },
-    restored: { item, score: score ?? 1 },
-    damaged: { item, score: score ?? 1 }
-  };
+  applyReferenceCorrectionRule(detection, item, score);
   detection.referencePreview = makeReferenceCanvas(item.image);
-  detection.corrected = true;
-  detection.manual = true;
-  detection.correction = {
-    correctedAt,
-    damagedName: item.name,
-    restoredName: item.restoredName,
-    archaeologyLevel: item.archaeologyLevel,
-    culture: item.culture,
-    scoreAtSelection: score,
-    source: "manual-dropdown"
-  };
   updateDetectionRow(detection);
   updateTotals();
 }
