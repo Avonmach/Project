@@ -1810,13 +1810,7 @@ function updateDetectionRow(detection) {
 
 function drawEmptyState(message) {
   resultsBody.replaceChildren();
-  const row = document.createElement("tr");
-  const cell = document.createElement("td");
-  cell.className = "empty";
-  cell.colSpan = 9;
-  cell.textContent = message;
-  row.append(cell);
-  resultsBody.append(row);
+  drawTableEmptyState(resultsBody, message);
   renderResultsTabContent();
 }
 
