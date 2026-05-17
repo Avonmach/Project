@@ -13,6 +13,7 @@ import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./d
 import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
 import { normalizeName, nullableNumber } from "./domain/shared/format";
 import { getIconMatchBox } from "./domain/shared/geometry";
+import { loadImageElement } from "./infrastructure/browser/image-loader";
 import { alphaBounds, copyImageData, cropImageData, pixelColorAt } from "./infrastructure/image-processing/image-data";
 import {
   applyResultTabSelection,
@@ -209,15 +210,6 @@ function loadImageFromUrl(src) {
       drawEmptyState("Could not load the screenshot.");
       resolve();
     };
-    img.src = src;
-  });
-}
-
-function loadImageElement(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error(`Could not load ${src}`));
     img.src = src;
   });
 }
