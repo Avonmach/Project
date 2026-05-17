@@ -11,7 +11,7 @@ import { createAnalysisExportPayload, exportBestMatch } from "./application/expo
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
-import { normalizeName, nullableNumber, percent } from "./domain/shared/format";
+import { normalizeName, nullableNumber } from "./domain/shared/format";
 import { alphaBounds, copyImageData, cropImageData, pixelColorAt } from "./infrastructure/image-processing/image-data";
 import {
   applyResultTabSelection,
@@ -25,6 +25,7 @@ import { renderStorageTab as renderStorageTabPanel } from "./presentation/render
 import { renderDamagedTab as renderDamagedTabPanel } from "./presentation/renderers/damaged-tab";
 import { makeCollectionOverview as makeCollectionOverviewElement } from "./presentation/renderers/collection-overview";
 import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentation/renderers/restoration-plan";
+import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentation/renderers/recognition-info";
 import {
   makeEmptyMessage,
   makeLinkedTextCell,
@@ -2020,22 +2021,7 @@ function markQuantityManual(quantityCell) {
 }
 
 function makeRecognitionInfo(detection) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "recognition-info";
-  if (detection.ambiguousMatch) wrapper.classList.add("score-warning");
-  wrapper.textContent = [
-    `Match: ${percent(detection.matchScore)}`,
-    `Overlap: ${percent(detection.overlapScore)}`,
-    `Color: ${percent(detection.colorScore)}`,
-    detection.ambiguousMatch ? `Gap: ${percent(detection.matchGap)}` : null
-  ].filter(Boolean).join(" | ");
-
-  return wrapper;
-}
-
-function bestMatchLabel(match) {
-  if (!match?.item) return "none";
-  return `${match.item.restoredName || match.item.name} ${percent(match.score)}`;
+  return makeRecognitionInfoElement(detection);
 }
 
 function makeReferenceCorrectionDropdown(detection) {
