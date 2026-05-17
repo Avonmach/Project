@@ -7,6 +7,8 @@ import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
   calculateMaterialTotals as calculateMaterialTotalsForRecipes
 } from "./application/calculate-materials/material-totals";
+import { applyQuantityChange as applyQuantityCorrection } from "./application/correct-detection/quantity-correction";
+import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
 import { createAnalysisExportPayload, exportBestMatch } from "./application/export-analysis/analysis-export";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
 import {
@@ -1747,19 +1749,7 @@ function quantityNeedsReview(detection) {
 }
 
 function applyQuantityChange(detection, quantity, source) {
-  const previousQuantity = detection.quantity;
-  detection.quantity = quantity;
-  detection.manual = true;
-  detection.quantityManual = true;
-  detection.quantityCorrection = {
-    correctedAt: new Date().toISOString(),
-    originalQuantity: detection.originalQuantity,
-    detectedQuantity: detection.originalQuantity,
-    previousQuantity,
-    correctedQuantity: detection.quantity,
-    quantityConfidence: detection.quantityConfidence,
-    source
-  };
+  applyQuantityCorrection(detection, quantity, source);
 }
 
 function makeQuantityDebugView(detection) {
@@ -1831,21 +1821,7 @@ function applyReferenceCorrection(detection, item, score) {
 }
 
 function verifyDetection(detection) {
-  if (detection.corrected && detection.manual) return;
-
-  detection.corrected = true;
-  detection.manual = true;
-  detection.ambiguousMatch = false;
-  detection.matchGap = Math.max(detection.matchGap || 0, AMBIGUOUS_FINAL_MARGIN);
-  detection.correction = {
-    correctedAt: new Date().toISOString(),
-    damagedName: detection.artefact,
-    restoredName: detection.restoredName,
-    archaeologyLevel: detection.archaeologyLevel,
-    culture: detection.culture,
-    scoreAtSelection: detection.matchScore,
-    source: "row-verified"
-  };
+  if (!applyDetectionVerification(detection, AMBIGUOUS_FINAL_MARGIN)) return;
   updateDetectionRow(detection);
   updateTotals();
 }
