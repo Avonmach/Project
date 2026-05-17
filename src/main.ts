@@ -12,6 +12,7 @@ import { filterAndSortDetections } from "./application/filter-detections/detecti
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
 import { normalizeName, nullableNumber } from "./domain/shared/format";
+import { getIconMatchBox } from "./domain/shared/geometry";
 import { alphaBounds, copyImageData, cropImageData, pixelColorAt } from "./infrastructure/image-processing/image-data";
 import {
   applyResultTabSelection,
@@ -26,6 +27,16 @@ import { renderDamagedTab as renderDamagedTabPanel } from "./presentation/render
 import { makeCollectionOverview as makeCollectionOverviewElement } from "./presentation/renderers/collection-overview";
 import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentation/renderers/restoration-plan";
 import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentation/renderers/recognition-info";
+import {
+  makeBackgroundRemovedCanvas,
+  makeCroppedShapeCanvas,
+  makePreviewCanvas,
+  makeProcessedCanvas,
+  makeReferenceCanvas,
+  makeRemovedOverlayCanvas,
+  makeScaledShapeCanvas,
+  makeShapeMaskCanvas
+} from "./presentation/renderers/preview-canvases";
 import {
   makeEmptyMessage,
   makeLinkedTextCell,
@@ -70,7 +81,6 @@ const storagePanel = document.getElementById("storagePanel");
 const materialsPanel = document.getElementById("materialsPanel");
 
 const MATCH_SIZE = 32;
-const PREVIEW_SIZE = 48;
 const BANK_CELL_SIZE = 44;
 const BANK_GRID_SHIFT_X = 0;
 const BANK_GRID_SHIFT_Y = 0;
@@ -700,19 +710,6 @@ function connectedGridBackgroundMask(imageData, grid, backgroundColor) {
   }
 
   return mask;
-}
-
-function getIconMatchBox(box) {
-  const insetX = Math.max(1, Math.round(box.w * 0.04));
-  const topInset = Math.max(1, Math.round(box.h * 0.04));
-  const bottomInset = Math.max(1, Math.round(box.h * 0.04));
-  return {
-    x: box.x + insetX,
-    y: box.y + topInset,
-    w: Math.max(8, box.w - insetX * 2),
-    h: Math.max(8, box.h - topInset - bottomInset),
-    area: box.area
-  };
 }
 
 function removeBackground(imageData) {
@@ -1551,211 +1548,6 @@ function attachQuantityDebugSource(debug, imageData) {
     ...debug,
     source: copyImageData(imageData, debug.scanBox)
   };
-}
-
-function makePreviewCanvas(imageData, box, options = {}) {
-  const preview = document.createElement("canvas");
-  preview.width = PREVIEW_SIZE;
-  preview.height = PREVIEW_SIZE;
-  preview.className = "slot-preview";
-  if (options.enhanceHover === false) preview.classList.add("no-hover-enhance");
-  const previewCtx = preview.getContext("2d");
-  const temp = document.createElement("canvas");
-  temp.width = box.w;
-  temp.height = box.h;
-  temp.getContext("2d").putImageData(copyImageData(imageData, box), 0, 0);
-  previewCtx.imageSmoothingEnabled = true;
-  previewCtx.imageSmoothingQuality = "high";
-  previewCtx.drawImage(temp, 0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
-  return preview;
-}
-
-function makeProcessedCanvas(originalImageData, shapeImageData, box, options = {}) {
-  const enhance = options.enhance !== false;
-  const iconBox = getIconMatchBox(box);
-  const originalCrop = copyImageData(originalImageData, iconBox);
-  const shapeCrop = copyImageData(shapeImageData, iconBox);
-  const bounds = alphaBounds(shapeCrop);
-  const masked = new ImageData(originalCrop.width, originalCrop.height);
-
-  for (let i = 0; i < originalCrop.data.length; i += 4) {
-    if (shapeCrop.data[i + 3] <= 20) continue;
-    const color = enhance
-      ? enhancePreviewColor(originalCrop.data[i], originalCrop.data[i + 1], originalCrop.data[i + 2])
-      : { r: originalCrop.data[i], g: originalCrop.data[i + 1], b: originalCrop.data[i + 2] };
-    masked.data[i] = color.r;
-    masked.data[i + 1] = color.g;
-    masked.data[i + 2] = color.b;
-    masked.data[i + 3] = 255;
-  }
-
-  const source = document.createElement("canvas");
-  source.width = masked.width;
-  source.height = masked.height;
-  source.getContext("2d").putImageData(masked, 0, 0);
-
-  const preview = document.createElement("canvas");
-  preview.width = PREVIEW_SIZE;
-  preview.height = PREVIEW_SIZE;
-  preview.className = "processed-preview";
-  if (!enhance) preview.classList.add("no-hover-enhance");
-  const previewCtx = preview.getContext("2d");
-  previewCtx.clearRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
-  previewCtx.imageSmoothingEnabled = true;
-  previewCtx.imageSmoothingQuality = "high";
-
-  if (bounds) {
-    const longest = Math.max(bounds.w, bounds.h);
-    const maxIconSize = PREVIEW_SIZE - 8;
-    const drawW = Math.ceil((bounds.w / longest) * maxIconSize);
-    const drawH = Math.ceil((bounds.h / longest) * maxIconSize);
-    const dx = Math.floor((PREVIEW_SIZE - drawW) / 2);
-    const dy = Math.floor((PREVIEW_SIZE - drawH) / 2);
-    previewCtx.drawImage(source, bounds.x, bounds.y, bounds.w, bounds.h, dx, dy, drawW, drawH);
-  }
-
-  return preview;
-}
-
-function brightenChannel(value, factor) {
-  return Math.max(0, Math.min(255, Math.round(value * factor)));
-}
-
-function enhancePreviewColor(r, g, b) {
-  const brightness = 1.8;
-  const saturation = 1.75;
-  const gray = r * 0.299 + g * 0.587 + b * 0.114;
-  return {
-    r: brightenChannel(gray + (r - gray) * saturation, brightness),
-    g: brightenChannel(gray + (g - gray) * saturation, brightness),
-    b: brightenChannel(gray + (b - gray) * saturation, brightness)
-  };
-}
-
-function makeBackgroundRemovedCanvas(imageData, box) {
-  const preview = document.createElement("canvas");
-  preview.width = PREVIEW_SIZE;
-  preview.height = PREVIEW_SIZE;
-  preview.className = "clean-preview";
-  const previewCtx = preview.getContext("2d");
-  previewCtx.clearRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
-  const temp = document.createElement("canvas");
-  temp.width = box.w;
-  temp.height = box.h;
-  const tempCtx = temp.getContext("2d");
-  tempCtx.putImageData(copyImageData(imageData, box), 0, 0);
-  previewCtx.imageSmoothingEnabled = false;
-  previewCtx.drawImage(temp, 0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
-  return preview;
-}
-
-function makeRemovedOverlayCanvas(imageData, shapeImageData, box) {
-  const iconBox = getIconMatchBox(box);
-  const overlay = copyImageData(imageData, iconBox);
-  const shapeCrop = copyImageData(shapeImageData, iconBox);
-
-  for (let y = 0; y < iconBox.h; y += 1) {
-    for (let x = 0; x < iconBox.w; x += 1) {
-      const target = (y * iconBox.w + x) * 4;
-      if (shapeCrop.data[target + 3] > 0) continue;
-      overlay.data[target] = 255;
-      overlay.data[target + 1] = 0;
-      overlay.data[target + 2] = 0;
-      overlay.data[target + 3] = 210;
-    }
-  }
-
-  const preview = document.createElement("canvas");
-  preview.width = PREVIEW_SIZE;
-  preview.height = PREVIEW_SIZE;
-  preview.className = "background-overlay-preview";
-  const previewCtx = preview.getContext("2d");
-  const temp = document.createElement("canvas");
-  temp.width = iconBox.w;
-  temp.height = iconBox.h;
-  temp.getContext("2d").putImageData(overlay, 0, 0);
-  previewCtx.imageSmoothingEnabled = false;
-  previewCtx.drawImage(temp, 0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
-  return preview;
-}
-
-function makeCroppedShapeCanvas(imageData, box) {
-  const iconBox = getIconMatchBox(box);
-  const cropData = copyImageData(imageData, iconBox);
-  const bounds = alphaBounds(cropData);
-  const preview = document.createElement("canvas");
-  preview.width = PREVIEW_SIZE;
-  preview.height = PREVIEW_SIZE;
-  preview.className = "recognition-preview";
-  const previewCtx = preview.getContext("2d");
-  previewCtx.clearRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
-
-  const temp = document.createElement("canvas");
-  temp.width = bounds?.w || cropData.width;
-  temp.height = bounds?.h || cropData.height;
-  const tempCtx = temp.getContext("2d");
-  if (bounds) {
-    tempCtx.putImageData(cropImageData(cropData, bounds), 0, 0);
-  } else {
-    tempCtx.putImageData(cropData, 0, 0);
-  }
-
-  previewCtx.imageSmoothingEnabled = false;
-  previewCtx.drawImage(temp, 0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
-  return preview;
-}
-
-function makeScaledShapeCanvas(fingerprint) {
-  const preview = document.createElement("canvas");
-  preview.width = PREVIEW_SIZE;
-  preview.height = PREVIEW_SIZE;
-  preview.className = "augmented-preview";
-  paintFingerprintMask(preview, fingerprint);
-  return preview;
-}
-
-function makeReferenceCanvas(image) {
-  const preview = document.createElement("canvas");
-  preview.width = PREVIEW_SIZE;
-  preview.height = PREVIEW_SIZE;
-  preview.className = "reference-preview";
-  const previewCtx = preview.getContext("2d");
-  previewCtx.imageSmoothingEnabled = true;
-  previewCtx.imageSmoothingQuality = "high";
-  previewCtx.clearRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
-
-  const longest = Math.max(image.naturalWidth, image.naturalHeight);
-  const maxIconSize = PREVIEW_SIZE - 8;
-  const drawWidth = Math.round((image.naturalWidth / longest) * maxIconSize);
-  const drawHeight = Math.round((image.naturalHeight / longest) * maxIconSize);
-  const x = Math.floor((PREVIEW_SIZE - drawWidth) / 2);
-  const y = Math.floor((PREVIEW_SIZE - drawHeight) / 2);
-  previewCtx.drawImage(image, x, y, drawWidth, drawHeight);
-  return preview;
-}
-
-function makeShapeMaskCanvas(fingerprint) {
-  const preview = document.createElement("canvas");
-  preview.width = PREVIEW_SIZE;
-  preview.height = PREVIEW_SIZE;
-  preview.className = "shape-mask-preview";
-  paintFingerprintMask(preview, fingerprint);
-  return preview;
-}
-
-function paintFingerprintMask(canvas, fingerprint) {
-  const previewCtx = canvas.getContext("2d");
-  previewCtx.clearRect(0, 0, canvas.width, canvas.height);
-  if (!fingerprint?.length) return;
-
-  const pixel = canvas.width / MATCH_SIZE;
-  previewCtx.fillStyle = "#111417";
-  for (let y = 0; y < MATCH_SIZE; y += 1) {
-    for (let x = 0; x < MATCH_SIZE; x += 1) {
-      if (!fingerprint[y * MATCH_SIZE + x]?.visible) continue;
-      previewCtx.fillRect(x * pixel, y * pixel, Math.ceil(pixel), Math.ceil(pixel));
-    }
-  }
 }
 
 function renderDetections() {
