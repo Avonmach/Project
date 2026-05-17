@@ -3,6 +3,10 @@ import {
   FALLBACK_DIGIT_TEMPLATES,
   buildDigitTemplatesFromFont
 } from "./domain/ocr/digit-templates";
+import {
+  aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
+  calculateMaterialTotals as calculateMaterialTotalsForRecipes
+} from "./application/calculate-materials/material-totals";
 import { detectQuantity, isQuantityPixel, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "./domain/shared/color";
 import { normalizeName, nullableNumber, percent } from "./domain/shared/format";
@@ -1877,8 +1881,8 @@ function renderMaterialsTab(items) {
     allDetections: detections,
     visibleDetections: items,
     recipeRecordCount: archaeologyReference.artefactRecipes?.length || 0,
-    calculateMaterialTotals,
-    aggregateRestoredArtefacts,
+    calculateMaterialTotals: (detections) => calculateMaterialTotalsForRecipes(detections, recipeByRestoredName),
+    aggregateRestoredArtefacts: (detections) => aggregateRestoredArtefactsForDetections(detections, quantityNeedsReview),
     sortMaterialRows,
     makeMaterialCell,
     makeTextCell,
@@ -1893,7 +1897,7 @@ function renderStorageTab(items) {
     panel: storagePanel,
     visibleDetections: items,
     materials: archaeologyReference.materials || [],
-    calculateMaterialTotals,
+    calculateMaterialTotals: (detections) => calculateMaterialTotalsForRecipes(detections, recipeByRestoredName),
     makeMaterialCell,
     makeLinkedTextCell,
     makeTableHead,
@@ -1991,45 +1995,6 @@ function makeMaterialCell(row) {
   }
   cell.append(label);
   return cell;
-}
-
-function calculateMaterialTotals(items) {
-  const totals = new Map();
-  for (const detection of items) {
-    const recipe = recipeByRestoredName.get(normalizeName(detection.restoredName || detection.artefact));
-    if (!recipe?.materials?.length) continue;
-    for (const material of recipe.materials) {
-      const key = normalizeName(material.name);
-      const current = totals.get(key) || { name: material.name, quantity: 0, artefacts: new Set() };
-      current.quantity += material.quantity * detection.quantity;
-      current.artefacts.add(detection.restoredName || detection.artefact);
-      totals.set(key, current);
-    }
-  }
-  return [...totals.values()].map((row) => ({ ...row, artefacts: [...row.artefacts].sort() }));
-}
-
-function aggregateRestoredArtefacts(items) {
-  const groups = new Map();
-  for (const detection of items) {
-    const key = detection.restoredName || detection.artefact;
-    const current =
-      groups.get(key) || {
-        restoredName: key,
-        damagedName: detection.artefact,
-        level: detection.archaeologyLevel,
-        culture: detection.culture,
-        digSite: detection.digSite,
-        quantity: 0,
-        needsReview: false
-      };
-    current.quantity += detection.quantity;
-    current.needsReview = current.needsReview || detection.ambiguousMatch || quantityNeedsReview(detection);
-    groups.set(key, current);
-  }
-  return [...groups.values()].sort(
-    (a, b) => String(a.restoredName).localeCompare(String(b.restoredName))
-  );
 }
 
 function sortRestoredRows(rows) {
