@@ -43,6 +43,7 @@ import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentatio
 import { renderSummaryTotals } from "./presentation/renderers/summary-totals";
 import { makeMaterialCell as makeMaterialCellElement } from "./presentation/renderers/material-cell";
 import { drawAnalysisOverlay } from "./presentation/renderers/analysis-overlay";
+import { updateDetectionRow as updateDetectionRowElement } from "./presentation/renderers/detection-row-update";
 import {
   makeBackgroundRemovedCanvas,
   makeCroppedShapeCanvas,
@@ -1794,33 +1795,17 @@ function verifyDetection(detection) {
 }
 
 function updateDetectionRow(detection) {
-  const elements = detection.rowElements;
-  if (!elements) return;
-
-  detection.referencePreview.classList.remove("review-border");
-  const input = elements.quantityCell?.querySelector(".qty-input");
-  if (input) input.classList.remove("quantity-warning-input");
-  elements.referenceCell.replaceChildren(makeReferenceCorrectionDropdown(detection));
-  elements.nameCell.replaceChildren();
-  if (elements.row) elements.row.className = rowReviewClass(detection);
-
-  if (detection.wikiPage) {
-    const link = document.createElement("a");
-    link.className = "artifact-link";
-    link.href = detection.wikiPage;
-    link.target = "_blank";
-    link.rel = "noreferrer";
-    link.textContent = detection.restoredName || detection.artefact;
-    elements.nameCell.append(link);
-  } else {
-    elements.nameCell.textContent = detection.restoredName || detection.artefact;
+  if (
+    updateDetectionRowElement({
+      detection,
+      rowReviewClass,
+      makeReferenceCorrectionDropdown,
+      makeRecognitionInfo,
+      makeStatusPill
+    })
+  ) {
+    renderRestorationPlan(filteredDetections());
   }
-  elements.nameCell.append(makeRecognitionInfo(detection));
-  elements.levelCell.textContent = detection.archaeologyLevel ?? "";
-  elements.themeCell.textContent = detection.culture || "";
-  if (elements.siteCell) elements.siteCell.textContent = detection.digSite || "";
-  if (elements.statusCell) elements.statusCell.replaceChildren(makeStatusPill(detection));
-  renderRestorationPlan(filteredDetections());
 }
 
 function drawEmptyState(message) {
