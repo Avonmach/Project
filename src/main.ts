@@ -21,6 +21,7 @@ import {
   makeStatusPill as makeDetectionStatusPill,
   rowReviewClass as detectionRowReviewClass
 } from "./presentation/renderers/detection-row";
+import { makeReferenceCorrectionDropdown as makeReferenceCorrectionDropdownElement } from "./presentation/renderers/correction-dropdown";
 
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -2467,132 +2468,12 @@ function bestMatchLabel(match) {
   return `${match.item.restoredName || match.item.name} ${percent(match.score)}`;
 }
 
-function makeCorrectionDropdown(detection) {
-  const details = document.createElement("details");
-  details.className = "correction-menu";
-  const summary = document.createElement("summary");
-  summary.title = "Choose artefact";
-  summary.setAttribute("aria-label", "Choose artefact");
-  summary.textContent = "↔";
-  details.append(summary);
-
-  details.addEventListener(
-    "toggle",
-    () => {
-      if (details.open && !details.dataset.loaded) {
-        details.append(makeCorrectionPanel(detection));
-        details.dataset.loaded = "true";
-      }
-    },
-    { once: false }
-  );
-
-  return details;
-}
-
 function makeReferenceCorrectionDropdown(detection) {
-  const details = makeCorrectionDropdown(detection);
-  details.classList.add("reference-correction-menu");
-  const summary = details.querySelector("summary");
-  summary.textContent = "";
-  summary.append(detection.referencePreview);
-  return details;
-}
-
-function makeCorrectionPanel(detection) {
-  const panel = document.createElement("div");
-  panel.className = "correction-panel";
-
-  const search = document.createElement("input");
-  search.className = "correction-search";
-  search.type = "search";
-  search.placeholder = "Search artefacts";
-  panel.append(search);
-
-  const list = document.createElement("div");
-  panel.append(list);
-
-  const renderList = () => {
-    list.replaceChildren();
-    const query = search.value.trim().toLowerCase();
-    const topMatches = [...(detection.topMatches || [])].sort((a, b) => bestCandidateScore(b) - bestCandidateScore(a));
-    const scored = new Map(topMatches.map((candidate) => [candidate.item.name, candidate.score]));
-
-    const top = document.createElement("div");
-    top.className = "correction-section-title";
-    top.textContent = "Best matches";
-    list.append(top);
-
-    for (const candidate of topMatches.filter((candidate) => matchesCorrectionSearch(candidate.item, query))) {
-      list.append(makeCorrectionOption(detection, candidate.item, candidate.score));
-    }
-
-    const all = document.createElement("div");
-    all.className = "correction-section-title";
-    all.textContent = "All artefacts";
-    list.append(all);
-
-    const items = [...references]
-      .filter((item) => !scored.has(item.name))
-      .filter((item) => matchesCorrectionSearch(item, query))
-      .sort((a, b) => {
-        return referenceBestScore(b, detection) - referenceBestScore(a, detection) || sortName(a).localeCompare(sortName(b));
-      });
-
-    for (const item of items) {
-      list.append(makeCorrectionOption(detection, item, null));
-    }
-  };
-
-  search.addEventListener("input", renderList);
-  renderList();
-
-  return panel;
-}
-
-function sortName(item) {
-  return String(item.restoredName || item.name)
-    .replace(/['"]/g, "")
-    .toLowerCase();
-}
-
-function bestCandidateScore(candidate) {
-  return Math.max(candidate.score || 0, candidate.shapeScore || 0, candidate.restoredScore || 0, candidate.damagedScore || 0);
-}
-
-function referenceBestScore(item, detection) {
-  const candidate = (detection.topMatches || []).find((match) => match.item.name === item.name);
-  return candidate ? bestCandidateScore(candidate) : -1;
-}
-
-function matchesCorrectionSearch(item, query) {
-  if (!query) return true;
-  return `${item.name} ${item.restoredName} ${item.culture || ""} ${item.archaeologyLevel || ""}`.toLowerCase().includes(query);
-}
-
-function makeCorrectionOption(detection, item, score) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "correction-option";
-
-  const image = document.createElement("img");
-  image.src = `data/${detection.recognitionMode === "restored" ? item.icon : item.damagedIcon || item.icon}`;
-  image.alt = "";
-  image.loading = "lazy";
-
-  const label = document.createElement("span");
-  label.textContent = item.restoredName || item.name;
-
-  const meta = document.createElement("small");
-  meta.textContent = score === null ? `${item.archaeologyLevel ?? "?"} ${item.culture || ""}` : `${Math.round(score * 100)}%`;
-
-  button.append(image, label, meta);
-  button.addEventListener("click", () => {
-    applyReferenceCorrection(detection, item, score);
-    const menu = button.closest("details");
-    if (menu) menu.open = false;
+  return makeReferenceCorrectionDropdownElement({
+    detection,
+    references,
+    applyReferenceCorrection
   });
-  return button;
 }
 
 function applyReferenceCorrection(detection, item, score) {
