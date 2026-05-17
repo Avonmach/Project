@@ -14,6 +14,7 @@ import {
 import { createResultsState } from "./presentation/state/results-state";
 import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
 import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from "./presentation/renderers/restored-tab";
+import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/renderers/materials-tab";
 
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -1962,40 +1963,20 @@ function renderRestoredTab(items) {
 }
 
 function renderMaterialsTab(items) {
-  materialsPanel.replaceChildren();
-  if (!detections.length) {
-    materialsPanel.append(makeEmptyMessage("Analyze a screenshot to calculate needed restoration materials."));
-    return;
-  }
-
-  const summary = document.createElement("div");
-  summary.className = "overview-grid";
-  const materialRows = calculateMaterialTotals(items);
-  summary.append(
-    makeOverviewCard("Artefact quantity", items.reduce((sum, detection) => sum + detection.quantity, 0)),
-    makeOverviewCard("Unique artefacts", aggregateRestoredArtefacts(items).length),
-    makeOverviewCard("Needed materials", materialRows.length),
-    makeOverviewCard("Recipe records", archaeologyReference.artefactRecipes?.length || 0)
-  );
-
-  if (!materialRows.length) {
-    materialsPanel.append(summary, makeEmptyMessage("No material recipes match the current artefacts."));
-    return;
-  }
-
-  const table = document.createElement("table");
-  table.className = "secondary-table materials-table";
-  table.append(makeTableHead(["Material", "Needed", "Used by artefacts"]));
-  const body = document.createElement("tbody");
-
-  for (const row of sortMaterialRows(materialRows)) {
-    const tr = document.createElement("tr");
-    tr.append(makeMaterialCell(row), makeTextCell(row.quantity, "number-cell"), makeTextCell(row.artefacts.join(", ")));
-    body.append(tr);
-  }
-
-  table.append(body);
-  materialsPanel.append(summary, table);
+  renderMaterialsTabPanel({
+    panel: materialsPanel,
+    allDetections: detections,
+    visibleDetections: items,
+    recipeRecordCount: archaeologyReference.artefactRecipes?.length || 0,
+    calculateMaterialTotals,
+    aggregateRestoredArtefacts,
+    sortMaterialRows,
+    makeMaterialCell,
+    makeTextCell,
+    makeTableHead,
+    makeEmptyMessage,
+    makeOverviewCard
+  });
 }
 
 function renderStorageTab(items) {
