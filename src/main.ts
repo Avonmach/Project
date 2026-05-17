@@ -14,6 +14,11 @@ import { channelDistance, colorDistance, sameColor } from "./domain/shared/color
 import { normalizeName, nullableNumber } from "./domain/shared/format";
 import { getIconMatchBox } from "./domain/shared/geometry";
 import { loadImageElement } from "./infrastructure/browser/image-loader";
+import {
+  emptyArchaeologyReferenceData,
+  loadArchaeologyReferenceData,
+  loadDamagedArtifactRecords
+} from "./infrastructure/data/reference-data";
 import { alphaBounds, copyImageData, cropImageData, pixelColorAt } from "./infrastructure/image-processing/image-data";
 import {
   applyResultTabSelection,
@@ -161,9 +166,7 @@ async function loadQuantityFontTemplates() {
 }
 
 async function loadReferences() {
-  const response = await fetch("data/damaged-artifacts.json");
-  const database = await response.json();
-  const items = database.items.filter((item) => item.icon);
+  const items = await loadDamagedArtifactRecords();
 
   references = await Promise.all(
     items.map(async (item) => {
@@ -180,8 +183,7 @@ async function loadReferences() {
 
 async function loadArchaeologyReference() {
   try {
-    const response = await fetch("data/archaeology-reference.json");
-    archaeologyReference = await response.json();
+    archaeologyReference = await loadArchaeologyReferenceData();
     recipeByRestoredName = new Map(
       (archaeologyReference.artefactRecipes || []).map((recipe) => [normalizeName(recipe.restoredName), recipe])
     );
@@ -190,7 +192,7 @@ async function loadArchaeologyReference() {
     );
   } catch (error) {
     console.warn("Material and collection reference data is unavailable.", error);
-    archaeologyReference = { materials: [], artefactRecipes: [], collections: [] };
+    archaeologyReference = emptyArchaeologyReferenceData();
     recipeByRestoredName = new Map();
     materialByName = new Map();
   }
