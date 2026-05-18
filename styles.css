@@ -118,6 +118,7 @@ button:focus-visible,
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: var(--shadow);
+  min-width: 0;
 }
 
 .panel-heading {
@@ -238,6 +239,8 @@ input[type="search"] {
 .plan-panel {
   grid-column: 2 / 3;
   grid-row: 1 / 3;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .plan-stats {
@@ -263,6 +266,7 @@ input[type="search"] {
 }
 
 .plan-body {
+  overflow-x: auto;
   padding: 12px;
 }
 
@@ -291,6 +295,10 @@ input[type="search"] {
 .plan-table td:last-child,
 .plan-table th:last-child {
   text-align: right;
+}
+
+.plan-table td:first-child {
+  overflow-wrap: anywhere;
 }
 
 .overview-panel {
@@ -488,6 +496,7 @@ input[type="search"] {
 
 .results-panel {
   grid-column: 1 / 2;
+  min-width: 0;
   overflow: visible;
   position: relative;
   z-index: 2;
@@ -548,9 +557,17 @@ input[type="search"] {
 }
 
 .table-wrap {
-  overflow-x: visible;
-  overflow-y: visible;
+  overflow-x: auto;
+  overflow-y: clip;
   position: relative;
+}
+
+.artifact-table {
+  min-width: 900px;
+}
+
+.damaged-table {
+  min-width: 980px;
 }
 
 .damaged-review-strip {
@@ -608,6 +625,7 @@ th {
 }
 
 td {
+  overflow-wrap: anywhere;
   overflow: visible;
   white-space: normal;
 }
@@ -1087,7 +1105,7 @@ tbody tr:has(.processed-preview:hover),
   border-radius: 8px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
   max-height: 360px;
-  min-width: 310px;
+  min-width: min(310px, calc(100vw - 32px));
   overflow: auto;
   padding: 8px;
   position: absolute;
@@ -1224,6 +1242,43 @@ tbody tr:has(.processed-preview:hover),
   }
 
   input[type="search"] {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1120px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .image-panel,
+  .results-panel,
+  .plan-panel {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .plan-panel {
+    order: 3;
+  }
+}
+
+@media (max-width: 640px) {
+  .summary {
+    grid-template-columns: 1fr;
+  }
+
+  .results-toolbar,
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .file-control,
+  .file-control input,
+  .file-control select,
+  .wiki-link,
+  .toolbar > button {
     width: 100%;
   }
 }

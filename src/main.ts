@@ -224,23 +224,25 @@ function applyCandidatePrediction(detection: AppDetection, candidate: AppMatchCa
 }
 
 function renderDetections(): void {
-  if (!detections.length) {
-    if (resultsState.activeTab === "damaged") drawEmptyState(STATUS_MESSAGES.noDamagedSlotsDetected);
+  preserveScrollPosition(() => {
+    if (!detections.length) {
+      if (resultsState.activeTab === "damaged") drawEmptyState(STATUS_MESSAGES.noDamagedSlotsDetected);
+      updateTotals();
+      renderRestorationPlan([]);
+      renderResultsTabContent();
+      return;
+    }
+
+    updateFilterOptions();
+    const visibleDetections = filteredDetections();
+    if (resultsState.activeTab === "damaged") {
+      renderDamagedTable(visibleDetections);
+    }
+
     updateTotals();
-    renderRestorationPlan([]);
+    renderRestorationPlan(visibleDetections);
     renderResultsTabContent();
-    return;
-  }
-
-  updateFilterOptions();
-  const visibleDetections = filteredDetections();
-  if (resultsState.activeTab === "damaged") {
-    renderDamagedTable(visibleDetections);
-  }
-
-  updateTotals();
-  renderRestorationPlan(visibleDetections);
-  renderResultsTabContent();
+  });
 }
 
 function makeDetectionTableRow(detection: AppDetection): HTMLTableRowElement {
@@ -275,13 +277,15 @@ function filteredDetections(): AppDetection[] {
 }
 
 function setActiveResultsTab(tab: ResultsTab): void {
-  detections = resultsState.setActiveTab(tab);
-  applyResultTabSelection({ tab, title: resultsTitle, buttons: resultTabButtons, panels: resultTabPanels });
+  preserveScrollPosition(() => {
+    detections = resultsState.setActiveTab(tab);
+    applyResultTabSelection({ tab, title: resultsTitle, buttons: resultTabButtons, panels: resultTabPanels });
 
-  if (tab === "damaged") renderDamagedTable(filteredDetections());
-  updateTotals();
-  renderResultsTabContent();
-  requestTabScreenshot(tab);
+    if (tab === "damaged") renderDamagedTable(filteredDetections());
+    updateTotals();
+    renderResultsTabContent();
+    requestTabScreenshot(tab);
+  });
 }
 
 function renderResultsTabContent(): void {
@@ -493,14 +497,16 @@ function drawEmptyState(message: string): void {
 }
 
 function updateTotals(): void {
-  renderSummaryTotals({
-    detections,
-    slotCountElement: slotCountEl,
-    quantityTotalElement: quantityTotalEl,
-    manualCountElement: manualCountEl
+  preserveScrollPosition(() => {
+    renderSummaryTotals({
+      detections,
+      slotCountElement: slotCountEl,
+      quantityTotalElement: quantityTotalEl,
+      manualCountElement: manualCountEl
+    });
+    if (detections.length) renderRestorationPlan(filteredDetections());
+    renderResultsTabContent();
   });
-  if (detections.length) renderRestorationPlan(filteredDetections());
-  renderResultsTabContent();
 }
 
 function exportResults(): void {
@@ -514,4 +520,13 @@ function drawBoxes(
 ): void {
   if (!loadedImage) return;
   drawAnalysisOverlay({ context: ctx, image: loadedImage, items, contentArea, infinityArea });
+}
+
+function preserveScrollPosition(render: () => void): void {
+  const x = window.scrollX;
+  const y = window.scrollY;
+  render();
+  window.requestAnimationFrame(() => {
+    if (window.scrollX !== x || window.scrollY !== y) window.scrollTo(x, y);
+  });
 }
