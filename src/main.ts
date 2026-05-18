@@ -1,5 +1,6 @@
 import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
 import { createDetectionRecord, type DetectionRecord } from "./application/analyze-screenshot/detection-record";
+import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
 import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
   calculateMaterialTotals as calculateMaterialTotalsForRecipes,
@@ -134,10 +135,6 @@ const resultsState = createResultsState<AppDetection>();
 let collectionSort: CollectionSort = { key: "progress", direction: "desc" };
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
-const DEFAULT_SCREENSHOTS = {
-  damaged: "Damaged_Items.png",
-  restored: "Items%23.png"
-};
 
 loadDefaultButton.addEventListener("click", () => imageInput.click());
 analyzeButton.addEventListener("click", analyzeCurrentImage);
