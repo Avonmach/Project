@@ -779,8 +779,9 @@ tbody tr:has(.processed-preview:hover),
 
 .processed-preview,
 .reference-preview {
-  background: #ffffff;
+  background: transparent;
   border: 2px solid #d8e2dd;
+  filter: brightness(1.28) saturate(1.55) contrast(1.08);
   image-rendering: auto;
 }
 
@@ -1143,8 +1144,9 @@ tbody tr:has(.processed-preview:hover),
 }
 
 .correction-option img {
-  background: #302b26;
+  background: transparent;
   border-radius: 5px;
+  filter: brightness(1.35) saturate(1.65) contrast(1.08);
   height: 40px;
   image-rendering: auto;
   object-fit: contain;
