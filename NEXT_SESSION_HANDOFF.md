@@ -17,7 +17,7 @@ Branch: `Archeology`
 
 Latest pushed commit at handoff:
 
-- `564d2a9` Reuse reference record filter
+- `b7c90db` Export reference data paths
 
 The repo is clean except for these untracked image files, which have been intentionally left untouched:
 
@@ -55,7 +55,7 @@ The TypeScript migration has advanced substantially:
 - Vite + TypeScript build passes with `"strict": true`.
 - No TypeScript suppression comments remain in `src/`.
 - Detection records, original predictions, corrections, export payloads, reference metadata, and scoring weights have named types.
-- Reference JSON loading now has lightweight shape validation and HTTP status checks.
+- Reference JSON loading now has lightweight shape validation, optional metadata validation, finite-number checks, and HTTP status checks.
 
 ## What was finished today
 
@@ -80,6 +80,8 @@ Major extraction checkpoints pushed today:
 - full strict TypeScript enablement
 - reference JSON validation
 - additional export/reference typing cleanups
+- browser DOM/font loading helper extraction
+- default screenshot and reference path config extraction
 
 Each checkpoint has a matching file under `changes/`.
 
@@ -103,6 +105,7 @@ Continue with small, safe checkpoints:
 2. Consider moving DOM element lookup/wiring into a presentation/browser entry helper.
 3. Add focused unit tests for pure OCR, matching, correction, filtering, and export helpers.
 4. Keep reducing remaining intentional `unknown` boundaries where a stable JSON/data shape exists.
+5. Consider enabling stricter indexed-access checks module by module, starting with smaller data helpers before image-processing loops.
 
 Avoid big changes without asking:
 
