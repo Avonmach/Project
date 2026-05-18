@@ -1,5 +1,5 @@
 import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
-import { analyzeDetections } from "./application/analyze-screenshot/analyze-detections";
+import { analyzeScreenshot } from "./application/analyze-screenshot/analyze-screenshot";
 import { recognitionModeForTab } from "./application/analyze-screenshot/recognition-mode";
 import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
 import { AMBIGUOUS_FINAL_MARGIN } from "./application/config/matching-thresholds";
@@ -199,13 +199,12 @@ async function loadImageFromUrl(src: string) {
 function analyzeCurrentImage() {
   if (!loadedImage || !references.length) return;
 
+  const image = loadedImage;
   const recognitionMode = recognitionModeForTab(resultsState.activeTab);
-  const frame = createScreenshotAnalysisFrame(loadedImage, canvas, ctx, recognitionMode);
-
-  const analyzedDetections = analyzeDetections({
-    imageData: frame.imageData,
-    shapeImageData: frame.shapeImageData,
-    boxes: frame.boxes,
+  const analysis = analyzeScreenshot({
+    frameSource: {
+      createFrame: (mode) => createScreenshotAnalysisFrame(image, canvas, ctx, mode)
+    },
     cellSize: getGridCellSize(),
     recognitionMode,
     digitTemplates,
@@ -223,10 +222,10 @@ function analyzeCurrentImage() {
     }
   });
 
-  detections = resultsState.setDetectionsForMode(recognitionMode, analyzedDetections);
+  detections = resultsState.setDetectionsForMode(recognitionMode, analysis.detections);
   applyUniqueArtefactAssignments(detections);
   renderDetections();
-  drawBoxes(detections, frame.contentArea, frame.infinityArea);
+  drawBoxes(detections, analysis.frame.contentArea, analysis.frame.infinityArea);
 }
 
 function matchArtifact(
