@@ -1,7 +1,4 @@
-import {
-  FALLBACK_DIGIT_TEMPLATES,
-  buildDigitTemplatesFromFont
-} from "./domain/ocr/digit-templates";
+import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
 import { createDetectionRecord, type DetectionRecord } from "./application/analyze-screenshot/detection-record";
 import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
@@ -22,6 +19,7 @@ import { detectQuantity, quantityCandidatesAreClose, type QuantityDebug } from "
 import type { BoundingBox } from "./domain/shared/geometry";
 import { normalizeName } from "./domain/shared/format";
 import { requireCanvasContext, requireElement } from "./infrastructure/browser/dom-elements";
+import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
 import { loadImageElement, loadImageToCanvas, readImageFileAsDataUrl } from "./infrastructure/browser/image-loader";
 import {
   emptyArchaeologyReferenceData,
@@ -180,17 +178,7 @@ async function initialize() {
 }
 
 async function loadQuantityFontTemplates() {
-  if (!("FontFace" in window)) return;
-  try {
-    const face = new FontFace("RunescapeQuantityOCR", "url('runescape-small-07/runescape-small-07.otf')");
-    await face.load();
-    document.fonts.add(face);
-    await document.fonts.ready;
-    digitTemplates = buildDigitTemplatesFromFont("RunescapeQuantityOCR");
-  } catch (error) {
-    console.warn("Using fallback quantity OCR templates.", error);
-    digitTemplates = FALLBACK_DIGIT_TEMPLATES;
-  }
+  digitTemplates = await loadQuantityFontTemplatesFromBrowser();
 }
 
 async function loadReferences() {
