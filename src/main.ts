@@ -16,10 +16,7 @@ import { verifyDetection as applyDetectionVerification } from "./application/cor
 import { createAnalysisExportPayload } from "./application/export-analysis/analysis-export";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
 import { prepareArtefactReferences } from "./application/load-references/artefact-reference-preparation";
-import {
-  sortMaterialRows as sortMaterialRowsForMode,
-  sortRestoredRows as sortRestoredRowsForMode
-} from "./application/sort-results/result-row-sorting";
+import { sortMaterialRows as sortMaterialRowsForMode } from "./application/sort-results/result-row-sorting";
 import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode } from "./domain/artefacts/matching";
 import { detectQuantity, quantityCandidatesAreClose, type QuantityDebug } from "./domain/ocr/quantity-ocr";
 import type { BoundingBox } from "./domain/shared/geometry";
@@ -476,10 +473,6 @@ function renderRestorationPlan(items: readonly AppDetection[]): void {
 
 function makeMaterialCell(row: MaterialCellRow): HTMLTableCellElement {
   return makeMaterialCellElement(row, materialByName);
-}
-
-function sortRestoredRows(rows: readonly { restoredName: string; level?: number | null; culture?: string | null; digSite?: string | null }[]) {
-  return sortRestoredRowsForMode(rows, viewMode.value);
 }
 
 function sortMaterialRows(rows: readonly MaterialRow[]): readonly MaterialRow[] {
