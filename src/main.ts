@@ -13,6 +13,7 @@ import { applyReferenceCorrection as applyReferenceCorrectionRule } from "./appl
 import { findUniqueArtefactAssignments } from "./application/correct-detection/unique-artefact-assignments";
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
 import { createAnalysisExportPayload } from "./application/export-analysis/analysis-export";
+import { createAnalysisExportFilename } from "./application/export-analysis/export-filename";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
 import {
   createArchaeologyReferenceIndexes,
@@ -553,7 +554,7 @@ function exportResults(): void {
     detections
   });
 
-  downloadJsonFile(`rs3-archaeology-analysis-${exportedAt.replace(/[:.]/g, "-")}.json`, payload);
+  downloadJsonFile(createAnalysisExportFilename(exportedAt), payload);
 }
 
 function drawBoxes(
