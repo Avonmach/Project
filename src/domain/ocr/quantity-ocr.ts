@@ -1,4 +1,5 @@
 import type { BoundingBox, PixelPoint } from "../shared/geometry";
+import { readImageDataChannel } from "../../infrastructure/image-processing/image-data";
 import type { Digit, DigitTemplate, DigitTemplateMap } from "./digit-templates";
 import { DIGIT_TEMPLATE_WIDTH, normalizeDigit, shiftedTemplateScore, templateWidth } from "./digit-templates";
 
@@ -148,7 +149,10 @@ export function quantityAlternativeConfidenceGap(detection: {
 }): number | null {
   const options = detection.quantityAlternatives || [];
   if (options.length < 2) return null;
-  return Math.abs(options[0].confidence - options[1].confidence);
+  const first = options[0];
+  const second = options[1];
+  if (!first || !second) return null;
+  return Math.abs(first.confidence - second.confidence);
 }
 
 function makeQuantityDebug({
@@ -244,9 +248,9 @@ function collectYellowPixels(imageData: ImageData, box: BoundingBox, options: { 
   for (let y = scanBox.y; y < scanBox.y + scanBox.h; y += 1) {
     for (let x = scanBox.x; x < scanBox.x + scanBox.w; x += 1) {
       const offset = (y * width + x) * 4;
-      const r = data[offset];
-      const g = data[offset + 1];
-      const b = data[offset + 2];
+      const r = readImageDataChannel(data, offset);
+      const g = readImageDataChannel(data, offset + 1);
+      const b = readImageDataChannel(data, offset + 2);
       if (strict ? isStrictQuantityTextPixel(r, g, b) : isQuantityPixel(r, g, b)) {
         pixels.push({ x: x - box.x, y: y - box.y });
       }
@@ -284,7 +288,7 @@ function splitDigitBoxes(pixels: readonly PixelPoint[]): BoundingBox[] {
 
   for (const column of columns) {
     const previous = current[current.length - 1];
-    if (current.length && column - previous > 1) {
+    if (previous !== undefined && column - previous > 1) {
       groups.push(current);
       current = [];
     }
@@ -293,10 +297,13 @@ function splitDigitBoxes(pixels: readonly PixelPoint[]): BoundingBox[] {
   if (current.length) groups.push(current);
 
   return groups.flatMap((group) => {
-    const groupPixels = pixels.filter((pixel) => pixel.x >= group[0] && pixel.x <= group[group.length - 1]);
+    const firstColumn = group[0];
+    const lastColumn = group[group.length - 1];
+    if (firstColumn === undefined || lastColumn === undefined) return [];
+    const groupPixels = pixels.filter((pixel) => pixel.x >= firstColumn && pixel.x <= lastColumn);
     const minY = Math.min(...groupPixels.map((pixel) => pixel.y));
     const maxY = Math.max(...groupPixels.map((pixel) => pixel.y));
-    const box = { x: group[0], y: minY, w: group[group.length - 1] - group[0] + 1, h: maxY - minY + 1 };
+    const box = { x: firstColumn, y: minY, w: lastColumn - firstColumn + 1, h: maxY - minY + 1 };
     return splitWideDigitBox(pixels, box);
   });
 }
