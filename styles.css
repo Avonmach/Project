@@ -781,7 +781,6 @@ tbody tr:has(.processed-preview:hover),
 .reference-preview {
   background: #ffffff;
   border: 2px solid #d8e2dd;
-  filter: brightness(1.45) saturate(1.8) contrast(1.12);
   image-rendering: auto;
 }
 
