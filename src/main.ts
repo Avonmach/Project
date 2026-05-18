@@ -169,16 +169,12 @@ initialize();
 async function initialize() {
   analyzeButton.disabled = true;
   drawEmptyState("Loading reference database.");
-  await loadQuantityFontTemplates();
+  digitTemplates = await loadQuantityFontTemplatesFromBrowser();
   await loadReferences();
   await loadArchaeologyReference();
   await loadImageFromUrl(DEFAULT_SCREENSHOTS.damaged);
   analyzeButton.disabled = false;
   drawEmptyState("Image and references loaded. Click Analyze.");
-}
-
-async function loadQuantityFontTemplates() {
-  digitTemplates = await loadQuantityFontTemplatesFromBrowser();
 }
 
 async function loadReferences() {
