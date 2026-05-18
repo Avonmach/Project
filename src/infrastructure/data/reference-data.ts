@@ -39,12 +39,14 @@ export interface ArchaeologyReferenceData {
 
 export async function loadDamagedArtifactRecords(path = "data/damaged-artifacts.json"): Promise<DamagedArtifactReferenceRecord[]> {
   const response = await fetch(path);
+  assertOkResponse(response, path);
   const database = parseDamagedArtifactsDatabase(await response.json(), path);
   return database.items.filter((item) => item.icon);
 }
 
 export async function loadArchaeologyReferenceData(path = "data/archaeology-reference.json"): Promise<ArchaeologyReferenceData> {
   const response = await fetch(path);
+  assertOkResponse(response, path);
   return parseArchaeologyReferenceData(await response.json(), path);
 }
 
@@ -102,4 +104,10 @@ function isArchaeologyCollectionRecord(value: unknown): value is ArchaeologyColl
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
+}
+
+function assertOkResponse(response: Response, path: string): void {
+  if (!response.ok) {
+    throw new Error(`Could not load ${path}: HTTP ${response.status}`);
+  }
 }
