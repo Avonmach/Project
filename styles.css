@@ -273,10 +273,10 @@ input[type="search"] {
 .plan-table {
   border-collapse: separate;
   border-spacing: 0;
-  margin-right: 12px;
+  margin-right: 16px;
   min-width: 0;
   table-layout: fixed;
-  width: calc(100% - 12px);
+  width: calc(100% - 16px);
 }
 
 .plan-table caption {
@@ -298,9 +298,9 @@ input[type="search"] {
 
 .plan-table td:last-child,
 .plan-table th:last-child {
-  padding-right: 12px;
+  padding-right: 18px;
   text-align: right;
-  width: 70px;
+  width: 82px;
 }
 
 .plan-table td:first-child {
