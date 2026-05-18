@@ -13,7 +13,10 @@ import { findUniqueArtefactAssignments } from "./application/correct-detection/u
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
 import { createAnalysisExportPayload } from "./application/export-analysis/analysis-export";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
-import { createArchaeologyReferenceIndexes } from "./application/load-references/archaeology-reference-indexes";
+import {
+  createArchaeologyReferenceIndexes,
+  emptyArchaeologyReferenceIndexes
+} from "./application/load-references/archaeology-reference-indexes";
 import { prepareArtefactReferences } from "./application/load-references/artefact-reference-preparation";
 import { sortMaterialRows as sortMaterialRowsForMode } from "./application/sort-results/result-row-sorting";
 import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode } from "./domain/artefacts/matching";
@@ -187,8 +190,7 @@ async function loadArchaeologyReference() {
   } catch (error) {
     console.warn("Material and collection reference data is unavailable.", error);
     archaeologyReference = emptyArchaeologyReferenceData();
-    recipeByRestoredName = new Map();
-    materialByName = new Map();
+    ({ recipeByRestoredName, materialByName } = emptyArchaeologyReferenceIndexes());
   }
 }
 

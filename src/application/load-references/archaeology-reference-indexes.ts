@@ -14,3 +14,10 @@ export function createArchaeologyReferenceIndexes(reference: ArchaeologyReferenc
     materialByName: new Map(reference.materials.map((material) => [normalizeName(material.name), material]))
   };
 }
+
+export function emptyArchaeologyReferenceIndexes(): ArchaeologyReferenceIndexes {
+  return {
+    recipeByRestoredName: new Map(),
+    materialByName: new Map()
+  };
+}
