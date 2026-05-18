@@ -1,6 +1,6 @@
 import { isQuantityPixel } from "../../domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "../../domain/shared/color";
-import { pixelColorAt } from "./image-data";
+import { pixelColorAt, readImageDataChannel } from "./image-data";
 
 const BANK_CELL_SIZE = 44;
 const BANK_GRID_SHIFT_X = 0;
@@ -107,9 +107,9 @@ export function foregroundAlphaBounds(imageData: ImageData): BankGridBox | null 
   for (let y = 0; y < imageData.height; y += 1) {
     for (let x = 0; x < imageData.width; x += 1) {
       const offset = (y * imageData.width + x) * 4;
-      const r = imageData.data[offset];
-      const g = imageData.data[offset + 1];
-      const b = imageData.data[offset + 2];
+      const r = readImageDataChannel(imageData.data, offset);
+      const g = readImageDataChannel(imageData.data, offset + 1);
+      const b = readImageDataChannel(imageData.data, offset + 2);
       if (!isScreenshotShapePixel(r, g, b)) continue;
       minX = Math.min(minX, x);
       minY = Math.min(minY, y);
@@ -176,7 +176,8 @@ export function connectedComponents(mask: Uint8Array, width: number, height: num
     let area = 0;
 
     for (let qi = 0; qi < queue.length; qi += 1) {
-      const current: number = queue[qi];
+      const current = queue[qi];
+      if (current === undefined) continue;
       const x = current % width;
       const y = Math.floor(current / width);
       minX = Math.min(minX, x);
@@ -245,7 +246,15 @@ function findBankContentArea(imageData: ImageData): (BankGridBox & { readonly in
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const offset = (y * width + x) * 4;
-      if (isFrameOrScrollbarPixel(data[offset], data[offset + 1], data[offset + 2])) framePixels[y * width + x] = 1;
+      if (
+        isFrameOrScrollbarPixel(
+          readImageDataChannel(data, offset),
+          readImageDataChannel(data, offset + 1),
+          readImageDataChannel(data, offset + 2)
+        )
+      ) {
+        framePixels[y * width + x] = 1;
+      }
     }
   }
 
@@ -297,9 +306,9 @@ function findInfinitySymbolBounds(imageData: ImageData): BankGridBox | null {
   for (let y = minY; y <= maxY; y += 1) {
     for (let x = 0; x <= maxX; x += 1) {
       const offset = (y * width + x) * 4;
-      const r = data[offset];
-      const g = data[offset + 1];
-      const b = data[offset + 2];
+      const r = readImageDataChannel(data, offset);
+      const g = readImageDataChannel(data, offset + 1);
+      const b = readImageDataChannel(data, offset + 2);
       const isInfinityPixel = r >= 90 && g >= 65 && b >= 30 && r > b + 25 && g > b + 8;
       if (isInfinityPixel) mask[y * width + x] = 1;
     }
@@ -326,7 +335,15 @@ function findContentTopAfterInfinity(imageData: ImageData, infinity: BankGridBox
     let contentPixels = 0;
     for (let x = 0; x < width; x += 1) {
       const offset = (y * width + x) * 4;
-      if (isBankContentBackgroundPixel(data[offset], data[offset + 1], data[offset + 2])) contentPixels += 1;
+      if (
+        isBankContentBackgroundPixel(
+          readImageDataChannel(data, offset),
+          readImageDataChannel(data, offset + 1),
+          readImageDataChannel(data, offset + 2)
+        )
+      ) {
+        contentPixels += 1;
+      }
     }
     if (contentPixels > width * 0.55) return y;
   }
@@ -348,9 +365,9 @@ function findContentRightBeforeScrollbar(imageData: ImageData, top: number, bott
     let scrollbarPixels = 0;
     for (let y = minY; y <= maxY; y += 1) {
       const offset = (y * width + x) * 4;
-      const r = data[offset];
-      const g = data[offset + 1];
-      const b = data[offset + 2];
+      const r = readImageDataChannel(data, offset);
+      const g = readImageDataChannel(data, offset + 1);
+      const b = readImageDataChannel(data, offset + 2);
       if (r > 145 && g > 100 && b > 45 && r > b + 45) scrollbarPixels += 1;
     }
     if (scrollbarPixels > (maxY - minY + 1) * 0.35) {
@@ -398,12 +415,14 @@ function findFirstItemAnchor(centers: readonly Point[], cell: number): Point {
   if (!centers.length) return { x: cell / 2, y: cell / 2 };
 
   const sorted = [...centers].sort((a, b) => a.y - b.y || a.x - b.x);
-  const firstRowY = sorted[0].y;
+  const firstSortedCenter = sorted[0];
+  if (!firstSortedCenter) return { x: cell / 2, y: cell / 2 };
+  const firstRowY = firstSortedCenter.y;
   const firstRow = sorted
     .filter((center) => Math.abs(center.y - firstRowY) < cell / 2)
     .sort((a, b) => a.x - b.x);
 
-  return firstRow[0] || sorted[0];
+  return firstRow[0] || firstSortedCenter;
 }
 
 function estimateItemCenters(imageData: ImageData, bounds: BankGridBox | null = null): Point[] {
@@ -417,7 +436,15 @@ function estimateItemCenters(imageData: ImageData, bounds: BankGridBox | null = 
   for (let y = minY; y <= maxY; y += 1) {
     for (let x = minX; x <= maxX; x += 1) {
       const offset = (y * width + x) * 4;
-      if (isGridItemPixel(data[offset], data[offset + 1], data[offset + 2])) mask[y * width + x] = 1;
+      if (
+        isGridItemPixel(
+          readImageDataChannel(data, offset),
+          readImageDataChannel(data, offset + 1),
+          readImageDataChannel(data, offset + 2)
+        )
+      ) {
+        mask[y * width + x] = 1;
+      }
     }
   }
 
@@ -436,7 +463,15 @@ function foregroundBounds(imageData: ImageData): Bounds {
   for (let y = 0; y < imageData.height; y += 1) {
     for (let x = 0; x < imageData.width; x += 1) {
       const offset = (y * imageData.width + x) * 4;
-      if (!isGridItemPixel(imageData.data[offset], imageData.data[offset + 1], imageData.data[offset + 2])) continue;
+      if (
+        !isGridItemPixel(
+          readImageDataChannel(imageData.data, offset),
+          readImageDataChannel(imageData.data, offset + 1),
+          readImageDataChannel(imageData.data, offset + 2)
+        )
+      ) {
+        continue;
+      }
       minX = Math.min(minX, x);
       minY = Math.min(minY, y);
       maxX = Math.max(maxX, x);
@@ -456,7 +491,13 @@ function bankContentRightLimit(imageData: ImageData): number {
     let borderPixels = 0;
     for (let y = 0; y < imageData.height; y += 1) {
       const offset = (y * imageData.width + x) * 4;
-      if (isFrameOrScrollbarPixel(imageData.data[offset], imageData.data[offset + 1], imageData.data[offset + 2])) {
+      if (
+        isFrameOrScrollbarPixel(
+          readImageDataChannel(imageData.data, offset),
+          readImageDataChannel(imageData.data, offset + 1),
+          readImageDataChannel(imageData.data, offset + 2)
+        )
+      ) {
         borderPixels += 1;
       }
     }
@@ -482,7 +523,15 @@ function countCellForeground(imageData: ImageData, x: number, y: number, w: numb
   for (let py = y; py < y + h; py += 1) {
     for (let px = x; px < x + w; px += 1) {
       const offset = (py * imageData.width + px) * 4;
-      if (isForeground(imageData.data[offset], imageData.data[offset + 1], imageData.data[offset + 2])) count += 1;
+      if (
+        isForeground(
+          readImageDataChannel(imageData.data, offset),
+          readImageDataChannel(imageData.data, offset + 1),
+          readImageDataChannel(imageData.data, offset + 2)
+        )
+      ) {
+        count += 1;
+      }
     }
   }
   return count;
@@ -495,9 +544,9 @@ function isOccupiedCell(imageData: ImageData, box: BankGridBox): boolean {
   for (let y = box.y; y < box.y + box.h; y += 1) {
     for (let x = box.x; x < box.x + box.w; x += 1) {
       const offset = (y * imageData.width + x) * 4;
-      const r = imageData.data[offset];
-      const g = imageData.data[offset + 1];
-      const b = imageData.data[offset + 2];
+      const r = readImageDataChannel(imageData.data, offset);
+      const g = readImageDataChannel(imageData.data, offset + 1);
+      const b = readImageDataChannel(imageData.data, offset + 2);
       if (isGridItemPixel(r, g, b)) itemPixels += 1;
       if (isFrameOrScrollbarPixel(r, g, b)) borderPixels += 1;
     }
