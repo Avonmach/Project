@@ -27,6 +27,7 @@ import { detectQuantity, quantityCandidatesAreClose } from "./domain/ocr/quantit
 import type { BoundingBox } from "./domain/shared/geometry";
 import { downloadJsonFile } from "./infrastructure/browser/download";
 import { closeOpenDetailsMenusOutsideTarget } from "./infrastructure/browser/details-menu";
+import { openFilePicker } from "./infrastructure/browser/file-input";
 import { requireCanvasContext, requireElement } from "./infrastructure/browser/dom-elements";
 import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
 import { loadImageElement, loadImageToCanvas, readSelectedImageAsDataUrl } from "./infrastructure/browser/image-loader";
@@ -145,7 +146,7 @@ let collectionSort: CollectionSort = { key: "progress", direction: "desc" };
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
 
-loadDefaultButton.addEventListener("click", () => imageInput.click());
+loadDefaultButton.addEventListener("click", () => openFilePicker(imageInput));
 analyzeButton.addEventListener("click", analyzeCurrentImage);
 viewMode.addEventListener("change", renderDetections);
 artefactSearch.addEventListener("input", renderDetections);
@@ -346,7 +347,7 @@ function requestTabScreenshot(tab: ResultsTab): void {
     loadImageFromUrl(DEFAULT_SCREENSHOTS.restored);
     return;
   }
-  imageInput.click();
+  openFilePicker(imageInput);
 }
 
 function renderOverviewTab(items: readonly AppDetection[]): void {
