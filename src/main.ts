@@ -14,9 +14,6 @@ import { applyQuantityChange as applyQuantityCorrection } from "./application/co
 import { applyReferenceCorrection as applyReferenceCorrectionRule } from "./application/correct-detection/reference-correction";
 import { findUniqueArtefactAssignments } from "./application/correct-detection/unique-artefact-assignments";
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
-import { createAnalysisExportFile } from "./application/export-analysis/analysis-export-file";
-import { createExportGridMetadata } from "./application/export-analysis/export-grid-metadata";
-import { createExportImageMetadata } from "./application/export-analysis/export-image-metadata";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
 import {
   createArchaeologyReferenceIndexes,
@@ -27,7 +24,7 @@ import { sortMaterialRows as sortMaterialRowsForMode } from "./application/sort-
 import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode } from "./domain/artefacts/matching";
 import { quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import type { BoundingBox } from "./domain/shared/geometry";
-import { downloadJsonFile } from "./infrastructure/browser/download";
+import { exportAnalysisResults } from "./infrastructure/browser/analysis-export";
 import { connectAppEvents } from "./infrastructure/browser/app-events";
 import { getAppElements } from "./infrastructure/browser/app-elements";
 import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
@@ -40,8 +37,6 @@ import {
 } from "./infrastructure/data/reference-data";
 import {
   getGridCellSize,
-  getGridOffsetX,
-  getGridOffsetY,
 } from "./infrastructure/image-processing/bank-grid";
 import { createCanvasFrameSource } from "./infrastructure/image-processing/canvas-frame-source";
 import {
@@ -502,19 +497,7 @@ function updateTotals(): void {
 }
 
 function exportResults(): void {
-  const exportedAt = new Date().toISOString();
-  const file = createAnalysisExportFile({
-    exportedAt,
-    image: createExportImageMetadata(loadedImage),
-    grid: createExportGridMetadata({
-      offsetX: getGridOffsetX(),
-      offsetY: getGridOffsetY(),
-      cellSize: getGridCellSize(),
-    }),
-    detections
-  });
-
-  downloadJsonFile(file.filename, file.payload);
+  exportAnalysisResults({ image: loadedImage, detections });
 }
 
 function drawBoxes(
