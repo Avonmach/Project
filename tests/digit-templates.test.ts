@@ -17,3 +17,23 @@ test("normalizeDigit keeps a one-pixel vertical stroke one cell wide", () => {
     "00100"
   ]);
 });
+
+test("normalizeDigit does not duplicate a four-pixel digit into a five-pixel grid", () => {
+  const pixels = [
+    ...Array.from({ length: 4 }, (_, x) => ({ x, y: 0 })),
+    ...Array.from({ length: 4 }, (_, x) => ({ x, y: 7 })),
+    ...Array.from({ length: 6 }, (_, index) => ({ x: 0, y: index + 1 })),
+    ...Array.from({ length: 6 }, (_, index) => ({ x: 3, y: index + 1 }))
+  ];
+
+  assert.deepEqual(normalizeDigit(pixels, { x: 0, y: 0, w: 4, h: 8 }, 5), [
+    "11011",
+    "10001",
+    "10001",
+    "10001",
+    "10001",
+    "10001",
+    "10001",
+    "11011"
+  ]);
+});
