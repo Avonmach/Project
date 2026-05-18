@@ -625,5 +625,6 @@ function drawBoxes(
   contentArea: BoundingBox | null = null,
   infinityArea: BoundingBox | null = null
 ): void {
+  if (!loadedImage) return;
   drawAnalysisOverlay({ context: ctx, image: loadedImage, items, contentArea, infinityArea });
 }

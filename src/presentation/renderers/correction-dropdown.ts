@@ -1,9 +1,9 @@
 export interface CorrectionReference {
   readonly name: string;
-  readonly restoredName?: string;
-  readonly culture?: string;
-  readonly archaeologyLevel?: number | string | null;
-  readonly icon?: string;
+  readonly restoredName?: string | null;
+  readonly culture?: string | null;
+  readonly archaeologyLevel?: number | null;
+  readonly icon?: string | null;
   readonly damagedIcon?: string | null;
 }
 

@@ -49,7 +49,7 @@ interface ExportDetection {
     readonly restoredName?: string | null;
     readonly archaeologyLevel?: number | null;
     readonly culture?: string | null;
-  };
+  } | null;
   readonly originalPrediction?: unknown;
   readonly artefact: string;
   readonly restoredName?: string | null;

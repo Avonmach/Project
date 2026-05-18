@@ -29,7 +29,9 @@ export function renderRestorationPlan<TDetection extends RestorationPlanDetectio
 }: RestorationPlanOptions<TDetection>): void {
   const selectedQuantity = visibleDetections.reduce((sum, detection) => sum + detection.quantity, 0);
   const reviewCount = allDetections.filter((detection) => detection.ambiguousMatch || quantityNeedsReview(detection)).length;
-  const levels = visibleDetections.map((detection) => detection.archaeologyLevel).filter(Number.isFinite);
+  const levels = visibleDetections
+    .map((detection) => detection.archaeologyLevel)
+    .filter((level): level is number => Number.isFinite(level));
 
   visibleCountElement.textContent = String(selectedQuantity);
   reviewCountElement.textContent = String(reviewCount);

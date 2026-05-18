@@ -6,9 +6,8 @@ import type {
 } from "../../domain/artefacts/matching";
 import type { QuantityAlternative, QuantityDebug, QuantityResult } from "../../domain/ocr/quantity-ocr";
 import type { BoundingBox } from "../../domain/shared/geometry";
+import type { DetectionCorrection } from "../correct-detection/correction-record";
 import type { QuantityCorrectionDetection } from "../correct-detection/quantity-correction";
-import type { ReferenceCorrectableDetection } from "../correct-detection/reference-correction";
-import type { VerifiableDetection } from "../correct-detection/verification";
 import { exportBestMatch } from "../export-analysis/analysis-export";
 
 export interface DetectionRecordPreviewParts<TPreview, TProcessedPreview, TReferencePreview> {
@@ -64,7 +63,7 @@ export interface DetectionRecord<TReference extends MatchReference, TPreview, TP
   topMatches: readonly ArtefactMatchCandidate<TReference>[];
   readonly recognitionMode: RecognitionMode;
   readonly originalPrediction: unknown;
-  correction: ReferenceCorrectableDetection<TReference>["correction"] | VerifiableDetection["correction"] | null;
+  correction: DetectionCorrection | null;
   quantity: number;
   readonly originalQuantity: number;
   readonly quantityConfidence: number;

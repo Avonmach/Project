@@ -12,7 +12,7 @@ export interface QuantityCorrectionDetection {
     readonly correctedQuantity: number;
     readonly quantityConfidence?: number;
     readonly source: string;
-  };
+  } | null;
 }
 
 export function applyQuantityChange<TDetection extends QuantityCorrectionDetection>(

@@ -1,3 +1,5 @@
+import type { DetectionCorrection } from "./correction-record";
+
 export interface ReferenceCorrectionItem {
   readonly name: string;
   readonly wikiPage?: string | null;
@@ -35,7 +37,7 @@ export interface ReferenceCorrectableDetection<TItem extends ReferenceCorrection
   };
   corrected?: boolean;
   manual?: boolean;
-  correction?: unknown;
+  correction?: DetectionCorrection | null;
 }
 
 export function applyReferenceCorrection<TDetection extends ReferenceCorrectableDetection<TItem>, TItem extends ReferenceCorrectionItem>(

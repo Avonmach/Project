@@ -1,3 +1,5 @@
+import type { DetectionCorrection } from "./correction-record";
+
 export interface VerifiableDetection {
   corrected?: boolean;
   manual?: boolean;
@@ -8,7 +10,7 @@ export interface VerifiableDetection {
   readonly archaeologyLevel?: number | null;
   readonly culture?: string | null;
   readonly matchScore?: number | null;
-  correction?: unknown;
+  correction?: DetectionCorrection | null;
 }
 
 export function verifyDetection<TDetection extends VerifiableDetection>(

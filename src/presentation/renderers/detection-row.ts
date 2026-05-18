@@ -11,8 +11,8 @@ export interface DetectionRowElements {
 
 export interface DetectionRowModel {
   artefact?: string;
-  restoredName?: string;
-  wikiPage?: string;
+  restoredName?: string | null;
+  wikiPage?: string | null;
   archaeologyLevel?: number | string | null;
   culture?: string | null;
   digSite?: string | null;
