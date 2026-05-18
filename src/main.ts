@@ -21,6 +21,7 @@ import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode }
 import { detectQuantity, quantityCandidatesAreClose, type QuantityDebug } from "./domain/ocr/quantity-ocr";
 import type { BoundingBox } from "./domain/shared/geometry";
 import { normalizeName } from "./domain/shared/format";
+import { requireCanvasContext, requireElement } from "./infrastructure/browser/dom-elements";
 import { loadImageElement, loadImageToCanvas, readImageFileAsDataUrl } from "./infrastructure/browser/image-loader";
 import {
   emptyArchaeologyReferenceData,
@@ -139,23 +140,6 @@ const DEFAULT_SCREENSHOTS = {
   damaged: "Damaged_Items.png",
   restored: "Items%23.png"
 };
-
-function requireElement<TElement extends Element>(
-  id: string,
-  constructor: { new (...args: never[]): TElement }
-): TElement {
-  const element = document.getElementById(id);
-  if (!(element instanceof constructor)) {
-    throw new Error(`Missing required element #${id}.`);
-  }
-  return element;
-}
-
-function requireCanvasContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
-  const context = canvas.getContext("2d", { willReadFrequently: true });
-  if (!context) throw new Error("Could not create preview canvas context.");
-  return context;
-}
 
 loadDefaultButton.addEventListener("click", () => imageInput.click());
 analyzeButton.addEventListener("click", analyzeCurrentImage);
