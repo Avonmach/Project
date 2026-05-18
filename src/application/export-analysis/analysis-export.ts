@@ -1,4 +1,7 @@
 import type { ArtefactScoringWeights } from "../../domain/artefacts/matching";
+import type { QuantityAlternative } from "../../domain/ocr/quantity-ocr";
+import type { BoundingBox } from "../../domain/shared/geometry";
+import type { QuantityCorrectionDetection } from "../correct-detection/quantity-correction";
 
 interface ExportImageInfo {
   readonly width: number;
@@ -37,13 +40,13 @@ interface ExportDetection {
   readonly bankIndex: number;
   readonly bankRow?: number;
   readonly bankColumn?: number;
-  readonly box: unknown;
+  readonly box: BoundingBox;
   readonly quantity: number;
   readonly originalQuantity?: number;
   readonly quantityConfidence?: number;
-  readonly quantityAlternatives?: unknown;
+  readonly quantityAlternatives?: readonly QuantityAlternative[];
   readonly quantityManual?: boolean;
-  readonly quantityCorrection?: unknown;
+  readonly quantityCorrection?: QuantityCorrectionDetection["quantityCorrection"];
   readonly manual?: boolean;
   readonly corrected?: boolean;
   readonly correction?: {
@@ -118,20 +121,20 @@ export interface ExportQuantityLabel {
   readonly bankIndex: number;
   readonly bankRow?: number;
   readonly bankColumn?: number;
-  readonly box: unknown;
+  readonly box: BoundingBox;
   readonly originalQuantity?: number;
   readonly detectedQuantity?: number;
   readonly correctedQuantity: number;
   readonly quantityConfidence?: number;
-  readonly quantityAlternatives?: unknown;
-  readonly correction?: unknown;
+  readonly quantityAlternatives?: readonly QuantityAlternative[];
+  readonly correction?: QuantityCorrectionDetection["quantityCorrection"];
 }
 
 export interface ExportTrainingLabel {
   readonly bankIndex: number;
   readonly bankRow?: number;
   readonly bankColumn?: number;
-  readonly box: unknown;
+  readonly box: BoundingBox;
   readonly corrected: ExportDetection["correction"];
   readonly originalPrediction?: ExportDetection["originalPrediction"];
   readonly topMatches: readonly ExportedCandidateMatch[];
@@ -156,13 +159,13 @@ export interface ExportDetectionPayload {
   readonly bankIndex: number;
   readonly bankRow?: number;
   readonly bankColumn?: number;
-  readonly box: unknown;
+  readonly box: BoundingBox;
   readonly quantity: number;
   readonly originalQuantity?: number;
   readonly quantityConfidence?: number;
-  readonly quantityAlternatives?: unknown;
+  readonly quantityAlternatives?: readonly QuantityAlternative[];
   readonly correctedQuantity?: boolean;
-  readonly quantityCorrection?: unknown;
+  readonly quantityCorrection?: QuantityCorrectionDetection["quantityCorrection"];
   readonly correctedArtefact?: boolean;
   readonly originalPrediction?: ExportDetection["originalPrediction"];
   readonly correction?: ExportDetection["correction"];
@@ -171,7 +174,7 @@ export interface ExportDetectionPayload {
       readonly bankIndex: number;
       readonly bankRow?: number;
       readonly bankColumn?: number;
-      readonly box: unknown;
+      readonly box: BoundingBox;
       readonly originalQuantity?: number;
       readonly quantity: number;
     };
