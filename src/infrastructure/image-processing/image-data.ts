@@ -9,7 +9,7 @@ export function alphaBounds(imageData: ImageData, minimumAlpha = 40): BoundingBo
 
   for (let y = 0; y < imageData.height; y += 1) {
     for (let x = 0; x < imageData.width; x += 1) {
-      const alpha = imageData.data[(y * imageData.width + x) * 4 + 3];
+      const alpha = readImageDataChannel(imageData.data, (y * imageData.width + x) * 4 + 3);
       if (alpha < minimumAlpha) continue;
       minX = Math.min(minX, x);
       minY = Math.min(minY, y);
@@ -28,10 +28,10 @@ export function copyImageData(imageData: ImageData, box: BoundingBox): ImageData
     for (let x = 0; x < box.w; x += 1) {
       const source = ((box.y + y) * imageData.width + box.x + x) * 4;
       const target = (y * box.w + x) * 4;
-      crop.data[target] = imageData.data[source];
-      crop.data[target + 1] = imageData.data[source + 1];
-      crop.data[target + 2] = imageData.data[source + 2];
-      crop.data[target + 3] = imageData.data[source + 3];
+      crop.data[target] = readImageDataChannel(imageData.data, source);
+      crop.data[target + 1] = readImageDataChannel(imageData.data, source + 1);
+      crop.data[target + 2] = readImageDataChannel(imageData.data, source + 2);
+      crop.data[target + 3] = readImageDataChannel(imageData.data, source + 3);
     }
   }
   return crop;
@@ -51,8 +51,12 @@ export function pixelColorAt(imageData: ImageData, x: number, y: number): RgbCol
   const safeY = Math.max(0, Math.min(imageData.height - 1, Math.round(y)));
   const offset = (safeY * imageData.width + safeX) * 4;
   return {
-    r: imageData.data[offset],
-    g: imageData.data[offset + 1],
-    b: imageData.data[offset + 2]
+    r: readImageDataChannel(imageData.data, offset),
+    g: readImageDataChannel(imageData.data, offset + 1),
+    b: readImageDataChannel(imageData.data, offset + 2)
   };
+}
+
+export function readImageDataChannel(data: Uint8ClampedArray, offset: number): number {
+  return data[offset] ?? 0;
 }
