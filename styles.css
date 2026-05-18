@@ -906,8 +906,8 @@ tbody tr:has(.processed-preview:hover),
 }
 
 .processed-preview {
-  background: transparent;
-  border: 0;
+  background: #ffffff;
+  border: 2px solid #d8e2dd;
   filter: brightness(1.2);
   image-rendering: auto;
 }
