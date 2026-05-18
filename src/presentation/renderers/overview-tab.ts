@@ -38,7 +38,9 @@ export function renderOverviewTab<TDetection extends OverviewDetection>({
   const totalQuantity = visibleDetections.reduce((sum, detection) => sum + detection.quantity, 0);
   const reviewCount = visibleDetections.filter((detection) => detection.ambiguousMatch || quantityNeedsReview(detection)).length;
   const manualCount = visibleDetections.filter((detection) => detection.manual || detection.quantityManual).length;
-  const levels = visibleDetections.map((detection) => detection.archaeologyLevel).filter(Number.isFinite) as number[];
+  const levels = visibleDetections
+    .map((detection) => detection.archaeologyLevel)
+    .filter((level): level is number => Number.isFinite(level));
 
   const cards = document.createElement("div");
   cards.className = "overview-grid";
