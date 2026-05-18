@@ -17,7 +17,7 @@ Branch: `Archeology`
 
 Latest pushed commit at handoff:
 
-- `5a89108` Extract unique artefact assignments
+- `564d2a9` Reuse reference record filter
 
 The repo is clean except for these untracked image files, which have been intentionally left untouched:
 
@@ -30,7 +30,7 @@ The repo is clean except for these untracked image files, which have been intent
 
 The project is a Vite + TypeScript frontend with vanilla DOM rendering. There is no React, Next.js, NestJS, or real backend.
 
-`src/main.ts` still has `// @ts-nocheck`, but it is now mostly orchestration:
+`src/main.ts` no longer has `// @ts-nocheck`, and the project now runs with full TypeScript `strict` mode enabled. `main.ts` is still the browser coordinator:
 
 - startup and reference loading coordination
 - screenshot loading
@@ -50,6 +50,13 @@ Most logic has moved into typed modules:
 - `src/infrastructure/` - image/data/browser loading and image processing
 - `src/presentation/` - tabs, state, table/rendering modules
 
+The TypeScript migration has advanced substantially:
+
+- Vite + TypeScript build passes with `"strict": true`.
+- No TypeScript suppression comments remain in `src/`.
+- Detection records, original predictions, corrections, export payloads, reference metadata, and scoring weights have named types.
+- Reference JSON loading now has lightweight shape validation and HTTP status checks.
+
 ## What was finished today
 
 Major extraction checkpoints pushed today:
@@ -66,6 +73,13 @@ Major extraction checkpoints pushed today:
 - artefact matching
 - candidate prediction rule
 - unique artefact assignment selection
+- screenshot loading helper extraction
+- reference preparation helper extraction
+- detection record builder extraction
+- `main.ts` TypeScript suppression removal
+- full strict TypeScript enablement
+- reference JSON validation
+- additional export/reference typing cleanups
 
 Each checkpoint has a matching file under `changes/`.
 
@@ -85,10 +99,10 @@ The local site returned `200`.
 
 Continue with small, safe checkpoints:
 
-1. Extract screenshot loading from `src/main.ts` into a browser/canvas infrastructure helper, while keeping app state updates in `main.ts`.
-2. Extract the reference preparation flow from `loadReferences`, possibly into an application use case that loads images and attaches fingerprints.
-3. Extract detection-record construction from `analyzeCurrentImage` into an application builder/factory.
-4. After more typed boundaries exist, revisit removing `// @ts-nocheck` from `src/main.ts`.
+1. Continue shrinking `src/main.ts` by extracting analysis orchestration into an application use case.
+2. Consider moving DOM element lookup/wiring into a presentation/browser entry helper.
+3. Add focused unit tests for pure OCR, matching, correction, filtering, and export helpers.
+4. Keep reducing remaining intentional `unknown` boundaries where a stable JSON/data shape exists.
 
 Avoid big changes without asking:
 
