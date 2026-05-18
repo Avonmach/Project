@@ -39,15 +39,55 @@ export interface ArchaeologyReferenceData {
 
 export async function loadDamagedArtifactRecords(path = "data/damaged-artifacts.json"): Promise<DamagedArtifactReferenceRecord[]> {
   const response = await fetch(path);
-  const database = (await response.json()) as DamagedArtifactsDatabase;
+  const database = parseDamagedArtifactsDatabase(await response.json(), path);
   return database.items.filter((item) => item.icon);
 }
 
 export async function loadArchaeologyReferenceData(path = "data/archaeology-reference.json"): Promise<ArchaeologyReferenceData> {
   const response = await fetch(path);
-  return (await response.json()) as ArchaeologyReferenceData;
+  return parseArchaeologyReferenceData(await response.json(), path);
 }
 
 export function emptyArchaeologyReferenceData(): ArchaeologyReferenceData {
   return { materials: [], artefactRecipes: [], collections: [] };
+}
+
+function parseDamagedArtifactsDatabase(value: unknown, path: string): DamagedArtifactsDatabase {
+  if (!isRecord(value) || !Array.isArray(value.items)) {
+    throw new Error(`Invalid damaged artefact database: ${path}`);
+  }
+  return { items: value.items.filter(isDamagedArtifactReferenceRecord) };
+}
+
+function parseArchaeologyReferenceData(value: unknown, path: string): ArchaeologyReferenceData {
+  if (!isRecord(value)) throw new Error(`Invalid archaeology reference data: ${path}`);
+  const { materials, artefactRecipes, collections } = value;
+  if (!Array.isArray(materials) || !Array.isArray(artefactRecipes) || !Array.isArray(collections)) {
+    throw new Error(`Invalid archaeology reference data: ${path}`);
+  }
+  return {
+    materials: materials.filter(isArchaeologyMaterialRecord),
+    artefactRecipes: artefactRecipes.filter(isArchaeologyArtefactRecipeRecord),
+    collections: collections.filter(isArchaeologyCollectionRecord)
+  };
+}
+
+function isDamagedArtifactReferenceRecord(value: unknown): value is DamagedArtifactReferenceRecord {
+  return isRecord(value) && typeof value.name === "string";
+}
+
+function isArchaeologyMaterialRecord(value: unknown): value is ArchaeologyMaterialRecord {
+  return isRecord(value) && typeof value.name === "string";
+}
+
+function isArchaeologyArtefactRecipeRecord(value: unknown): value is ArchaeologyArtefactRecipeRecord {
+  return isRecord(value) && typeof value.restoredName === "string";
+}
+
+function isArchaeologyCollectionRecord(value: unknown): value is ArchaeologyCollectionRecord {
+  return isRecord(value) && typeof value.name === "string" && Array.isArray(value.artefacts);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
 }
