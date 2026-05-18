@@ -21,7 +21,7 @@ import {
 import { prepareArtefactReferences } from "./application/load-references/artefact-reference-preparation";
 import { sortMaterialRows as sortMaterialRowsForMode } from "./application/sort-results/result-row-sorting";
 import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode } from "./domain/artefacts/matching";
-import { detectQuantity, quantityCandidatesAreClose, type QuantityDebug } from "./domain/ocr/quantity-ocr";
+import { detectQuantity, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import type { BoundingBox } from "./domain/shared/geometry";
 import { requireCanvasContext, requireElement } from "./infrastructure/browser/dom-elements";
 import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
@@ -39,7 +39,7 @@ import {
   getGridOffsetX,
   getGridOffsetY,
 } from "./infrastructure/image-processing/bank-grid";
-import { copyImageData } from "./infrastructure/image-processing/image-data";
+import { attachQuantityDebugSource } from "./infrastructure/image-processing/quantity-debug-source";
 import { makeFullShapeImageData } from "./infrastructure/image-processing/shape-mask";
 import {
   applyResultTabSelection,
@@ -257,14 +257,6 @@ function applyUniqueArtefactAssignments(items: readonly AppDetection[]): void {
 function applyCandidatePrediction(detection: AppDetection, candidate: AppMatchCandidate): void {
   applyCandidatePredictionRule(detection, candidate, AMBIGUOUS_FINAL_MARGIN);
   detection.referencePreview = makeReferenceCanvas(candidate.item.image);
-}
-
-function attachQuantityDebugSource(debug: QuantityDebug | null, imageData: ImageData): (QuantityDebug & { source: ImageData }) | null {
-  if (!debug) return null;
-  return {
-    ...debug,
-    source: copyImageData(imageData, debug.scanBox)
-  };
 }
 
 function renderDetections(): void {
