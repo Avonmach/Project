@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build && node scripts/copy-vite-static-assets.js",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --loader ./scripts/typescript-test-loader.mjs --test \"tests/**/*.test.ts\"",
+    "test": "node --import ./scripts/register-typescript-test-loader.mjs --test \"tests/**/*.test.ts\"",
     "typecheck": "tsc --noEmit",
     "serve:static": "node server.js",
     "build:database": "node scripts/build-damaged-artifact-db.js",
