@@ -17,7 +17,7 @@ Branch: `Archeology`
 
 Latest pushed commit at handoff:
 
-- `1519c22` Extract DOM query helper
+- `5d9ecb1` Enable no unchecked indexed access
 
 The repo is clean except for these untracked image files, which have been intentionally left untouched:
 
@@ -95,6 +95,8 @@ Major extraction checkpoints pushed today:
 - screenshot analysis frame preparation helper
 - app detection type aliases
 - typed DOM query helper
+- indexed-access hardening for image data, matching, digit templates, preview canvases, shape masks, quantity OCR, bank grid, and fingerprinting
+- `noUncheckedIndexedAccess` enabled in `tsconfig.json`
 
 Each checkpoint has a matching file under `changes/`.
 
@@ -110,7 +112,7 @@ Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8080 | Select-Object -Expand
 
 The local site returned `200`.
 
-`npm.cmd exec tsc -- --noEmit --noUncheckedIndexedAccess` was probed on 2026-05-18 and is not ready for global enablement yet. The current failures are concentrated in image/OCR array and pixel-buffer loops, especially `src/domain/artefacts/fingerprint.ts`, `src/domain/ocr/*`, and `src/infrastructure/image-processing/*`.
+`noUncheckedIndexedAccess` is now enabled in the real `tsconfig.json` and the normal `npm.cmd run typecheck` covers it.
 
 ## Good next steps
 
@@ -120,7 +122,7 @@ Continue with small, safe checkpoints:
 2. Consider moving DOM element lookup/wiring into a presentation/browser entry helper.
 3. Add focused unit tests for pure OCR, matching, correction, filtering, and export helpers.
 4. Keep reducing remaining intentional `unknown` boundaries where a stable JSON/data shape exists.
-5. Work toward stricter indexed-access checks module by module; start with small helpers and avoid enabling it globally until image/OCR loops are made explicit.
+5. Consider the next strictness/hardening step only after adding tests around OCR, matching, and image-processing behavior.
 
 Avoid big changes without asking:
 
