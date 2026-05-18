@@ -67,6 +67,7 @@ import {
 import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentation/renderers/restoration-plan";
 import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentation/renderers/recognition-info";
 import { renderSummaryTotals } from "./presentation/renderers/summary-totals";
+import { renderReferenceCount } from "./presentation/renderers/reference-count";
 import {
   makeMaterialCell as makeMaterialCellElement,
   type MaterialCellReference,
@@ -186,7 +187,7 @@ async function initialize() {
 async function loadReferences() {
   const items = await loadDamagedArtifactRecords();
   references = await prepareArtefactReferences(items, loadImageElement);
-  referenceCountEl.textContent = String(references.length);
+  renderReferenceCount(referenceCountEl, references.length);
 }
 
 async function loadArchaeologyReference() {
