@@ -141,8 +141,7 @@ let loadedImage: HTMLImageElement | null = null;
 let detections: AppDetection[] = [];
 let references: PreparedArtefactReference[] = [];
 let archaeologyReference: ArchaeologyReferenceData = emptyArchaeologyReferenceData();
-let recipeByRestoredName: Map<string, MaterialRecipe> = new Map();
-let materialByName: Map<string, MaterialCellReference> = new Map();
+let { recipeByRestoredName, materialByName } = emptyArchaeologyReferenceIndexes();
 const resultsState = createResultsState<AppDetection>();
 let collectionSort: CollectionSort = { key: "progress", direction: "desc" };
 
