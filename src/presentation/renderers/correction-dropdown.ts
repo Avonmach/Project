@@ -86,8 +86,8 @@ function makeCorrectionPanel<TDetection extends CorrectionDetection<TReference>,
   const renderList = () => {
     list.replaceChildren();
     const query = search.value.trim().toLowerCase();
-    const topMatches = [...(detection.topMatches || [])].sort((a, b) => bestCandidateScore(b) - bestCandidateScore(a));
-    const scored = new Map(topMatches.map((candidate) => [candidate.item.name, candidate.score]));
+    const topMatches = [...(detection.topMatches || [])].sort((a, b) => candidateDisplayScore(b) - candidateDisplayScore(a));
+    const scored = new Map(topMatches.map((candidate) => [candidate.item.name, candidateDisplayScore(candidate)]));
 
     const top = document.createElement("div");
     top.className = "correction-section-title";
@@ -95,7 +95,7 @@ function makeCorrectionPanel<TDetection extends CorrectionDetection<TReference>,
     list.append(top);
 
     for (const candidate of topMatches.filter((candidate) => matchesCorrectionSearch(candidate.item, query))) {
-      list.append(makeCorrectionOption(detection, candidate.item, candidate.score ?? null, applyReferenceCorrection));
+      list.append(makeCorrectionOption(detection, candidate.item, candidateDisplayScore(candidate), applyReferenceCorrection));
     }
 
     const all = document.createElement("div");
@@ -106,7 +106,7 @@ function makeCorrectionPanel<TDetection extends CorrectionDetection<TReference>,
     const items = [...references]
       .filter((item) => !scored.has(item.name))
       .filter((item) => matchesCorrectionSearch(item, query))
-      .sort((a, b) => referenceBestScore(b, detection) - referenceBestScore(a, detection) || sortName(a).localeCompare(sortName(b)));
+      .sort((a, b) => sortName(a).localeCompare(sortName(b)));
 
     for (const item of items) {
       list.append(makeCorrectionOption(detection, item, null, applyReferenceCorrection));
@@ -155,16 +155,8 @@ function sortName(item: CorrectionReference): string {
     .toLowerCase();
 }
 
-function bestCandidateScore(candidate: CorrectionCandidate<CorrectionReference>): number {
-  return Math.max(candidate.score || 0, candidate.shapeScore || 0, candidate.restoredScore || 0, candidate.damagedScore || 0);
-}
-
-function referenceBestScore<TReference extends CorrectionReference>(
-  item: TReference,
-  detection: CorrectionDetection<TReference>
-): number {
-  const candidate = (detection.topMatches || []).find((match) => match.item.name === item.name);
-  return candidate ? bestCandidateScore(candidate) : -1;
+function candidateDisplayScore(candidate: CorrectionCandidate<CorrectionReference>): number {
+  return candidate.score ?? 0;
 }
 
 function matchesCorrectionSearch(item: CorrectionReference, query: string): boolean {

@@ -1,4 +1,4 @@
-export interface RestoredTabRendererOptions<TDetection> {
+export interface RestoredTabRendererOptions<TDetection extends ReviewableDetection> {
   readonly body: HTMLTableSectionElement;
   readonly detectedCountElement: HTMLElement;
   readonly visibleCountElement: HTMLElement;
@@ -9,7 +9,7 @@ export interface RestoredTabRendererOptions<TDetection> {
   readonly quantityNeedsReview: (detection: TDetection) => boolean;
 }
 
-export function renderRestoredTab<TDetection>({
+export function renderRestoredTab<TDetection extends ReviewableDetection>({
   body,
   detectedCountElement,
   visibleCountElement,
@@ -56,7 +56,11 @@ export function drawTableEmptyState(body: HTMLTableSectionElement, message: stri
   body.append(row);
 }
 
-interface RestoredReviewSummaryOptions<TDetection> {
+interface ReviewableDetection {
+  readonly ambiguousMatch?: boolean;
+}
+
+interface RestoredReviewSummaryOptions<TDetection extends ReviewableDetection> {
   readonly detectedCountElement: HTMLElement;
   readonly visibleCountElement: HTMLElement;
   readonly reviewCountElement: HTMLElement;
@@ -65,7 +69,7 @@ interface RestoredReviewSummaryOptions<TDetection> {
   readonly quantityNeedsReview: (detection: TDetection) => boolean;
 }
 
-function updateRestoredReviewSummary<TDetection>({
+function updateRestoredReviewSummary<TDetection extends ReviewableDetection>({
   detectedCountElement,
   visibleCountElement,
   reviewCountElement,
@@ -76,6 +80,6 @@ function updateRestoredReviewSummary<TDetection>({
   detectedCountElement.textContent = String(allDetections.length);
   visibleCountElement.textContent = String(visibleDetections.length);
   reviewCountElement.textContent = String(
-    visibleDetections.filter((detection) => quantityNeedsReview(detection)).length
+    visibleDetections.filter((detection) => detection.ambiguousMatch || quantityNeedsReview(detection)).length
   );
 }

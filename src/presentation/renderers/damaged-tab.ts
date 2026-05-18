@@ -1,4 +1,4 @@
-export interface DamagedTabRendererOptions<TDetection> {
+export interface DamagedTabRendererOptions<TDetection extends ReviewableDetection> {
   readonly body: HTMLTableSectionElement;
   readonly detectedCountElement: HTMLElement;
   readonly visibleCountElement: HTMLElement;
@@ -9,7 +9,7 @@ export interface DamagedTabRendererOptions<TDetection> {
   readonly quantityNeedsReview: (detection: TDetection) => boolean;
 }
 
-export function renderDamagedTab<TDetection>({
+export function renderDamagedTab<TDetection extends ReviewableDetection>({
   body,
   detectedCountElement,
   visibleCountElement,
@@ -46,7 +46,11 @@ export function renderDamagedTab<TDetection>({
   }
 }
 
-interface DamagedReviewSummaryOptions<TDetection> {
+interface ReviewableDetection {
+  readonly ambiguousMatch?: boolean;
+}
+
+interface DamagedReviewSummaryOptions<TDetection extends ReviewableDetection> {
   readonly detectedCountElement: HTMLElement;
   readonly visibleCountElement: HTMLElement;
   readonly reviewCountElement: HTMLElement;
@@ -55,7 +59,7 @@ interface DamagedReviewSummaryOptions<TDetection> {
   readonly quantityNeedsReview: (detection: TDetection) => boolean;
 }
 
-function updateDamagedReviewSummary<TDetection>({
+function updateDamagedReviewSummary<TDetection extends ReviewableDetection>({
   detectedCountElement,
   visibleCountElement,
   reviewCountElement,
@@ -66,7 +70,7 @@ function updateDamagedReviewSummary<TDetection>({
   detectedCountElement.textContent = String(allDetections.length);
   visibleCountElement.textContent = String(visibleDetections.length);
   reviewCountElement.textContent = String(
-    visibleDetections.filter((detection) => quantityNeedsReview(detection)).length
+    visibleDetections.filter((detection) => detection.ambiguousMatch || quantityNeedsReview(detection)).length
   );
 }
 
