@@ -88,7 +88,10 @@ function isDamagedArtifactReferenceRecord(value: unknown): value is DamagedArtif
     isOptionalStringOrNull(value.damagedIcon) &&
     isOptionalStringOrNull(value.wikiPage) &&
     isOptionalStringOrNull(value.restoredName) &&
-    isOptionalStringOrNull(value.restoredWikiPage)
+    isOptionalStringOrNull(value.restoredWikiPage) &&
+    isOptionalNumberOrNull(value.archaeologyLevel) &&
+    isOptionalStringOrNull(value.culture) &&
+    isOptionalStringOrNull(value.digSite)
   );
 }
 
