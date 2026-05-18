@@ -85,12 +85,39 @@ export interface AnalysisExportOptions<TDetection extends ExportDetection> {
   readonly detections: readonly TDetection[];
 }
 
+export interface AnalysisExportPayload {
+  readonly exportedAt: string;
+  readonly image: ExportImageInfo | null;
+  readonly grid: ExportGridInfo;
+  readonly totals: {
+    readonly slots: number;
+    readonly quantity: number;
+    readonly quantityCorrections: number;
+    readonly manualCorrections: number;
+  };
+  readonly training: {
+    readonly correctedArtefacts: number;
+    readonly correctedQuantities: number;
+    readonly quantityLabels: readonly unknown[];
+    readonly labels: readonly unknown[];
+  };
+  readonly detections: readonly unknown[];
+}
+
+export interface ExportedBestMatch {
+  readonly damagedName: string;
+  readonly restoredName?: string | null;
+  readonly score?: number;
+  readonly archaeologyLevel?: number | null;
+  readonly culture?: string | null;
+}
+
 export function createAnalysisExportPayload<TDetection extends ExportDetection>({
   exportedAt,
   image,
   grid,
   detections
-}: AnalysisExportOptions<TDetection>): unknown {
+}: AnalysisExportOptions<TDetection>): AnalysisExportPayload {
   return {
     exportedAt,
     image,
@@ -220,7 +247,7 @@ export function createAnalysisExportPayload<TDetection extends ExportDetection>(
   };
 }
 
-export function exportBestMatch(match: ExportMatch | null | undefined): unknown {
+export function exportBestMatch(match: ExportMatch | null | undefined): ExportedBestMatch | null {
   if (!match?.item) return null;
   return {
     damagedName: match.item.name,
