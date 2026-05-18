@@ -52,10 +52,10 @@ export function shiftedTemplateScore(normalized: DigitTemplate, template: DigitT
           const templateX = x - shiftX;
           const expected =
             templateY >= 0 && templateY < height && templateX >= 0 && templateX < width
-              ? template[templateY][templateX]
+              ? templateValueAt(template, templateY, templateX)
               : "0";
           total += expected === "1" ? 2 : 1;
-          if (normalized[y][x] === expected) same += expected === "1" ? 2 : 1;
+          if (templateValueAt(normalized, y, x) === expected) same += expected === "1" ? 2 : 1;
         }
       }
       best = Math.max(best, same / total);
@@ -78,6 +78,8 @@ export function normalizeDigit(
 
   for (let gy = 0; gy < DIGIT_TEMPLATE_HEIGHT; gy += 1) {
     for (let gx = 0; gx < width; gx += 1) {
+      const row = grid[gy];
+      if (!row) continue;
       let hits = 0;
       let samples = 0;
       const startX = box.x + Math.floor((gx / width) * box.w);
@@ -90,7 +92,7 @@ export function normalizeDigit(
           if (inside.has(`${x},${y}`)) hits += 1;
         }
       }
-      grid[gy][gx] = hits / Math.max(samples, 1) > 0.18 ? "1" : "0";
+      row[gx] = hits / Math.max(samples, 1) > 0.18 ? "1" : "0";
     }
   }
 
@@ -131,9 +133,13 @@ function renderDigitTemplate(digit: Digit, fontFamily: string): string[] {
     let row = "";
     for (let x = 0; x < width; x += 1) {
       const offset = (y * width + x) * 4;
-      row += normalizedData[offset + 3] > 30 ? "1" : "0";
+      row += (normalizedData[offset + 3] ?? 0) > 30 ? "1" : "0";
     }
     rows.push(row);
   }
   return rows;
+}
+
+function templateValueAt(template: DigitTemplate, y: number, x: number): string {
+  return template[y]?.[x] ?? "0";
 }
