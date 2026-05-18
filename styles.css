@@ -5,7 +5,8 @@
   --panel-strong: #e8d6b3;
   --surface: #ead8b8;
   --surface-soft: #f0e2c8;
-  --image-bg: #eadcc2;
+  --image-bg: #dcc8a6;
+  --image-border: #9f8a63;
   --green-soft: #d7e3d2;
   --blue-soft: #d6e1e6;
   --bronze-soft: #ead3a2;
@@ -898,8 +899,8 @@ tbody tr:has(.processed-preview:hover),
 .recognition-preview,
 .augmented-preview,
 .reference-preview {
-  background: #302b26;
-  border: 1px solid #4a443d;
+  background: var(--image-bg);
+  border: 2px solid var(--image-border);
   border-radius: 8px;
   height: 46px;
   image-rendering: pixelated;
@@ -933,14 +934,14 @@ tbody tr:has(.processed-preview:hover),
 
 .reference-preview {
   background: var(--image-bg);
-  border: 2px solid #8aa38d;
+  border-color: var(--image-border);
   filter: none;
   image-rendering: auto;
 }
 
 .processed-preview {
   background: var(--image-bg);
-  border: 2px solid #9fae80;
+  border-color: var(--image-border);
   filter: brightness(1.2);
   image-rendering: auto;
 }
@@ -956,16 +957,16 @@ tbody tr:has(.processed-preview:hover),
     linear-gradient(-45deg, transparent 75%, #d3c2a4 75%);
   background-position: 0 0, 0 6px, 6px -6px, -6px 0;
   background-size: 12px 12px;
-  border-color: #cbb998;
+  border-color: var(--image-border);
 }
 
 .slot-preview {
-  border-color: #7b6f5e;
+  border-color: var(--image-border);
 }
 
 .background-overlay-preview {
-  background: #302b26;
-  border-color: #d2d6d9;
+  background: var(--image-bg);
+  border-color: var(--image-border);
 }
 
 .shape-mask-preview {

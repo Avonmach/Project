@@ -8,6 +8,8 @@ import {
 
 const MATCH_SIZE = 32;
 const PREVIEW_SIZE = 48;
+const PREVIEW_INSET = 3;
+const PREVIEW_BACKGROUND = "#dcc8a6";
 
 export interface PreviewCanvasOptions {
   readonly enhanceHover?: boolean;
@@ -109,14 +111,14 @@ export function makeProcessedCanvas(
   if (!enhance) preview.classList.add("no-hover-enhance");
   const previewCtx = preview.getContext("2d");
   if (!previewCtx) return preview;
-  previewCtx.fillStyle = "#eadcc2";
+  previewCtx.fillStyle = PREVIEW_BACKGROUND;
   previewCtx.fillRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
   previewCtx.imageSmoothingEnabled = true;
   previewCtx.imageSmoothingQuality = "high";
 
   if (bounds) {
     const longest = Math.max(bounds.w, bounds.h);
-    const maxIconSize = PREVIEW_SIZE;
+    const maxIconSize = PREVIEW_SIZE - PREVIEW_INSET * 2;
     const drawW = Math.ceil((bounds.w / longest) * maxIconSize);
     const drawH = Math.ceil((bounds.h / longest) * maxIconSize);
     const dx = Math.floor((PREVIEW_SIZE - drawW) / 2);
