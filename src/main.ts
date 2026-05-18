@@ -2,6 +2,7 @@ import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
 import { createDetectionRecord, type DetectionRecord } from "./application/analyze-screenshot/detection-record";
 import { recognitionModeForTab } from "./application/analyze-screenshot/recognition-mode";
 import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
+import { STATUS_MESSAGES } from "./application/config/status-messages";
 import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
   calculateMaterialTotals as calculateMaterialTotalsForRecipes,
@@ -165,7 +166,7 @@ imageInput.addEventListener("change", async () => {
     await loadImageFromUrl(dataUrl);
   } catch (error) {
     console.warn("Could not read the selected screenshot.", error);
-    drawEmptyState("Could not load the screenshot.");
+    drawEmptyState(STATUS_MESSAGES.screenshotLoadFailed);
   }
 });
 
@@ -173,13 +174,13 @@ initialize();
 
 async function initialize() {
   analyzeButton.disabled = true;
-  drawEmptyState("Loading reference database.");
+  drawEmptyState(STATUS_MESSAGES.loadingReferences);
   digitTemplates = await loadQuantityFontTemplatesFromBrowser();
   await loadReferences();
   await loadArchaeologyReference();
   await loadImageFromUrl(DEFAULT_SCREENSHOTS.damaged);
   analyzeButton.disabled = false;
-  drawEmptyState("Image and references loaded. Click Analyze.");
+  drawEmptyState(STATUS_MESSAGES.readyToAnalyze);
 }
 
 async function loadReferences() {
@@ -204,7 +205,7 @@ async function loadImageFromUrl(src: string) {
     loadedImage = await loadImageToCanvas(src, canvas, ctx);
   } catch (error) {
     console.warn("Could not load the screenshot.", error);
-    drawEmptyState("Could not load the screenshot.");
+    drawEmptyState(STATUS_MESSAGES.screenshotLoadFailed);
   }
 }
 
@@ -265,7 +266,7 @@ function applyCandidatePrediction(detection: AppDetection, candidate: AppMatchCa
 
 function renderDetections(): void {
   if (!detections.length) {
-    if (resultsState.activeTab === "damaged") drawEmptyState("No occupied artefact slots detected.");
+    if (resultsState.activeTab === "damaged") drawEmptyState(STATUS_MESSAGES.noDamagedSlotsDetected);
     updateTotals();
     renderRestorationPlan([]);
     renderResultsTabContent();
