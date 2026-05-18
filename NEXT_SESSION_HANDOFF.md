@@ -18,7 +18,7 @@ Branch: `Archeology`
 
 Latest pushed commit at handoff:
 
-- `86e27f8` Add recognition pipeline fixtures
+- `23ffd8f` Extract selected screenshot input
 
 The repo is clean except for these untracked image files, which have been intentionally left untouched:
 
@@ -103,6 +103,11 @@ Major extraction checkpoints pushed today:
 - formal recognition pipeline ports and screenshot analysis use case
 - current canvas/matcher/debug/preview adapters for the recognition pipeline
 - recognition pipeline fixture helpers for future algorithm tests
+- recognition pipeline boundary documentation
+- app element lookup extraction
+- app event wiring extraction
+- browser analysis export extraction
+- selected screenshot input extraction
 
 Each checkpoint has a matching file under `changes/`.
 
