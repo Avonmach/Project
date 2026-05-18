@@ -1,5 +1,6 @@
 export type ResultsTab = "overview" | "damaged" | "restored" | "storage" | "materials";
 export type DetectionMode = "damaged" | "restored";
+export type ScreenshotTab = "damaged" | "restored" | "storage";
 
 export const RESULT_TAB_TITLES: Record<ResultsTab, string> = {
   overview: "Overview",
@@ -15,6 +16,11 @@ export function isResultsTab(value: string | undefined): value is ResultsTab {
 
 export function resultModeForTab(tab: ResultsTab): DetectionMode {
   return tab === "restored" ? "restored" : "damaged";
+}
+
+export function screenshotTabForResultsTab(tab: ResultsTab): ScreenshotTab | null {
+  if (tab === "damaged" || tab === "restored" || tab === "storage") return tab;
+  return null;
 }
 
 export function connectResultTabButtons(

@@ -1,6 +1,8 @@
 import { queryElements, requireCanvasContext, requireElement } from "./dom-elements";
 
 export interface AppElements {
+  imagePanel: HTMLElement;
+  screenshotTitle: HTMLElement;
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   imageInput: HTMLInputElement;
@@ -36,6 +38,8 @@ export function getAppElements(): AppElements {
   const canvas = requireElement("previewCanvas", HTMLCanvasElement);
 
   return {
+    imagePanel: requireElement("imagePanel", HTMLElement),
+    screenshotTitle: requireElement("screenshotTitle", HTMLElement),
     canvas,
     ctx: requireCanvasContext(canvas),
     imageInput: requireElement("imageInput", HTMLInputElement),

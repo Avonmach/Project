@@ -46,7 +46,7 @@ export function createResultsState<TDetection>(): ResultsState<TDetection> {
       return detectionsByMode[resultModeForTab(activeTab)];
     },
     shouldRequestScreenshot(tab) {
-      if (!["restored", "materials"].includes(tab) || screenshotRequestedTabs.has(tab)) return false;
+      if (!["restored", "storage"].includes(tab) || screenshotRequestedTabs.has(tab)) return false;
       screenshotRequestedTabs.add(tab);
       return true;
     }

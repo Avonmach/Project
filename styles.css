@@ -874,16 +874,21 @@ tbody tr:has(.processed-preview:hover),
   transition: filter 120ms ease, transform 120ms ease, box-shadow 120ms ease;
 }
 
-.slot-preview:hover,
-.processed-preview:hover {
+.slot-preview:hover {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
   filter: brightness(1.8) saturate(1.75);
   transform: scale(3);
   z-index: 80;
 }
 
-.slot-preview.no-hover-enhance:hover,
-.processed-preview.no-hover-enhance:hover {
+.processed-preview:hover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  filter: none;
+  transform: scale(3);
+  z-index: 80;
+}
+
+.slot-preview.no-hover-enhance:hover {
   filter: none;
 }
 
@@ -1565,7 +1570,7 @@ tbody tr:has(.processed-preview:hover),
   }
 
   .damaged-table td:nth-child(8)::before {
-    content: "Ref";
+    content: "Result";
   }
 
   .damaged-table .empty {

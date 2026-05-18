@@ -24,13 +24,13 @@ export function createCanvasDetectionPreviewFactory<TReference extends MatchRefe
   HTMLCanvasElement
 > {
   return {
-    makePreviews: ({ imageData, shapeImageData, box, recognitionMode, match }) =>
+    makePreviews: ({ imageData, shapeImageData, box, match }) =>
       makeDetectionPreviews({
         imageData,
         shapeImageData,
         box,
         referenceImage: match.item.image,
-        enhance: recognitionMode !== "restored"
+        enhance: false
       })
   };
 }

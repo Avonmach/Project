@@ -47,6 +47,8 @@ import {
 } from "./infrastructure/image-processing/current-recognition-adapters";
 import {
   applyResultTabSelection,
+  screenshotTabForResultsTab,
+  type ScreenshotTab,
   type ResultsTab
 } from "./presentation/tabs/results-tabs";
 import { createResultsState } from "./presentation/state/results-state";
@@ -94,6 +96,8 @@ import type { PreparedArtefactReference } from "./application/load-references/ar
 
 const elements = getAppElements();
 const {
+  imagePanel,
+  screenshotTitle,
   canvas,
   ctx,
   imageInput,
@@ -126,6 +130,11 @@ const {
 } = elements;
 
 let loadedImage: HTMLImageElement | null = null;
+const loadedImagesByTab: Record<ScreenshotTab, HTMLImageElement | null> = {
+  damaged: null,
+  restored: null,
+  storage: null
+};
 let detections: AppDetection[] = [];
 let references: PreparedArtefactReference[] = [];
 let archaeologyReference: ArchaeologyReferenceData = emptyArchaeologyReferenceData();
@@ -148,10 +157,11 @@ initialize();
 async function initialize() {
   analyzeButton.disabled = true;
   drawEmptyState(STATUS_MESSAGES.loadingReferences);
+  updateScreenshotPanel();
   digitTemplates = await loadQuantityFontTemplatesFromBrowser();
   await loadReferences();
   await loadArchaeologyReference();
-  await loadImageFromUrl(DEFAULT_SCREENSHOTS.damaged);
+  await loadImageFromUrl(DEFAULT_SCREENSHOTS.damaged, "damaged");
   analyzeButton.disabled = false;
   drawEmptyState(STATUS_MESSAGES.readyToAnalyze);
 }
@@ -173,9 +183,14 @@ async function loadArchaeologyReference() {
   }
 }
 
-async function loadImageFromUrl(src: string) {
+async function loadImageFromUrl(src: string, tab: ScreenshotTab = currentScreenshotTab() || "damaged") {
   try {
-    loadedImage = await loadImageToCanvas(src, canvas, ctx);
+    loadedImagesByTab[tab] = await loadImageToCanvas(src, canvas, ctx);
+    if (currentScreenshotTab() === tab) {
+      loadedImage = loadedImagesByTab[tab];
+    } else {
+      restoreActiveScreenshotToCanvas();
+    }
   } catch (error) {
     console.warn(STATUS_MESSAGES.screenshotLoadWarning, error);
     drawEmptyState(STATUS_MESSAGES.screenshotLoadFailed);
@@ -183,6 +198,7 @@ async function loadImageFromUrl(src: string) {
 }
 
 function analyzeCurrentImage() {
+  if (resultsState.activeTab === "storage") return;
   if (!loadedImage || !references.length) return;
 
   const image = loadedImage;
@@ -280,6 +296,7 @@ function setActiveResultsTab(tab: ResultsTab): void {
   preserveScrollPosition(() => {
     detections = resultsState.setActiveTab(tab);
     applyResultTabSelection({ tab, title: resultsTitle, buttons: resultTabButtons, panels: resultTabPanels });
+    updateScreenshotPanel();
 
     if (tab === "damaged") renderDamagedTable(filteredDetections());
     updateTotals();
@@ -312,10 +329,42 @@ function renderDamagedTable(items: readonly AppDetection[]): void {
 function requestTabScreenshot(tab: ResultsTab): void {
   if (!resultsState.shouldRequestScreenshot(tab)) return;
   if (tab === "restored") {
-    loadImageFromUrl(DEFAULT_SCREENSHOTS.restored);
+    void loadImageFromUrl(DEFAULT_SCREENSHOTS.restored, "restored");
     return;
   }
   browserActions.requestScreenshotFile();
+}
+
+function currentScreenshotTab(): ScreenshotTab | null {
+  return screenshotTabForResultsTab(resultsState.activeTab);
+}
+
+function updateScreenshotPanel(): void {
+  const tab = currentScreenshotTab();
+  imagePanel.hidden = !tab;
+  if (!tab) {
+    loadedImage = null;
+    return;
+  }
+
+  screenshotTitle.textContent = {
+    damaged: "Damaged artefact screenshot",
+    restored: "Restored artefact screenshot",
+    storage: "Storage screenshot"
+  }[tab];
+  restoreActiveScreenshotToCanvas();
+}
+
+function restoreActiveScreenshotToCanvas(): void {
+  const tab = currentScreenshotTab();
+  loadedImage = tab ? loadedImagesByTab[tab] : null;
+  if (!tab || !loadedImage) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+  canvas.width = loadedImage.naturalWidth;
+  canvas.height = loadedImage.naturalHeight;
+  ctx.drawImage(loadedImage, 0, 0);
 }
 
 function renderOverviewTab(items: readonly AppDetection[]): void {
