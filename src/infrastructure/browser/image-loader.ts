@@ -22,6 +22,11 @@ export function readImageFileAsDataUrl(file: File): Promise<string> {
   });
 }
 
+export async function readSelectedImageAsDataUrl(input: HTMLInputElement): Promise<string | null> {
+  const file = input.files?.[0];
+  return file ? readImageFileAsDataUrl(file) : null;
+}
+
 export async function loadImageToCanvas(
   src: string,
   canvas: HTMLCanvasElement,

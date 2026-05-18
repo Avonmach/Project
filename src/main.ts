@@ -29,7 +29,7 @@ import { downloadJsonFile } from "./infrastructure/browser/download";
 import { closeOpenDetailsMenusOutsideTarget } from "./infrastructure/browser/details-menu";
 import { requireCanvasContext, requireElement } from "./infrastructure/browser/dom-elements";
 import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
-import { loadImageElement, loadImageToCanvas, readImageFileAsDataUrl } from "./infrastructure/browser/image-loader";
+import { loadImageElement, loadImageToCanvas, readSelectedImageAsDataUrl } from "./infrastructure/browser/image-loader";
 import {
   emptyArchaeologyReferenceData,
   loadArchaeologyReferenceData,
@@ -158,10 +158,10 @@ document.addEventListener("click", (event) => {
 });
 exportResultsButton.addEventListener("click", exportResults);
 imageInput.addEventListener("change", async () => {
-  const file = imageInput.files?.[0];
-  if (!file) return;
   try {
-    await loadImageFromUrl(await readImageFileAsDataUrl(file));
+    const dataUrl = await readSelectedImageAsDataUrl(imageInput);
+    if (!dataUrl) return;
+    await loadImageFromUrl(dataUrl);
   } catch (error) {
     console.warn("Could not read the selected screenshot.", error);
     drawEmptyState("Could not load the screenshot.");
