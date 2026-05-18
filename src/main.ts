@@ -14,6 +14,7 @@ import { findUniqueArtefactAssignments } from "./application/correct-detection/u
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
 import { createAnalysisExportPayload } from "./application/export-analysis/analysis-export";
 import { createAnalysisExportFilename } from "./application/export-analysis/export-filename";
+import { createExportGridMetadata } from "./application/export-analysis/export-grid-metadata";
 import { createExportImageMetadata } from "./application/export-analysis/export-image-metadata";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
 import {
@@ -539,13 +540,11 @@ function exportResults(): void {
   const payload = createAnalysisExportPayload({
     exportedAt,
     image: createExportImageMetadata(loadedImage),
-    grid: {
+    grid: createExportGridMetadata({
       offsetX: getGridOffsetX(),
       offsetY: getGridOffsetY(),
       cellSize: getGridCellSize(),
-      rows: null,
-      columns: null
-    },
+    }),
     detections
   });
 

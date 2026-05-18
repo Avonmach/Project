@@ -10,7 +10,7 @@ export interface ExportImageInfo {
   readonly source: string;
 }
 
-interface ExportGridInfo {
+export interface ExportGridInfo {
   readonly offsetX: number;
   readonly offsetY: number;
   readonly cellSize: number;
