@@ -4,7 +4,7 @@ import type { BoundingBox } from "../../domain/shared/geometry";
 import type { OriginalPrediction } from "../analyze-screenshot/detection-record";
 import type { QuantityCorrectionDetection } from "../correct-detection/quantity-correction";
 
-interface ExportImageInfo {
+export interface ExportImageInfo {
   readonly width: number;
   readonly height: number;
   readonly source: string;

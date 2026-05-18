@@ -14,6 +14,7 @@ import { findUniqueArtefactAssignments } from "./application/correct-detection/u
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
 import { createAnalysisExportPayload } from "./application/export-analysis/analysis-export";
 import { createAnalysisExportFilename } from "./application/export-analysis/export-filename";
+import { createExportImageMetadata } from "./application/export-analysis/export-image-metadata";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
 import {
   createArchaeologyReferenceIndexes,
@@ -537,13 +538,7 @@ function exportResults(): void {
   const exportedAt = new Date().toISOString();
   const payload = createAnalysisExportPayload({
     exportedAt,
-    image: loadedImage
-      ? {
-          width: loadedImage.naturalWidth,
-          height: loadedImage.naturalHeight,
-          source: loadedImage.currentSrc || loadedImage.src
-        }
-      : null,
+    image: createExportImageMetadata(loadedImage),
     grid: {
       offsetX: getGridOffsetX(),
       offsetY: getGridOffsetY(),
