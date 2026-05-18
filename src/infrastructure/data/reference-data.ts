@@ -110,7 +110,7 @@ function isArchaeologyArtefactRecipeRecord(value: unknown): value is Archaeology
     value.materials === undefined ||
     (Array.isArray(value.materials) &&
       value.materials.every(
-        (material) => isRecord(material) && typeof material.name === "string" && typeof material.quantity === "number"
+        (material) => isRecord(material) && typeof material.name === "string" && isFiniteNumber(material.quantity)
       ))
   );
 }
@@ -137,7 +137,11 @@ function isOptionalStringOrNull(value: unknown): boolean {
 }
 
 function isOptionalNumberOrNull(value: unknown): boolean {
-  return value === undefined || value === null || typeof value === "number";
+  return value === undefined || value === null || isFiniteNumber(value);
+}
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value);
 }
 
 function assertOkResponse(response: Response, path: string): void {
