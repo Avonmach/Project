@@ -38,3 +38,21 @@ test("detectQuantity strict mode rejects orange artefact pixels", () => {
 
   assert.equal(result.debug.pixelCount, 0);
 });
+
+test("detectQuantity strict mode keeps a connected two as one digit", () => {
+  const imageData = { width: 44, height: 44, data: new Uint8ClampedArray(44 * 44 * 4) } as ImageData;
+  const yellow = [230, 210, 60, 255];
+  const rows = ["01110", "10001", "00001", "00010", "00100", "01000", "10000", "11111"];
+  const points = rows.flatMap((row, y) =>
+    [...row].flatMap((value, x) => (value === "1" ? [{ x, y }] : []))
+  );
+
+  for (const point of points) {
+    imageData.data.set(yellow, (point.y * imageData.width + point.x) * 4);
+  }
+
+  const result = detectQuantity(imageData, { x: 0, y: 0, w: 44, h: 44 }, "restored", FALLBACK_DIGIT_TEMPLATES);
+
+  assert.equal(result.debug.digitBoxes.length, 1);
+  assert.equal(result.quantity, 2);
+});

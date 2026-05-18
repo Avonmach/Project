@@ -19,7 +19,7 @@ export function createScreenshotAnalysisFrame(
 ): ScreenshotAnalysisFrame {
   context.drawImage(image, 0, 0);
   const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-  const grid = estimateBankGrid(imageData, { trimLastColumn: recognitionMode === "restored" });
+  const grid = estimateBankGrid(imageData);
   return {
     imageData,
     shapeImageData: makeFullShapeImageData(imageData, grid, recognitionMode),

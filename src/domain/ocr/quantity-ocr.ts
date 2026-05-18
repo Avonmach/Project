@@ -94,7 +94,7 @@ export function detectQuantity(
     };
   }
 
-  const rawDigitBoxes = splitDigitBoxes(yellowPixels).sort((a, b) => a.x - b.x);
+  const rawDigitBoxes = splitDigitBoxes(yellowPixels, { splitWide: !strict }).sort((a, b) => a.x - b.x);
   const digitBoxes = rawDigitBoxes.filter((digitBox) => isPlausibleQuantityDigitBox(yellowPixels, digitBox, strict));
 
   if (!digitBoxes.length) {
@@ -277,7 +277,8 @@ function quantityScanBox(box: BoundingBox, strict = false): BoundingBox {
 }
 
 function isStrictQuantityTextPixel(r: number, g: number, b: number): boolean {
-  return isQuantityPixel(r, g, b) && r >= 150 && g >= 145 && b <= 95 && r <= g + 70 && (r + g) / 2 - b >= 58;
+  const brightness = (r + g) / 2;
+  return isQuantityPixel(r, g, b) && r >= 175 && g >= 165 && b <= 80 && r <= g + 55 && brightness - b >= 105;
 }
 
 function isPlausibleQuantityDigitBox(pixels: readonly PixelPoint[], box: BoundingBox, strict = false): boolean {
@@ -289,7 +290,7 @@ function isPlausibleQuantityDigitBox(pixels: readonly PixelPoint[], box: Boundin
   return area >= 4 && density >= 0.16 && density <= 0.78;
 }
 
-function splitDigitBoxes(pixels: readonly PixelPoint[]): BoundingBox[] {
+function splitDigitBoxes(pixels: readonly PixelPoint[], options: { readonly splitWide?: boolean } = {}): BoundingBox[] {
   const columns = [...new Set(pixels.map((pixel) => pixel.x))].sort((a, b) => a - b);
   const groups: number[][] = [];
   let current: number[] = [];
@@ -312,7 +313,7 @@ function splitDigitBoxes(pixels: readonly PixelPoint[]): BoundingBox[] {
     const minY = Math.min(...groupPixels.map((pixel) => pixel.y));
     const maxY = Math.max(...groupPixels.map((pixel) => pixel.y));
     const box = { x: firstColumn, y: minY, w: lastColumn - firstColumn + 1, h: maxY - minY + 1 };
-    return splitWideDigitBox(pixels, box);
+    return options.splitWide === false ? [box] : splitWideDigitBox(pixels, box);
   });
 }
 
