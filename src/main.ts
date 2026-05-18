@@ -295,7 +295,7 @@ function matchArtifact(
 
 function applyUniqueArtefactAssignments(items: readonly AppDetection[]): void {
   for (const { detection, candidate } of findUniqueArtefactAssignments(items)) {
-    applyCandidatePrediction(detection, candidate as AppMatchCandidate);
+    applyCandidatePrediction(detection, candidate);
   }
 }
 

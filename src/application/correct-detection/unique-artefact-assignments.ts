@@ -1,8 +1,13 @@
-export interface UniqueAssignmentCandidate<TItem> {
+export interface UniqueAssignmentItem {
+  readonly name?: string | null;
+  readonly restoredName?: string | null;
+}
+
+export interface UniqueAssignmentCandidate<TItem extends UniqueAssignmentItem> {
   readonly item: TItem;
 }
 
-export interface UniqueAssignmentDetection<TCandidate extends UniqueAssignmentCandidate<TItem>, TItem> {
+export interface UniqueAssignmentDetection<TCandidate extends UniqueAssignmentCandidate<TItem>, TItem extends UniqueAssignmentItem> {
   readonly bankIndex: number;
   readonly matchScore: number;
   readonly topMatches?: readonly TCandidate[];
@@ -13,13 +18,15 @@ export interface UniqueAssignment<TDetection, TCandidate> {
   readonly candidate: TCandidate;
 }
 
+type CandidateForDetection<TDetection> = TDetection extends { readonly topMatches?: readonly (infer TCandidate)[] }
+  ? TCandidate
+  : never;
+
 export function findUniqueArtefactAssignments<
-  TItem extends { readonly name?: string | null; readonly restoredName?: string | null },
-  TCandidate extends UniqueAssignmentCandidate<TItem>,
-  TDetection extends UniqueAssignmentDetection<TCandidate, TItem>
->(items: readonly TDetection[]): UniqueAssignment<TDetection, TCandidate>[] {
+  TDetection extends UniqueAssignmentDetection<UniqueAssignmentCandidate<UniqueAssignmentItem>, UniqueAssignmentItem>
+>(items: readonly TDetection[]): UniqueAssignment<TDetection, CandidateForDetection<TDetection>>[] {
   const used = new Set<string>();
-  const assignments: UniqueAssignment<TDetection, TCandidate>[] = [];
+  const assignments: UniqueAssignment<TDetection, CandidateForDetection<TDetection>>[] = [];
   const byConfidence = [...items].sort((a, b) => b.matchScore - a.matchScore || a.bankIndex - b.bankIndex);
 
   for (const detection of byConfidence) {
@@ -28,13 +35,13 @@ export function findUniqueArtefactAssignments<
       return key && !used.has(key);
     });
     if (!candidate) continue;
-    assignments.push({ detection, candidate });
+    assignments.push({ detection, candidate: candidate as CandidateForDetection<TDetection> });
     used.add(artefactKey(candidate.item));
   }
 
   return assignments;
 }
 
-function artefactKey(item: { readonly name?: string | null; readonly restoredName?: string | null } | null | undefined): string {
+function artefactKey(item: UniqueAssignmentItem | null | undefined): string {
   return (item?.restoredName || item?.name || "").toLowerCase();
 }
