@@ -186,6 +186,7 @@ async function loadArchaeologyReference() {
 async function loadImageFromUrl(src: string, tab: ScreenshotTab = currentScreenshotTab() || "damaged") {
   try {
     loadedImagesByTab[tab] = await loadImageToCanvas(src, canvas, ctx);
+    canvas.classList.remove("is-empty");
     if (currentScreenshotTab() === tab) {
       loadedImage = loadedImagesByTab[tab];
     } else {
@@ -360,8 +361,10 @@ function restoreActiveScreenshotToCanvas(): void {
   loadedImage = tab ? loadedImagesByTab[tab] : null;
   if (!tab || !loadedImage) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.classList.add("is-empty");
     return;
   }
+  canvas.classList.remove("is-empty");
   canvas.width = loadedImage.naturalWidth;
   canvas.height = loadedImage.naturalHeight;
   ctx.drawImage(loadedImage, 0, 0);

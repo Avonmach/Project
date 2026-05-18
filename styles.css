@@ -271,6 +271,10 @@ input[type="search"] {
   max-width: calc(100% - 24px);
 }
 
+.image-panel canvas.is-empty {
+  display: none;
+}
+
 .plan-panel {
   grid-column: 2 / 3;
   grid-row: 1 / 3;
@@ -883,7 +887,7 @@ tbody tr:has(.processed-preview:hover),
 
 .processed-preview:hover {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-  filter: none;
+  filter: brightness(1.2);
   transform: scale(3);
   z-index: 80;
 }
@@ -896,7 +900,12 @@ tbody tr:has(.processed-preview:hover),
 .reference-preview {
   background: #ffffff;
   border: 2px solid #d8e2dd;
+  filter: brightness(1.2);
   image-rendering: auto;
+}
+
+.reference-preview {
+  filter: none;
 }
 
 .clean-preview,
