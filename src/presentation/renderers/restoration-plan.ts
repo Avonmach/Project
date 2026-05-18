@@ -1,5 +1,3 @@
-import { makePlanTable } from "./table-elements";
-
 export interface RestorationPlanDetection {
   readonly quantity: number;
   readonly archaeologyLevel?: number | null;
@@ -47,9 +45,40 @@ export function renderRestorationPlan<TDetection extends RestorationPlanDetectio
   }
 
   body.append(
-    makePlanTable("By culture", groupQuantity(visibleDetections, "culture")),
-    makePlanTable("By dig site", groupQuantity(visibleDetections, "digSite"))
+    makePlanList("By culture", groupQuantity(visibleDetections, "culture")),
+    makePlanList("By dig site", groupQuantity(visibleDetections, "digSite"))
   );
+}
+
+function makePlanList(captionText: string, rows: readonly [string, number][]): HTMLElement {
+  const section = document.createElement("section");
+  section.className = "plan-list";
+
+  const title = document.createElement("h3");
+  title.textContent = captionText;
+
+  const header = document.createElement("div");
+  header.className = "plan-list-row plan-list-head";
+  header.append(makePlanListCell("Group", "plan-list-name"), makePlanListCell("Qty", "plan-list-qty"));
+
+  const items = document.createElement("div");
+  items.className = "plan-list-items";
+  for (const [name, quantity] of rows) {
+    const row = document.createElement("div");
+    row.className = "plan-list-row";
+    row.append(makePlanListCell(name, "plan-list-name"), makePlanListCell(String(quantity), "plan-list-qty"));
+    items.append(row);
+  }
+
+  section.append(title, header, items);
+  return section;
+}
+
+function makePlanListCell(text: string, className: string): HTMLSpanElement {
+  const cell = document.createElement("span");
+  cell.className = className;
+  cell.textContent = text;
+  return cell;
 }
 
 function groupQuantity<TDetection extends RestorationPlanDetection>(

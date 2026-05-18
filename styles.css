@@ -270,6 +270,53 @@ input[type="search"] {
   padding: 12px;
 }
 
+.plan-list {
+  min-width: 0;
+}
+
+.plan-list + .plan-list {
+  margin-top: 12px;
+}
+
+.plan-list h3 {
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+
+.plan-list-row {
+  align-items: center;
+  border-bottom: 1px solid var(--soft-line);
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(42px, auto);
+  min-width: 0;
+  padding: 6px 12px;
+}
+
+.plan-list-head {
+  background: #e8f0ec;
+  color: #22332d;
+  font-weight: 800;
+}
+
+.plan-list-name,
+.plan-list-qty {
+  font-size: 12px;
+  min-width: 0;
+}
+
+.plan-list-name {
+  overflow-wrap: anywhere;
+}
+
+.plan-list-qty {
+  justify-self: end;
+  text-align: right;
+}
+
 .plan-table {
   border-collapse: separate;
   border-spacing: 0;
