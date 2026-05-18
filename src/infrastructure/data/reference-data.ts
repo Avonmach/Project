@@ -85,7 +85,12 @@ function isArchaeologyArtefactRecipeRecord(value: unknown): value is Archaeology
 }
 
 function isArchaeologyCollectionRecord(value: unknown): value is ArchaeologyCollectionRecord {
-  return isRecord(value) && typeof value.name === "string" && Array.isArray(value.artefacts);
+  return (
+    isRecord(value) &&
+    typeof value.name === "string" &&
+    Array.isArray(value.artefacts) &&
+    value.artefacts.every((artefact) => typeof artefact === "string")
+  );
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
