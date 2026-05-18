@@ -165,7 +165,7 @@ imageInput.addEventListener("change", async () => {
     if (!dataUrl) return;
     await loadImageFromUrl(dataUrl);
   } catch (error) {
-    console.warn("Could not read the selected screenshot.", error);
+    console.warn(STATUS_MESSAGES.screenshotReadWarning, error);
     drawEmptyState(STATUS_MESSAGES.screenshotLoadFailed);
   }
 });
@@ -194,7 +194,7 @@ async function loadArchaeologyReference() {
     archaeologyReference = await loadArchaeologyReferenceData();
     ({ recipeByRestoredName, materialByName } = createArchaeologyReferenceIndexes(archaeologyReference));
   } catch (error) {
-    console.warn("Material and collection reference data is unavailable.", error);
+    console.warn(STATUS_MESSAGES.referenceLoadWarning, error);
     archaeologyReference = emptyArchaeologyReferenceData();
     ({ recipeByRestoredName, materialByName } = emptyArchaeologyReferenceIndexes());
   }
@@ -204,7 +204,7 @@ async function loadImageFromUrl(src: string) {
   try {
     loadedImage = await loadImageToCanvas(src, canvas, ctx);
   } catch (error) {
-    console.warn("Could not load the screenshot.", error);
+    console.warn(STATUS_MESSAGES.screenshotLoadWarning, error);
     drawEmptyState(STATUS_MESSAGES.screenshotLoadFailed);
   }
 }
