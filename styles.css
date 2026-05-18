@@ -273,9 +273,10 @@ input[type="search"] {
 .plan-table {
   border-collapse: separate;
   border-spacing: 0;
+  margin-right: 12px;
   min-width: 0;
   table-layout: fixed;
-  width: 100%;
+  width: calc(100% - 12px);
 }
 
 .plan-table caption {
