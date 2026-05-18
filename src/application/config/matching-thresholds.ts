@@ -1,0 +1,1 @@
+export const AMBIGUOUS_FINAL_MARGIN = 0.025;

@@ -2,6 +2,7 @@ import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
 import { createDetectionRecord, type DetectionRecord } from "./application/analyze-screenshot/detection-record";
 import { recognitionModeForTab } from "./application/analyze-screenshot/recognition-mode";
 import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
+import { AMBIGUOUS_FINAL_MARGIN } from "./application/config/matching-thresholds";
 import { STATUS_MESSAGES } from "./application/config/status-messages";
 import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
@@ -135,7 +136,6 @@ const overviewPanel = requireElement("overviewPanel", HTMLElement);
 const storagePanel = requireElement("storagePanel", HTMLElement);
 const materialsPanel = requireElement("materialsPanel", HTMLElement);
 
-const AMBIGUOUS_FINAL_MARGIN = 0.025;
 let loadedImage: HTMLImageElement | null = null;
 let detections: AppDetection[] = [];
 let references: PreparedArtefactReference[] = [];
