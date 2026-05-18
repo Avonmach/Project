@@ -14,3 +14,7 @@ export function requireCanvasContext(canvas: HTMLCanvasElement): CanvasRendering
   if (!context) throw new Error("Could not create preview canvas context.");
   return context;
 }
+
+export function queryElements<TElement extends Element>(selector: string): TElement[] {
+  return [...document.querySelectorAll<TElement>(selector)];
+}
