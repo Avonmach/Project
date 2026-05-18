@@ -1,154 +1,112 @@
 # Next session handoff
 
-Date written: 2026-05-18
+Date written: 2026-05-19
 
 ## Read first
 
 Before continuing, read these files in this order:
 
-1. `prompt.md` - original cleanup prompt and the working interpretation.
-2. `docs/architecture-and-typescript-guidelines.md` - architecture rules, TypeScript migration guidance, and framework decisions.
-3. Latest `changes/2026-05-18-*.md` files - detailed record of today's extraction checkpoints.
-4. `docs/recognition-pipeline.md` - current recognition pipeline boundary and extension points.
-5. `PROJECT_NOTES.md` and `ARCHAEOLOGY_IMAGE_RECOGNITION.md` if you need historical project context.
+1. `NEXT_SESSION_HANDOFF.md` - current status and tomorrow's storage focus.
+2. `docs/recognition-pipeline.md` - recognition boundaries and extension points.
+3. `docs/architecture-and-typescript-guidelines.md` - architecture rules and TypeScript guidance.
+4. Latest `changes/2026-05-18-*.md` and `changes/2026-05-19-*.md` files for detailed checkpoints.
+5. `PROJECT_NOTES.md` and `ARCHAEOLOGY_IMAGE_RECOGNITION.md` for older project context if needed.
 
-## Where we left off
+## Current branch and save state
 
 Branch: `Archeology`
 
-Latest pushed commit at handoff:
+Latest app/code commit before this handoff note:
 
-- `23ffd8f` Extract selected screenshot input
+- `f99cf86` Prepare storage two screenshot workflow
 
-The repo is clean except for these untracked image files, which have been intentionally left untouched:
+Recent relevant commits:
+
+- `4e4b697` Review weak color artefact matches
+- `50706b5` Remove green wash from theme
+- `132a72d` Review artefacts by shape and color gaps
+- `d0c909c` Align review counts and match sorting
+- `456c544` Rename preview columns and restore clear hover
+
+The tracked repo is saved, committed, and pushed. The only remaining untracked files are intentionally left untouched user/test images:
 
 - `Infinity.png`
 - `Items_Result.png`
 - `Items_Result_First item.png`
 - `Site_Image_2.png`
+- `Testing/Image.png`
+- `Testing/Image_Screenshot.png`
+- `Testing/Wrong_Border.png`
+- `Testing/reference-zero-8x4-8x5.png`
+- `Testing/runescape-small-07-digits.png`
 
-## Current architecture
+## Current app status
 
-The project is a Vite + TypeScript frontend with vanilla DOM rendering. There is no React, Next.js, NestJS, or real backend.
+The project is a Vite + TypeScript frontend with vanilla DOM rendering. There is no React, Next.js, NestJS, or backend framework.
 
-`src/main.ts` no longer has `// @ts-nocheck`, and the project now runs with full TypeScript `strict` mode enabled. `main.ts` is still the browser coordinator:
+The app is currently running locally at:
 
-- startup and reference loading coordination
-- screenshot loading
-- analysis flow coordination
-- building UI-facing detection records
-- tab/render delegation
-- correction callbacks
-- export/download coordination
-- canvas overlay delegation
+```text
+http://127.0.0.1:8080/
+```
 
-Most logic has moved into typed modules:
-
-- `src/domain/ocr/` - digit templates and quantity OCR
-- `src/domain/artefacts/` - fingerprinting and artefact matching
-- `src/domain/shared/` - color, format, geometry helpers
-- `src/application/` - material totals, export payloads, filters, sorting, correction rules
-- `src/infrastructure/` - image/data/browser loading and image processing
-- `src/presentation/` - tabs, state, table/rendering modules
-
-The TypeScript migration has advanced substantially:
-
-- Vite + TypeScript build passes with `"strict": true`.
-- No TypeScript suppression comments remain in `src/`.
-- Detection records, original predictions, corrections, export payloads, reference metadata, and scoring weights have named types.
-- Reference JSON loading now has lightweight shape validation, optional metadata validation, finite-number checks, and HTTP status checks.
-
-## What was finished today
-
-Major extraction checkpoints pushed today:
-
-- material cell rendering and row sorting
-- correction rules
-- reference correction rule
-- analysis overlay renderer
-- detection row update renderer
-- table empty-state reuse
-- artefact fingerprint logic
-- bank grid detection
-- shape mask processing
-- artefact matching
-- candidate prediction rule
-- unique artefact assignment selection
-- screenshot loading helper extraction
-- reference preparation helper extraction
-- detection record builder extraction
-- `main.ts` TypeScript suppression removal
-- full strict TypeScript enablement
-- reference JSON validation
-- additional export/reference typing cleanups
-- browser DOM/font loading helper extraction
-- default screenshot and reference path config extraction
-- archaeology reference index helpers
-- recognition mode and matching threshold config
-- quantity debug source extraction
-- export filename, image metadata, grid metadata, and export-file helpers
-- JSON download, file picker, selected image reader, and details-menu browser helpers
-- culture filter option/update helpers
-- status/warning message config
-- reference count renderer
-- generic analysis detection-loop use case
-- detection preview factory
-- screenshot analysis frame preparation helper
-- app detection type aliases
-- typed DOM query helper
-- indexed-access hardening for image data, matching, digit templates, preview canvases, shape masks, quantity OCR, bank grid, and fingerprinting
-- `noUncheckedIndexedAccess` enabled in `tsconfig.json`
-- Node built-in test runner wired through a local TypeScript loader
-- 22 pure application/state/pipeline tests covering export, filters, material totals, corrections, reference indexes, result state, sorting, culture options, recognition mode, and screenshot pipeline orchestration
-- formal recognition pipeline ports and screenshot analysis use case
-- current canvas/matcher/debug/preview adapters for the recognition pipeline
-- recognition pipeline fixture helpers for future algorithm tests
-- recognition pipeline boundary documentation
-- app element lookup extraction
-- app event wiring extraction
-- browser analysis export extraction
-- selected screenshot input extraction
-
-Each checkpoint has a matching file under `changes/`.
-
-## Verification status
-
-The last completed verification passed:
+Last verification passed:
 
 ```powershell
 npm.cmd run typecheck
 npm.cmd test
 npm.cmd run build
-Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8080 | Select-Object -ExpandProperty StatusCode
+(Invoke-WebRequest -UseBasicParsing -Uri http://127.0.0.1:8080/).StatusCode
 ```
 
 The local site returned `200`.
 
-`noUncheckedIndexedAccess` is now enabled in the real `tsconfig.json` and the normal `npm.cmd run typecheck` covers it.
+## What changed most recently
+
+Artefact review:
+
+- Review is no longer based on final calculated match score gap.
+- Review now triggers when both top candidates are within `2%` shape gap and `2%` color gap.
+- Review also triggers when the selected candidate color score is below `60%`.
+- The same review rule is used by the initial matcher and by candidate prediction/correction.
+
+Preview/UI:
+
+- Reference/Result preview canvases paint the beige background directly, including magnification.
+- Recognition info now includes `Shape` and labels final gap as `Score gap`.
+- The decorative pale-green page wash was removed again.
+
+Storage:
+
+- Storage tab now expects two screenshots because the in-game storage window is scrollable.
+- While Storage is active, the screenshot file input supports selecting multiple files.
+- If one storage screenshot is already loaded, selecting one additional screenshot appends it as the second.
+- Storage preview stacks uploaded screenshots vertically on the canvas.
+- Storage no longer shows the full material reference list before analysis.
+- After storage analysis, Storage only renders detected material names.
+- Actual material image recognition is not implemented yet, so analysis currently completes with zero detected materials and shows the empty detected-materials message.
 
 ## Good next steps
 
-Continue with small, safe checkpoints:
+Tomorrow's focus should be Storage recognition.
 
-1. Continue shrinking `src/main.ts` by extracting remaining UI wiring/callback groups only where the dependency shape stays clear.
-2. Consider moving DOM element lookup/wiring into a presentation/browser entry helper.
-3. Add focused unit tests for pure OCR, matching, correction, filtering, and export helpers.
-4. Keep reducing remaining intentional `unknown` boundaries where a stable JSON/data shape exists.
-5. Add targeted OCR, matching, and image-processing tests before changing the actual recognition algorithms.
+Recommended order:
 
-Avoid big changes without asking:
+1. Add storage-specific recognition modules instead of mixing material detection into artefact detection.
+2. Define the storage screenshot frame/region detection for the two stacked screenshots.
+3. Detect material rows/icons from both screenshots and merge duplicates.
+4. Match detected material icons against `archaeologyReference.materials`.
+5. Store detected storage material names/quantities in a dedicated storage state.
+6. Render only detected storage materials in `storage-tab.ts`.
+7. Add tests for storage state merging and material list rendering before adding fragile image logic.
 
-- React or Next.js
-- NestJS or backend framework
-- data format changes in `data/*.json`
-- OCR algorithm replacement
-- broad UI redesign
+Do not show the full material database in Storage. The user explicitly wants only detected materials after analysis.
 
 ## Working rules to preserve
 
 - Keep changes incremental.
 - Add one `changes/YYYY-MM-DD-*.md` note per meaningful checkpoint.
-- Run `npm.cmd run typecheck` and `npm.cmd run build` before committing.
+- Run `npm.cmd run typecheck`, `npm.cmd test`, and `npm.cmd run build` before committing.
 - Check the local site returns `200`.
 - Commit and push each safe checkpoint to `origin Archeology`.
-- Do not touch the untracked image files unless the user explicitly asks.
+- Do not touch untracked user/test images unless explicitly asked.
