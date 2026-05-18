@@ -1,7 +1,7 @@
 import { isQuantityPixel } from "../ocr/quantity-ocr";
 import { sameColor } from "../shared/color";
 import { getIconMatchBox, type BoundingBox } from "../shared/geometry";
-import { alphaBounds, copyImageData } from "../../infrastructure/image-processing/image-data";
+import { alphaBounds, copyImageData, readImageDataChannel } from "../../infrastructure/image-processing/image-data";
 
 const MATCH_SIZE = 32;
 
@@ -95,10 +95,10 @@ export function fingerprintColorCrop(originalImageData: ImageData, shapeImageDat
   const masked = new ImageData(originalCrop.width, originalCrop.height);
 
   for (let i = 0; i < originalCrop.data.length; i += 4) {
-    if (shapeCrop.data[i + 3] <= 20) continue;
-    masked.data[i] = originalCrop.data[i];
-    masked.data[i + 1] = originalCrop.data[i + 1];
-    masked.data[i + 2] = originalCrop.data[i + 2];
+    if (readImageDataChannel(shapeCrop.data, i + 3) <= 20) continue;
+    masked.data[i] = readImageDataChannel(originalCrop.data, i);
+    masked.data[i + 1] = readImageDataChannel(originalCrop.data, i + 1);
+    masked.data[i + 2] = readImageDataChannel(originalCrop.data, i + 2);
     masked.data[i + 3] = 255;
   }
 
@@ -140,9 +140,9 @@ export function removeBackground(imageData: ImageData): ImageData {
   const backgroundColor = topLeftPixelColor(imageData);
   const out = new ImageData(new Uint8ClampedArray(imageData.data), imageData.width, imageData.height);
   for (let i = 0; i < out.data.length; i += 4) {
-    const r = out.data[i];
-    const g = out.data[i + 1];
-    const b = out.data[i + 2];
+    const r = readImageDataChannel(out.data, i);
+    const g = readImageDataChannel(out.data, i + 1);
+    const b = readImageDataChannel(out.data, i + 2);
     const isYellowText = r > 120 && g > 105 && b < 75 && r >= g - 18;
     const isNearlyBlack = r < 8 && g < 8 && b < 8;
 
@@ -158,10 +158,10 @@ export function removeBackground(imageData: ImageData): ImageData {
 export function toFingerprint(imageData: ImageData, cleanedCrop: boolean): Fingerprint {
   const values = [] as Fingerprint;
   for (let i = 0; i < imageData.data.length; i += 4) {
-    const r = imageData.data[i];
-    const g = imageData.data[i + 1];
-    const b = imageData.data[i + 2];
-    const a = imageData.data[i + 3];
+    const r = readImageDataChannel(imageData.data, i);
+    const g = readImageDataChannel(imageData.data, i + 1);
+    const b = readImageDataChannel(imageData.data, i + 2);
+    const a = readImageDataChannel(imageData.data, i + 3);
     const visible = cleanedCrop ? a > 35 : a > 20;
     values.push({
       visible,
@@ -179,10 +179,10 @@ export function toScreenshotFingerprint(imageData: ImageData, backgroundColor = 
   const values = [] as Fingerprint;
   const edgeBackground = connectedEdgeBackgroundMask(imageData, backgroundColor);
   for (let i = 0; i < imageData.data.length; i += 4) {
-    const r = imageData.data[i];
-    const g = imageData.data[i + 1];
-    const b = imageData.data[i + 2];
-    const a = imageData.data[i + 3];
+    const r = readImageDataChannel(imageData.data, i);
+    const g = readImageDataChannel(imageData.data, i + 1);
+    const b = readImageDataChannel(imageData.data, i + 2);
+    const a = readImageDataChannel(imageData.data, i + 3);
     const visible = a > 20 && !edgeBackground[i / 4] && !isQuantityPixel(r, g, b);
     values.push({
       visible,
@@ -198,9 +198,9 @@ export function toScreenshotFingerprint(imageData: ImageData, backgroundColor = 
 
 export function topLeftPixelColor(imageData: ImageData): { readonly r: number; readonly g: number; readonly b: number } {
   return {
-    r: imageData.data[0],
-    g: imageData.data[1],
-    b: imageData.data[2]
+    r: readImageDataChannel(imageData.data, 0),
+    g: readImageDataChannel(imageData.data, 1),
+    b: readImageDataChannel(imageData.data, 2)
   };
 }
 
@@ -208,7 +208,7 @@ export function histogramSimilarity(a: Pick<Fingerprint, "histogram">, b: Pick<F
   if (!a.histogram || !b.histogram) return 0;
   let score = 0;
   for (let i = 0; i < a.histogram.length; i += 1) {
-    score += Math.min(a.histogram[i], b.histogram[i]);
+    score += Math.min(a.histogram[i] ?? 0, b.histogram[i] ?? 0);
   }
   return score;
 }
@@ -217,9 +217,11 @@ export function histogramChiAltSimilarity(a: Fingerprint, b: Fingerprint): numbe
   if (!a.histogram || !b.histogram) return 0;
   let distance = 0;
   for (let i = 0; i < a.histogram.length; i += 1) {
-    const denom = a.histogram[i] + b.histogram[i];
+    const aValue = a.histogram[i] ?? 0;
+    const bValue = b.histogram[i] ?? 0;
+    const denom = aValue + bValue;
     if (denom <= 0) continue;
-    const diff = a.histogram[i] - b.histogram[i];
+    const diff = aValue - bValue;
     distance += (2 * diff * diff) / denom;
   }
   const rgbScore = 1 / (1 + distance);
@@ -244,15 +246,18 @@ export function compareFingerprints(a: Fingerprint, b: Fingerprint): Fingerprint
   let lightScore = 0;
 
   for (let i = 0; i < a.length; i += 1) {
-    if (a[i].visible) visibleA += 1;
-    if (b[i].visible) visibleB += 1;
-    if (a[i].visible || b[i].visible) visibleUnion += 1;
-    if (a[i].edge || b[i].edge) edgeUnion += 1;
-    if (a[i].edge && b[i].edge) edgeOverlap += 1;
-    if (!a[i].visible || !b[i].visible) continue;
+    const aPixel = a[i];
+    const bPixel = b[i];
+    if (!aPixel || !bPixel) continue;
+    if (aPixel.visible) visibleA += 1;
+    if (bPixel.visible) visibleB += 1;
+    if (aPixel.visible || bPixel.visible) visibleUnion += 1;
+    if (aPixel.edge || bPixel.edge) edgeUnion += 1;
+    if (aPixel.edge && bPixel.edge) edgeOverlap += 1;
+    if (!aPixel.visible || !bPixel.visible) continue;
     overlap += 1;
-    const colorDistance = Math.abs(a[i].r - b[i].r) + Math.abs(a[i].g - b[i].g) + Math.abs(a[i].b - b[i].b);
-    const lightDistance = Math.abs(a[i].light - b[i].light);
+    const colorDistance = Math.abs(aPixel.r - bPixel.r) + Math.abs(aPixel.g - bPixel.g) + Math.abs(aPixel.b - bPixel.b);
+    const lightDistance = Math.abs(aPixel.light - bPixel.light);
     colorScore += 1 - Math.min(colorDistance / 765, 1);
     lightScore += 1 - Math.min(lightDistance / 255, 1);
   }
@@ -287,7 +292,16 @@ function connectedEdgeBackgroundMask(imageData: ImageData, backgroundColor = top
     const index = y * width + x;
     if (mask[index]) return;
     const offset = index * 4;
-    if (!sameColor(data[offset], data[offset + 1], data[offset + 2], backgroundColor)) return;
+    if (
+      !sameColor(
+        readImageDataChannel(data, offset),
+        readImageDataChannel(data, offset + 1),
+        readImageDataChannel(data, offset + 2),
+        backgroundColor
+      )
+    ) {
+      return;
+    }
     mask[index] = 1;
     queue.push(index);
   };
@@ -303,6 +317,7 @@ function connectedEdgeBackgroundMask(imageData: ImageData, backgroundColor = top
 
   for (let i = 0; i < queue.length; i += 1) {
     const index = queue[i];
+    if (index === undefined) continue;
     const x = index % width;
     const y = Math.floor(index / width);
     add(x + 1, y);
@@ -327,12 +342,12 @@ function attachHistogram(values: Fingerprint): Fingerprint {
     const gb = Math.min(Math.floor(value.g / 32), 7);
     const bb = Math.min(Math.floor(value.b / 32), 7);
     const hsv = rgbToHsv(value.r, value.g, value.b);
-    histogram[rb * 64 + gb * 8 + bb] += 1;
+    incrementBucket(histogram, rb * 64 + gb * 8 + bb);
     if (hsv.s > 0.12) {
-      hueHistogram[Math.min(Math.floor(hsv.h * hueHistogram.length), hueHistogram.length - 1)] += 1;
+      incrementBucket(hueHistogram, Math.min(Math.floor(hsv.h * hueHistogram.length), hueHistogram.length - 1));
       hueTotal += 1;
     } else {
-      grayHistogram[Math.min(Math.floor(hsv.v * grayHistogram.length), grayHistogram.length - 1)] += 1;
+      incrementBucket(grayHistogram, Math.min(Math.floor(hsv.v * grayHistogram.length), grayHistogram.length - 1));
       grayTotal += 1;
     }
     total += 1;
@@ -342,6 +357,10 @@ function attachHistogram(values: Fingerprint): Fingerprint {
   values.grayHistogram = grayTotal ? grayHistogram.map((count) => count / grayTotal) : grayHistogram;
   values.colorTotals = { total, hue: hueTotal, gray: grayTotal };
   return values;
+}
+
+function incrementBucket(values: number[], index: number): void {
+  values[index] = (values[index] ?? 0) + 1;
 }
 
 function rgbToHsv(r: number, g: number, b: number): { readonly h: number; readonly s: number; readonly v: number } {
@@ -374,6 +393,7 @@ function fingerprintDescriptor(values: Fingerprint): FingerprintDescriptor {
   for (let y = 0; y < MATCH_SIZE; y += 1) {
     for (let x = 0; x < MATCH_SIZE; x += 1) {
       const value = values[y * MATCH_SIZE + x];
+      if (!value) continue;
       if (!value.visible) continue;
       minX = Math.min(minX, x);
       minY = Math.min(minY, y);
@@ -410,14 +430,16 @@ function withEdges(values: Fingerprint): Fingerprint {
   for (let y = 0; y < MATCH_SIZE; y += 1) {
     for (let x = 0; x < MATCH_SIZE; x += 1) {
       const index = y * MATCH_SIZE + x;
-      if (!values[index].visible) continue;
+      const value = values[index];
+      const resultValue = result[index];
+      if (!value || !resultValue?.visible) continue;
       const neighbors = [
         y > 0 ? values[(y - 1) * MATCH_SIZE + x] : null,
         y < MATCH_SIZE - 1 ? values[(y + 1) * MATCH_SIZE + x] : null,
         x > 0 ? values[y * MATCH_SIZE + x - 1] : null,
         x < MATCH_SIZE - 1 ? values[y * MATCH_SIZE + x + 1] : null
       ];
-      result[index].edge = neighbors.some((neighbor) => !neighbor || !neighbor.visible);
+      resultValue.edge = neighbors.some((neighbor) => !neighbor || !neighbor.visible);
     }
   }
   return result;
