@@ -69,7 +69,7 @@ export function matchArtifact<TReference extends MatchReference>(
   references: readonly TReference[],
   mode: RecognitionMode = "damaged"
 ): ArtefactMatchResult<TReference> {
-  const fallback = references[0];
+  const fallback = requireFirstReference(references);
   const cropFingerprint = fingerprintCrop(shapeImageData, box);
   const colorFingerprint = fingerprintColorCrop(originalImageData, shapeImageData, box);
   let best: ArtefactMatchCandidate<TReference> = { item: fallback, score: 0, restoredScore: 0, damagedScore: 0, shapeScore: 0, colorScore: 0, colorExistenceScore: 0, colorPositionScore: 0 };
@@ -150,4 +150,10 @@ export function matchArtifact<TReference extends MatchReference>(
     algorithmBest: { shape: bestShape, restored: bestRestored, damaged: bestDamaged, color: bestColor },
     candidates: scores.slice(0, 10)
   };
+}
+
+function requireFirstReference<TReference extends MatchReference>(references: readonly TReference[]): TReference {
+  const reference = references[0];
+  if (!reference) throw new Error("Cannot match artefact without reference records.");
+  return reference;
 }
