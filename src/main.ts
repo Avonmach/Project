@@ -44,8 +44,12 @@ import {
   getGridOffsetX,
   getGridOffsetY,
 } from "./infrastructure/image-processing/bank-grid";
-import { attachQuantityDebugSource } from "./infrastructure/image-processing/quantity-debug-source";
-import { createScreenshotAnalysisFrame } from "./infrastructure/image-processing/screenshot-analysis-frame";
+import { createCanvasFrameSource } from "./infrastructure/image-processing/canvas-frame-source";
+import {
+  createCanvasDetectionPreviewFactory,
+  createQuantityDebugSource,
+  createReferenceArtefactMatcher
+} from "./infrastructure/image-processing/current-recognition-adapters";
 import {
   applyResultTabSelection,
   connectResultTabButtons,
@@ -75,10 +79,7 @@ import {
 import type { MaterialRow } from "./presentation/renderers/materials-tab";
 import { drawAnalysisOverlay } from "./presentation/renderers/analysis-overlay";
 import { updateDetectionRow as updateDetectionRowElement } from "./presentation/renderers/detection-row-update";
-import {
-  makeDetectionPreviews,
-  makeReferenceCanvas
-} from "./presentation/renderers/preview-canvases";
+import { makeReferenceCanvas } from "./presentation/renderers/preview-canvases";
 import {
   makeEmptyMessage,
   makeLinkedTextCell,
@@ -202,24 +203,13 @@ function analyzeCurrentImage() {
   const image = loadedImage;
   const recognitionMode = recognitionModeForTab(resultsState.activeTab);
   const analysis = analyzeScreenshot({
-    frameSource: {
-      createFrame: (mode) => createScreenshotAnalysisFrame(image, canvas, ctx, mode)
-    },
+    frameSource: createCanvasFrameSource({ image, canvas, context: ctx }),
     cellSize: getGridCellSize(),
     recognitionMode,
     digitTemplates,
-    artefactMatcher: { matchArtefact: matchArtifact },
-    quantityDebugSource: { makeQuantityDebug: attachQuantityDebugSource },
-    previewFactory: {
-      makePreviews: ({ imageData, shapeImageData, box, recognitionMode, match }) =>
-        makeDetectionPreviews({
-          imageData,
-          shapeImageData,
-          box,
-          referenceImage: match.item.image,
-          enhance: recognitionMode !== "restored"
-        })
-    }
+    artefactMatcher: createReferenceArtefactMatcher(matchArtifact),
+    quantityDebugSource: createQuantityDebugSource(),
+    previewFactory: createCanvasDetectionPreviewFactory<PreparedArtefactReference>()
   });
 
   detections = resultsState.setDetectionsForMode(recognitionMode, analysis.detections);
