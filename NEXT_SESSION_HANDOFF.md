@@ -9,7 +9,8 @@ Before continuing, read these files in this order:
 1. `prompt.md` - original cleanup prompt and the working interpretation.
 2. `docs/architecture-and-typescript-guidelines.md` - architecture rules, TypeScript migration guidance, and framework decisions.
 3. Latest `changes/2026-05-18-*.md` files - detailed record of today's extraction checkpoints.
-4. `PROJECT_NOTES.md` and `ARCHAEOLOGY_IMAGE_RECOGNITION.md` if you need historical project context.
+4. `docs/recognition-pipeline.md` - current recognition pipeline boundary and extension points.
+5. `PROJECT_NOTES.md` and `ARCHAEOLOGY_IMAGE_RECOGNITION.md` if you need historical project context.
 
 ## Where we left off
 
@@ -17,7 +18,7 @@ Branch: `Archeology`
 
 Latest pushed commit at handoff:
 
-- `feb0342` Register TypeScript test loader
+- `86e27f8` Add recognition pipeline fixtures
 
 The repo is clean except for these untracked image files, which have been intentionally left untouched:
 
@@ -98,7 +99,10 @@ Major extraction checkpoints pushed today:
 - indexed-access hardening for image data, matching, digit templates, preview canvases, shape masks, quantity OCR, bank grid, and fingerprinting
 - `noUncheckedIndexedAccess` enabled in `tsconfig.json`
 - Node built-in test runner wired through a local TypeScript loader
-- 21 pure application/state tests covering export, filters, material totals, corrections, reference indexes, result state, sorting, culture options, and recognition mode
+- 22 pure application/state/pipeline tests covering export, filters, material totals, corrections, reference indexes, result state, sorting, culture options, recognition mode, and screenshot pipeline orchestration
+- formal recognition pipeline ports and screenshot analysis use case
+- current canvas/matcher/debug/preview adapters for the recognition pipeline
+- recognition pipeline fixture helpers for future algorithm tests
 
 Each checkpoint has a matching file under `changes/`.
 
@@ -125,7 +129,7 @@ Continue with small, safe checkpoints:
 2. Consider moving DOM element lookup/wiring into a presentation/browser entry helper.
 3. Add focused unit tests for pure OCR, matching, correction, filtering, and export helpers.
 4. Keep reducing remaining intentional `unknown` boundaries where a stable JSON/data shape exists.
-5. Add targeted OCR, matching, and image-processing tests before making further algorithm or strictness changes.
+5. Add targeted OCR, matching, and image-processing tests before changing the actual recognition algorithms.
 
 Avoid big changes without asking:
 
