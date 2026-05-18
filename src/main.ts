@@ -50,6 +50,7 @@ import {
   type ResultsTab
 } from "./presentation/tabs/results-tabs";
 import { createResultsState } from "./presentation/state/results-state";
+import { getCultureOptions } from "./presentation/filters/culture-options";
 import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
 import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from "./presentation/renderers/restored-tab";
 import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/renderers/materials-tab";
@@ -404,9 +405,7 @@ function renderStorageTab(items: readonly AppDetection[]): void {
 
 function updateFilterOptions(): void {
   const current = cultureFilter.value;
-  const cultures = [
-    ...new Set(detections.map((detection) => detection.culture).filter((culture): culture is string => Boolean(culture)))
-  ].sort();
+  const cultures = getCultureOptions(detections);
   cultureFilter.replaceChildren(new Option("All cultures", ""));
   for (const culture of cultures) cultureFilter.append(new Option(culture, culture));
   if (cultures.includes(current)) cultureFilter.value = current;
