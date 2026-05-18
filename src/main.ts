@@ -1,5 +1,6 @@
 import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
 import { createDetectionRecord, type DetectionRecord } from "./application/analyze-screenshot/detection-record";
+import { recognitionModeForTab } from "./application/analyze-screenshot/recognition-mode";
 import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
 import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
@@ -206,7 +207,7 @@ async function loadImageFromUrl(src: string) {
 function analyzeCurrentImage() {
   if (!loadedImage || !references.length) return;
 
-  const recognitionMode = resultsState.activeTab === "restored" ? "restored" : "damaged";
+  const recognitionMode = recognitionModeForTab(resultsState.activeTab);
   ctx.drawImage(loadedImage, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const grid = estimateBankGrid(imageData, { trimLastColumn: recognitionMode === "restored" });
