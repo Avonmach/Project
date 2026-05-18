@@ -1,5 +1,8 @@
 import type { ArtefactReferenceMetadata } from "../../domain/artefacts/reference-types";
 
+const DAMAGED_ARTIFACTS_PATH = "data/damaged-artifacts.json";
+const ARCHAEOLOGY_REFERENCE_PATH = "data/archaeology-reference.json";
+
 export interface DamagedArtifactReferenceRecord extends ArtefactReferenceMetadata {
   readonly [key: string]: unknown;
 }
@@ -39,14 +42,14 @@ export interface ArchaeologyReferenceData {
 
 type RecordGuard<TRecord> = (value: unknown) => value is TRecord;
 
-export async function loadDamagedArtifactRecords(path = "data/damaged-artifacts.json"): Promise<DamagedArtifactReferenceRecord[]> {
+export async function loadDamagedArtifactRecords(path = DAMAGED_ARTIFACTS_PATH): Promise<DamagedArtifactReferenceRecord[]> {
   const response = await fetch(path);
   assertOkResponse(response, path);
   const database = parseDamagedArtifactsDatabase(await response.json(), path);
   return database.items.filter((item) => item.icon);
 }
 
-export async function loadArchaeologyReferenceData(path = "data/archaeology-reference.json"): Promise<ArchaeologyReferenceData> {
+export async function loadArchaeologyReferenceData(path = ARCHAEOLOGY_REFERENCE_PATH): Promise<ArchaeologyReferenceData> {
   const response = await fetch(path);
   assertOkResponse(response, path);
   return parseArchaeologyReferenceData(await response.json(), path);
