@@ -28,7 +28,8 @@ import { exportAnalysisResults } from "./infrastructure/browser/analysis-export"
 import { connectAppEvents } from "./infrastructure/browser/app-events";
 import { getAppElements } from "./infrastructure/browser/app-elements";
 import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
-import { loadImageElement, loadImageToCanvas, readSelectedImageAsDataUrl } from "./infrastructure/browser/image-loader";
+import { loadImageElement, loadImageToCanvas } from "./infrastructure/browser/image-loader";
+import { loadSelectedScreenshotInput } from "./infrastructure/browser/selected-screenshot-input";
 import {
   emptyArchaeologyReferenceData,
   loadArchaeologyReferenceData,
@@ -136,21 +137,10 @@ const browserActions = connectAppEvents(elements, {
   renderDetections,
   setActiveResultsTab,
   exportResults,
-  handleSelectedImageInput
+  handleSelectedImageInput: () => loadSelectedScreenshotInput({ imageInput, loadImageFromUrl, drawEmptyState })
 });
 
 initialize();
-
-async function handleSelectedImageInput() {
-  try {
-    const dataUrl = await readSelectedImageAsDataUrl(imageInput);
-    if (!dataUrl) return;
-    await loadImageFromUrl(dataUrl);
-  } catch (error) {
-    console.warn(STATUS_MESSAGES.screenshotReadWarning, error);
-    drawEmptyState(STATUS_MESSAGES.screenshotLoadFailed);
-  }
-}
 
 async function initialize() {
   analyzeButton.disabled = true;
