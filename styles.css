@@ -681,6 +681,10 @@ th:nth-child(9) {
   width: 116px;
 }
 
+.damaged-table th:nth-child(10) {
+  width: 78px;
+}
+
 th:nth-child(3) {
   width: 100px;
 }
@@ -701,8 +705,29 @@ td:nth-child(2),
 td:nth-child(6),
 td:nth-child(7),
 td:nth-child(8),
-td:nth-child(9) {
+td:nth-child(9),
+.row-action-cell {
   text-align: center;
+}
+
+.remove-detection-button {
+  background: #fff5f2;
+  border: 1px solid #e4b4aa;
+  border-radius: 6px;
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 900;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0;
+  width: 34px;
+}
+
+.remove-detection-button:hover,
+.remove-detection-button:focus-visible {
+  background: #ffe4df;
+  color: #8c1b16;
+  transform: none;
 }
 
 .image-cell {

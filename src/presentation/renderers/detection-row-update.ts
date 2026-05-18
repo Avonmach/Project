@@ -43,7 +43,11 @@ export function updateDetectionRow<TDetection extends UpdatableDetection>({
   if (input) input.classList.remove("quantity-warning-input");
   elements.referenceCell.replaceChildren(makeReferenceCorrectionDropdown(detection));
   elements.nameCell.replaceChildren();
-  if (elements.row) elements.row.className = rowReviewClass(detection);
+  if (elements.row) {
+    const isDamagedRow = elements.row.classList.contains("damaged-detection-row");
+    elements.row.className = rowReviewClass(detection);
+    if (isDamagedRow) elements.row.classList.add("damaged-detection-row");
+  }
 
   if (detection.wikiPage) {
     const link = document.createElement("a");

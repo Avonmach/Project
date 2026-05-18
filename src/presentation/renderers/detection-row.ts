@@ -7,6 +7,7 @@ export interface DetectionRowElements {
   themeCell: HTMLTableCellElement;
   siteCell: HTMLTableCellElement;
   statusCell: HTMLTableCellElement;
+  actionCell?: HTMLTableCellElement;
 }
 
 export interface DetectionRowModel {
@@ -33,6 +34,7 @@ export interface DetectionRowRendererOptions<TDetection extends DetectionRowMode
   readonly applyQuantityChange: (detection: TDetection, quantity: number, source: string) => void;
   readonly onQuantityChanged: (quantityCell: HTMLTableCellElement) => void;
   readonly onVerifyDetection: (detection: TDetection) => void;
+  readonly onRemoveDetection?: (detection: TDetection) => void;
   readonly makeReferenceCorrectionDropdown: (detection: TDetection) => Node;
   readonly makeRecognitionInfo: (detection: TDetection) => Node;
   readonly makeQuantityDebugView: (detection: TDetection) => Node;
@@ -45,6 +47,7 @@ export function makeDetectionTableRow<TDetection extends DetectionRowModel>({
   applyQuantityChange,
   onQuantityChanged,
   onVerifyDetection,
+  onRemoveDetection,
   makeReferenceCorrectionDropdown,
   makeRecognitionInfo,
   makeQuantityDebugView
@@ -59,6 +62,7 @@ export function makeDetectionTableRow<TDetection extends DetectionRowModel>({
   const referenceCell = document.createElement("td");
   const previewCell = document.createElement("td");
   const processedCell = document.createElement("td");
+  const actionCell = onRemoveDetection ? document.createElement("td") : null;
   const input = document.createElement("input");
   const quantityWarning = quantityNeedsReview(detection);
 
@@ -69,6 +73,7 @@ export function makeDetectionTableRow<TDetection extends DetectionRowModel>({
   });
 
   quantityCell.className = "quantity-cell";
+  if (actionCell) actionCell.className = "row-action-cell";
   referenceCell.className = "image-cell";
   previewCell.className = "image-cell";
   processedCell.className = "image-cell";
@@ -99,6 +104,17 @@ export function makeDetectionTableRow<TDetection extends DetectionRowModel>({
   themeCell.textContent = detection.culture || "";
   siteCell.textContent = detection.digSite || "";
   statusCell.append(makeStatusPill(detection, quantityWarning));
+
+  if (actionCell) {
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "remove-detection-button";
+    removeButton.textContent = "X";
+    removeButton.title = "Remove this detected artefact";
+    removeButton.setAttribute("aria-label", `Remove ${detection.restoredName || detection.artefact || "detected artefact"}`);
+    removeButton.addEventListener("click", () => onRemoveDetection?.(detection));
+    actionCell.append(removeButton);
+  }
 
   input.className = "qty-input";
   if (quantityWarning) input.classList.add("quantity-warning-input");
@@ -138,10 +154,11 @@ export function makeDetectionTableRow<TDetection extends DetectionRowModel>({
     levelCell,
     themeCell,
     siteCell,
-    statusCell
+    statusCell,
+    ...(actionCell ? { actionCell } : {})
   };
 
-  row.append(
+  const rowCells = [
     nameCell,
     levelCell,
     themeCell,
@@ -151,7 +168,9 @@ export function makeDetectionTableRow<TDetection extends DetectionRowModel>({
     processedCell,
     referenceCell,
     quantityCell
-  );
+  ];
+  if (actionCell) rowCells.push(actionCell);
+  row.append(...rowCells);
   return row;
 }
 

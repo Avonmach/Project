@@ -254,6 +254,7 @@ function makeDetectionTableRow(detection: AppDetection): HTMLTableRowElement {
       updateTotals();
     },
     onVerifyDetection: verifyDetection,
+    onRemoveDetection: detection.recognitionMode === "damaged" ? removeDetection : undefined,
     makeReferenceCorrectionDropdown,
     makeRecognitionInfo,
     makeQuantityDebugView
@@ -300,8 +301,7 @@ function renderDamagedTable(items: readonly AppDetection[]): void {
     allDetections: detections,
     visibleDetections: items,
     makeDetectionTableRow,
-    quantityNeedsReview,
-    drawEmptyState
+    quantityNeedsReview
   });
 }
 
@@ -423,6 +423,12 @@ function applyQuantityChange(detection: AppDetection, quantity: number, source: 
   applyQuantityCorrection(detection, quantity, source);
 }
 
+function removeDetection(detection: AppDetection): void {
+  detections = resultsState.removeDetectionForMode("damaged", detection);
+  renderDetections();
+  drawBoxes(detections);
+}
+
 function makeQuantityDebugView(detection: AppDetection): HTMLElement {
   return makeQuantityDebugViewElement(detection.quantityDebug);
 }
@@ -432,7 +438,11 @@ function markQuantityManual(quantityCell: HTMLTableCellElement): void {
   if (input) input.classList.remove("quantity-warning-input");
   const row = quantityCell.closest("tr");
   const detection = detections.find((item) => item.rowElements?.quantityCell === quantityCell);
-  if (row && detection) row.className = rowReviewClass(detection);
+  if (row && detection) {
+    const isDamagedRow = row.classList.contains("damaged-detection-row");
+    row.className = rowReviewClass(detection);
+    if (isDamagedRow) row.classList.add("damaged-detection-row");
+  }
   if (detection?.rowElements?.statusCell) detection.rowElements.statusCell.replaceChildren(makeStatusPill(detection));
   if (detections.length) renderRestorationPlan(filteredDetections());
 }

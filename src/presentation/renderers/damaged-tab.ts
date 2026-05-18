@@ -7,7 +7,6 @@ export interface DamagedTabRendererOptions<TDetection> {
   readonly visibleDetections: readonly TDetection[];
   readonly makeDetectionTableRow: (detection: TDetection) => HTMLTableRowElement;
   readonly quantityNeedsReview: (detection: TDetection) => boolean;
-  readonly drawEmptyState: (message: string) => void;
 }
 
 export function renderDamagedTab<TDetection>({
@@ -18,8 +17,7 @@ export function renderDamagedTab<TDetection>({
   allDetections,
   visibleDetections,
   makeDetectionTableRow,
-  quantityNeedsReview,
-  drawEmptyState
+  quantityNeedsReview
 }: DamagedTabRendererOptions<TDetection>): void {
   updateDamagedReviewSummary({
     detectedCountElement,
@@ -32,12 +30,12 @@ export function renderDamagedTab<TDetection>({
 
   body.replaceChildren();
   if (!allDetections.length) {
-    drawEmptyState("Analyze a damaged artefact screenshot to populate this table.");
+    drawDamagedEmptyState(body, "Analyze a damaged artefact screenshot to populate this table.");
     return;
   }
 
   if (!visibleDetections.length) {
-    drawEmptyState("No artefacts match the current filters.");
+    drawDamagedEmptyState(body, "No artefacts match the current filters.");
     return;
   }
 
@@ -70,4 +68,14 @@ function updateDamagedReviewSummary<TDetection>({
   reviewCountElement.textContent = String(
     visibleDetections.filter((detection) => quantityNeedsReview(detection)).length
   );
+}
+
+function drawDamagedEmptyState(body: HTMLTableSectionElement, message: string): void {
+  const row = document.createElement("tr");
+  const cell = document.createElement("td");
+  cell.colSpan = 10;
+  cell.className = "empty";
+  cell.textContent = message;
+  row.append(cell);
+  body.append(row);
 }

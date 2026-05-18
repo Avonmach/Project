@@ -77,7 +77,7 @@ export function estimateBankGrid(imageData: ImageData, options: EstimateBankGrid
     : foregroundBounds(imageData);
   if (!bankContent) content.maxX = Math.min(content.maxX, bankContentRightLimit(imageData));
 
-  const contentColumns = getGridColumns(Math.max(1, Math.ceil((content.maxX - x + 1) / cell)));
+  const contentColumns = getGridColumns(countGridColumnsWithinContent(content.maxX - x + 1, cell));
   const contentRows = getGridRows(Math.max(1, Math.ceil((content.maxY - y + 1) / cell)));
   const itemExtent = gridExtentFromItemCenters(itemCenters, x, y, cell);
   const last = itemExtent || lastOccupiedGridCell(imageData, x, y, cell, content);
@@ -362,19 +362,19 @@ function findContentRightBeforeScrollbar(imageData: ImageData, top: number, bott
   let runEnd = null;
 
   for (let x = width - 1; x >= Math.floor(width * 0.75); x -= 1) {
-    let scrollbarPixels = 0;
+    let edgePixels = 0;
     for (let y = minY; y <= maxY; y += 1) {
       const offset = (y * width + x) * 4;
       const r = readImageDataChannel(data, offset);
       const g = readImageDataChannel(data, offset + 1);
       const b = readImageDataChannel(data, offset + 2);
-      if (r > 145 && g > 100 && b > 45 && r > b + 45) scrollbarPixels += 1;
+      if (isFrameOrScrollbarPixel(r, g, b)) edgePixels += 1;
     }
-    if (scrollbarPixels > (maxY - minY + 1) * 0.35) {
+    if (edgePixels > (maxY - minY + 1) * 0.22) {
       if (runEnd === null) runEnd = x;
       continue;
     }
-    if (runEnd !== null) return Math.max(0, x - 2);
+    if (runEnd !== null) return Math.max(0, x - 3);
   }
 
   return null;
@@ -409,6 +409,13 @@ function getGridRows(autoRows: number): number {
 
 function getGridColumns(autoColumns: number): number {
   return Math.max(1, autoColumns);
+}
+
+function countGridColumnsWithinContent(contentWidth: number, cell: number): number {
+  const width = Math.max(1, contentWidth);
+  const fullColumns = Math.floor(width / cell);
+  const remainder = width % cell;
+  return Math.max(1, fullColumns + (remainder >= cell * 0.75 ? 1 : 0));
 }
 
 function findFirstItemAnchor(centers: readonly Point[], cell: number): Point {

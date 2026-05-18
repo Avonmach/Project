@@ -30,6 +30,19 @@ test("createResultsState maps tabs to active detection modes", () => {
   assert.equal(state.activeMode, "damaged");
 });
 
+test("createResultsState removes a detection from one recognition mode", () => {
+  const state = createResultsState<{ id: number }>();
+  const first = { id: 1 };
+  const second = { id: 2 };
+  const restored = { id: 3 };
+  state.setDetectionsForMode("damaged", [first, second]);
+  state.setDetectionsForMode("restored", [restored]);
+
+  assert.deepEqual(state.removeDetectionForMode("damaged", first), [second]);
+  assert.deepEqual(state.detectionsForMode("damaged"), [second]);
+  assert.deepEqual(state.detectionsForMode("restored"), [restored]);
+});
+
 test("createResultsState requests restored screenshots only once for relevant tabs", () => {
   const state = createResultsState();
 
