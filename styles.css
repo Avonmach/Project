@@ -1,19 +1,20 @@
 :root {
   color-scheme: light;
   --bg: #d4c19d;
-  --panel: #f1e3c5;
-  --panel-strong: #e8d6b3;
-  --surface: #ead8b8;
-  --surface-soft: #f0e2c8;
-  --image-bg: #dcc8a6;
-  --image-border: #9f8a63;
-  --green-soft: #d7e3d2;
+  --panel: #f2dfbd;
+  --panel-strong: #ddc395;
+  --surface: #e8d4ad;
+  --surface-soft: #f1e5ce;
+  --image-bg: #dcc7a3;
+  --image-border: #967f58;
+  --green-wash: #e6efd9;
+  --green-soft: #d6e9cf;
   --blue-soft: #d6e1e6;
   --bronze-soft: #ead3a2;
   --rose-soft: #ead3c7;
   --ink: #2b2118;
   --muted: #756752;
-  --line: #c9b996;
+  --line: #bda77f;
   --soft-line: #e5d9c3;
   --gold: #c88a2b;
   --gold-dark: #7a4d19;
@@ -35,8 +36,8 @@ body {
     linear-gradient(rgba(89, 66, 38, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(89, 66, 38, 0.03) 1px, transparent 1px),
     radial-gradient(circle at 12% -8%, rgba(174, 113, 36, 0.34), transparent 300px),
-    radial-gradient(circle at 88% 2%, rgba(51, 111, 84, 0.23), transparent 340px),
-    linear-gradient(180deg, #deceb0 0%, #cdb78f 100%),
+    radial-gradient(circle at 88% 2%, rgba(64, 132, 92, 0.32), transparent 360px),
+    linear-gradient(180deg, #dfd2b4 0%, #c9b68f 100%),
     var(--bg);
   background-size: 22px 22px, 22px 22px, auto, auto, auto;
   color: var(--ink);
@@ -157,7 +158,7 @@ button:focus-visible,
 .surface-panel,
 .summary > div {
   background:
-    linear-gradient(180deg, rgba(242, 227, 197, 0.98), rgba(232, 213, 177, 0.98));
+    linear-gradient(180deg, rgba(244, 229, 199, 0.98), rgba(229, 238, 216, 0.95) 100%);
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: var(--shadow);
@@ -166,7 +167,7 @@ button:focus-visible,
 
 .panel-heading {
   align-items: center;
-  background: linear-gradient(180deg, #e4d0aa, #d5bc8f);
+  background: linear-gradient(180deg, #e4d0aa, #d8dfc6);
   border-bottom: 1px solid var(--line);
   border-radius: 12px 12px 0 0;
   display: flex;
@@ -206,7 +207,7 @@ input[type="file"],
 input[type="number"],
 input[type="search"],
 select {
-  background: var(--surface-soft);
+  background: #f4ead7;
   border: 1px solid var(--line);
   border-radius: 8px;
   color: var(--ink);
@@ -350,7 +351,7 @@ input[type="search"] {
 }
 
 .plan-list-head {
-  background: #eadfc5;
+  background: #e4ead2;
   color: #2f2419;
   font-weight: 800;
 }
@@ -424,7 +425,7 @@ input[type="search"] {
 }
 
 .overview-card {
-  background: linear-gradient(180deg, var(--surface-soft), var(--green-soft));
+  background: linear-gradient(180deg, #f0e3ca, var(--green-soft));
   border: 1px solid var(--line);
   border-left: 4px solid var(--green);
   border-radius: 8px;
@@ -654,8 +655,8 @@ input[type="search"] {
 }
 
 .result-tab[data-results-tab="restored"] {
-  background: var(--green-soft);
-  border-color: #9db89e;
+  background: var(--green-wash);
+  border-color: #92b892;
 }
 
 .result-tab[data-results-tab="storage"],
@@ -709,7 +710,7 @@ input[type="search"] {
 }
 
 .artefact-review-strip > div {
-  background: rgba(240, 226, 200, 0.96);
+  background: rgba(232, 239, 218, 0.96);
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -761,7 +762,7 @@ td {
 }
 
 th {
-  background: linear-gradient(180deg, #d8e0ca, #ccb98f);
+  background: linear-gradient(180deg, #dfead1, #cbbb92);
   color: #2f2419;
   font-size: 14px;
   font-weight: 800;
@@ -781,12 +782,12 @@ tbody tr:nth-child(even) td {
 }
 
 tbody tr:hover td {
-  background: #f3ead5;
+  background: #e9edd7;
 }
 
 .damaged-table tbody tr:hover td,
 .restored-table tbody tr:hover td {
-  background: #f3ead5;
+  background: #e9edd7;
 }
 
 .artefact-detection-row td:first-child {
@@ -1176,7 +1177,7 @@ tbody tr:has(.processed-preview:hover),
 }
 
 .checked-row td {
-  background: #d7e2ca !important;
+  background: #d3e6c8 !important;
 }
 
 .reference-preview.review-border {
@@ -1202,7 +1203,7 @@ tbody tr:has(.processed-preview:hover),
 }
 
 .status-pill.checked {
-  background: #d7e2ca;
+  background: #d3e6c8;
   border-color: var(--green);
   color: var(--green-dark);
 }
@@ -1305,7 +1306,7 @@ tbody tr:has(.processed-preview:hover),
 }
 
 .correction-option:hover {
-  background: #f3ead8;
+  background: #e9edd7;
 }
 
 .correction-option img {
