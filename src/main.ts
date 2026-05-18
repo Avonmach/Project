@@ -1,5 +1,6 @@
 import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
-import { createDetectionRecord, type DetectionRecord } from "./application/analyze-screenshot/detection-record";
+import { analyzeDetections } from "./application/analyze-screenshot/analyze-detections";
+import type { DetectionRecord } from "./application/analyze-screenshot/detection-record";
 import { recognitionModeForTab } from "./application/analyze-screenshot/recognition-mode";
 import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
 import { AMBIGUOUS_FINAL_MARGIN } from "./application/config/matching-thresholds";
@@ -25,7 +26,7 @@ import {
 import { prepareArtefactReferences } from "./application/load-references/artefact-reference-preparation";
 import { sortMaterialRows as sortMaterialRowsForMode } from "./application/sort-results/result-row-sorting";
 import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode } from "./domain/artefacts/matching";
-import { detectQuantity, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
+import { quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import type { BoundingBox } from "./domain/shared/geometry";
 import { downloadJsonFile } from "./infrastructure/browser/download";
 import { closeOpenDetailsMenusOutsideTarget } from "./infrastructure/browser/details-menu";
@@ -219,23 +220,23 @@ function analyzeCurrentImage() {
   const boxes = detectItemBoxes(imageData, grid);
   const shapeImageData = makeFullShapeImageData(imageData, grid, recognitionMode);
 
-  const analyzedDetections = boxes.map((box, index) => {
-    const quantityResult = detectQuantity(imageData, box, recognitionMode, digitTemplates);
-    const match = matchArtifact(shapeImageData, imageData, box, recognitionMode);
-    const preview = makePreviewCanvas(imageData, box, { enhanceHover: recognitionMode !== "restored" });
-    const processedPreview = makeProcessedCanvas(imageData, shapeImageData, box, { enhance: recognitionMode !== "restored" });
-    const referencePreview = makeReferenceCanvas(match.item.image);
-
-    return createDetectionRecord({
-      box,
-      bankIndex: index,
-      cellSize: getGridCellSize(),
-      match,
-      quantityResult,
-      quantityDebug: attachQuantityDebugSource(quantityResult.debug, imageData),
-      recognitionMode,
-      previews: { preview, processedPreview, referencePreview }
-    });
+  const analyzedDetections = analyzeDetections({
+    imageData,
+    shapeImageData,
+    boxes,
+    cellSize: getGridCellSize(),
+    recognitionMode,
+    digitTemplates,
+    matchArtefact: matchArtifact,
+    makeQuantityDebug: attachQuantityDebugSource,
+    makePreviews: ({ imageData, shapeImageData, box, recognitionMode, match }) => {
+      const enhance = recognitionMode !== "restored";
+      return {
+        preview: makePreviewCanvas(imageData, box, { enhanceHover: enhance }),
+        processedPreview: makeProcessedCanvas(imageData, shapeImageData, box, { enhance }),
+        referencePreview: makeReferenceCanvas(match.item.image)
+      };
+    }
   });
 
   detections = resultsState.setDetectionsForMode(recognitionMode, analyzedDetections);
