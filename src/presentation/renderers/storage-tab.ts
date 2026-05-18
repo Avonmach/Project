@@ -3,11 +3,16 @@ export interface StorageMaterial {
   readonly wikiPage?: string | null;
 }
 
+export interface StorageMaterialNeed {
+  readonly name: string;
+  readonly quantity: number;
+}
+
 export interface StorageTabRendererOptions<TDetection> {
   readonly panel: HTMLElement;
   readonly visibleDetections: readonly TDetection[];
   readonly materials: readonly StorageMaterial[];
-  readonly calculateMaterialTotals: (items: readonly TDetection[]) => readonly unknown[];
+  readonly calculateMaterialTotals: (items: readonly TDetection[]) => readonly StorageMaterialNeed[];
   readonly makeMaterialCell: (row: { readonly name: string }) => HTMLTableCellElement;
   readonly makeLinkedTextCell: (label: string, href?: string | null) => HTMLTableCellElement;
   readonly makeTableHead: (labels: readonly string[]) => HTMLTableSectionElement;

@@ -4,6 +4,11 @@ export interface MaterialRow {
   readonly artefacts: readonly string[];
 }
 
+export interface RestoredArtefactSummaryRow {
+  readonly restoredName: string;
+  readonly quantity: number;
+}
+
 export interface MaterialsTabDetection {
   readonly quantity: number;
 }
@@ -14,7 +19,7 @@ export interface MaterialsTabRendererOptions<TDetection extends MaterialsTabDete
   readonly visibleDetections: readonly TDetection[];
   readonly recipeRecordCount: number;
   readonly calculateMaterialTotals: (items: readonly TDetection[]) => readonly MaterialRow[];
-  readonly aggregateRestoredArtefacts: (items: readonly TDetection[]) => readonly unknown[];
+  readonly aggregateRestoredArtefacts: (items: readonly TDetection[]) => readonly RestoredArtefactSummaryRow[];
   readonly sortMaterialRows: (rows: readonly MaterialRow[]) => readonly MaterialRow[];
   readonly makeMaterialCell: (row: Pick<MaterialRow, "name">) => HTMLTableCellElement;
   readonly makeTextCell: (value: string | number, className?: string) => HTMLTableCellElement;
