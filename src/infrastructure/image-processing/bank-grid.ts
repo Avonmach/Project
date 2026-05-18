@@ -261,14 +261,14 @@ function findBankContentArea(imageData: ImageData): (BankGridBox & { readonly in
   const horizontalRuns = [];
   for (let y = 0; y < height; y += 1) {
     let count = 0;
-    for (let x = 0; x < width; x += 1) count += framePixels[y * width + x];
+    for (let x = 0; x < width; x += 1) count += framePixels[y * width + x] ?? 0;
     if (count > width * 0.45) horizontalRuns.push(y);
   }
 
   const verticalRuns = [];
   for (let x = 0; x < width; x += 1) {
     let count = 0;
-    for (let y = 0; y < height; y += 1) count += framePixels[y * width + x];
+    for (let y = 0; y < height; y += 1) count += framePixels[y * width + x] ?? 0;
     if (count > height * 0.45) verticalRuns.push(x);
   }
 
