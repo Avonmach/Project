@@ -86,8 +86,8 @@ export function normalizeDigit(
       const endX = box.x + Math.max(1, Math.floor(((gx + 1) / width) * box.w));
       const startY = box.y + Math.floor((gy / DIGIT_TEMPLATE_HEIGHT) * box.h);
       const endY = box.y + Math.max(1, Math.floor(((gy + 1) / DIGIT_TEMPLATE_HEIGHT) * box.h));
-      for (let y = startY; y <= endY; y += 1) {
-        for (let x = startX; x <= endX; x += 1) {
+      for (let y = startY; y < endY; y += 1) {
+        for (let x = startX; x < endX; x += 1) {
           samples += 1;
           if (inside.has(`${x},${y}`)) hits += 1;
         }
