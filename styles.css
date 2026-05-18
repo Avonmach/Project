@@ -30,6 +30,7 @@ body {
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
+  overflow-x: auto;
 }
 
 .app-shell {
@@ -557,7 +558,7 @@ input[type="search"] {
 }
 
 .table-wrap {
-  overflow-x: auto;
+  overflow-x: visible;
   overflow-y: visible;
   position: relative;
 }
@@ -1266,9 +1267,17 @@ tbody tr:has(.processed-preview:hover),
     overflow: visible;
   }
 
-  .artifact-table,
+  .results-panel,
+  .table-wrap {
+    width: max-content;
+  }
+
+  .artifact-table {
+    min-width: 860px;
+  }
+
   .damaged-table {
-    min-width: 760px;
+    min-width: 940px;
   }
 }
 
@@ -1291,8 +1300,8 @@ tbody tr:has(.processed-preview:hover),
     width: 100%;
   }
 
-  .artifact-table,
-  .damaged-table {
-    min-width: 680px;
+  .results-panel,
+  .table-wrap {
+    width: max-content;
   }
 }
