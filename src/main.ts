@@ -100,6 +100,7 @@ type AppDetection = ReturnType<
 > & {
   rowElements?: DetectionRowElements;
 };
+type AppMatchCandidate = NonNullable<AppDetection["topMatches"]>[number];
 
 const canvas = requireElement("previewCanvas", HTMLCanvasElement);
 const ctx = requireCanvasContext(canvas);
@@ -289,26 +290,26 @@ function matchArtifact(
   return matchArtefactAgainstReferences(shapeImageData, originalImageData, box, references, mode);
 }
 
-function applyUniqueArtefactAssignments(items) {
+function applyUniqueArtefactAssignments(items: readonly AppDetection[]): void {
   for (const { detection, candidate } of findUniqueArtefactAssignments(items)) {
-    applyCandidatePrediction(detection, candidate);
+    applyCandidatePrediction(detection, candidate as AppMatchCandidate);
   }
 }
 
-function applyCandidatePrediction(detection, candidate) {
+function applyCandidatePrediction(detection: AppDetection, candidate: AppMatchCandidate): void {
   applyCandidatePredictionRule(detection, candidate, AMBIGUOUS_FINAL_MARGIN);
   detection.referencePreview = makeReferenceCanvas(candidate.item.image);
 }
 
-function attachQuantityDebugSource(debug: QuantityDebug | null, imageData: ImageData) {
-  if (!debug) return debug;
+function attachQuantityDebugSource(debug: QuantityDebug | null, imageData: ImageData): (QuantityDebug & { source: ImageData }) | null {
+  if (!debug) return null;
   return {
     ...debug,
     source: copyImageData(imageData, debug.scanBox)
   };
 }
 
-function renderDetections() {
+function renderDetections(): void {
   if (!detections.length) {
     if (resultsState.activeTab === "damaged") drawEmptyState("No occupied artefact slots detected.");
     updateTotals();
@@ -328,11 +329,11 @@ function renderDetections() {
   renderResultsTabContent();
 }
 
-function makeDetectionTableRow(detection) {
+function makeDetectionTableRow(detection: AppDetection): HTMLTableRowElement {
   return makeDetectionTableRowElement({
     detection,
     quantityNeedsReview,
-    quantityCandidatesAreClose,
+    quantityCandidatesAreClose: quantityCandidatesAreCloseForDetection,
     applyQuantityChange,
     onQuantityChanged: (quantityCell) => {
       markQuantityManual(quantityCell);
@@ -345,11 +346,11 @@ function makeDetectionTableRow(detection) {
   });
 }
 
-function makeStatusPill(detection, quantityWarning = quantityNeedsReview(detection)) {
+function makeStatusPill(detection: AppDetection, quantityWarning = quantityNeedsReview(detection)): HTMLSpanElement {
   return makeDetectionStatusPill(detection, quantityWarning);
 }
 
-function filteredDetections() {
+function filteredDetections(): AppDetection[] {
   return filterAndSortDetections(detections, viewMode.value, {
     query: artefactSearch.value,
     culture: cultureFilter.value,
@@ -358,7 +359,7 @@ function filteredDetections() {
   });
 }
 
-function setActiveResultsTab(tab) {
+function setActiveResultsTab(tab: ResultsTab): void {
   detections = resultsState.setActiveTab(tab);
   applyResultTabSelection({ tab, title: resultsTitle, buttons: resultTabButtons, panels: resultTabPanels });
 
@@ -368,7 +369,7 @@ function setActiveResultsTab(tab) {
   requestTabScreenshot(tab);
 }
 
-function renderResultsTabContent() {
+function renderResultsTabContent(): void {
   const items = filteredDetections();
   if (resultsState.activeTab === "overview") renderOverviewTab(items);
   if (resultsState.activeTab === "restored") renderRestoredTab(items);
@@ -376,7 +377,7 @@ function renderResultsTabContent() {
   if (resultsState.activeTab === "materials") renderMaterialsTab(items);
 }
 
-function renderDamagedTable(items) {
+function renderDamagedTable(items: readonly AppDetection[]): void {
   renderDamagedTabPanel({
     body: resultsBody,
     allDetections: detections,
@@ -386,7 +387,7 @@ function renderDamagedTable(items) {
   });
 }
 
-function requestTabScreenshot(tab) {
+function requestTabScreenshot(tab: ResultsTab): void {
   if (!resultsState.shouldRequestScreenshot(tab)) return;
   if (tab === "restored") {
     loadImageFromUrl(DEFAULT_SCREENSHOTS.restored);
@@ -395,7 +396,7 @@ function requestTabScreenshot(tab) {
   imageInput.click();
 }
 
-function renderOverviewTab(items) {
+function renderOverviewTab(items: readonly AppDetection[]): void {
   renderOverviewTabPanel({
     panel: overviewPanel,
     allDetections: detections,
@@ -408,7 +409,7 @@ function renderOverviewTab(items) {
   });
 }
 
-function renderRestoredTab(items) {
+function renderRestoredTab(items: readonly AppDetection[]): void {
   renderRestoredTabPanel({
     body: restoredResultsBody,
     allDetections: detections,
@@ -417,7 +418,7 @@ function renderRestoredTab(items) {
   });
 }
 
-function renderMaterialsTab(items: AppDetection[]) {
+function renderMaterialsTab(items: readonly AppDetection[]): void {
   renderMaterialsTabPanel({
     panel: materialsPanel,
     allDetections: detections,
@@ -434,7 +435,7 @@ function renderMaterialsTab(items: AppDetection[]) {
   });
 }
 
-function renderStorageTab(items: AppDetection[]) {
+function renderStorageTab(items: readonly AppDetection[]): void {
   renderStorageTabPanel({
     panel: storagePanel,
     visibleDetections: items,
@@ -448,7 +449,7 @@ function renderStorageTab(items: AppDetection[]) {
   });
 }
 
-function updateFilterOptions() {
+function updateFilterOptions(): void {
   const current = cultureFilter.value;
   const cultures = [
     ...new Set(detections.map((detection) => detection.culture).filter((culture): culture is string => Boolean(culture)))
@@ -458,7 +459,7 @@ function updateFilterOptions() {
   if (cultures.includes(current)) cultureFilter.value = current;
 }
 
-function renderRestorationPlan(items) {
+function renderRestorationPlan(items: readonly AppDetection[]): void {
   renderRestorationPlanPanel({
     body: planBody,
     visibleCountElement: visibleCountEl,
@@ -470,11 +471,11 @@ function renderRestorationPlan(items) {
   });
 }
 
-function makeMaterialCell(row) {
+function makeMaterialCell(row: MaterialCellRow): HTMLTableCellElement {
   return makeMaterialCellElement(row, materialByName);
 }
 
-function sortRestoredRows(rows) {
+function sortRestoredRows(rows: readonly { restoredName: string; level?: number | null; culture?: string | null; digSite?: string | null }[]) {
   return sortRestoredRowsForMode(rows, viewMode.value);
 }
 
@@ -482,7 +483,7 @@ function sortMaterialRows(rows: readonly MaterialRow[]): readonly MaterialRow[] 
   return sortMaterialRowsForMode(rows, viewMode.value);
 }
 
-function makeCollectionOverview(items) {
+function makeCollectionOverview(items: readonly AppDetection[]): HTMLElement {
   return makeCollectionOverviewElement({
     items,
     collections: archaeologyReference.collections || [],
@@ -498,23 +499,27 @@ function makeCollectionOverview(items) {
   });
 }
 
-function rowReviewClass(detection, quantityWarning = quantityNeedsReview(detection)) {
+function rowReviewClass(detection: AppDetection, quantityWarning = quantityNeedsReview(detection)): string {
   return detectionRowReviewClass(detection, quantityWarning);
 }
 
-function quantityNeedsReview(detection) {
-  return !detection.quantityManual && quantityCandidatesAreClose(detection);
+function quantityNeedsReview(detection: AppDetection): boolean {
+  return !detection.quantityManual && quantityCandidatesAreCloseForDetection(detection);
 }
 
-function applyQuantityChange(detection, quantity, source) {
+function quantityCandidatesAreCloseForDetection(detection: AppDetection): boolean {
+  return quantityCandidatesAreClose(detection);
+}
+
+function applyQuantityChange(detection: AppDetection, quantity: number, source: string): void {
   applyQuantityCorrection(detection, quantity, source);
 }
 
-function makeQuantityDebugView(detection) {
+function makeQuantityDebugView(detection: AppDetection): HTMLElement {
   return makeQuantityDebugViewElement(detection.quantityDebug);
 }
 
-function markQuantityManual(quantityCell) {
+function markQuantityManual(quantityCell: HTMLTableCellElement): void {
   const input = quantityCell.querySelector(".qty-input");
   if (input) input.classList.remove("quantity-warning-input");
   const row = quantityCell.closest("tr");
@@ -524,11 +529,11 @@ function markQuantityManual(quantityCell) {
   if (detections.length) renderRestorationPlan(filteredDetections());
 }
 
-function makeRecognitionInfo(detection) {
+function makeRecognitionInfo(detection: AppDetection): HTMLElement {
   return makeRecognitionInfoElement(detection);
 }
 
-function makeReferenceCorrectionDropdown(detection) {
+function makeReferenceCorrectionDropdown(detection: AppDetection): HTMLDetailsElement {
   return makeReferenceCorrectionDropdownElement({
     detection,
     references,
@@ -536,20 +541,20 @@ function makeReferenceCorrectionDropdown(detection) {
   });
 }
 
-function applyReferenceCorrection(detection, item, score) {
+function applyReferenceCorrection(detection: AppDetection, item: PreparedArtefactReference, score: number | null): void {
   applyReferenceCorrectionRule(detection, item, score);
   detection.referencePreview = makeReferenceCanvas(item.image);
   updateDetectionRow(detection);
   updateTotals();
 }
 
-function verifyDetection(detection) {
+function verifyDetection(detection: AppDetection): void {
   if (!applyDetectionVerification(detection, AMBIGUOUS_FINAL_MARGIN)) return;
   updateDetectionRow(detection);
   updateTotals();
 }
 
-function updateDetectionRow(detection) {
+function updateDetectionRow(detection: AppDetection): void {
   if (
     updateDetectionRowElement({
       detection,
@@ -563,13 +568,13 @@ function updateDetectionRow(detection) {
   }
 }
 
-function drawEmptyState(message) {
+function drawEmptyState(message: string): void {
   resultsBody.replaceChildren();
   drawTableEmptyState(resultsBody, message);
   renderResultsTabContent();
 }
 
-function updateTotals() {
+function updateTotals(): void {
   renderSummaryTotals({
     detections,
     slotCountElement: slotCountEl,
@@ -580,7 +585,7 @@ function updateTotals() {
   renderResultsTabContent();
 }
 
-function exportResults() {
+function exportResults(): void {
   const exportedAt = new Date().toISOString();
   const payload = createAnalysisExportPayload({
     exportedAt,
@@ -612,6 +617,10 @@ function exportResults() {
   URL.revokeObjectURL(url);
 }
 
-function drawBoxes(items, contentArea = null, infinityArea = null) {
+function drawBoxes(
+  items: readonly AppDetection[],
+  contentArea: BoundingBox | null = null,
+  infinityArea: BoundingBox | null = null
+): void {
   drawAnalysisOverlay({ context: ctx, image: loadedImage, items, contentArea, infinityArea });
 }
