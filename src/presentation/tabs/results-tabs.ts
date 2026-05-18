@@ -18,12 +18,12 @@ export function resultModeForTab(tab: ResultsTab): DetectionMode {
 }
 
 export function connectResultTabButtons(
-  buttons: readonly Element[],
+  buttons: readonly HTMLElement[],
   onSelect: (tab: ResultsTab) => void
 ): void {
   for (const button of buttons) {
     button.addEventListener("click", () => {
-      const tab = (button as HTMLElement).dataset.resultsTab;
+      const tab = button.dataset.resultsTab;
       if (isResultsTab(tab)) onSelect(tab);
     });
   }
@@ -37,20 +37,18 @@ export function applyResultTabSelection({
 }: {
   readonly tab: ResultsTab;
   readonly title: HTMLElement | null;
-  readonly buttons: readonly Element[];
-  readonly panels: readonly Element[];
+  readonly buttons: readonly HTMLElement[];
+  readonly panels: readonly HTMLElement[];
 }): void {
   if (title) title.textContent = RESULT_TAB_TITLES[tab];
 
   for (const button of buttons) {
-    const element = button as HTMLElement;
-    const active = element.dataset.resultsTab === tab;
-    element.classList.toggle("is-active", active);
-    element.setAttribute("aria-selected", String(active));
+    const active = button.dataset.resultsTab === tab;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-selected", String(active));
   }
 
   for (const panel of panels) {
-    const element = panel as HTMLElement;
-    element.hidden = element.dataset.resultsPanel !== tab;
+    panel.hidden = panel.dataset.resultsPanel !== tab;
   }
 }
