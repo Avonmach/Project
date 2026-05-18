@@ -98,10 +98,10 @@ export interface AnalysisExportPayload {
   readonly training: {
     readonly correctedArtefacts: number;
     readonly correctedQuantities: number;
-    readonly quantityLabels: readonly unknown[];
-    readonly labels: readonly unknown[];
+    readonly quantityLabels: readonly ExportQuantityLabel[];
+    readonly labels: readonly ExportTrainingLabel[];
   };
-  readonly detections: readonly unknown[];
+  readonly detections: readonly ExportDetectionPayload[];
 }
 
 export interface ExportedBestMatch {
@@ -110,6 +110,106 @@ export interface ExportedBestMatch {
   readonly score?: number;
   readonly archaeologyLevel?: number | null;
   readonly culture?: string | null;
+}
+
+export interface ExportQuantityLabel {
+  readonly bankIndex: number;
+  readonly bankRow?: number;
+  readonly bankColumn?: number;
+  readonly box: unknown;
+  readonly originalQuantity?: number;
+  readonly detectedQuantity?: number;
+  readonly correctedQuantity: number;
+  readonly quantityConfidence?: number;
+  readonly quantityAlternatives?: unknown;
+  readonly correction?: unknown;
+}
+
+export interface ExportTrainingLabel {
+  readonly bankIndex: number;
+  readonly bankRow?: number;
+  readonly bankColumn?: number;
+  readonly box: unknown;
+  readonly corrected: ExportDetection["correction"];
+  readonly originalPrediction?: ExportDetection["originalPrediction"];
+  readonly topMatches: readonly ExportedCandidateMatch[];
+}
+
+export interface ExportedCandidateMatch {
+  readonly damagedName?: string;
+  readonly restoredName?: string | null;
+  readonly score?: number;
+  readonly shapeScore?: number;
+  readonly colorScore?: number;
+  readonly colorExistenceScore?: number;
+  readonly colorPositionScore?: number;
+  readonly scoringWeights?: unknown;
+  readonly restoredScore?: number;
+  readonly damagedScore?: number;
+  readonly archaeologyLevel?: number | null;
+  readonly culture?: string | null;
+}
+
+export interface ExportDetectionPayload {
+  readonly bankIndex: number;
+  readonly bankRow?: number;
+  readonly bankColumn?: number;
+  readonly box: unknown;
+  readonly quantity: number;
+  readonly originalQuantity?: number;
+  readonly quantityConfidence?: number;
+  readonly quantityAlternatives?: unknown;
+  readonly correctedQuantity?: boolean;
+  readonly quantityCorrection?: unknown;
+  readonly correctedArtefact?: boolean;
+  readonly originalPrediction?: ExportDetection["originalPrediction"];
+  readonly correction?: ExportDetection["correction"];
+  readonly trainingLabel: {
+    readonly input: {
+      readonly bankIndex: number;
+      readonly bankRow?: number;
+      readonly bankColumn?: number;
+      readonly box: unknown;
+      readonly originalQuantity?: number;
+      readonly quantity: number;
+    };
+    readonly label: {
+      readonly damagedName?: string;
+      readonly restoredName?: string | null;
+      readonly archaeologyLevel?: number | null;
+      readonly culture?: string | null;
+    };
+    readonly previousPrediction?: ExportDetection["originalPrediction"];
+  } | null;
+  readonly selected: {
+    readonly damagedName: string;
+    readonly restoredName?: string | null;
+    readonly archaeologyLevel?: number | null;
+    readonly culture?: string | null;
+    readonly digSite?: string | null;
+    readonly wikiPage?: string | null;
+    readonly damagedWikiPage?: string | null;
+  };
+  readonly ambiguousMatch?: boolean;
+  readonly matchGap?: number;
+  readonly scores: {
+    readonly selectedShape?: number;
+    readonly selectedColor?: number;
+    readonly selectedColorExistence?: number;
+    readonly selectedColorPosition?: number;
+    readonly selectedRestored?: number;
+    readonly selectedDamaged?: number;
+    readonly selectedMain?: number;
+    readonly referenceUsed?: unknown;
+    readonly weights?: unknown;
+  };
+  readonly algorithmBest: {
+    readonly shape: ExportedBestMatch | null;
+    readonly color: ExportedBestMatch | null;
+    readonly restored: ExportedBestMatch | null;
+    readonly damaged: ExportedBestMatch | null;
+  };
+  readonly topMatches: readonly ExportedCandidateMatch[];
 }
 
 export function createAnalysisExportPayload<TDetection extends ExportDetection>({
