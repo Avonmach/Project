@@ -17,7 +17,7 @@ Branch: `Archeology`
 
 Latest pushed commit at handoff:
 
-- `b7c90db` Export reference data paths
+- `ae614c0` Reuse empty reference indexes initially
 
 The repo is clean except for these untracked image files, which have been intentionally left untouched:
 
@@ -82,6 +82,14 @@ Major extraction checkpoints pushed today:
 - additional export/reference typing cleanups
 - browser DOM/font loading helper extraction
 - default screenshot and reference path config extraction
+- archaeology reference index helpers
+- recognition mode and matching threshold config
+- quantity debug source extraction
+- export filename, image metadata, grid metadata, and export-file helpers
+- JSON download, file picker, selected image reader, and details-menu browser helpers
+- culture filter option/update helpers
+- status/warning message config
+- reference count renderer
 
 Each checkpoint has a matching file under `changes/`.
 
