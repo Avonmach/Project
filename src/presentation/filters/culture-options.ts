@@ -13,3 +13,10 @@ export function replaceCultureFilterOptions(select: HTMLSelectElement, cultures:
   for (const culture of cultures) select.append(new Option(culture, culture));
   if (cultures.includes(current)) select.value = current;
 }
+
+export function updateCultureFilterOptions(
+  select: HTMLSelectElement,
+  detections: readonly CultureOptionDetection[]
+): void {
+  replaceCultureFilterOptions(select, getCultureOptions(detections), select.value);
+}

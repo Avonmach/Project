@@ -50,7 +50,7 @@ import {
   type ResultsTab
 } from "./presentation/tabs/results-tabs";
 import { createResultsState } from "./presentation/state/results-state";
-import { getCultureOptions, replaceCultureFilterOptions } from "./presentation/filters/culture-options";
+import { updateCultureFilterOptions as updateCultureFilterOptionsElement } from "./presentation/filters/culture-options";
 import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
 import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from "./presentation/renderers/restored-tab";
 import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/renderers/materials-tab";
@@ -404,9 +404,7 @@ function renderStorageTab(items: readonly AppDetection[]): void {
 }
 
 function updateFilterOptions(): void {
-  const current = cultureFilter.value;
-  const cultures = getCultureOptions(detections);
-  replaceCultureFilterOptions(cultureFilter, cultures, current);
+  updateCultureFilterOptionsElement(cultureFilter, detections);
 }
 
 function renderRestorationPlan(items: readonly AppDetection[]): void {
