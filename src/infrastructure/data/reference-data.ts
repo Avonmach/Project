@@ -8,27 +8,33 @@ export interface DamagedArtifactsDatabase {
   readonly items: readonly DamagedArtifactReferenceRecord[];
 }
 
+export interface ArchaeologyMaterialRecord {
+  readonly name: string;
+  readonly icon?: string | null;
+  readonly wikiPage?: string | null;
+  readonly [key: string]: unknown;
+}
+
+export interface ArchaeologyArtefactRecipeRecord {
+  readonly restoredName: string;
+  readonly materials?: readonly { readonly name: string; readonly quantity: number }[];
+  readonly [key: string]: unknown;
+}
+
+export interface ArchaeologyCollectionRecord {
+  readonly name: string;
+  readonly collector?: string | null;
+  readonly archaeologyLevel?: number | null;
+  readonly wikiPage?: string | null;
+  readonly artefacts: readonly string[];
+  readonly artefactCount?: number | null;
+  readonly [key: string]: unknown;
+}
+
 export interface ArchaeologyReferenceData {
-  readonly materials: readonly {
-    readonly name: string;
-    readonly icon?: string | null;
-    readonly wikiPage?: string | null;
-    readonly [key: string]: unknown;
-  }[];
-  readonly artefactRecipes: readonly {
-    readonly restoredName: string;
-    readonly materials?: readonly { readonly name: string; readonly quantity: number }[];
-    readonly [key: string]: unknown;
-  }[];
-  readonly collections: readonly {
-    readonly name: string;
-    readonly collector?: string | null;
-    readonly archaeologyLevel?: number | null;
-    readonly wikiPage?: string | null;
-    readonly artefacts: readonly string[];
-    readonly artefactCount?: number | null;
-    readonly [key: string]: unknown;
-  }[];
+  readonly materials: readonly ArchaeologyMaterialRecord[];
+  readonly artefactRecipes: readonly ArchaeologyArtefactRecipeRecord[];
+  readonly collections: readonly ArchaeologyCollectionRecord[];
 }
 
 export async function loadDamagedArtifactRecords(path = "data/damaged-artifacts.json"): Promise<DamagedArtifactReferenceRecord[]> {
