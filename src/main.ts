@@ -64,14 +64,9 @@ import type { MaterialRow } from "./presentation/renderers/materials-tab";
 import { drawAnalysisOverlay } from "./presentation/renderers/analysis-overlay";
 import { updateDetectionRow as updateDetectionRowElement } from "./presentation/renderers/detection-row-update";
 import {
-  makeBackgroundRemovedCanvas,
-  makeCroppedShapeCanvas,
   makePreviewCanvas,
   makeProcessedCanvas,
-  makeReferenceCanvas,
-  makeRemovedOverlayCanvas,
-  makeScaledShapeCanvas,
-  makeShapeMaskCanvas
+  makeReferenceCanvas
 } from "./presentation/renderers/preview-canvases";
 import {
   makeEmptyMessage,
