@@ -17,7 +17,7 @@ Branch: `Archeology`
 
 Latest pushed commit at handoff:
 
-- `5d9ecb1` Enable no unchecked indexed access
+- `feb0342` Register TypeScript test loader
 
 The repo is clean except for these untracked image files, which have been intentionally left untouched:
 
@@ -97,6 +97,8 @@ Major extraction checkpoints pushed today:
 - typed DOM query helper
 - indexed-access hardening for image data, matching, digit templates, preview canvases, shape masks, quantity OCR, bank grid, and fingerprinting
 - `noUncheckedIndexedAccess` enabled in `tsconfig.json`
+- Node built-in test runner wired through a local TypeScript loader
+- 21 pure application/state tests covering export, filters, material totals, corrections, reference indexes, result state, sorting, culture options, and recognition mode
 
 Each checkpoint has a matching file under `changes/`.
 
@@ -106,6 +108,7 @@ The last completed verification passed:
 
 ```powershell
 npm.cmd run typecheck
+npm.cmd test
 npm.cmd run build
 Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8080 | Select-Object -ExpandProperty StatusCode
 ```
@@ -122,7 +125,7 @@ Continue with small, safe checkpoints:
 2. Consider moving DOM element lookup/wiring into a presentation/browser entry helper.
 3. Add focused unit tests for pure OCR, matching, correction, filtering, and export helpers.
 4. Keep reducing remaining intentional `unknown` boundaries where a stable JSON/data shape exists.
-5. Consider the next strictness/hardening step only after adding tests around OCR, matching, and image-processing behavior.
+5. Add targeted OCR, matching, and image-processing tests before making further algorithm or strictness changes.
 
 Avoid big changes without asking:
 
