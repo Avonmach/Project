@@ -1,4 +1,4 @@
-import { isAmbiguousArtefactMatch, type ArtefactScoringWeights } from "../../domain/artefacts/matching";
+import { shouldReviewArtefactMatch, type ArtefactScoringWeights } from "../../domain/artefacts/matching";
 
 export interface CandidatePredictionItem {
   readonly name: string;
@@ -76,5 +76,5 @@ export function applyCandidatePrediction<TDetection extends CandidatePredictable
   const index = ordered.indexOf(candidate);
   const next = ordered.find((match, candidateIndex) => candidateIndex !== index);
   detection.matchGap = next ? candidate.score - next.score : 1;
-  detection.ambiguousMatch = isAmbiguousArtefactMatch(candidate, next ?? null);
+  detection.ambiguousMatch = shouldReviewArtefactMatch(candidate, next ?? null);
 }

@@ -13,6 +13,7 @@ const CROWDED_SHAPE_COLOR_WEIGHT = 0.6;
 const SHAPE_CROWD_MARGIN = 0.015;
 const SHAPE_CROWD_COUNT = 5;
 const AMBIGUOUS_COMPONENT_MARGIN = 0.02;
+const LOW_COLOR_REVIEW_THRESHOLD = 0.6;
 const COLOR_POSITION_WEIGHT = 0.25;
 const COLOR_SIMILAR_MARGIN = 0.03;
 
@@ -138,7 +139,7 @@ export function matchArtifact<TReference extends MatchReference>(
   best = scores[0] ?? best;
   const secondBest = scores[1] ?? null;
   const matchGap = secondBest ? best.score - secondBest.score : 1;
-  const ambiguous = isAmbiguousArtefactMatch(best, secondBest);
+  const ambiguous = shouldReviewArtefactMatch(best, secondBest);
   const referenceFingerprint =
     mode !== "restored" && best.item.damagedFingerprint && best.damagedScore >= best.restoredScore
       ? best.item.damagedFingerprint
@@ -168,6 +169,17 @@ export function isAmbiguousArtefactMatch(
   const shapeGap = Math.abs(best.shapeScore - secondBest.shapeScore);
   const colorGap = Math.abs(best.colorScore - secondBest.colorScore);
   return shapeGap <= margin && colorGap <= margin;
+}
+
+export function isLowColorArtefactMatch(candidate: ArtefactAmbiguityCandidate, threshold = LOW_COLOR_REVIEW_THRESHOLD): boolean {
+  return typeof candidate.colorScore === "number" && candidate.colorScore < threshold;
+}
+
+export function shouldReviewArtefactMatch(
+  best: ArtefactAmbiguityCandidate,
+  secondBest: ArtefactAmbiguityCandidate | null
+): boolean {
+  return isLowColorArtefactMatch(best) || isAmbiguousArtefactMatch(best, secondBest);
 }
 
 function requireFirstReference<TReference extends MatchReference>(references: readonly TReference[]): TReference {

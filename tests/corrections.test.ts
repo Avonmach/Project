@@ -47,6 +47,19 @@ test("applyCandidatePrediction does not review close final scores with different
   assert.equal(detection.ambiguousMatch, false);
 });
 
+test("applyCandidatePrediction reviews weak color matches", () => {
+  const detection = {
+    topMatches: [
+      { item, score: 0.9, shapeScore: 0.95, colorScore: 0.59 },
+      { item: { ...item, name: "Damaged token", restoredName: "Restored token" }, score: 0.72, shapeScore: 0.8, colorScore: 0.3 }
+    ]
+  };
+
+  applyCandidatePrediction(detection, detection.topMatches[0]);
+
+  assert.equal(detection.ambiguousMatch, true);
+});
+
 test("applyQuantityChange records manual quantity correction metadata", () => {
   const detection = { quantity: 1, originalQuantity: 1, quantityConfidence: 0.65 };
   applyQuantityChange(detection, 5, "test", "2026-05-18T12:00:00.000Z");
