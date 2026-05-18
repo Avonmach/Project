@@ -2,6 +2,12 @@ export interface DamagedArtifactReferenceRecord {
   readonly name: string;
   readonly icon?: string | null;
   readonly damagedIcon?: string | null;
+  readonly wikiPage?: string | null;
+  readonly restoredName?: string | null;
+  readonly restoredWikiPage?: string | null;
+  readonly archaeologyLevel?: number | null;
+  readonly culture?: string | null;
+  readonly digSite?: string | null;
   readonly [key: string]: unknown;
 }
 
@@ -10,9 +16,26 @@ export interface DamagedArtifactsDatabase {
 }
 
 export interface ArchaeologyReferenceData {
-  readonly materials: readonly { readonly name: string; readonly [key: string]: unknown }[];
-  readonly artefactRecipes: readonly { readonly restoredName: string; readonly [key: string]: unknown }[];
-  readonly collections: readonly unknown[];
+  readonly materials: readonly {
+    readonly name: string;
+    readonly icon?: string | null;
+    readonly wikiPage?: string | null;
+    readonly [key: string]: unknown;
+  }[];
+  readonly artefactRecipes: readonly {
+    readonly restoredName: string;
+    readonly materials?: readonly { readonly name: string; readonly quantity: number }[];
+    readonly [key: string]: unknown;
+  }[];
+  readonly collections: readonly {
+    readonly name: string;
+    readonly collector?: string | null;
+    readonly archaeologyLevel?: number | null;
+    readonly wikiPage?: string | null;
+    readonly artefacts: readonly string[];
+    readonly artefactCount?: number | null;
+    readonly [key: string]: unknown;
+  }[];
 }
 
 export async function loadDamagedArtifactRecords(path = "data/damaged-artifacts.json"): Promise<DamagedArtifactReferenceRecord[]> {

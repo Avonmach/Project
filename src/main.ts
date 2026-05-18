@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   FALLBACK_DIGIT_TEMPLATES,
   buildDigitTemplatesFromFont
@@ -6,7 +5,8 @@ import {
 import { createDetectionRecord } from "./application/analyze-screenshot/detection-record";
 import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
-  calculateMaterialTotals as calculateMaterialTotalsForRecipes
+  calculateMaterialTotals as calculateMaterialTotalsForRecipes,
+  type MaterialRecipe
 } from "./application/calculate-materials/material-totals";
 import { applyCandidatePrediction as applyCandidatePredictionRule } from "./application/correct-detection/candidate-prediction";
 import { applyQuantityChange as applyQuantityCorrection } from "./application/correct-detection/quantity-correction";
@@ -20,14 +20,16 @@ import {
   sortMaterialRows as sortMaterialRowsForMode,
   sortRestoredRows as sortRestoredRowsForMode
 } from "./application/sort-results/result-row-sorting";
-import { matchArtifact as matchArtefactAgainstReferences } from "./domain/artefacts/matching";
-import { detectQuantity, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
+import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode } from "./domain/artefacts/matching";
+import { detectQuantity, quantityCandidatesAreClose, type QuantityDebug } from "./domain/ocr/quantity-ocr";
+import type { BoundingBox } from "./domain/shared/geometry";
 import { normalizeName } from "./domain/shared/format";
 import { loadImageElement, loadImageToCanvas, readImageFileAsDataUrl } from "./infrastructure/browser/image-loader";
 import {
   emptyArchaeologyReferenceData,
   loadArchaeologyReferenceData,
-  loadDamagedArtifactRecords
+  loadDamagedArtifactRecords,
+  type ArchaeologyReferenceData
 } from "./infrastructure/data/reference-data";
 import {
   detectItemBoxes,
@@ -40,7 +42,8 @@ import { copyImageData } from "./infrastructure/image-processing/image-data";
 import { makeFullShapeImageData } from "./infrastructure/image-processing/shape-mask";
 import {
   applyResultTabSelection,
-  connectResultTabButtons
+  connectResultTabButtons,
+  type ResultsTab
 } from "./presentation/tabs/results-tabs";
 import { createResultsState } from "./presentation/state/results-state";
 import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
@@ -48,11 +51,19 @@ import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from
 import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/renderers/materials-tab";
 import { renderStorageTab as renderStorageTabPanel } from "./presentation/renderers/storage-tab";
 import { renderDamagedTab as renderDamagedTabPanel } from "./presentation/renderers/damaged-tab";
-import { makeCollectionOverview as makeCollectionOverviewElement } from "./presentation/renderers/collection-overview";
+import {
+  makeCollectionOverview as makeCollectionOverviewElement,
+  type CollectionSort
+} from "./presentation/renderers/collection-overview";
 import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentation/renderers/restoration-plan";
 import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentation/renderers/recognition-info";
 import { renderSummaryTotals } from "./presentation/renderers/summary-totals";
-import { makeMaterialCell as makeMaterialCellElement } from "./presentation/renderers/material-cell";
+import {
+  makeMaterialCell as makeMaterialCellElement,
+  type MaterialCellReference,
+  type MaterialCellRow
+} from "./presentation/renderers/material-cell";
+import type { MaterialRow } from "./presentation/renderers/materials-tab";
 import { drawAnalysisOverlay } from "./presentation/renderers/analysis-overlay";
 import { updateDetectionRow as updateDetectionRowElement } from "./presentation/renderers/detection-row-update";
 import {
@@ -76,53 +87,79 @@ import {
 import {
   makeDetectionTableRow as makeDetectionTableRowElement,
   makeStatusPill as makeDetectionStatusPill,
-  rowReviewClass as detectionRowReviewClass
+  rowReviewClass as detectionRowReviewClass,
+  type DetectionRowElements
 } from "./presentation/renderers/detection-row";
 import { makeReferenceCorrectionDropdown as makeReferenceCorrectionDropdownElement } from "./presentation/renderers/correction-dropdown";
 import { makeQuantityDebugView as makeQuantityDebugViewElement } from "./presentation/renderers/quantity-debug";
 
-const canvas = document.getElementById("previewCanvas");
-const ctx = canvas.getContext("2d", { willReadFrequently: true });
-const imageInput = document.getElementById("imageInput");
-const loadDefaultButton = document.getElementById("loadDefault");
-const analyzeButton = document.getElementById("analyze");
-const viewMode = document.getElementById("viewMode");
-const exportResultsButton = document.getElementById("exportResults");
-const resultsBody = document.getElementById("resultsBody");
-const restoredResultsBody = document.getElementById("restoredResultsBody");
-const slotCountEl = document.getElementById("slotCount");
-const quantityTotalEl = document.getElementById("quantityTotal");
-const manualCountEl = document.getElementById("manualCount");
-const referenceCountEl = document.getElementById("referenceCount");
-const visibleCountEl = document.getElementById("visibleCount");
-const reviewCountEl = document.getElementById("reviewCount");
-const highestLevelEl = document.getElementById("highestLevel");
-const planBody = document.getElementById("planBody");
-const artefactSearch = document.getElementById("artefactSearch");
-const cultureFilter = document.getElementById("cultureFilter");
-const reviewOnly = document.getElementById("reviewOnly");
-const resultsTitle = document.getElementById("resultsTitle");
-const resultTabButtons = [...document.querySelectorAll("[data-results-tab]")];
-const resultTabPanels = [...document.querySelectorAll("[data-results-panel]")];
-const overviewPanel = document.getElementById("overviewPanel");
-const storagePanel = document.getElementById("storagePanel");
-const materialsPanel = document.getElementById("materialsPanel");
+import type { PreparedArtefactReference } from "./application/load-references/artefact-reference-preparation";
+
+type AppDetection = ReturnType<
+  typeof createDetectionRecord<PreparedArtefactReference, HTMLCanvasElement, HTMLCanvasElement, HTMLCanvasElement>
+> & {
+  rowElements?: DetectionRowElements;
+};
+
+const canvas = requireElement("previewCanvas", HTMLCanvasElement);
+const ctx = requireCanvasContext(canvas);
+const imageInput = requireElement("imageInput", HTMLInputElement);
+const loadDefaultButton = requireElement("loadDefault", HTMLButtonElement);
+const analyzeButton = requireElement("analyze", HTMLButtonElement);
+const viewMode = requireElement("viewMode", HTMLSelectElement);
+const exportResultsButton = requireElement("exportResults", HTMLButtonElement);
+const resultsBody = requireElement("resultsBody", HTMLTableSectionElement);
+const restoredResultsBody = requireElement("restoredResultsBody", HTMLTableSectionElement);
+const slotCountEl = requireElement("slotCount", HTMLElement);
+const quantityTotalEl = requireElement("quantityTotal", HTMLElement);
+const manualCountEl = requireElement("manualCount", HTMLElement);
+const referenceCountEl = requireElement("referenceCount", HTMLElement);
+const visibleCountEl = requireElement("visibleCount", HTMLElement);
+const reviewCountEl = requireElement("reviewCount", HTMLElement);
+const highestLevelEl = requireElement("highestLevel", HTMLElement);
+const planBody = requireElement("planBody", HTMLElement);
+const artefactSearch = requireElement("artefactSearch", HTMLInputElement);
+const cultureFilter = requireElement("cultureFilter", HTMLSelectElement);
+const reviewOnly = requireElement("reviewOnly", HTMLInputElement);
+const resultsTitle = requireElement("resultsTitle", HTMLElement);
+const resultTabButtons = [...document.querySelectorAll<HTMLElement>("[data-results-tab]")];
+const resultTabPanels = [...document.querySelectorAll<HTMLElement>("[data-results-panel]")];
+const overviewPanel = requireElement("overviewPanel", HTMLElement);
+const storagePanel = requireElement("storagePanel", HTMLElement);
+const materialsPanel = requireElement("materialsPanel", HTMLElement);
 
 const AMBIGUOUS_FINAL_MARGIN = 0.025;
-let loadedImage = null;
-let detections = [];
-let references = [];
-let archaeologyReference = { materials: [], artefactRecipes: [], collections: [] };
-let recipeByRestoredName = new Map();
-let materialByName = new Map();
-const resultsState = createResultsState();
-let collectionSort = { key: "progress", direction: "desc" };
+let loadedImage: HTMLImageElement | null = null;
+let detections: AppDetection[] = [];
+let references: PreparedArtefactReference[] = [];
+let archaeologyReference: ArchaeologyReferenceData = emptyArchaeologyReferenceData();
+let recipeByRestoredName: Map<string, MaterialRecipe> = new Map();
+let materialByName: Map<string, MaterialCellReference> = new Map();
+const resultsState = createResultsState<AppDetection>();
+let collectionSort: CollectionSort = { key: "progress", direction: "desc" };
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
 const DEFAULT_SCREENSHOTS = {
   damaged: "Damaged_Items.png",
   restored: "Items%23.png"
 };
+
+function requireElement<TElement extends Element>(
+  id: string,
+  constructor: { new (...args: never[]): TElement }
+): TElement {
+  const element = document.getElementById(id);
+  if (!(element instanceof constructor)) {
+    throw new Error(`Missing required element #${id}.`);
+  }
+  return element;
+}
+
+function requireCanvasContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  if (!context) throw new Error("Could not create preview canvas context.");
+  return context;
+}
 
 loadDefaultButton.addEventListener("click", () => imageInput.click());
 analyzeButton.addEventListener("click", analyzeCurrentImage);
@@ -132,13 +169,14 @@ cultureFilter.addEventListener("change", renderDetections);
 reviewOnly.addEventListener("change", renderDetections);
 connectResultTabButtons(resultTabButtons, setActiveResultsTab);
 document.addEventListener("click", (event) => {
-  for (const menu of document.querySelectorAll(".correction-menu[open]")) {
+  if (!(event.target instanceof Node)) return;
+  for (const menu of document.querySelectorAll<HTMLDetailsElement>(".correction-menu[open]")) {
     if (!menu.contains(event.target)) menu.open = false;
   }
 });
 exportResultsButton.addEventListener("click", exportResults);
-imageInput.addEventListener("change", async (event) => {
-  const file = event.target.files?.[0];
+imageInput.addEventListener("change", async () => {
+  const file = imageInput.files?.[0];
   if (!file) return;
   try {
     await loadImageFromUrl(await readImageFileAsDataUrl(file));
@@ -198,7 +236,7 @@ async function loadArchaeologyReference() {
   }
 }
 
-async function loadImageFromUrl(src) {
+async function loadImageFromUrl(src: string) {
   try {
     loadedImage = await loadImageToCanvas(src, canvas, ctx);
   } catch (error) {
@@ -242,7 +280,12 @@ function analyzeCurrentImage() {
   drawBoxes(detections, grid.contentArea, grid.infinityArea);
 }
 
-function matchArtifact(shapeImageData, originalImageData, box, mode = "damaged") {
+function matchArtifact(
+  shapeImageData: ImageData,
+  originalImageData: ImageData,
+  box: BoundingBox,
+  mode: RecognitionMode = "damaged"
+) {
   return matchArtefactAgainstReferences(shapeImageData, originalImageData, box, references, mode);
 }
 
@@ -257,7 +300,7 @@ function applyCandidatePrediction(detection, candidate) {
   detection.referencePreview = makeReferenceCanvas(candidate.item.image);
 }
 
-function attachQuantityDebugSource(debug, imageData) {
+function attachQuantityDebugSource(debug: QuantityDebug | null, imageData: ImageData) {
   if (!debug) return debug;
   return {
     ...debug,
@@ -374,7 +417,7 @@ function renderRestoredTab(items) {
   });
 }
 
-function renderMaterialsTab(items) {
+function renderMaterialsTab(items: AppDetection[]) {
   renderMaterialsTabPanel({
     panel: materialsPanel,
     allDetections: detections,
@@ -391,7 +434,7 @@ function renderMaterialsTab(items) {
   });
 }
 
-function renderStorageTab(items) {
+function renderStorageTab(items: AppDetection[]) {
   renderStorageTabPanel({
     panel: storagePanel,
     visibleDetections: items,
@@ -407,7 +450,9 @@ function renderStorageTab(items) {
 
 function updateFilterOptions() {
   const current = cultureFilter.value;
-  const cultures = [...new Set(detections.map((detection) => detection.culture).filter(Boolean))].sort();
+  const cultures = [
+    ...new Set(detections.map((detection) => detection.culture).filter((culture): culture is string => Boolean(culture)))
+  ].sort();
   cultureFilter.replaceChildren(new Option("All cultures", ""));
   for (const culture of cultures) cultureFilter.append(new Option(culture, culture));
   if (cultures.includes(current)) cultureFilter.value = current;
@@ -433,7 +478,7 @@ function sortRestoredRows(rows) {
   return sortRestoredRowsForMode(rows, viewMode.value);
 }
 
-function sortMaterialRows(rows) {
+function sortMaterialRows(rows: readonly MaterialRow[]): readonly MaterialRow[] {
   return sortMaterialRowsForMode(rows, viewMode.value);
 }
 
