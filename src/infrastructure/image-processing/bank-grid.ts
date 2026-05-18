@@ -45,7 +45,7 @@ interface Point {
 }
 
 export function detectItemBoxes(imageData: ImageData, grid = estimateBankGrid(imageData)): BankGridBox[] {
-  const boxes = [];
+  const boxes: BankGridBox[] = [];
 
   for (let row = 0; row < grid.rows; row += 1) {
     for (let column = 0; column < grid.columns; column += 1) {
@@ -160,8 +160,8 @@ export function dilate(mask: Uint8Array, width: number, height: number, radius: 
 
 export function connectedComponents(mask: Uint8Array, width: number, height: number): BankGridBox[] {
   const visited = new Uint8Array(mask.length);
-  const boxes = [];
-  const queue = [];
+  const boxes: BankGridBox[] = [];
+  const queue: number[] = [];
 
   for (let start = 0; start < mask.length; start += 1) {
     if (!mask[start] || visited[start]) continue;
@@ -176,7 +176,7 @@ export function connectedComponents(mask: Uint8Array, width: number, height: num
     let area = 0;
 
     for (let qi = 0; qi < queue.length; qi += 1) {
-      const current = queue[qi];
+      const current: number = queue[qi];
       const x = current % width;
       const y = Math.floor(current / width);
       minX = Math.min(minX, x);
@@ -185,7 +185,7 @@ export function connectedComponents(mask: Uint8Array, width: number, height: num
       maxY = Math.max(maxY, y);
       area += 1;
 
-      const neighbors = [current - 1, current + 1, current - width, current + width];
+      const neighbors: number[] = [current - 1, current + 1, current - width, current + width];
       for (const next of neighbors) {
         if (next < 0 || next >= mask.length || visited[next] || !mask[next]) continue;
         const nx = next % width;

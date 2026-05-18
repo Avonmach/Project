@@ -12,6 +12,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "strict": false,
+    "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
