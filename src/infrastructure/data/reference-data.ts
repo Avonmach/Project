@@ -81,7 +81,14 @@ function isArchaeologyMaterialRecord(value: unknown): value is ArchaeologyMateri
 }
 
 function isArchaeologyArtefactRecipeRecord(value: unknown): value is ArchaeologyArtefactRecipeRecord {
-  return isRecord(value) && typeof value.restoredName === "string";
+  if (!isRecord(value) || typeof value.restoredName !== "string") return false;
+  return (
+    value.materials === undefined ||
+    (Array.isArray(value.materials) &&
+      value.materials.every(
+        (material) => isRecord(material) && typeof material.name === "string" && typeof material.quantity === "number"
+      ))
+  );
 }
 
 function isArchaeologyCollectionRecord(value: unknown): value is ArchaeologyCollectionRecord {
