@@ -115,7 +115,7 @@ export function makeProcessedCanvas(
 
   if (bounds) {
     const longest = Math.max(bounds.w, bounds.h);
-    const maxIconSize = PREVIEW_SIZE - 8;
+    const maxIconSize = PREVIEW_SIZE;
     const drawW = Math.ceil((bounds.w / longest) * maxIconSize);
     const drawH = Math.ceil((bounds.h / longest) * maxIconSize);
     const dx = Math.floor((PREVIEW_SIZE - drawW) / 2);

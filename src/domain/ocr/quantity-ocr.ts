@@ -41,12 +41,20 @@ export interface QuantityDebug {
   readonly strict: boolean;
   readonly scanBox: BoundingBox;
   readonly pixelCount: number;
-  readonly pixels: PixelPoint[];
+  readonly pixels: QuantityDebugPixel[];
   readonly digitBoxes: BoundingBox[];
   readonly rejectedBoxes: BoundingBox[];
   readonly matches: QuantityDebugMatch[];
   readonly text: string;
   readonly confidence: number;
+}
+
+export interface QuantityDebugPixel extends PixelPoint {
+  readonly color: {
+    readonly r: number;
+    readonly g: number;
+    readonly b: number;
+  };
 }
 
 export interface QuantityResult {
@@ -170,7 +178,7 @@ function makeQuantityDebug({
   readonly mode: RecognitionMode;
   readonly strict: boolean;
   readonly scanBox: BoundingBox;
-  readonly yellowPixels: readonly PixelPoint[];
+  readonly yellowPixels: readonly QuantityDebugPixel[];
   readonly digitBoxes: readonly BoundingBox[];
   readonly rejectedBoxes?: readonly BoundingBox[];
   readonly matches: readonly QuantityDigitMatch[];
@@ -183,7 +191,7 @@ function makeQuantityDebug({
     strict,
     scanBox,
     pixelCount: yellowPixels.length,
-    pixels: yellowPixels.map((pixel) => ({ x: pixel.x, y: pixel.y })),
+    pixels: yellowPixels.map((pixel) => ({ x: pixel.x, y: pixel.y, color: { ...pixel.color } })),
     digitBoxes: digitBoxes.map((box) => ({ ...box })),
     rejectedBoxes: rejectedBoxes.map((box) => ({ ...box })),
     matches: matches.map((match, index) => ({
@@ -240,9 +248,9 @@ function quantityAlternatives(matches: readonly QuantityDigitMatch[]): QuantityA
     .slice(0, 6);
 }
 
-function collectYellowPixels(imageData: ImageData, box: BoundingBox, options: { readonly strict?: boolean } = {}): PixelPoint[] {
+function collectYellowPixels(imageData: ImageData, box: BoundingBox, options: { readonly strict?: boolean } = {}): QuantityDebugPixel[] {
   const { width, data } = imageData;
-  const pixels: PixelPoint[] = [];
+  const pixels: QuantityDebugPixel[] = [];
   const strict = options.strict === true;
   const scanBox = quantityScanBox(box, strict);
   for (let y = scanBox.y; y < scanBox.y + scanBox.h; y += 1) {
@@ -252,7 +260,7 @@ function collectYellowPixels(imageData: ImageData, box: BoundingBox, options: { 
       const g = readImageDataChannel(data, offset + 1);
       const b = readImageDataChannel(data, offset + 2);
       if (strict ? isStrictQuantityTextPixel(r, g, b) : isQuantityPixel(r, g, b)) {
-        pixels.push({ x: x - box.x, y: y - box.y });
+        pixels.push({ x: x - box.x, y: y - box.y, color: { r, g, b } });
       }
     }
   }
@@ -269,7 +277,7 @@ function quantityScanBox(box: BoundingBox, strict = false): BoundingBox {
 }
 
 function isStrictQuantityTextPixel(r: number, g: number, b: number): boolean {
-  return isQuantityPixel(r, g, b) && r <= g + 70 && (r + g) / 2 - b >= 58;
+  return isQuantityPixel(r, g, b) && r >= 150 && g >= 145 && b <= 95 && r <= g + 70 && (r + g) / 2 - b >= 58;
 }
 
 function isPlausibleQuantityDigitBox(pixels: readonly PixelPoint[], box: BoundingBox, strict = false): boolean {

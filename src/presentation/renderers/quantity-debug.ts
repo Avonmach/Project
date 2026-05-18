@@ -11,6 +11,11 @@ interface QuantityDebugBox {
 interface QuantityDebugPixel {
   readonly x: number;
   readonly y: number;
+  readonly color?: {
+    readonly r: number;
+    readonly g: number;
+    readonly b: number;
+  };
 }
 
 interface QuantityDebugTemplateOption {
@@ -175,9 +180,9 @@ function makeQuantityDebugCanvas(debug: QuantityDebugData): HTMLCanvasElement {
   context.fillStyle = "#1f2529";
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  context.fillStyle = "#f3d14a";
   for (const pixel of debug.pixels) {
     if (pixel.x >= debug.scanBox.w || pixel.y >= debug.scanBox.h) continue;
+    context.fillStyle = pixel.color ? `rgb(${pixel.color.r}, ${pixel.color.g}, ${pixel.color.b})` : "#f3d14a";
     context.fillRect(pixel.x * scale, pixel.y * scale, scale, scale);
   }
 

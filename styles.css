@@ -896,16 +896,18 @@ tbody tr:has(.processed-preview:hover),
   filter: none;
 }
 
-.processed-preview,
 .reference-preview {
   background: #ffffff;
   border: 2px solid #d8e2dd;
-  filter: brightness(1.2);
+  filter: none;
   image-rendering: auto;
 }
 
-.reference-preview {
-  filter: none;
+.processed-preview {
+  background: transparent;
+  border: 0;
+  filter: brightness(1.2);
+  image-rendering: auto;
 }
 
 .clean-preview,
