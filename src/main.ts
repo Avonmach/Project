@@ -13,12 +13,12 @@ import { findUniqueArtefactAssignments } from "./application/correct-detection/u
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
 import { createAnalysisExportPayload } from "./application/export-analysis/analysis-export";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
+import { createArchaeologyReferenceIndexes } from "./application/load-references/archaeology-reference-indexes";
 import { prepareArtefactReferences } from "./application/load-references/artefact-reference-preparation";
 import { sortMaterialRows as sortMaterialRowsForMode } from "./application/sort-results/result-row-sorting";
 import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode } from "./domain/artefacts/matching";
 import { detectQuantity, quantityCandidatesAreClose, type QuantityDebug } from "./domain/ocr/quantity-ocr";
 import type { BoundingBox } from "./domain/shared/geometry";
-import { normalizeName } from "./domain/shared/format";
 import { requireCanvasContext, requireElement } from "./infrastructure/browser/dom-elements";
 import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
 import { loadImageElement, loadImageToCanvas, readImageFileAsDataUrl } from "./infrastructure/browser/image-loader";
@@ -183,12 +183,7 @@ async function loadReferences() {
 async function loadArchaeologyReference() {
   try {
     archaeologyReference = await loadArchaeologyReferenceData();
-    recipeByRestoredName = new Map(
-      (archaeologyReference.artefactRecipes || []).map((recipe) => [normalizeName(recipe.restoredName), recipe])
-    );
-    materialByName = new Map(
-      (archaeologyReference.materials || []).map((material) => [normalizeName(material.name), material])
-    );
+    ({ recipeByRestoredName, materialByName } = createArchaeologyReferenceIndexes(archaeologyReference));
   } catch (error) {
     console.warn("Material and collection reference data is unavailable.", error);
     archaeologyReference = emptyArchaeologyReferenceData();
