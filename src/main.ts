@@ -28,8 +28,7 @@ import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode }
 import { quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import type { BoundingBox } from "./domain/shared/geometry";
 import { downloadJsonFile } from "./infrastructure/browser/download";
-import { closeOpenDetailsMenusOutsideTarget } from "./infrastructure/browser/details-menu";
-import { openFilePicker } from "./infrastructure/browser/file-input";
+import { connectAppEvents } from "./infrastructure/browser/app-events";
 import { getAppElements } from "./infrastructure/browser/app-elements";
 import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
 import { loadImageElement, loadImageToCanvas, readSelectedImageAsDataUrl } from "./infrastructure/browser/image-loader";
@@ -52,7 +51,6 @@ import {
 } from "./infrastructure/image-processing/current-recognition-adapters";
 import {
   applyResultTabSelection,
-  connectResultTabButtons,
   type ResultsTab
 } from "./presentation/tabs/results-tabs";
 import { createResultsState } from "./presentation/state/results-state";
@@ -98,6 +96,7 @@ import { makeQuantityDebugView as makeQuantityDebugViewElement } from "./present
 
 import type { PreparedArtefactReference } from "./application/load-references/artefact-reference-preparation";
 
+const elements = getAppElements();
 const {
   canvas,
   ctx,
@@ -125,7 +124,7 @@ const {
   overviewPanel,
   storagePanel,
   materialsPanel
-} = getAppElements();
+} = elements;
 
 let loadedImage: HTMLImageElement | null = null;
 let detections: AppDetection[] = [];
@@ -137,19 +136,17 @@ let collectionSort: CollectionSort = { key: "progress", direction: "desc" };
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
 
-loadDefaultButton.addEventListener("click", () => openFilePicker(imageInput));
-analyzeButton.addEventListener("click", analyzeCurrentImage);
-viewMode.addEventListener("change", renderDetections);
-artefactSearch.addEventListener("input", renderDetections);
-cultureFilter.addEventListener("change", renderDetections);
-reviewOnly.addEventListener("change", renderDetections);
-connectResultTabButtons(resultTabButtons, setActiveResultsTab);
-document.addEventListener("click", (event) => {
-  if (!(event.target instanceof Node)) return;
-  closeOpenDetailsMenusOutsideTarget(".correction-menu[open]", event.target);
+const browserActions = connectAppEvents(elements, {
+  analyzeCurrentImage,
+  renderDetections,
+  setActiveResultsTab,
+  exportResults,
+  handleSelectedImageInput
 });
-exportResultsButton.addEventListener("click", exportResults);
-imageInput.addEventListener("change", async () => {
+
+initialize();
+
+async function handleSelectedImageInput() {
   try {
     const dataUrl = await readSelectedImageAsDataUrl(imageInput);
     if (!dataUrl) return;
@@ -158,9 +155,7 @@ imageInput.addEventListener("change", async () => {
     console.warn(STATUS_MESSAGES.screenshotReadWarning, error);
     drawEmptyState(STATUS_MESSAGES.screenshotLoadFailed);
   }
-});
-
-initialize();
+}
 
 async function initialize() {
   analyzeButton.disabled = true;
@@ -324,7 +319,7 @@ function requestTabScreenshot(tab: ResultsTab): void {
     loadImageFromUrl(DEFAULT_SCREENSHOTS.restored);
     return;
   }
-  openFilePicker(imageInput);
+  browserActions.requestScreenshotFile();
 }
 
 function renderOverviewTab(items: readonly AppDetection[]): void {
