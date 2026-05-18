@@ -209,16 +209,18 @@ function analyzeCurrentImage() {
     cellSize: getGridCellSize(),
     recognitionMode,
     digitTemplates,
-    matchArtefact: matchArtifact,
-    makeQuantityDebug: attachQuantityDebugSource,
-    makePreviews: ({ imageData, shapeImageData, box, recognitionMode, match }) =>
-      makeDetectionPreviews({
-        imageData,
-        shapeImageData,
-        box,
-        referenceImage: match.item.image,
-        enhance: recognitionMode !== "restored"
-      })
+    artefactMatcher: { matchArtefact: matchArtifact },
+    quantityDebugSource: { makeQuantityDebug: attachQuantityDebugSource },
+    previewFactory: {
+      makePreviews: ({ imageData, shapeImageData, box, recognitionMode, match }) =>
+        makeDetectionPreviews({
+          imageData,
+          shapeImageData,
+          box,
+          referenceImage: match.item.image,
+          enhance: recognitionMode !== "restored"
+        })
+    }
   });
 
   detections = resultsState.setDetectionsForMode(recognitionMode, analyzedDetections);

@@ -1,20 +1,9 @@
-import type {
-  ArtefactMatchResult,
-  MatchReference,
-  RecognitionMode
-} from "../../domain/artefacts/matching";
+import type { MatchReference, RecognitionMode } from "../../domain/artefacts/matching";
 import type { DigitTemplateMap } from "../../domain/ocr/digit-templates";
-import { detectQuantity, type QuantityDebug } from "../../domain/ocr/quantity-ocr";
 import type { BoundingBox } from "../../domain/shared/geometry";
-import { createDetectionRecord, type DetectionRecordPreviewParts } from "./detection-record";
-
-export interface DetectionPreviewFactoryOptions {
-  readonly imageData: ImageData;
-  readonly shapeImageData: ImageData;
-  readonly box: BoundingBox;
-  readonly recognitionMode: RecognitionMode;
-  readonly match: ArtefactMatchResult<MatchReference>;
-}
+import { detectQuantity } from "../../domain/ocr/quantity-ocr";
+import { createDetectionRecord } from "./detection-record";
+import type { ArtefactMatcher, DetectionPreviewFactory, QuantityDebugSource, QuantityRecognizer } from "./recognition-ports";
 
 export interface AnalyzeDetectionsOptions<TReference extends MatchReference, TPreview, TProcessedPreview, TReferencePreview> {
   readonly imageData: ImageData;
@@ -23,16 +12,10 @@ export interface AnalyzeDetectionsOptions<TReference extends MatchReference, TPr
   readonly cellSize: number;
   readonly recognitionMode: RecognitionMode;
   readonly digitTemplates: DigitTemplateMap;
-  readonly matchArtefact: (
-    shapeImageData: ImageData,
-    imageData: ImageData,
-    box: BoundingBox,
-    recognitionMode: RecognitionMode
-  ) => ArtefactMatchResult<TReference>;
-  readonly makeQuantityDebug: (debug: QuantityDebug | null, imageData: ImageData) => QuantityDebug | null;
-  readonly makePreviews: (
-    options: DetectionPreviewFactoryOptions & { readonly match: ArtefactMatchResult<TReference> }
-  ) => DetectionRecordPreviewParts<TPreview, TProcessedPreview, TReferencePreview>;
+  readonly quantityRecognizer?: QuantityRecognizer;
+  readonly artefactMatcher: ArtefactMatcher<TReference>;
+  readonly quantityDebugSource: QuantityDebugSource;
+  readonly previewFactory: DetectionPreviewFactory<TReference, TPreview, TProcessedPreview, TReferencePreview>;
 }
 
 export function analyzeDetections<TReference extends MatchReference, TPreview, TProcessedPreview, TReferencePreview>({
@@ -42,13 +25,14 @@ export function analyzeDetections<TReference extends MatchReference, TPreview, T
   cellSize,
   recognitionMode,
   digitTemplates,
-  matchArtefact,
-  makeQuantityDebug,
-  makePreviews
+  quantityRecognizer = { detectQuantity },
+  artefactMatcher,
+  quantityDebugSource,
+  previewFactory
 }: AnalyzeDetectionsOptions<TReference, TPreview, TProcessedPreview, TReferencePreview>) {
   return boxes.map((box, index) => {
-    const quantityResult = detectQuantity(imageData, box, recognitionMode, digitTemplates);
-    const match = matchArtefact(shapeImageData, imageData, box, recognitionMode);
+    const quantityResult = quantityRecognizer.detectQuantity(imageData, box, recognitionMode, digitTemplates);
+    const match = artefactMatcher.matchArtefact(shapeImageData, imageData, box, recognitionMode);
 
     return createDetectionRecord({
       box,
@@ -56,9 +40,9 @@ export function analyzeDetections<TReference extends MatchReference, TPreview, T
       cellSize,
       match,
       quantityResult,
-      quantityDebug: makeQuantityDebug(quantityResult.debug, imageData),
+      quantityDebug: quantityDebugSource.makeQuantityDebug(quantityResult.debug, imageData),
       recognitionMode,
-      previews: makePreviews({ imageData, shapeImageData, box, recognitionMode, match })
+      previews: previewFactory.makePreviews({ imageData, shapeImageData, box, recognitionMode, match })
     });
   });
 }
