@@ -20,17 +20,31 @@ test("applyCandidatePrediction updates selected match fields and ambiguity", () 
   const detection = {
     topMatches: [
       { item, score: 0.9, shapeScore: 0.8, colorScore: 0.7, restoredScore: 0.6, damagedScore: 0.95 },
-      { item: { ...item, name: "Damaged token", restoredName: "Restored token" }, score: 0.88 }
+      { item: { ...item, name: "Damaged token", restoredName: "Restored token" }, score: 0.88, shapeScore: 0.79, colorScore: 0.69 }
     ]
   };
 
-  applyCandidatePrediction(detection, detection.topMatches[0], 0.025);
+  applyCandidatePrediction(detection, detection.topMatches[0]);
 
   assert.equal(detection.artefact, "Damaged vase");
   assert.equal(detection.restoredName, "Restored vase");
   assert.equal(detection.referenceUsed, "damaged");
   assert.equal(detection.matchGap, 0.020000000000000018);
   assert.equal(detection.ambiguousMatch, true);
+});
+
+test("applyCandidatePrediction does not review close final scores with different color", () => {
+  const detection = {
+    topMatches: [
+      { item, score: 0.9, shapeScore: 0.8, colorScore: 0.7 },
+      { item: { ...item, name: "Damaged token", restoredName: "Restored token" }, score: 0.88, shapeScore: 0.79, colorScore: 0.66 }
+    ]
+  };
+
+  applyCandidatePrediction(detection, detection.topMatches[0]);
+
+  assert.equal(detection.matchGap, 0.020000000000000018);
+  assert.equal(detection.ambiguousMatch, false);
 });
 
 test("applyQuantityChange records manual quantity correction metadata", () => {

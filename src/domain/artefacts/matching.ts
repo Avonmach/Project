@@ -12,7 +12,7 @@ const COLOR_SCORE_WEIGHT = 0.2;
 const CROWDED_SHAPE_COLOR_WEIGHT = 0.6;
 const SHAPE_CROWD_MARGIN = 0.015;
 const SHAPE_CROWD_COUNT = 5;
-const AMBIGUOUS_FINAL_MARGIN = 0.025;
+const AMBIGUOUS_COMPONENT_MARGIN = 0.02;
 const COLOR_POSITION_WEIGHT = 0.25;
 const COLOR_SIMILAR_MARGIN = 0.03;
 
@@ -44,6 +44,11 @@ export interface ArtefactScoringWeights {
   readonly colorExistence: number;
   readonly colorPosition: number;
   readonly similarColorCount: number;
+}
+
+export interface ArtefactAmbiguityCandidate {
+  readonly shapeScore?: number;
+  readonly colorScore?: number;
 }
 
 export interface ArtefactMatchResult<TReference extends MatchReference> extends ArtefactMatchCandidate<TReference> {
@@ -133,7 +138,7 @@ export function matchArtifact<TReference extends MatchReference>(
   best = scores[0] ?? best;
   const secondBest = scores[1] ?? null;
   const matchGap = secondBest ? best.score - secondBest.score : 1;
-  const ambiguous = Boolean(secondBest && matchGap <= AMBIGUOUS_FINAL_MARGIN);
+  const ambiguous = isAmbiguousArtefactMatch(best, secondBest);
   const referenceFingerprint =
     mode !== "restored" && best.item.damagedFingerprint && best.damagedScore >= best.restoredScore
       ? best.item.damagedFingerprint
@@ -150,6 +155,19 @@ export function matchArtifact<TReference extends MatchReference>(
     algorithmBest: { shape: bestShape, restored: bestRestored, damaged: bestDamaged, color: bestColor },
     candidates: scores.slice(0, 10)
   };
+}
+
+export function isAmbiguousArtefactMatch(
+  best: ArtefactAmbiguityCandidate,
+  secondBest: ArtefactAmbiguityCandidate | null,
+  margin = AMBIGUOUS_COMPONENT_MARGIN
+): boolean {
+  if (!secondBest) return false;
+  if (typeof best.shapeScore !== "number" || typeof best.colorScore !== "number") return false;
+  if (typeof secondBest.shapeScore !== "number" || typeof secondBest.colorScore !== "number") return false;
+  const shapeGap = Math.abs(best.shapeScore - secondBest.shapeScore);
+  const colorGap = Math.abs(best.colorScore - secondBest.colorScore);
+  return shapeGap <= margin && colorGap <= margin;
 }
 
 function requireFirstReference<TReference extends MatchReference>(references: readonly TReference[]): TReference {

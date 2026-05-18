@@ -225,7 +225,8 @@ export function makeReferenceCanvas(image: CanvasImageSource & { readonly natura
   if (!previewCtx) return preview;
   previewCtx.imageSmoothingEnabled = true;
   previewCtx.imageSmoothingQuality = "high";
-  previewCtx.clearRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
+  previewCtx.fillStyle = PREVIEW_BACKGROUND;
+  previewCtx.fillRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
 
   const longest = Math.max(image.naturalWidth, image.naturalHeight);
   const maxIconSize = PREVIEW_SIZE - 8;

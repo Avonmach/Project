@@ -239,7 +239,7 @@ function applyUniqueArtefactAssignments(items: readonly AppDetection[]): void {
 }
 
 function applyCandidatePrediction(detection: AppDetection, candidate: AppMatchCandidate): void {
-  applyCandidatePredictionRule(detection, candidate, AMBIGUOUS_FINAL_MARGIN);
+  applyCandidatePredictionRule(detection, candidate);
   detection.referencePreview = makeReferenceCanvas(candidate.item.image);
 }
 
