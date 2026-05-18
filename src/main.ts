@@ -30,7 +30,7 @@ import type { BoundingBox } from "./domain/shared/geometry";
 import { downloadJsonFile } from "./infrastructure/browser/download";
 import { closeOpenDetailsMenusOutsideTarget } from "./infrastructure/browser/details-menu";
 import { openFilePicker } from "./infrastructure/browser/file-input";
-import { queryElements, requireCanvasContext, requireElement } from "./infrastructure/browser/dom-elements";
+import { getAppElements } from "./infrastructure/browser/app-elements";
 import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
 import { loadImageElement, loadImageToCanvas, readSelectedImageAsDataUrl } from "./infrastructure/browser/image-loader";
 import {
@@ -98,32 +98,34 @@ import { makeQuantityDebugView as makeQuantityDebugViewElement } from "./present
 
 import type { PreparedArtefactReference } from "./application/load-references/artefact-reference-preparation";
 
-const canvas = requireElement("previewCanvas", HTMLCanvasElement);
-const ctx = requireCanvasContext(canvas);
-const imageInput = requireElement("imageInput", HTMLInputElement);
-const loadDefaultButton = requireElement("loadDefault", HTMLButtonElement);
-const analyzeButton = requireElement("analyze", HTMLButtonElement);
-const viewMode = requireElement("viewMode", HTMLSelectElement);
-const exportResultsButton = requireElement("exportResults", HTMLButtonElement);
-const resultsBody = requireElement("resultsBody", HTMLTableSectionElement);
-const restoredResultsBody = requireElement("restoredResultsBody", HTMLTableSectionElement);
-const slotCountEl = requireElement("slotCount", HTMLElement);
-const quantityTotalEl = requireElement("quantityTotal", HTMLElement);
-const manualCountEl = requireElement("manualCount", HTMLElement);
-const referenceCountEl = requireElement("referenceCount", HTMLElement);
-const visibleCountEl = requireElement("visibleCount", HTMLElement);
-const reviewCountEl = requireElement("reviewCount", HTMLElement);
-const highestLevelEl = requireElement("highestLevel", HTMLElement);
-const planBody = requireElement("planBody", HTMLElement);
-const artefactSearch = requireElement("artefactSearch", HTMLInputElement);
-const cultureFilter = requireElement("cultureFilter", HTMLSelectElement);
-const reviewOnly = requireElement("reviewOnly", HTMLInputElement);
-const resultsTitle = requireElement("resultsTitle", HTMLElement);
-const resultTabButtons = queryElements<HTMLElement>("[data-results-tab]");
-const resultTabPanels = queryElements<HTMLElement>("[data-results-panel]");
-const overviewPanel = requireElement("overviewPanel", HTMLElement);
-const storagePanel = requireElement("storagePanel", HTMLElement);
-const materialsPanel = requireElement("materialsPanel", HTMLElement);
+const {
+  canvas,
+  ctx,
+  imageInput,
+  loadDefaultButton,
+  analyzeButton,
+  viewMode,
+  exportResultsButton,
+  resultsBody,
+  restoredResultsBody,
+  slotCountEl,
+  quantityTotalEl,
+  manualCountEl,
+  referenceCountEl,
+  visibleCountEl,
+  reviewCountEl,
+  highestLevelEl,
+  planBody,
+  artefactSearch,
+  cultureFilter,
+  reviewOnly,
+  resultsTitle,
+  resultTabButtons,
+  resultTabPanels,
+  overviewPanel,
+  storagePanel,
+  materialsPanel
+} = getAppElements();
 
 let loadedImage: HTMLImageElement | null = null;
 let detections: AppDetection[] = [];
