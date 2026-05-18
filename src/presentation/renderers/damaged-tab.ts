@@ -41,7 +41,7 @@ export function renderDamagedTab<TDetection>({
 
   for (const detection of visibleDetections) {
     const row = makeDetectionTableRow(detection);
-    row.classList.add("damaged-detection-row");
+    row.classList.add("artefact-detection-row", "damaged-detection-row");
     body.append(row);
   }
 }

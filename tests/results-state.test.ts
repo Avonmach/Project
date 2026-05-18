@@ -41,6 +41,11 @@ test("createResultsState removes a detection from one recognition mode", () => {
   assert.deepEqual(state.removeDetectionForMode("damaged", first), [second]);
   assert.deepEqual(state.detectionsForMode("damaged"), [second]);
   assert.deepEqual(state.detectionsForMode("restored"), [restored]);
+
+  state.setActiveTab("restored");
+  assert.deepEqual(state.removeDetectionForMode("restored", restored), []);
+  assert.deepEqual(state.detectionsForMode("restored"), []);
+  assert.deepEqual(state.detectionsForMode("damaged"), [second]);
 });
 
 test("createResultsState requests separate screenshots only once for relevant tabs", () => {

@@ -125,6 +125,9 @@ const {
   damagedDetectedCount,
   damagedVisibleCount,
   damagedReviewCount,
+  restoredDetectedCount,
+  restoredVisibleCount,
+  restoredReviewCount,
   storagePanel,
   materialsPanel
 } = elements;
@@ -273,7 +276,7 @@ function makeDetectionTableRow(detection: AppDetection): HTMLTableRowElement {
       updateTotals();
     },
     onVerifyDetection: verifyDetection,
-    onRemoveDetection: detection.recognitionMode === "damaged" ? removeDetection : undefined,
+    onRemoveDetection: removeDetection,
     makeReferenceCorrectionDropdown,
     makeRecognitionInfo,
     makeQuantityDebugView
@@ -386,9 +389,13 @@ function renderOverviewTab(items: readonly AppDetection[]): void {
 function renderRestoredTab(items: readonly AppDetection[]): void {
   renderRestoredTabPanel({
     body: restoredResultsBody,
+    detectedCountElement: restoredDetectedCount,
+    visibleCountElement: restoredVisibleCount,
+    reviewCountElement: restoredReviewCount,
     allDetections: detections,
     visibleDetections: items,
-    makeDetectionTableRow
+    makeDetectionTableRow,
+    quantityNeedsReview
   });
 }
 
@@ -480,7 +487,7 @@ function applyQuantityChange(detection: AppDetection, quantity: number, source: 
 }
 
 function removeDetection(detection: AppDetection): void {
-  detections = resultsState.removeDetectionForMode("damaged", detection);
+  detections = resultsState.removeDetectionForMode(detection.recognitionMode, detection);
   renderDetections();
   drawBoxes(detections);
 }

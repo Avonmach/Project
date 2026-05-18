@@ -30,6 +30,9 @@ export interface AppElements {
   damagedDetectedCount: HTMLElement;
   damagedVisibleCount: HTMLElement;
   damagedReviewCount: HTMLElement;
+  restoredDetectedCount: HTMLElement;
+  restoredVisibleCount: HTMLElement;
+  restoredReviewCount: HTMLElement;
   storagePanel: HTMLElement;
   materialsPanel: HTMLElement;
 }
@@ -67,6 +70,9 @@ export function getAppElements(): AppElements {
     damagedDetectedCount: requireElement("damagedDetectedCount", HTMLElement),
     damagedVisibleCount: requireElement("damagedVisibleCount", HTMLElement),
     damagedReviewCount: requireElement("damagedReviewCount", HTMLElement),
+    restoredDetectedCount: requireElement("restoredDetectedCount", HTMLElement),
+    restoredVisibleCount: requireElement("restoredVisibleCount", HTMLElement),
+    restoredReviewCount: requireElement("restoredReviewCount", HTMLElement),
     storagePanel: requireElement("storagePanel", HTMLElement),
     materialsPanel: requireElement("materialsPanel", HTMLElement)
   };

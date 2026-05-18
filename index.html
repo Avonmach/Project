@@ -129,7 +129,7 @@
           <p class="empty">Analyze a screenshot to create an overview.</p>
         </div>
         <div id="damagedPanel" class="tab-panel table-wrap" data-results-panel="damaged">
-          <div class="damaged-review-strip" aria-label="Damaged artefact review summary">
+          <div class="artefact-review-strip" aria-label="Damaged artefact review summary">
             <div>
               <span>Detected</span>
               <strong id="damagedDetectedCount">0</strong>
@@ -166,6 +166,20 @@
           </table>
         </div>
         <div id="restoredPanel" class="tab-panel table-wrap" data-results-panel="restored" hidden>
+          <div class="artefact-review-strip" aria-label="Restored artefact review summary">
+            <div>
+              <span>Detected</span>
+              <strong id="restoredDetectedCount">0</strong>
+            </div>
+            <div>
+              <span>Visible</span>
+              <strong id="restoredVisibleCount">0</strong>
+            </div>
+            <div>
+              <span>Review</span>
+              <strong id="restoredReviewCount">0</strong>
+            </div>
+          </div>
           <table class="artifact-table restored-table">
           <thead>
             <tr>
@@ -178,11 +192,12 @@
               <th>Guess</th>
               <th>Result</th>
               <th>Quantity</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody id="restoredResultsBody">
             <tr>
-              <td colspan="9" class="empty">Upload and analyze a restored artefact screenshot to populate this table.</td>
+              <td colspan="10" class="empty">Upload and analyze a restored artefact screenshot to populate this table.</td>
             </tr>
           </tbody>
           </table>
