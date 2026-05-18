@@ -224,7 +224,7 @@ export function mergeCloseBoxes(boxes: readonly BankGridBox[], width: number, he
 }
 
 function isBeforeLastDetectedItem(row: number, column: number, grid: BankGrid): boolean {
-  const lastColumn = Math.min(grid.columns - 1, grid.lastOccupiedColumn + 1);
+  const lastColumn = Math.min(grid.columns - 1, grid.lastOccupiedColumn);
   return row < grid.lastOccupiedRow || (row === grid.lastOccupiedRow && column <= lastColumn);
 }
 
