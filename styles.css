@@ -558,7 +558,7 @@ input[type="search"] {
 
 .table-wrap {
   overflow-x: auto;
-  overflow-y: clip;
+  overflow-y: visible;
   position: relative;
 }
 
@@ -1261,6 +1261,15 @@ tbody tr:has(.processed-preview:hover),
   .plan-panel {
     order: 3;
   }
+
+  .results-panel {
+    overflow: visible;
+  }
+
+  .artifact-table,
+  .damaged-table {
+    min-width: 760px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1280,5 +1289,10 @@ tbody tr:has(.processed-preview:hover),
   .wiki-link,
   .toolbar > button {
     width: 100%;
+  }
+
+  .artifact-table,
+  .damaged-table {
+    min-width: 680px;
   }
 }
