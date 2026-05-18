@@ -40,14 +40,16 @@ export interface ArtefactMatchCandidate<TReference extends MatchReference> {
   readonly colorExistenceScore: number;
   readonly colorPositionScore: number;
   readonly overlapScore?: number;
-  scoringWeights?: {
-    readonly shape: number;
-    readonly color: number;
-    readonly crowdedShapeCount: number;
-    readonly colorExistence: number;
-    readonly colorPosition: number;
-    readonly similarColorCount: number;
-  };
+  scoringWeights?: ArtefactScoringWeights;
+}
+
+export interface ArtefactScoringWeights {
+  readonly shape: number;
+  readonly color: number;
+  readonly crowdedShapeCount: number;
+  readonly colorExistence: number;
+  readonly colorPosition: number;
+  readonly similarColorCount: number;
 }
 
 export interface ArtefactMatchResult<TReference extends MatchReference> extends ArtefactMatchCandidate<TReference> {

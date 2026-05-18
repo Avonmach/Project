@@ -1,3 +1,5 @@
+import type { ArtefactScoringWeights } from "../../domain/artefacts/matching";
+
 export interface CandidatePredictionItem {
   readonly name: string;
   readonly wikiPage?: string | null;
@@ -18,7 +20,7 @@ export interface CandidatePrediction<TItem extends CandidatePredictionItem> {
   readonly restoredScore?: number;
   readonly damagedScore?: number;
   readonly overlapScore?: number;
-  readonly scoringWeights?: unknown;
+  readonly scoringWeights?: ArtefactScoringWeights;
 }
 
 export interface CandidatePredictableDetection<TItem extends CandidatePredictionItem> {
@@ -39,7 +41,7 @@ export interface CandidatePredictableDetection<TItem extends CandidatePrediction
   restoredScore?: number;
   damagedScore?: number;
   overlapScore?: number;
-  scoringWeights?: unknown;
+  scoringWeights?: ArtefactScoringWeights;
   referenceUsed?: "damaged" | "restored";
   topMatches?: readonly CandidatePrediction<TItem>[];
   matchGap?: number;

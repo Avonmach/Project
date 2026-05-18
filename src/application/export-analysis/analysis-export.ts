@@ -1,3 +1,5 @@
+import type { ArtefactScoringWeights } from "../../domain/artefacts/matching";
+
 interface ExportImageInfo {
   readonly width: number;
   readonly height: number;
@@ -26,7 +28,7 @@ interface ExportMatch {
   readonly colorScore?: number;
   readonly colorExistenceScore?: number;
   readonly colorPositionScore?: number;
-  readonly scoringWeights?: unknown;
+  readonly scoringWeights?: ArtefactScoringWeights;
   readonly restoredScore?: number;
   readonly damagedScore?: number;
 }
@@ -68,7 +70,7 @@ interface ExportDetection {
   readonly damagedScore?: number;
   readonly matchScore?: number;
   readonly referenceUsed?: unknown;
-  readonly scoringWeights?: unknown;
+  readonly scoringWeights?: ArtefactScoringWeights;
   readonly algorithmBest?: {
     readonly shape?: ExportMatch | null;
     readonly color?: ExportMatch | null;
@@ -143,7 +145,7 @@ export interface ExportedCandidateMatch {
   readonly colorScore?: number;
   readonly colorExistenceScore?: number;
   readonly colorPositionScore?: number;
-  readonly scoringWeights?: unknown;
+  readonly scoringWeights?: ArtefactScoringWeights;
   readonly restoredScore?: number;
   readonly damagedScore?: number;
   readonly archaeologyLevel?: number | null;
@@ -201,7 +203,7 @@ export interface ExportDetectionPayload {
     readonly selectedDamaged?: number;
     readonly selectedMain?: number;
     readonly referenceUsed?: unknown;
-    readonly weights?: unknown;
+    readonly weights?: ArtefactScoringWeights;
   };
   readonly algorithmBest: {
     readonly shape: ExportedBestMatch | null;
