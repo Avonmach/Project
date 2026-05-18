@@ -78,8 +78,7 @@ import type { MaterialRow } from "./presentation/renderers/materials-tab";
 import { drawAnalysisOverlay } from "./presentation/renderers/analysis-overlay";
 import { updateDetectionRow as updateDetectionRowElement } from "./presentation/renderers/detection-row-update";
 import {
-  makePreviewCanvas,
-  makeProcessedCanvas,
+  makeDetectionPreviews,
   makeReferenceCanvas
 } from "./presentation/renderers/preview-canvases";
 import {
@@ -229,14 +228,14 @@ function analyzeCurrentImage() {
     digitTemplates,
     matchArtefact: matchArtifact,
     makeQuantityDebug: attachQuantityDebugSource,
-    makePreviews: ({ imageData, shapeImageData, box, recognitionMode, match }) => {
-      const enhance = recognitionMode !== "restored";
-      return {
-        preview: makePreviewCanvas(imageData, box, { enhanceHover: enhance }),
-        processedPreview: makeProcessedCanvas(imageData, shapeImageData, box, { enhance }),
-        referencePreview: makeReferenceCanvas(match.item.image)
-      };
-    }
+    makePreviews: ({ imageData, shapeImageData, box, recognitionMode, match }) =>
+      makeDetectionPreviews({
+        imageData,
+        shapeImageData,
+        box,
+        referenceImage: match.item.image,
+        enhance: recognitionMode !== "restored"
+      })
   });
 
   detections = resultsState.setDetectionsForMode(recognitionMode, analyzedDetections);

@@ -16,6 +16,32 @@ export interface FingerprintPixel {
   readonly visible?: boolean;
 }
 
+export interface DetectionPreviewOptions<TImage extends CanvasImageSource & { readonly naturalWidth: number; readonly naturalHeight: number }> {
+  readonly imageData: ImageData;
+  readonly shapeImageData: ImageData;
+  readonly box: BoundingBox;
+  readonly referenceImage: TImage;
+  readonly enhance: boolean;
+}
+
+export function makeDetectionPreviews<TImage extends CanvasImageSource & { readonly naturalWidth: number; readonly naturalHeight: number }>({
+  imageData,
+  shapeImageData,
+  box,
+  referenceImage,
+  enhance
+}: DetectionPreviewOptions<TImage>): {
+  readonly preview: HTMLCanvasElement;
+  readonly processedPreview: HTMLCanvasElement;
+  readonly referencePreview: HTMLCanvasElement;
+} {
+  return {
+    preview: makePreviewCanvas(imageData, box, { enhanceHover: enhance }),
+    processedPreview: makeProcessedCanvas(imageData, shapeImageData, box, { enhance }),
+    referencePreview: makeReferenceCanvas(referenceImage)
+  };
+}
+
 export function makePreviewCanvas(imageData: ImageData, box: BoundingBox, options: PreviewCanvasOptions = {}): HTMLCanvasElement {
   const preview = document.createElement("canvas");
   preview.width = PREVIEW_SIZE;
