@@ -81,11 +81,24 @@ function parseArchaeologyReferenceData(value: unknown, path: string): Archaeolog
 }
 
 function isDamagedArtifactReferenceRecord(value: unknown): value is DamagedArtifactReferenceRecord {
-  return isRecord(value) && typeof value.name === "string";
+  return (
+    isRecord(value) &&
+    typeof value.name === "string" &&
+    isOptionalStringOrNull(value.icon) &&
+    isOptionalStringOrNull(value.damagedIcon) &&
+    isOptionalStringOrNull(value.wikiPage) &&
+    isOptionalStringOrNull(value.restoredName) &&
+    isOptionalStringOrNull(value.restoredWikiPage)
+  );
 }
 
 function isArchaeologyMaterialRecord(value: unknown): value is ArchaeologyMaterialRecord {
-  return isRecord(value) && typeof value.name === "string";
+  return (
+    isRecord(value) &&
+    typeof value.name === "string" &&
+    isOptionalStringOrNull(value.icon) &&
+    isOptionalStringOrNull(value.wikiPage)
+  );
 }
 
 function isArchaeologyArtefactRecipeRecord(value: unknown): value is ArchaeologyArtefactRecipeRecord {
@@ -110,6 +123,10 @@ function isArchaeologyCollectionRecord(value: unknown): value is ArchaeologyColl
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
+}
+
+function isOptionalStringOrNull(value: unknown): boolean {
+  return value === undefined || value === null || typeof value === "string";
 }
 
 function assertOkResponse(response: Response, path: string): void {
