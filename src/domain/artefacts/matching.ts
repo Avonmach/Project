@@ -5,6 +5,7 @@ import {
   histogramChiAltSimilarity,
   type Fingerprint
 } from "./fingerprint";
+import type { ArtefactReferenceMetadata } from "./reference-types";
 import type { BoundingBox } from "../shared/geometry";
 
 const COLOR_SCORE_WEIGHT = 0.2;
@@ -17,14 +18,7 @@ const COLOR_SIMILAR_MARGIN = 0.03;
 
 export type RecognitionMode = "damaged" | "restored";
 
-export interface MatchReference {
-  readonly name: string;
-  readonly wikiPage?: string | null;
-  readonly restoredName?: string | null;
-  readonly restoredWikiPage?: string | null;
-  readonly archaeologyLevel?: number | null;
-  readonly culture?: string | null;
-  readonly digSite?: string | null;
+export interface MatchReference extends ArtefactReferenceMetadata {
   readonly fingerprint: Fingerprint;
   readonly damagedFingerprint?: Fingerprint | null;
   readonly [key: string]: unknown;

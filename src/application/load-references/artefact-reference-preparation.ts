@@ -1,15 +1,7 @@
 import { fingerprintReference, type Fingerprint } from "../../domain/artefacts/fingerprint";
+import type { ArtefactReferenceMetadata } from "../../domain/artefacts/reference-types";
 
-export interface ArtefactReferenceSource {
-  readonly name: string;
-  readonly icon?: string | null;
-  readonly damagedIcon?: string | null;
-  readonly wikiPage?: string | null;
-  readonly restoredName?: string | null;
-  readonly restoredWikiPage?: string | null;
-  readonly archaeologyLevel?: number | null;
-  readonly culture?: string | null;
-  readonly digSite?: string | null;
+export interface ArtefactReferenceSource extends ArtefactReferenceMetadata {
   readonly [key: string]: unknown;
 }
 

@@ -1,13 +1,6 @@
-export interface DamagedArtifactReferenceRecord {
-  readonly name: string;
-  readonly icon?: string | null;
-  readonly damagedIcon?: string | null;
-  readonly wikiPage?: string | null;
-  readonly restoredName?: string | null;
-  readonly restoredWikiPage?: string | null;
-  readonly archaeologyLevel?: number | null;
-  readonly culture?: string | null;
-  readonly digSite?: string | null;
+import type { ArtefactReferenceMetadata } from "../../domain/artefacts/reference-types";
+
+export interface DamagedArtifactReferenceRecord extends ArtefactReferenceMetadata {
   readonly [key: string]: unknown;
 }
 
