@@ -26,6 +26,7 @@ import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode }
 import { detectQuantity, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import type { BoundingBox } from "./domain/shared/geometry";
 import { downloadJsonFile } from "./infrastructure/browser/download";
+import { closeOpenDetailsMenusOutsideTarget } from "./infrastructure/browser/details-menu";
 import { requireCanvasContext, requireElement } from "./infrastructure/browser/dom-elements";
 import { loadQuantityFontTemplates as loadQuantityFontTemplatesFromBrowser } from "./infrastructure/browser/font-templates";
 import { loadImageElement, loadImageToCanvas, readImageFileAsDataUrl } from "./infrastructure/browser/image-loader";
@@ -153,9 +154,7 @@ reviewOnly.addEventListener("change", renderDetections);
 connectResultTabButtons(resultTabButtons, setActiveResultsTab);
 document.addEventListener("click", (event) => {
   if (!(event.target instanceof Node)) return;
-  for (const menu of document.querySelectorAll<HTMLDetailsElement>(".correction-menu[open]")) {
-    if (!menu.contains(event.target)) menu.open = false;
-  }
+  closeOpenDetailsMenusOutsideTarget(".correction-menu[open]", event.target);
 });
 exportResultsButton.addEventListener("click", exportResults);
 imageInput.addEventListener("change", async () => {
