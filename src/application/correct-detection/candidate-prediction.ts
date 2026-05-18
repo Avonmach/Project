@@ -3,7 +3,7 @@ export interface CandidatePredictionItem {
   readonly wikiPage?: string | null;
   readonly restoredName?: string | null;
   readonly restoredWikiPage?: string | null;
-  readonly archaeologyLevel?: number | string | null;
+  readonly archaeologyLevel?: number | null;
   readonly culture?: string | null;
   readonly digSite?: string | null;
 }
@@ -27,7 +27,7 @@ export interface CandidatePredictableDetection<TItem extends CandidatePrediction
   damagedWikiPage?: string | null;
   restoredName?: string | null;
   restoredWikiPage?: string | null;
-  archaeologyLevel?: number | string | null;
+  archaeologyLevel?: number | null;
   culture?: string | null;
   digSite?: string | null;
   matchName?: string;

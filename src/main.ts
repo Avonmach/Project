@@ -2,7 +2,7 @@ import {
   FALLBACK_DIGIT_TEMPLATES,
   buildDigitTemplatesFromFont
 } from "./domain/ocr/digit-templates";
-import { createDetectionRecord } from "./application/analyze-screenshot/detection-record";
+import { createDetectionRecord, type DetectionRecord } from "./application/analyze-screenshot/detection-record";
 import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
   calculateMaterialTotals as calculateMaterialTotalsForRecipes,
@@ -95,8 +95,11 @@ import { makeQuantityDebugView as makeQuantityDebugViewElement } from "./present
 
 import type { PreparedArtefactReference } from "./application/load-references/artefact-reference-preparation";
 
-type AppDetection = ReturnType<
-  typeof createDetectionRecord<PreparedArtefactReference, HTMLCanvasElement, HTMLCanvasElement, HTMLCanvasElement>
+type AppDetection = DetectionRecord<
+  PreparedArtefactReference,
+  HTMLCanvasElement,
+  HTMLCanvasElement,
+  HTMLCanvasElement
 > & {
   rowElements?: DetectionRowElements;
 };

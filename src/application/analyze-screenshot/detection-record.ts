@@ -1,6 +1,14 @@
-import type { ArtefactMatchResult, MatchReference, RecognitionMode } from "../../domain/artefacts/matching";
-import type { QuantityDebug, QuantityResult } from "../../domain/ocr/quantity-ocr";
+import type {
+  ArtefactMatchCandidate,
+  ArtefactMatchResult,
+  MatchReference,
+  RecognitionMode
+} from "../../domain/artefacts/matching";
+import type { QuantityAlternative, QuantityDebug, QuantityResult } from "../../domain/ocr/quantity-ocr";
 import type { BoundingBox } from "../../domain/shared/geometry";
+import type { QuantityCorrectionDetection } from "../correct-detection/quantity-correction";
+import type { ReferenceCorrectableDetection } from "../correct-detection/reference-correction";
+import type { VerifiableDetection } from "../correct-detection/verification";
 import { exportBestMatch } from "../export-analysis/analysis-export";
 
 export interface DetectionRecordPreviewParts<TPreview, TProcessedPreview, TReferencePreview> {
@@ -25,6 +33,52 @@ export interface DetectionRecordOptions<
   readonly previews: DetectionRecordPreviewParts<TPreview, TProcessedPreview, TReferencePreview>;
 }
 
+export interface DetectionRecord<TReference extends MatchReference, TPreview, TProcessedPreview, TReferencePreview> {
+  readonly id: number;
+  readonly box: BoundingBox;
+  readonly bankIndex: number;
+  readonly bankRow: number;
+  readonly bankColumn: number;
+  artefact: string;
+  wikiPage?: string | null;
+  damagedWikiPage?: string | null;
+  restoredName?: string | null;
+  restoredWikiPage?: string | null;
+  archaeologyLevel?: number | null;
+  culture?: string | null;
+  digSite?: string | null;
+  matchName: string;
+  matchScore: number;
+  shapeScore: number;
+  colorScore: number;
+  colorExistenceScore: number;
+  colorPositionScore: number;
+  overlapScore?: number;
+  restoredScore: number;
+  damagedScore: number;
+  algorithmBest: ArtefactMatchResult<TReference>["algorithmBest"];
+  referenceUsed: ArtefactMatchResult<TReference>["referenceUsed"];
+  scoringWeights?: ArtefactMatchCandidate<TReference>["scoringWeights"];
+  ambiguousMatch: boolean;
+  matchGap: number;
+  topMatches: readonly ArtefactMatchCandidate<TReference>[];
+  readonly recognitionMode: RecognitionMode;
+  readonly originalPrediction: unknown;
+  correction: ReferenceCorrectableDetection<TReference>["correction"] | VerifiableDetection["correction"] | null;
+  quantity: number;
+  readonly originalQuantity: number;
+  readonly quantityConfidence: number;
+  readonly quantityAlternatives: readonly QuantityAlternative[];
+  readonly quantityDebug: QuantityDebug | null;
+  quantityCorrection: QuantityCorrectionDetection["quantityCorrection"] | null;
+  quantityManual: boolean;
+  readonly preview: TPreview;
+  readonly processedPreview: TProcessedPreview;
+  referencePreview: TReferencePreview;
+  corrected: boolean;
+  manual: boolean;
+}
+
 export function createDetectionRecord<
   TReference extends MatchReference,
   TPreview,
@@ -39,7 +93,12 @@ export function createDetectionRecord<
   quantityDebug,
   recognitionMode,
   previews
-}: DetectionRecordOptions<TReference, TPreview, TProcessedPreview, TReferencePreview>) {
+}: DetectionRecordOptions<TReference, TPreview, TProcessedPreview, TReferencePreview>): DetectionRecord<
+  TReference,
+  TPreview,
+  TProcessedPreview,
+  TReferencePreview
+> {
   return {
     id: bankIndex + 1,
     box,

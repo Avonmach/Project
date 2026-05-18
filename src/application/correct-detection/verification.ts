@@ -8,15 +8,7 @@ export interface VerifiableDetection {
   readonly archaeologyLevel?: number | null;
   readonly culture?: string | null;
   readonly matchScore?: number | null;
-  correction?: {
-    readonly correctedAt: string;
-    readonly damagedName: string;
-    readonly restoredName?: string | null;
-    readonly archaeologyLevel?: number | null;
-    readonly culture?: string | null;
-    readonly scoreAtSelection?: number | null;
-    readonly source: "row-verified";
-  };
+  correction?: unknown;
 }
 
 export function verifyDetection<TDetection extends VerifiableDetection>(

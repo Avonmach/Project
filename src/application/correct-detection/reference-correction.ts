@@ -3,7 +3,7 @@ export interface ReferenceCorrectionItem {
   readonly wikiPage?: string | null;
   readonly restoredName?: string | null;
   readonly restoredWikiPage?: string | null;
-  readonly archaeologyLevel?: number | string | null;
+  readonly archaeologyLevel?: number | null;
   readonly culture?: string | null;
   readonly digSite?: string | null;
 }
@@ -14,7 +14,7 @@ export interface ReferenceCorrectableDetection<TItem extends ReferenceCorrection
   damagedWikiPage?: string | null;
   restoredName?: string | null;
   restoredWikiPage?: string | null;
-  archaeologyLevel?: number | string | null;
+  archaeologyLevel?: number | null;
   culture?: string | null;
   digSite?: string | null;
   matchName?: string;
@@ -35,15 +35,7 @@ export interface ReferenceCorrectableDetection<TItem extends ReferenceCorrection
   };
   corrected?: boolean;
   manual?: boolean;
-  correction?: {
-    readonly correctedAt: string;
-    readonly damagedName: string;
-    readonly restoredName?: string | null;
-    readonly archaeologyLevel?: number | string | null;
-    readonly culture?: string | null;
-    readonly scoreAtSelection: number | null;
-    readonly source: "manual-dropdown";
-  };
+  correction?: unknown;
 }
 
 export function applyReferenceCorrection<TDetection extends ReferenceCorrectableDetection<TItem>, TItem extends ReferenceCorrectionItem>(
