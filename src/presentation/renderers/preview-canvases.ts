@@ -1,5 +1,10 @@
 import { getIconMatchBox, type BoundingBox } from "../../domain/shared/geometry";
-import { alphaBounds, copyImageData, cropImageData } from "../../infrastructure/image-processing/image-data";
+import {
+  alphaBounds,
+  copyImageData,
+  cropImageData,
+  readImageDataChannel
+} from "../../infrastructure/image-processing/image-data";
 
 const MATCH_SIZE = 32;
 const PREVIEW_SIZE = 48;
@@ -74,10 +79,18 @@ export function makeProcessedCanvas(
   const masked = new ImageData(originalCrop.width, originalCrop.height);
 
   for (let i = 0; i < originalCrop.data.length; i += 4) {
-    if (shapeCrop.data[i + 3] <= 20) continue;
+    if (readImageDataChannel(shapeCrop.data, i + 3) <= 20) continue;
     const color = enhance
-      ? enhancePreviewColor(originalCrop.data[i], originalCrop.data[i + 1], originalCrop.data[i + 2])
-      : { r: originalCrop.data[i], g: originalCrop.data[i + 1], b: originalCrop.data[i + 2] };
+      ? enhancePreviewColor(
+          readImageDataChannel(originalCrop.data, i),
+          readImageDataChannel(originalCrop.data, i + 1),
+          readImageDataChannel(originalCrop.data, i + 2)
+        )
+      : {
+          r: readImageDataChannel(originalCrop.data, i),
+          g: readImageDataChannel(originalCrop.data, i + 1),
+          b: readImageDataChannel(originalCrop.data, i + 2)
+        };
     masked.data[i] = color.r;
     masked.data[i + 1] = color.g;
     masked.data[i + 2] = color.b;
@@ -138,7 +151,7 @@ export function makeRemovedOverlayCanvas(imageData: ImageData, shapeImageData: I
   for (let y = 0; y < iconBox.h; y += 1) {
     for (let x = 0; x < iconBox.w; x += 1) {
       const target = (y * iconBox.w + x) * 4;
-      if (shapeCrop.data[target + 3] > 0) continue;
+      if (readImageDataChannel(shapeCrop.data, target + 3) > 0) continue;
       overlay.data[target] = 255;
       overlay.data[target + 1] = 0;
       overlay.data[target + 2] = 0;
@@ -252,7 +265,8 @@ function paintFingerprintMask(canvas: HTMLCanvasElement, fingerprint: readonly F
   previewCtx.fillStyle = "#111417";
   for (let y = 0; y < MATCH_SIZE; y += 1) {
     for (let x = 0; x < MATCH_SIZE; x += 1) {
-      if (!fingerprint[y * MATCH_SIZE + x]?.visible) continue;
+      const fingerprintPixel = fingerprint[y * MATCH_SIZE + x];
+      if (!fingerprintPixel?.visible) continue;
       previewCtx.fillRect(x * pixel, y * pixel, Math.ceil(pixel), Math.ceil(pixel));
     }
   }
