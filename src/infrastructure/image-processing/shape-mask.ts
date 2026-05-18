@@ -2,7 +2,7 @@ import { isQuantityPixel } from "../../domain/ocr/quantity-ocr";
 import { channelDistance, colorDistance, sameColor } from "../../domain/shared/color";
 import type { BankGrid } from "./bank-grid";
 import { isFrameOrScrollbarPixel } from "./bank-grid";
-import { pixelColorAt } from "./image-data";
+import { pixelColorAt, readImageDataChannel } from "./image-data";
 
 interface RgbColor {
   readonly r: number;
@@ -31,10 +31,10 @@ export function makeFullShapeImageData(imageData: ImageData, grid: BankGrid, mod
       for (let py = y; py < y + h; py += 1) {
         for (let px = x; px < x + w; px += 1) {
           const offset = (py * imageData.width + px) * 4;
-          const r = imageData.data[offset];
-          const g = imageData.data[offset + 1];
-          const b = imageData.data[offset + 2];
-          const a = imageData.data[offset + 3];
+          const r = readImageDataChannel(imageData.data, offset);
+          const g = readImageDataChannel(imageData.data, offset + 1);
+          const b = readImageDataChannel(imageData.data, offset + 2);
+          const a = readImageDataChannel(imageData.data, offset + 3);
           const backgroundRemoved = backgroundMask
             ? backgroundMask[(py - y) * w + (px - x)]
             : matchesCellBackground(r, g, b, backgroundColors, removeSimilarBackground);
@@ -68,7 +68,16 @@ export function connectedGridBackgroundMask(imageData: ImageData, grid: BankGrid
     const index = y * width + x;
     if (mask[index]) return;
     const offset = index * 4;
-    if (!sameColor(data[offset], data[offset + 1], data[offset + 2], backgroundColor)) return;
+    if (
+      !sameColor(
+        readImageDataChannel(data, offset),
+        readImageDataChannel(data, offset + 1),
+        readImageDataChannel(data, offset + 2),
+        backgroundColor
+      )
+    ) {
+      return;
+    }
     mask[index] = 1;
     queue.push(index);
   };
@@ -84,6 +93,7 @@ export function connectedGridBackgroundMask(imageData: ImageData, grid: BankGrid
 
   for (let i = 0; i < queue.length; i += 1) {
     const index = queue[i];
+    if (index === undefined) continue;
     const x = index % width;
     const y = Math.floor(index / width);
     add(x + 1, y);
@@ -121,13 +131,14 @@ function cellBackgroundColors(imageData: ImageData, x: number, y: number, w: num
   const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
   if (!ranked.length) return [pixelColorAt(imageData, x, y)];
 
-  const minimumCount = options.includeSimilar ? Math.max(2, ranked[0][1] * 0.08) : ranked[0][1];
+  const topCount = ranked[0]?.[1] ?? 0;
+  const minimumCount = options.includeSimilar ? Math.max(2, topCount * 0.08) : topCount;
   return ranked
     .filter((entry) => entry[1] >= minimumCount)
     .slice(0, options.includeSimilar ? 3 : 1)
     .map(([key]) => {
       const [r, g, b] = key.split(",").map(Number);
-      return { r, g, b };
+      return { r: r ?? 0, g: g ?? 0, b: b ?? 0 };
     });
 }
 
@@ -145,9 +156,9 @@ function connectedCellBackgroundMask(imageData: ImageData, x: number, y: number,
     const index = localY * w + localX;
     if (mask[index]) return;
     const offset = ((y + localY) * imageData.width + x + localX) * 4;
-    const r = imageData.data[offset];
-    const g = imageData.data[offset + 1];
-    const b = imageData.data[offset + 2];
+    const r = readImageDataChannel(imageData.data, offset);
+    const g = readImageDataChannel(imageData.data, offset + 1);
+    const b = readImageDataChannel(imageData.data, offset + 2);
     if (!matchesCellBackground(r, g, b, backgroundColors, true)) return;
     mask[index] = 1;
     queue.push(index);
@@ -164,6 +175,7 @@ function connectedCellBackgroundMask(imageData: ImageData, x: number, y: number,
 
   for (let i = 0; i < queue.length; i += 1) {
     const index = queue[i];
+    if (index === undefined) continue;
     const localX = index % w;
     const localY = Math.floor(index / w);
     add(localX + 1, localY);
