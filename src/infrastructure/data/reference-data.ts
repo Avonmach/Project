@@ -37,6 +37,8 @@ export interface ArchaeologyReferenceData {
   readonly collections: readonly ArchaeologyCollectionRecord[];
 }
 
+type RecordGuard<TRecord> = (value: unknown) => value is TRecord;
+
 export async function loadDamagedArtifactRecords(path = "data/damaged-artifacts.json"): Promise<DamagedArtifactReferenceRecord[]> {
   const response = await fetch(path);
   assertOkResponse(response, path);
@@ -58,7 +60,11 @@ function parseDamagedArtifactsDatabase(value: unknown, path: string): DamagedArt
   if (!isRecord(value) || !Array.isArray(value.items)) {
     throw new Error(`Invalid damaged artefact database: ${path}`);
   }
-  return { items: value.items.filter(isDamagedArtifactReferenceRecord) };
+  return { items: filterRecords(value.items, isDamagedArtifactReferenceRecord) };
+}
+
+function filterRecords<TRecord>(values: readonly unknown[], guard: RecordGuard<TRecord>): TRecord[] {
+  return values.filter(guard);
 }
 
 function parseArchaeologyReferenceData(value: unknown, path: string): ArchaeologyReferenceData {
@@ -68,9 +74,9 @@ function parseArchaeologyReferenceData(value: unknown, path: string): Archaeolog
     throw new Error(`Invalid archaeology reference data: ${path}`);
   }
   return {
-    materials: materials.filter(isArchaeologyMaterialRecord),
-    artefactRecipes: artefactRecipes.filter(isArchaeologyArtefactRecipeRecord),
-    collections: collections.filter(isArchaeologyCollectionRecord)
+    materials: filterRecords(materials, isArchaeologyMaterialRecord),
+    artefactRecipes: filterRecords(artefactRecipes, isArchaeologyArtefactRecipeRecord),
+    collections: filterRecords(collections, isArchaeologyCollectionRecord)
   };
 }
 
