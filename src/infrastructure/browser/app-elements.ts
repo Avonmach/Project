@@ -25,6 +25,9 @@ export interface AppElements {
   resultTabButtons: HTMLElement[];
   resultTabPanels: HTMLElement[];
   overviewPanel: HTMLElement;
+  damagedDetectedCount: HTMLElement;
+  damagedVisibleCount: HTMLElement;
+  damagedReviewCount: HTMLElement;
   storagePanel: HTMLElement;
   materialsPanel: HTMLElement;
 }
@@ -57,6 +60,9 @@ export function getAppElements(): AppElements {
     resultTabButtons: queryElements<HTMLElement>("[data-results-tab]"),
     resultTabPanels: queryElements<HTMLElement>("[data-results-panel]"),
     overviewPanel: requireElement("overviewPanel", HTMLElement),
+    damagedDetectedCount: requireElement("damagedDetectedCount", HTMLElement),
+    damagedVisibleCount: requireElement("damagedVisibleCount", HTMLElement),
+    damagedReviewCount: requireElement("damagedReviewCount", HTMLElement),
     storagePanel: requireElement("storagePanel", HTMLElement),
     materialsPanel: requireElement("materialsPanel", HTMLElement)
   };

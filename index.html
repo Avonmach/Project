@@ -124,7 +124,21 @@
           <p class="empty">Analyze a screenshot to create an overview.</p>
         </div>
         <div id="damagedPanel" class="tab-panel table-wrap" data-results-panel="damaged">
-          <table>
+          <div class="damaged-review-strip" aria-label="Damaged artefact review summary">
+            <div>
+              <span>Detected</span>
+              <strong id="damagedDetectedCount">0</strong>
+            </div>
+            <div>
+              <span>Visible</span>
+              <strong id="damagedVisibleCount">0</strong>
+            </div>
+            <div>
+              <span>Review</span>
+              <strong id="damagedReviewCount">0</strong>
+            </div>
+          </div>
+          <table class="artifact-table damaged-table">
           <thead>
             <tr>
               <th>Damaged artefact</th>
@@ -146,7 +160,7 @@
           </table>
         </div>
         <div id="restoredPanel" class="tab-panel table-wrap" data-results-panel="restored" hidden>
-          <table>
+          <table class="artifact-table restored-table">
           <thead>
             <tr>
               <th>Restored artefact</th>

@@ -118,6 +118,9 @@ const {
   resultTabButtons,
   resultTabPanels,
   overviewPanel,
+  damagedDetectedCount,
+  damagedVisibleCount,
+  damagedReviewCount,
   storagePanel,
   materialsPanel
 } = elements;
@@ -291,9 +294,13 @@ function renderResultsTabContent(): void {
 function renderDamagedTable(items: readonly AppDetection[]): void {
   renderDamagedTabPanel({
     body: resultsBody,
+    detectedCountElement: damagedDetectedCount,
+    visibleCountElement: damagedVisibleCount,
+    reviewCountElement: damagedReviewCount,
     allDetections: detections,
     visibleDetections: items,
     makeDetectionTableRow,
+    quantityNeedsReview,
     drawEmptyState
   });
 }
