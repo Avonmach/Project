@@ -116,6 +116,10 @@ function isArchaeologyCollectionRecord(value: unknown): value is ArchaeologyColl
   return (
     isRecord(value) &&
     typeof value.name === "string" &&
+    isOptionalStringOrNull(value.collector) &&
+    isOptionalNumberOrNull(value.archaeologyLevel) &&
+    isOptionalStringOrNull(value.wikiPage) &&
+    isOptionalNumberOrNull(value.artefactCount) &&
     Array.isArray(value.artefacts) &&
     value.artefacts.every((artefact) => typeof artefact === "string")
   );
@@ -127,6 +131,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isOptionalStringOrNull(value: unknown): boolean {
   return value === undefined || value === null || typeof value === "string";
+}
+
+function isOptionalNumberOrNull(value: unknown): boolean {
+  return value === undefined || value === null || typeof value === "number";
 }
 
 function assertOkResponse(response: Response, path: string): void {
