@@ -41,14 +41,12 @@ import {
   type ArchaeologyReferenceData
 } from "./infrastructure/data/reference-data";
 import {
-  detectItemBoxes,
-  estimateBankGrid,
   getGridCellSize,
   getGridOffsetX,
   getGridOffsetY,
 } from "./infrastructure/image-processing/bank-grid";
 import { attachQuantityDebugSource } from "./infrastructure/image-processing/quantity-debug-source";
-import { makeFullShapeImageData } from "./infrastructure/image-processing/shape-mask";
+import { createScreenshotAnalysisFrame } from "./infrastructure/image-processing/screenshot-analysis-frame";
 import {
   applyResultTabSelection,
   connectResultTabButtons,
@@ -213,16 +211,12 @@ function analyzeCurrentImage() {
   if (!loadedImage || !references.length) return;
 
   const recognitionMode = recognitionModeForTab(resultsState.activeTab);
-  ctx.drawImage(loadedImage, 0, 0);
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const grid = estimateBankGrid(imageData, { trimLastColumn: recognitionMode === "restored" });
-  const boxes = detectItemBoxes(imageData, grid);
-  const shapeImageData = makeFullShapeImageData(imageData, grid, recognitionMode);
+  const frame = createScreenshotAnalysisFrame(loadedImage, canvas, ctx, recognitionMode);
 
   const analyzedDetections = analyzeDetections({
-    imageData,
-    shapeImageData,
-    boxes,
+    imageData: frame.imageData,
+    shapeImageData: frame.shapeImageData,
+    boxes: frame.boxes,
     cellSize: getGridCellSize(),
     recognitionMode,
     digitTemplates,
@@ -241,7 +235,7 @@ function analyzeCurrentImage() {
   detections = resultsState.setDetectionsForMode(recognitionMode, analyzedDetections);
   applyUniqueArtefactAssignments(detections);
   renderDetections();
-  drawBoxes(detections, grid.contentArea, grid.infinityArea);
+  drawBoxes(detections, frame.contentArea, frame.infinityArea);
 }
 
 function matchArtifact(
