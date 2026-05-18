@@ -1,0 +1,42 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { createResultsState } from "../src/presentation/state/results-state";
+
+test("createResultsState stores detections by recognition mode", () => {
+  const state = createResultsState<{ id: number }>();
+  const damaged = [{ id: 1 }];
+  const restored = [{ id: 2 }];
+
+  assert.deepEqual(state.setDetectionsForMode("damaged", damaged), damaged);
+  assert.deepEqual(state.setDetectionsForMode("restored", restored), restored);
+  assert.deepEqual(state.detectionsForMode("damaged"), damaged);
+  assert.deepEqual(state.detectionsForMode("restored"), restored);
+});
+
+test("createResultsState maps tabs to active detection modes", () => {
+  const state = createResultsState<{ id: number }>();
+  const damaged = [{ id: 1 }];
+  const restored = [{ id: 2 }];
+  state.setDetectionsForMode("damaged", damaged);
+  state.setDetectionsForMode("restored", restored);
+
+  assert.equal(state.activeTab, "damaged");
+  assert.equal(state.activeMode, "damaged");
+  assert.deepEqual(state.setActiveTab("restored"), restored);
+  assert.equal(state.activeMode, "restored");
+  assert.deepEqual(state.activeDetections(), restored);
+  assert.deepEqual(state.setActiveTab("materials"), damaged);
+  assert.equal(state.activeMode, "damaged");
+});
+
+test("createResultsState requests restored screenshots only once for relevant tabs", () => {
+  const state = createResultsState();
+
+  assert.equal(state.shouldRequestScreenshot("damaged"), false);
+  assert.equal(state.shouldRequestScreenshot("overview"), false);
+  assert.equal(state.shouldRequestScreenshot("restored"), true);
+  assert.equal(state.shouldRequestScreenshot("restored"), false);
+  assert.equal(state.shouldRequestScreenshot("materials"), true);
+  assert.equal(state.shouldRequestScreenshot("materials"), false);
+});
