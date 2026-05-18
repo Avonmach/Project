@@ -94,6 +94,8 @@ import { makeQuantityDebugView as makeQuantityDebugViewElement } from "./present
 
 import type { PreparedArtefactReference } from "./application/load-references/artefact-reference-preparation";
 
+const STORAGE_REQUIRED_SCREENSHOTS = 2;
+
 const elements = getAppElements();
 const {
   imagePanel,
@@ -138,6 +140,9 @@ const loadedImagesByTab: Record<ScreenshotTab, HTMLImageElement | null> = {
   restored: null,
   storage: null
 };
+let storageImages: HTMLImageElement[] = [];
+let storageAnalysisDone = false;
+let detectedStorageMaterialNames = new Set<string>();
 let detections: AppDetection[] = [];
 let references: PreparedArtefactReference[] = [];
 let archaeologyReference: ArchaeologyReferenceData = emptyArchaeologyReferenceData();
@@ -152,7 +157,8 @@ const browserActions = connectAppEvents(elements, {
   renderDetections,
   setActiveResultsTab,
   exportResults,
-  handleSelectedImageInput: () => loadSelectedScreenshotInput({ imageInput, loadImageFromUrl, drawEmptyState })
+  handleSelectedImageInput: () =>
+    loadSelectedScreenshotInput({ imageInput, loadImageFromUrl, loadImagesFromUrls: loadSelectedImagesFromUrls, drawEmptyState })
 });
 
 initialize();
@@ -187,6 +193,10 @@ async function loadArchaeologyReference() {
 }
 
 async function loadImageFromUrl(src: string, tab: ScreenshotTab = currentScreenshotTab() || "damaged") {
+  if (tab === "storage") {
+    await loadStorageImagesFromUrls([src]);
+    return;
+  }
   try {
     loadedImagesByTab[tab] = await loadImageToCanvas(src, canvas, ctx);
     canvas.classList.remove("is-empty");
@@ -201,8 +211,42 @@ async function loadImageFromUrl(src: string, tab: ScreenshotTab = currentScreens
   }
 }
 
+async function loadSelectedImagesFromUrls(srcs: readonly string[]): Promise<void> {
+  const tab = currentScreenshotTab() || "damaged";
+  if (tab === "storage") {
+    await loadStorageImagesFromUrls(srcs);
+    return;
+  }
+  const first = srcs[0];
+  if (first) await loadImageFromUrl(first, tab);
+}
+
+async function loadStorageImagesFromUrls(srcs: readonly string[]): Promise<void> {
+  try {
+    const loadedStorageImages = await Promise.all(srcs.map((src) => loadImageElement(src)));
+    const existingStorageImage = storageImages[0];
+    const newStorageImage = loadedStorageImages[0];
+    if (srcs.length === 1 && existingStorageImage && newStorageImage) {
+      storageImages = [existingStorageImage, newStorageImage];
+    } else {
+      storageImages = loadedStorageImages.slice(0, STORAGE_REQUIRED_SCREENSHOTS);
+    }
+    loadedImagesByTab.storage = storageImages[0] ?? null;
+    storageAnalysisDone = false;
+    detectedStorageMaterialNames = new Set();
+    if (currentScreenshotTab() === "storage") restoreActiveScreenshotToCanvas();
+    renderResultsTabContent();
+  } catch (error) {
+    console.warn(STATUS_MESSAGES.screenshotLoadWarning, error);
+    drawEmptyState(STATUS_MESSAGES.screenshotLoadFailed);
+  }
+}
+
 function analyzeCurrentImage() {
-  if (resultsState.activeTab === "storage") return;
+  if (resultsState.activeTab === "storage") {
+    analyzeStorageScreenshots();
+    return;
+  }
   if (!loadedImage || !references.length) return;
 
   const image = loadedImage;
@@ -221,6 +265,17 @@ function analyzeCurrentImage() {
   applyUniqueArtefactAssignments(detections);
   renderDetections();
   drawBoxes(detections, analysis.frame.contentArea, analysis.frame.infinityArea);
+}
+
+function analyzeStorageScreenshots(): void {
+  if (storageImages.length < STORAGE_REQUIRED_SCREENSHOTS) {
+    storageAnalysisDone = false;
+    renderResultsTabContent();
+    return;
+  }
+  storageAnalysisDone = true;
+  detectedStorageMaterialNames = new Set();
+  renderResultsTabContent();
 }
 
 function matchArtifact(
@@ -354,13 +409,18 @@ function updateScreenshotPanel(): void {
   screenshotTitle.textContent = {
     damaged: "Damaged artefact screenshot",
     restored: "Restored artefact screenshot",
-    storage: "Storage screenshot"
+    storage: "Storage screenshots"
   }[tab];
+  imageInput.multiple = tab === "storage";
   restoreActiveScreenshotToCanvas();
 }
 
 function restoreActiveScreenshotToCanvas(): void {
   const tab = currentScreenshotTab();
+  if (tab === "storage") {
+    drawStoragePreview();
+    return;
+  }
   loadedImage = tab ? loadedImagesByTab[tab] : null;
   if (!tab || !loadedImage) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -371,6 +431,29 @@ function restoreActiveScreenshotToCanvas(): void {
   canvas.width = loadedImage.naturalWidth;
   canvas.height = loadedImage.naturalHeight;
   ctx.drawImage(loadedImage, 0, 0);
+}
+
+function drawStoragePreview(): void {
+  loadedImage = storageImages[0] ?? null;
+  if (!storageImages.length) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.classList.add("is-empty");
+    return;
+  }
+
+  const gap = 12;
+  const width = Math.max(...storageImages.map((image) => image.naturalWidth));
+  const height = storageImages.reduce((sum, image) => sum + image.naturalHeight, 0) + gap * (storageImages.length - 1);
+  canvas.width = width;
+  canvas.height = height;
+  canvas.classList.remove("is-empty");
+  ctx.fillStyle = "#221f1c";
+  ctx.fillRect(0, 0, width, height);
+  let y = 0;
+  for (const image of storageImages) {
+    ctx.drawImage(image, 0, y);
+    y += image.naturalHeight + gap;
+  }
 }
 
 function renderOverviewTab(items: readonly AppDetection[]): void {
@@ -420,6 +503,10 @@ function renderStorageTab(items: readonly AppDetection[]): void {
   renderStorageTabPanel({
     panel: storagePanel,
     visibleDetections: items,
+    uploadedImageCount: storageImages.length,
+    requiredImageCount: STORAGE_REQUIRED_SCREENSHOTS,
+    analysisDone: storageAnalysisDone,
+    detectedMaterialNames: detectedStorageMaterialNames,
     materials: archaeologyReference.materials || [],
     calculateMaterialTotals: (detections) => calculateMaterialTotalsForRecipes(detections, recipeByRestoredName),
     makeMaterialCell,

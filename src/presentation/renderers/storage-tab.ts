@@ -11,6 +11,10 @@ export interface StorageMaterialNeed {
 export interface StorageTabRendererOptions<TDetection> {
   readonly panel: HTMLElement;
   readonly visibleDetections: readonly TDetection[];
+  readonly uploadedImageCount: number;
+  readonly requiredImageCount: number;
+  readonly analysisDone: boolean;
+  readonly detectedMaterialNames: ReadonlySet<string>;
   readonly materials: readonly StorageMaterial[];
   readonly calculateMaterialTotals: (items: readonly TDetection[]) => readonly StorageMaterialNeed[];
   readonly makeMaterialCell: (row: { readonly name: string }) => HTMLTableCellElement;
@@ -23,6 +27,10 @@ export interface StorageTabRendererOptions<TDetection> {
 export function renderStorageTab<TDetection>({
   panel,
   visibleDetections,
+  uploadedImageCount,
+  requiredImageCount,
+  analysisDone,
+  detectedMaterialNames,
   materials,
   calculateMaterialTotals,
   makeMaterialCell,
@@ -32,26 +40,44 @@ export function renderStorageTab<TDetection>({
   makeOverviewCard
 }: StorageTabRendererOptions<TDetection>): void {
   panel.replaceChildren();
-  const sortedMaterials = [...materials].sort((a, b) => a.name.localeCompare(b.name));
-  if (!sortedMaterials.length) {
-    panel.append(makeEmptyMessage("Material reference data is not available."));
-    return;
-  }
+  const detectedMaterials = [...materials]
+    .filter((material) => detectedMaterialNames.has(material.name))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const summary = document.createElement("div");
   summary.className = "overview-grid";
   summary.append(
-    makeOverviewCard("Known materials", sortedMaterials.length),
+    makeOverviewCard("Screenshots", `${uploadedImageCount}/${requiredImageCount}`),
     makeOverviewCard("Needed now", calculateMaterialTotals(visibleDetections).length),
-    makeOverviewCard("Storage matched", 0)
+    makeOverviewCard("Detected materials", analysisDone ? detectedMaterials.length : 0)
   );
+
+  if (uploadedImageCount < requiredImageCount) {
+    panel.append(summary, makeEmptyMessage("Upload two material storage screenshots before analyzing storage."));
+    return;
+  }
+
+  if (!analysisDone) {
+    panel.append(summary, makeEmptyMessage("Click Analyze to detect materials from the uploaded storage screenshots."));
+    return;
+  }
+
+  if (!materials.length) {
+    panel.append(summary, makeEmptyMessage("Material reference data is not available."));
+    return;
+  }
+
+  if (!detectedMaterials.length) {
+    panel.append(summary, makeEmptyMessage("No storage materials were detected in the uploaded screenshots."));
+    return;
+  }
 
   const table = document.createElement("table");
   table.className = "secondary-table materials-table";
   table.append(makeTableHead(["Material", "Wiki page"]));
   const body = document.createElement("tbody");
 
-  for (const material of sortedMaterials) {
+  for (const material of detectedMaterials) {
     const tr = document.createElement("tr");
     const linkCell = makeLinkedTextCell(material.name, material.wikiPage);
     tr.append(makeMaterialCell({ name: material.name }), linkCell);
@@ -59,9 +85,5 @@ export function renderStorageTab<TDetection>({
   }
 
   table.append(body);
-  panel.append(
-    summary,
-    makeEmptyMessage("Storage screenshot recognition is ready to be added on top of this material database."),
-    table
-  );
+  panel.append(summary, table);
 }

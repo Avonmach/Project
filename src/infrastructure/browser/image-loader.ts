@@ -22,9 +22,9 @@ export function readImageFileAsDataUrl(file: File): Promise<string> {
   });
 }
 
-export async function readSelectedImageAsDataUrl(input: HTMLInputElement): Promise<string | null> {
-  const file = input.files?.[0];
-  return file ? readImageFileAsDataUrl(file) : null;
+export async function readSelectedImagesAsDataUrls(input: HTMLInputElement): Promise<readonly string[]> {
+  const files = Array.from(input.files || []);
+  return Promise.all(files.map((file) => readImageFileAsDataUrl(file)));
 }
 
 export async function loadImageToCanvas(
