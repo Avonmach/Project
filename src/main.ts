@@ -1,6 +1,5 @@
 import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
 import { analyzeDetections } from "./application/analyze-screenshot/analyze-detections";
-import type { DetectionRecord } from "./application/analyze-screenshot/detection-record";
 import { recognitionModeForTab } from "./application/analyze-screenshot/recognition-mode";
 import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
 import { AMBIGUOUS_FINAL_MARGIN } from "./application/config/matching-thresholds";
@@ -53,6 +52,7 @@ import {
   type ResultsTab
 } from "./presentation/tabs/results-tabs";
 import { createResultsState } from "./presentation/state/results-state";
+import type { AppDetection, AppMatchCandidate } from "./presentation/state/app-detection";
 import { updateCultureFilterOptions as updateCultureFilterOptionsElement } from "./presentation/filters/culture-options";
 import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
 import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from "./presentation/renderers/restored-tab";
@@ -90,23 +90,12 @@ import {
 import {
   makeDetectionTableRow as makeDetectionTableRowElement,
   makeStatusPill as makeDetectionStatusPill,
-  rowReviewClass as detectionRowReviewClass,
-  type DetectionRowElements
+  rowReviewClass as detectionRowReviewClass
 } from "./presentation/renderers/detection-row";
 import { makeReferenceCorrectionDropdown as makeReferenceCorrectionDropdownElement } from "./presentation/renderers/correction-dropdown";
 import { makeQuantityDebugView as makeQuantityDebugViewElement } from "./presentation/renderers/quantity-debug";
 
 import type { PreparedArtefactReference } from "./application/load-references/artefact-reference-preparation";
-
-type AppDetection = DetectionRecord<
-  PreparedArtefactReference,
-  HTMLCanvasElement,
-  HTMLCanvasElement,
-  HTMLCanvasElement
-> & {
-  rowElements?: DetectionRowElements;
-};
-type AppMatchCandidate = NonNullable<AppDetection["topMatches"]>[number];
 
 const canvas = requireElement("previewCanvas", HTMLCanvasElement);
 const ctx = requireCanvasContext(canvas);
