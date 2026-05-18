@@ -109,7 +109,7 @@ export function makeProcessedCanvas(
   if (!enhance) preview.classList.add("no-hover-enhance");
   const previewCtx = preview.getContext("2d");
   if (!previewCtx) return preview;
-  previewCtx.fillStyle = "#ffffff";
+  previewCtx.fillStyle = "#eadcc2";
   previewCtx.fillRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
   previewCtx.imageSmoothingEnabled = true;
   previewCtx.imageSmoothingQuality = "high";
