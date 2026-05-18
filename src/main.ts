@@ -14,16 +14,11 @@ import { findUniqueArtefactAssignments } from "./application/correct-detection/u
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
 import { createAnalysisExportPayload, exportBestMatch } from "./application/export-analysis/analysis-export";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
+import { prepareArtefactReferences } from "./application/load-references/artefact-reference-preparation";
 import {
   sortMaterialRows as sortMaterialRowsForMode,
   sortRestoredRows as sortRestoredRowsForMode
 } from "./application/sort-results/result-row-sorting";
-import {
-  fingerprintReference,
-  removeBackground,
-  toScreenshotFingerprint,
-  topLeftPixelColor
-} from "./domain/artefacts/fingerprint";
 import { matchArtifact as matchArtefactAgainstReferences } from "./domain/artefacts/matching";
 import { detectQuantity, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { normalizeName } from "./domain/shared/format";
@@ -181,17 +176,7 @@ async function loadQuantityFontTemplates() {
 
 async function loadReferences() {
   const items = await loadDamagedArtifactRecords();
-
-  references = await Promise.all(
-    items.map(async (item) => {
-      const image = await loadImageElement(`data/${item.icon}`);
-      const damagedImage = item.damagedIcon ? await loadImageElement(`data/${item.damagedIcon}`) : null;
-      const fingerprint = fingerprintReference(image);
-      const damagedFingerprint = damagedImage ? fingerprintReference(damagedImage) : null;
-      return { ...item, image, fingerprint, damagedImage, damagedFingerprint };
-    })
-  );
-
+  references = await prepareArtefactReferences(items, loadImageElement);
   referenceCountEl.textContent = String(references.length);
 }
 
