@@ -1145,7 +1145,6 @@ tbody tr:has(.processed-preview:hover),
 .correction-option img {
   background: #ffffff;
   border-radius: 5px;
-  filter: brightness(1.65) saturate(2) contrast(1.12);
   height: 40px;
   image-rendering: auto;
   object-fit: contain;

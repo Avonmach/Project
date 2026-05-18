@@ -130,7 +130,7 @@ function makeCorrectionOption<TDetection extends CorrectionDetection<TReference>
   button.className = "correction-option";
 
   const image = document.createElement("img");
-  image.src = `data/${detection.recognitionMode === "restored" ? item.icon : item.damagedIcon || item.icon}`;
+  image.src = `data/${item.icon}`;
   image.alt = "";
   image.loading = "lazy";
 
