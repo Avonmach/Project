@@ -1,7 +1,7 @@
 import type { ArtefactReferenceMetadata } from "../../domain/artefacts/reference-types";
 
-const DAMAGED_ARTIFACTS_PATH = "data/damaged-artifacts.json";
-const ARCHAEOLOGY_REFERENCE_PATH = "data/archaeology-reference.json";
+export const DAMAGED_ARTIFACTS_PATH = "data/damaged-artifacts.json";
+export const ARCHAEOLOGY_REFERENCE_PATH = "data/archaeology-reference.json";
 
 export interface DamagedArtifactReferenceRecord extends ArtefactReferenceMetadata {
   readonly [key: string]: unknown;
