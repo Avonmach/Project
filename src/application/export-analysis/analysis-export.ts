@@ -37,7 +37,7 @@ interface ExportMatch {
   readonly damagedScore?: number;
 }
 
-interface ExportDetection {
+export interface ExportDetection {
   readonly bankIndex: number;
   readonly bankRow?: number;
   readonly bankColumn?: number;

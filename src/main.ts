@@ -12,8 +12,7 @@ import { applyQuantityChange as applyQuantityCorrection } from "./application/co
 import { applyReferenceCorrection as applyReferenceCorrectionRule } from "./application/correct-detection/reference-correction";
 import { findUniqueArtefactAssignments } from "./application/correct-detection/unique-artefact-assignments";
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
-import { createAnalysisExportPayload } from "./application/export-analysis/analysis-export";
-import { createAnalysisExportFilename } from "./application/export-analysis/export-filename";
+import { createAnalysisExportFile } from "./application/export-analysis/analysis-export-file";
 import { createExportGridMetadata } from "./application/export-analysis/export-grid-metadata";
 import { createExportImageMetadata } from "./application/export-analysis/export-image-metadata";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
@@ -537,7 +536,7 @@ function updateTotals(): void {
 
 function exportResults(): void {
   const exportedAt = new Date().toISOString();
-  const payload = createAnalysisExportPayload({
+  const file = createAnalysisExportFile({
     exportedAt,
     image: createExportImageMetadata(loadedImage),
     grid: createExportGridMetadata({
@@ -548,7 +547,7 @@ function exportResults(): void {
     detections
   });
 
-  downloadJsonFile(createAnalysisExportFilename(exportedAt), payload);
+  downloadJsonFile(file.filename, file.payload);
 }
 
 function drawBoxes(
