@@ -3,6 +3,7 @@ import {
   FALLBACK_DIGIT_TEMPLATES,
   buildDigitTemplatesFromFont
 } from "./domain/ocr/digit-templates";
+import { createDetectionRecord } from "./application/analyze-screenshot/detection-record";
 import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
   calculateMaterialTotals as calculateMaterialTotalsForRecipes
@@ -12,7 +13,7 @@ import { applyQuantityChange as applyQuantityCorrection } from "./application/co
 import { applyReferenceCorrection as applyReferenceCorrectionRule } from "./application/correct-detection/reference-correction";
 import { findUniqueArtefactAssignments } from "./application/correct-detection/unique-artefact-assignments";
 import { verifyDetection as applyDetectionVerification } from "./application/correct-detection/verification";
-import { createAnalysisExportPayload, exportBestMatch } from "./application/export-analysis/analysis-export";
+import { createAnalysisExportPayload } from "./application/export-analysis/analysis-export";
 import { filterAndSortDetections } from "./application/filter-detections/detection-filters";
 import { prepareArtefactReferences } from "./application/load-references/artefact-reference-preparation";
 import {
@@ -223,70 +224,16 @@ function analyzeCurrentImage() {
     const processedPreview = makeProcessedCanvas(imageData, shapeImageData, box, { enhance: recognitionMode !== "restored" });
     const referencePreview = makeReferenceCanvas(match.item.image);
 
-    return {
-      id: index + 1,
+    return createDetectionRecord({
       box,
       bankIndex: index,
-      bankRow: Math.floor(box.y / getGridCellSize()) + 1,
-      bankColumn: Math.floor(box.x / getGridCellSize()) + 1,
-      artefact: match.item.name,
-      wikiPage: match.item.restoredWikiPage || match.item.wikiPage,
-      damagedWikiPage: match.item.wikiPage,
-      restoredName: match.item.restoredName,
-      restoredWikiPage: match.item.restoredWikiPage,
-      archaeologyLevel: match.item.archaeologyLevel,
-      culture: match.item.culture,
-      digSite: match.item.digSite,
-      matchName: match.item.restoredName || match.item.name,
-      matchScore: match.score,
-      shapeScore: match.shapeScore,
-      colorScore: match.colorScore,
-      colorExistenceScore: match.colorExistenceScore,
-      colorPositionScore: match.colorPositionScore,
-      overlapScore: match.overlapScore,
-      restoredScore: match.restoredScore,
-      damagedScore: match.damagedScore,
-      algorithmBest: match.algorithmBest,
-      referenceUsed: match.referenceUsed,
-      scoringWeights: match.scoringWeights,
-      ambiguousMatch: match.ambiguous,
-      matchGap: match.matchGap,
-      topMatches: match.candidates,
-      recognitionMode,
-      originalPrediction: {
-        damagedName: match.item.name,
-        restoredName: match.item.restoredName,
-        archaeologyLevel: match.item.archaeologyLevel,
-        culture: match.item.culture,
-        scores: {
-          shape: match.shapeScore,
-          restored: match.restoredScore,
-          damaged: match.damagedScore,
-          color: match.colorScore,
-          colorExistence: match.colorExistenceScore,
-          colorPosition: match.colorPositionScore,
-          selected: match.score
-        },
-        algorithmBest: {
-          shape: exportBestMatch(match.algorithmBest?.shape),
-          restored: exportBestMatch(match.algorithmBest?.restored),
-          damaged: exportBestMatch(match.algorithmBest?.damaged)
-        }
-      },
-      correction: null,
-      quantity: quantityResult.quantity,
-      originalQuantity: quantityResult.quantity,
-      quantityConfidence: quantityResult.confidence,
-      quantityAlternatives: quantityResult.alternatives,
+      cellSize: getGridCellSize(),
+      match,
+      quantityResult,
       quantityDebug: attachQuantityDebugSource(quantityResult.debug, imageData),
-      quantityCorrection: null,
-      quantityManual: false,
-      preview,
-      processedPreview,
-      referencePreview,
-      corrected: false,
-      manual: false
-    };
+      recognitionMode,
+      previews: { preview, processedPreview, referencePreview }
+    });
   });
 
   detections = resultsState.setDetectionsForMode(recognitionMode, analyzedDetections);
