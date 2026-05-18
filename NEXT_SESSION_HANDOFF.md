@@ -17,7 +17,7 @@ Branch: `Archeology`
 
 Latest pushed commit at handoff:
 
-- `ae614c0` Reuse empty reference indexes initially
+- `1519c22` Extract DOM query helper
 
 The repo is clean except for these untracked image files, which have been intentionally left untouched:
 
@@ -90,6 +90,11 @@ Major extraction checkpoints pushed today:
 - culture filter option/update helpers
 - status/warning message config
 - reference count renderer
+- generic analysis detection-loop use case
+- detection preview factory
+- screenshot analysis frame preparation helper
+- app detection type aliases
+- typed DOM query helper
 
 Each checkpoint has a matching file under `changes/`.
 
@@ -105,15 +110,17 @@ Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8080 | Select-Object -Expand
 
 The local site returned `200`.
 
+`npm.cmd exec tsc -- --noEmit --noUncheckedIndexedAccess` was probed on 2026-05-18 and is not ready for global enablement yet. The current failures are concentrated in image/OCR array and pixel-buffer loops, especially `src/domain/artefacts/fingerprint.ts`, `src/domain/ocr/*`, and `src/infrastructure/image-processing/*`.
+
 ## Good next steps
 
 Continue with small, safe checkpoints:
 
-1. Continue shrinking `src/main.ts` by extracting analysis orchestration into an application use case.
+1. Continue shrinking `src/main.ts` by extracting remaining UI wiring/callback groups only where the dependency shape stays clear.
 2. Consider moving DOM element lookup/wiring into a presentation/browser entry helper.
 3. Add focused unit tests for pure OCR, matching, correction, filtering, and export helpers.
 4. Keep reducing remaining intentional `unknown` boundaries where a stable JSON/data shape exists.
-5. Consider enabling stricter indexed-access checks module by module, starting with smaller data helpers before image-processing loops.
+5. Work toward stricter indexed-access checks module by module; start with small helpers and avoid enabling it globally until image/OCR loops are made explicit.
 
 Avoid big changes without asking:
 
