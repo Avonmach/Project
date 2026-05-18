@@ -82,14 +82,18 @@ export function makeQuantityDebugView(debug: QuantityDebugData | null | undefine
       line.className = "quantity-debug-match";
       const summary = document.createElement("code");
       const options = match.options.map((option) => `${option.digit}:${percent(option.score)}`).join(" ");
-      summary.textContent = `#${match.index} ${match.digit} ${percent(match.score)} input ${match.normalized.join("/")} ${options}`;
+      summary.textContent = `#${match.index} read ${match.digit} ${percent(match.score)} | ${options}`;
       line.append(summary);
+      const grids = document.createElement("div");
+      grids.className = "quantity-debug-grid-comparison";
+      grids.append(makeQuantityGridView("Detected", match.normalized));
       const templates = document.createElement("div");
       templates.className = "quantity-debug-templates";
       for (const option of match.options) {
-        templates.append(makeQuantityTemplateView(option));
+        templates.append(makeQuantityTemplateView(option, option.digit === match.digit));
       }
-      line.append(templates);
+      grids.append(templates);
+      line.append(grids);
       digitList.append(line);
     }
   } else {
@@ -102,19 +106,28 @@ export function makeQuantityDebugView(debug: QuantityDebugData | null | undefine
   return details;
 }
 
-function makeQuantityTemplateView(option: QuantityDebugTemplateOption): HTMLDivElement {
+function makeQuantityTemplateView(option: QuantityDebugTemplateOption, selected = false): HTMLDivElement {
   const wrapper = document.createElement("div");
   wrapper.className = "quantity-debug-template";
+  if (selected) wrapper.classList.add("is-selected");
   const template = option.template || [];
   const width = option.width || templateWidth(template);
-  const height = option.height || template.length;
+  const label = `Ref ${option.digit} ${percent(option.score)}`;
+  const grid = makeQuantityGridView(label, template, width);
+  wrapper.append(grid);
+  return wrapper;
+}
+
+function makeQuantityGridView(labelText: string, rows: readonly string[], width = templateWidth(rows)): HTMLDivElement {
+  const wrapper = document.createElement("div");
+  wrapper.className = "quantity-debug-grid-view";
   const label = document.createElement("small");
-  label.textContent = `${option.digit} ${height}x${width} ${percent(option.score)}`;
+  label.textContent = labelText;
   const grid = document.createElement("div");
   grid.className = "quantity-debug-template-grid";
   grid.style.gridTemplateColumns = `repeat(${width}, 4px)`;
-  for (const row of template) {
-    for (const value of row) {
+  for (const row of rows) {
+    for (const value of row.padEnd(width, "0").slice(0, width)) {
       const cell = document.createElement("span");
       if (value === "1") cell.className = "is-on";
       grid.append(cell);
