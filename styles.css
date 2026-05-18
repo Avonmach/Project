@@ -297,12 +297,18 @@ input[type="search"] {
 
 .plan-table td:last-child,
 .plan-table th:last-child {
+  padding-right: 12px;
   text-align: right;
-  width: 58px;
+  width: 70px;
 }
 
 .plan-table td:first-child {
   overflow-wrap: anywhere;
+  padding-left: 12px;
+}
+
+.plan-table th:first-child {
+  padding-left: 12px;
 }
 
 .overview-panel {
