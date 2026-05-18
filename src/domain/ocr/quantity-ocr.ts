@@ -368,11 +368,10 @@ function matchDigit(pixels: readonly PixelPoint[], box: BoundingBox, digitTempla
     if (score > best.score) best = { digit, score };
   }
 
-  const adjusted = adjustCommonQuantityMistakes(best, scores, normalizedForWidth(DIGIT_TEMPLATE_WIDTH));
   return {
-    ...adjusted,
-    normalized: normalizedForWidth(templateWidth(digitTemplates[adjusted.digit])),
-    options: digitOptions(scores, adjusted)
+    ...best,
+    normalized: normalizedForWidth(templateWidth(digitTemplates[best.digit])),
+    options: digitOptions(scores, best)
   };
 }
 
@@ -383,47 +382,4 @@ function digitOptions(scores: Partial<Record<Digit, number>>, adjusted: DigitOpt
   const adjustedIndex = options.findIndex((option) => option.digit === adjusted.digit);
   if (adjustedIndex >= 0) options.splice(adjustedIndex, 1);
   return [{ digit: adjusted.digit, score: adjusted.score }, ...options].slice(0, 5);
-}
-
-function adjustCommonQuantityMistakes(
-  best: DigitOption,
-  scores: Partial<Record<Digit, number>>,
-  normalized: readonly string[]
-): DigitOption {
-  const rows = normalized.map((row) => row.split(""));
-  const has = (x: number, y: number) => rows[y]?.[x] === "1";
-  const scoreGap = (a: Digit, b: Digit) => Math.abs((scores[a] || 0) - (scores[b] || 0));
-
-  if (best.digit === "7" && (scores[2] || 0) >= (scores[7] || 0) - 0.18) {
-    const hasMiddle = has(1, 2) || has(2, 2);
-    const hasLowerLeft = has(0, 3) || has(0, 4);
-    const weakSevenStem = !has(2, 2) || !has(1, 3);
-    if ((hasMiddle && hasLowerLeft) || (weakSevenStem && scoreGap("2", "7") <= 0.18)) {
-      return { digit: "2", score: Math.max(scores[2] || 0, best.score - 0.04) };
-    }
-  }
-
-  if (best.digit === "9" && (scores[3] || 0) >= (scores[9] || 0) - 0.28) {
-    const hasLeftLower = has(0, 3) || has(0, 4);
-    const strongRightSide = has(2, 1) && has(2, 2) && has(2, 3);
-    const weakNineLoop = !has(0, 1) || !has(0, 2);
-    const threeLikeCenter = has(1, 2) || has(2, 2);
-    if ((!hasLeftLower && strongRightSide) || (weakNineLoop && threeLikeCenter) || scoreGap("3", "9") <= 0.2) {
-      return { digit: "3", score: Math.max(scores[3] || 0, best.score - 0.04) };
-    }
-  }
-
-  if (best.digit === "6" && (scores[0] || 0) >= (scores[6] || 0) - 0.2) {
-    const openRightTop = !has(2, 1);
-    const zeroLoop = has(0, 1) && has(2, 1) && has(0, 3) && has(2, 3);
-    if (zeroLoop || openRightTop) {
-      return { digit: "0", score: Math.max(scores[0] || 0, best.score - 0.04) };
-    }
-  }
-
-  if (best.digit === "8" && (scores[6] || 0) >= (scores[8] || 0) - 0.14 && !has(2, 1)) {
-    return { digit: "6", score: Math.max(scores[6] || 0, best.score - 0.04) };
-  }
-
-  return best;
 }
