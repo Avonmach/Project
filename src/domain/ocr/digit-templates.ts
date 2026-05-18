@@ -9,7 +9,7 @@ export const DIGIT_TEMPLATE_WIDTH = 5;
 export const DIGIT_TEMPLATE_HEIGHT = 8;
 
 export const FALLBACK_DIGIT_TEMPLATES: DigitTemplateMap = {
-  0: ["01110", "10001", "10011", "10101", "11001", "10001", "10001", "01110"],
+  0: ["00100", "01010", "10001", "10001", "10001", "10001", "01011", "00110"],
   1: ["0100", "1100", "0100", "0100", "0100", "0100", "0100", "1110"],
   2: ["01110", "10001", "00001", "00010", "00100", "01000", "10000", "11111"],
   3: ["11110", "00001", "00001", "00110", "00001", "00001", "10001", "01110"],
@@ -25,6 +25,7 @@ export function buildDigitTemplatesFromFont(fontFamily: string): DigitTemplateMa
   const templates = { ...FALLBACK_DIGIT_TEMPLATES };
   for (let digit = 0; digit <= 9; digit += 1) {
     const key = String(digit) as Digit;
+    if (key === "0") continue;
     templates[key] = renderDigitTemplate(key, fontFamily);
   }
   return templates;
