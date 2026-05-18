@@ -8,7 +8,7 @@ import type { QuantityAlternative, QuantityDebug, QuantityResult } from "../../d
 import type { BoundingBox } from "../../domain/shared/geometry";
 import type { DetectionCorrection } from "../correct-detection/correction-record";
 import type { QuantityCorrectionDetection } from "../correct-detection/quantity-correction";
-import { exportBestMatch } from "../export-analysis/analysis-export";
+import { exportBestMatch, type ExportedBestMatch } from "../export-analysis/analysis-export";
 
 export interface DetectionRecordPreviewParts<TPreview, TProcessedPreview, TReferencePreview> {
   readonly preview: TPreview;
@@ -30,6 +30,27 @@ export interface DetectionRecordOptions<
   readonly quantityDebug: QuantityDebug | null;
   readonly recognitionMode: RecognitionMode;
   readonly previews: DetectionRecordPreviewParts<TPreview, TProcessedPreview, TReferencePreview>;
+}
+
+export interface OriginalPrediction {
+  readonly damagedName: string;
+  readonly restoredName?: string | null;
+  readonly archaeologyLevel?: number | null;
+  readonly culture?: string | null;
+  readonly scores: {
+    readonly shape: number;
+    readonly restored: number;
+    readonly damaged: number;
+    readonly color: number;
+    readonly colorExistence: number;
+    readonly colorPosition: number;
+    readonly selected: number;
+  };
+  readonly algorithmBest: {
+    readonly shape: ExportedBestMatch | null;
+    readonly restored: ExportedBestMatch | null;
+    readonly damaged: ExportedBestMatch | null;
+  };
 }
 
 export interface DetectionRecord<TReference extends MatchReference, TPreview, TProcessedPreview, TReferencePreview> {
@@ -62,7 +83,7 @@ export interface DetectionRecord<TReference extends MatchReference, TPreview, TP
   matchGap: number;
   topMatches: readonly ArtefactMatchCandidate<TReference>[];
   readonly recognitionMode: RecognitionMode;
-  readonly originalPrediction: unknown;
+  readonly originalPrediction: OriginalPrediction;
   correction: DetectionCorrection | null;
   quantity: number;
   readonly originalQuantity: number;
