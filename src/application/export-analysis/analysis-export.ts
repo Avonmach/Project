@@ -1,4 +1,4 @@
-import type { ArtefactScoringWeights } from "../../domain/artefacts/matching";
+import type { ArtefactScoringWeights, RecognitionMode } from "../../domain/artefacts/matching";
 import type { QuantityAlternative } from "../../domain/ocr/quantity-ocr";
 import type { BoundingBox } from "../../domain/shared/geometry";
 import type { QuantityCorrectionDetection } from "../correct-detection/quantity-correction";
@@ -72,7 +72,7 @@ interface ExportDetection {
   readonly restoredScore?: number;
   readonly damagedScore?: number;
   readonly matchScore?: number;
-  readonly referenceUsed?: unknown;
+  readonly referenceUsed?: RecognitionMode;
   readonly scoringWeights?: ArtefactScoringWeights;
   readonly algorithmBest?: {
     readonly shape?: ExportMatch | null;
@@ -205,7 +205,7 @@ export interface ExportDetectionPayload {
     readonly selectedRestored?: number;
     readonly selectedDamaged?: number;
     readonly selectedMain?: number;
-    readonly referenceUsed?: unknown;
+    readonly referenceUsed?: RecognitionMode;
     readonly weights?: ArtefactScoringWeights;
   };
   readonly algorithmBest: {
