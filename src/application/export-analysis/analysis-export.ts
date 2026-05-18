@@ -1,6 +1,7 @@
 import type { ArtefactScoringWeights, RecognitionMode } from "../../domain/artefacts/matching";
 import type { QuantityAlternative } from "../../domain/ocr/quantity-ocr";
 import type { BoundingBox } from "../../domain/shared/geometry";
+import type { OriginalPrediction } from "../analyze-screenshot/detection-record";
 import type { QuantityCorrectionDetection } from "../correct-detection/quantity-correction";
 
 interface ExportImageInfo {
@@ -55,7 +56,7 @@ interface ExportDetection {
     readonly archaeologyLevel?: number | null;
     readonly culture?: string | null;
   } | null;
-  readonly originalPrediction?: unknown;
+  readonly originalPrediction?: OriginalPrediction;
   readonly artefact: string;
   readonly restoredName?: string | null;
   readonly archaeologyLevel?: number | null;
