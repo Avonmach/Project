@@ -70,15 +70,30 @@ export function normalizeDigit(
   width = DIGIT_TEMPLATE_WIDTH
 ): string[] {
   const grid = Array.from({ length: DIGIT_TEMPLATE_HEIGHT }, () => Array.from({ length: width }, () => "0"));
-  for (const pixel of pixels) {
-    if (pixel.x < box.x || pixel.x >= box.x + box.w || pixel.y < box.y || pixel.y >= box.y + box.h) continue;
-    const gx = Math.min(width - 1, Math.floor(((pixel.x - box.x + 0.5) / Math.max(1, box.w)) * width));
-    const gy = Math.min(
-      DIGIT_TEMPLATE_HEIGHT - 1,
-      Math.floor(((pixel.y - box.y + 0.5) / Math.max(1, box.h)) * DIGIT_TEMPLATE_HEIGHT)
-    );
-    const row = grid[gy];
-    if (row) row[gx] = "1";
+  const inside = new Set(
+    pixels
+      .filter((pixel) => pixel.x >= box.x && pixel.x < box.x + box.w && pixel.y >= box.y && pixel.y < box.y + box.h)
+      .map((pixel) => `${pixel.x},${pixel.y}`)
+  );
+
+  for (let gy = 0; gy < DIGIT_TEMPLATE_HEIGHT; gy += 1) {
+    for (let gx = 0; gx < width; gx += 1) {
+      const row = grid[gy];
+      if (!row) continue;
+      const startX = box.x + Math.floor((gx / width) * box.w);
+      const endX = box.x + Math.max(1, Math.floor(((gx + 1) / width) * box.w));
+      const startY = box.y + Math.floor((gy / DIGIT_TEMPLATE_HEIGHT) * box.h);
+      const endY = box.y + Math.max(1, Math.floor(((gy + 1) / DIGIT_TEMPLATE_HEIGHT) * box.h));
+      let hits = 0;
+      let samples = 0;
+      for (let y = startY; y < endY; y += 1) {
+        for (let x = startX; x < endX; x += 1) {
+          samples += 1;
+          if (inside.has(`${x},${y}`)) hits += 1;
+        }
+      }
+      row[gx] = hits / Math.max(1, samples) >= 0.28 ? "1" : "0";
+    }
   }
 
   return grid.map((row) => row.join(""));

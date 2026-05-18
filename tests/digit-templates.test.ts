@@ -18,7 +18,7 @@ test("normalizeDigit keeps a one-pixel vertical stroke one cell wide", () => {
   ]);
 });
 
-test("normalizeDigit does not duplicate a four-pixel digit into a five-pixel grid", () => {
+test("normalizeDigit keeps a four-pixel digit narrow when scored as four columns", () => {
   const pixels = [
     ...Array.from({ length: 4 }, (_, x) => ({ x, y: 0 })),
     ...Array.from({ length: 4 }, (_, x) => ({ x, y: 7 })),
@@ -26,14 +26,103 @@ test("normalizeDigit does not duplicate a four-pixel digit into a five-pixel gri
     ...Array.from({ length: 6 }, (_, index) => ({ x: 3, y: index + 1 }))
   ];
 
-  assert.deepEqual(normalizeDigit(pixels, { x: 0, y: 0, w: 4, h: 8 }, 5), [
-    "11011",
-    "10001",
-    "10001",
-    "10001",
-    "10001",
-    "10001",
-    "10001",
-    "11011"
+  assert.deepEqual(normalizeDigit(pixels, { x: 0, y: 0, w: 4, h: 8 }, 4), [
+    "1111",
+    "1001",
+    "1001",
+    "1001",
+    "1001",
+    "1001",
+    "1001",
+    "1111"
   ]);
 });
+
+test("normalizeDigit keeps the uploaded zero sample hollow", () => {
+  const rows = [
+    "...............................",
+    "...............................",
+    "...............................",
+    "...............................",
+    "...............................",
+    "...............................",
+    "...............................",
+    "...............................",
+    "...............................",
+    "...............................",
+    "............####...............",
+    "............####...............",
+    "............####...............",
+    "........####....####...........",
+    "........####....####...........",
+    "........####....####...........",
+    "........####....####...........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    ".....###............###........",
+    "........####....####...........",
+    "........####....####...........",
+    "........####....####...........",
+    "........####....####...........",
+    "............####...............",
+    "............####...............",
+    "............####...............",
+    "..............................."
+  ];
+  const pixels = pixelsFromMask(rows);
+
+  assert.deepEqual(normalizeDigit(pixels, { x: 5, y: 10, w: 18, h: 30 }, 5), [
+    "00100",
+    "01010",
+    "10001",
+    "10001",
+    "10001",
+    "10001",
+    "01011",
+    "00110"
+  ]);
+});
+
+test("normalizeDigit keeps a thick source zero hollow", () => {
+  const pixels = [
+    ...Array.from({ length: 4 }, (_, x) => ({ x: x + 7, y: 0 })),
+    ...Array.from({ length: 4 }, (_, x) => ({ x: x + 7, y: 1 })),
+    ...Array.from({ length: 4 }, (_, x) => ({ x: x + 7, y: 2 })),
+    ...Array.from({ length: 4 }, (_, x) => ({ x: x + 3, y: 3 })),
+    ...Array.from({ length: 4 }, (_, x) => ({ x: x + 11, y: 3 })),
+    ...Array.from({ length: 4 }, (_, x) => ({ x: x + 3, y: 4 })),
+    ...Array.from({ length: 4 }, (_, x) => ({ x: x + 11, y: 4 })),
+    ...Array.from({ length: 3 }, (_, x) => ({ x, y: 5 })),
+    ...Array.from({ length: 3 }, (_, x) => ({ x: x + 15, y: 5 })),
+    ...Array.from({ length: 3 }, (_, x) => ({ x, y: 6 })),
+    ...Array.from({ length: 3 }, (_, x) => ({ x: x + 15, y: 6 })),
+    ...Array.from({ length: 3 }, (_, x) => ({ x, y: 7 })),
+    ...Array.from({ length: 3 }, (_, x) => ({ x: x + 15, y: 7 })),
+    ...Array.from({ length: 4 }, (_, x) => ({ x: x + 7, y: 8 })),
+    ...Array.from({ length: 4 }, (_, x) => ({ x: x + 7, y: 9 }))
+  ];
+
+  const normalized = normalizeDigit(pixels, { x: 0, y: 0, w: 18, h: 10 }, 5);
+
+  assert.notEqual(normalized[0], "11111");
+  assert.match(normalized.slice(2, 7).join(""), /0/);
+});
+
+function pixelsFromMask(rows: readonly string[]): Array<{ x: number; y: number }> {
+  return rows.flatMap((row, y) =>
+    [...row].flatMap((value, x) => (value === "#" ? [{ x, y }] : []))
+  );
+}
