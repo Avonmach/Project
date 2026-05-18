@@ -111,8 +111,6 @@ export function makeProcessedCanvas(
   if (!enhance) preview.classList.add("no-hover-enhance");
   const previewCtx = preview.getContext("2d");
   if (!previewCtx) return preview;
-  previewCtx.fillStyle = PREVIEW_BACKGROUND;
-  previewCtx.fillRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
   previewCtx.imageSmoothingEnabled = true;
   previewCtx.imageSmoothingQuality = "high";
 
@@ -125,6 +123,11 @@ export function makeProcessedCanvas(
     const dy = Math.floor((PREVIEW_SIZE - drawH) / 2);
     previewCtx.drawImage(source, bounds.x, bounds.y, bounds.w, bounds.h, dx, dy, drawW, drawH);
   }
+
+  previewCtx.globalCompositeOperation = "destination-over";
+  previewCtx.fillStyle = PREVIEW_BACKGROUND;
+  previewCtx.fillRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
+  previewCtx.globalCompositeOperation = "source-over";
 
   return preview;
 }

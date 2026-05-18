@@ -923,7 +923,7 @@ tbody tr:has(.processed-preview:hover),
 
 .processed-preview:hover {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-  filter: brightness(1.2);
+  filter: brightness(1.8) saturate(1.75);
   transform: scale(3);
   z-index: 80;
 }
@@ -942,7 +942,7 @@ tbody tr:has(.processed-preview:hover),
 .processed-preview {
   background: var(--image-bg);
   border-color: var(--image-border);
-  filter: brightness(1.2);
+  filter: none;
   image-rendering: auto;
 }
 
@@ -1649,12 +1649,12 @@ tbody tr:has(.processed-preview:hover),
 
   .damaged-table td:nth-child(7)::before,
   .restored-table td:nth-child(7)::before {
-    content: "Guess";
+    content: "Clear";
   }
 
   .damaged-table td:nth-child(8)::before,
   .restored-table td:nth-child(8)::before {
-    content: "Result";
+    content: "Guess";
   }
 
   .damaged-table .empty,
