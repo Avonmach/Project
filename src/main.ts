@@ -27,7 +27,7 @@ import {
 import { matchArtifact as matchArtefactAgainstReferences } from "./domain/artefacts/matching";
 import { detectQuantity, quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
 import { normalizeName } from "./domain/shared/format";
-import { loadImageElement } from "./infrastructure/browser/image-loader";
+import { loadImageElement, loadImageToCanvas, readImageFileAsDataUrl } from "./infrastructure/browser/image-loader";
 import {
   emptyArchaeologyReferenceData,
   loadArchaeologyReferenceData,
@@ -141,12 +141,15 @@ document.addEventListener("click", (event) => {
   }
 });
 exportResultsButton.addEventListener("click", exportResults);
-imageInput.addEventListener("change", (event) => {
+imageInput.addEventListener("change", async (event) => {
   const file = event.target.files?.[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => loadImageFromUrl(reader.result);
-  reader.readAsDataURL(file);
+  try {
+    await loadImageFromUrl(await readImageFileAsDataUrl(file));
+  } catch (error) {
+    console.warn("Could not read the selected screenshot.", error);
+    drawEmptyState("Could not load the screenshot.");
+  }
 });
 
 initialize();
@@ -209,22 +212,13 @@ async function loadArchaeologyReference() {
   }
 }
 
-function loadImageFromUrl(src) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => {
-      loadedImage = img;
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      ctx.drawImage(img, 0, 0);
-      resolve();
-    };
-    img.onerror = () => {
-      drawEmptyState("Could not load the screenshot.");
-      resolve();
-    };
-    img.src = src;
-  });
+async function loadImageFromUrl(src) {
+  try {
+    loadedImage = await loadImageToCanvas(src, canvas, ctx);
+  } catch (error) {
+    console.warn("Could not load the screenshot.", error);
+    drawEmptyState("Could not load the screenshot.");
+  }
 }
 
 function analyzeCurrentImage() {
