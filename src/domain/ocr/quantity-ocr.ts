@@ -355,6 +355,7 @@ function pixelsToBox(pixels: readonly PixelPoint[]): BoundingBox | null {
 function matchDigit(pixels: readonly PixelPoint[], box: BoundingBox, digitTemplates: DigitTemplateMap): QuantityDigitMatch {
   let best: DigitOption = { digit: "1", score: 0 };
   const scores: Partial<Record<Digit, number>> = {};
+  const normalizedByDigit: Partial<Record<Digit, string[]>> = {};
   const normalizedByWidth = new Map<number, string[]>();
   const normalizedForWidth = (width: number) => {
     if (!normalizedByWidth.has(width)) normalizedByWidth.set(width, normalizeDigit(pixels, box, width));
@@ -362,17 +363,47 @@ function matchDigit(pixels: readonly PixelPoint[], box: BoundingBox, digitTempla
   };
 
   for (const [digit, template] of Object.entries(digitTemplates) as Array<[Digit, DigitTemplate]>) {
-    const normalized = normalizedForWidth(templateWidth(template));
-    const score = shiftedTemplateScore(normalized, template);
+    const { normalized, score } = bestTemplateScoreForBox(normalizedForWidth, box, template);
     scores[digit] = score;
+    normalizedByDigit[digit] = normalized;
     if (score > best.score) best = { digit, score };
   }
 
   return {
     ...best,
-    normalized: normalizedForWidth(templateWidth(digitTemplates[best.digit])),
+    normalized: normalizedByDigit[best.digit] || normalizedForWidth(templateWidth(digitTemplates[best.digit])),
     options: digitOptions(scores, best)
   };
+}
+
+function bestTemplateScoreForBox(
+  normalizedForWidth: (width: number) => string[],
+  box: BoundingBox,
+  template: DigitTemplate
+): { normalized: string[]; score: number } {
+  const width = templateWidth(template);
+  const normalized = normalizedForWidth(width);
+  let best = { normalized, score: shiftedTemplateScore(normalized, template) };
+
+  if (box.w >= 3 && box.w < width) {
+    const narrowTemplate = resizeTemplateWidth(template, box.w);
+    const narrowNormalized = normalizedForWidth(box.w);
+    const narrowScore = shiftedTemplateScore(narrowNormalized, narrowTemplate);
+    if (narrowScore > best.score) best = { normalized: narrowNormalized, score: narrowScore };
+  }
+
+  return best;
+}
+
+function resizeTemplateWidth(template: DigitTemplate, width: number): DigitTemplate {
+  return template.map((row) => {
+    let resized = "";
+    for (let x = 0; x < width; x += 1) {
+      const sourceX = Math.min(row.length - 1, Math.floor(((x + 0.5) / width) * row.length));
+      resized += row[sourceX] || "0";
+    }
+    return resized;
+  });
 }
 
 function digitOptions(scores: Partial<Record<Digit, number>>, adjusted: DigitOption): DigitOption[] {
