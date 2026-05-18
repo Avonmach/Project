@@ -267,7 +267,6 @@ input[type="search"] {
 }
 
 .plan-body {
-  overflow-x: auto;
   padding: 12px;
 }
 
@@ -275,6 +274,7 @@ input[type="search"] {
   border-collapse: separate;
   border-spacing: 0;
   min-width: 0;
+  table-layout: fixed;
   width: 100%;
 }
 
@@ -291,11 +291,14 @@ input[type="search"] {
 .plan-table td {
   font-size: 12px;
   padding: 6px 7px;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .plan-table td:last-child,
 .plan-table th:last-child {
   text-align: right;
+  width: 58px;
 }
 
 .plan-table td:first-child {
