@@ -279,7 +279,7 @@ function analyzeCurrentImage() {
 }
 
 function analyzeStorageScreenshots(): void {
-  if (storageImages.length < STORAGE_REQUIRED_SCREENSHOTS) {
+  if (!storageImages.length) {
     storageAnalysisDone = false;
     storageGridDetections = [];
     storageRecognitionFrames = [];

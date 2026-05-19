@@ -55,8 +55,8 @@ export function renderStorageTab<TDetection>({
     makeOverviewCard("Detected materials", analysisDone ? detectedMaterials.length : 0)
   );
 
-  if (uploadedImageCount < requiredImageCount) {
-    panel.append(summary, makeEmptyMessage("Upload two material storage screenshots before analyzing storage."));
+  if (!uploadedImageCount) {
+    panel.append(summary, makeEmptyMessage("Upload material storage screenshots before analyzing storage."));
     return;
   }
 
