@@ -597,15 +597,20 @@ input[type="search"] {
 }
 
 .material-cell {
-  align-items: center;
-  display: flex;
-  gap: 8px;
+  white-space: normal;
 }
 
 .material-cell img {
   height: 26px;
   image-rendering: auto;
+  margin-right: 8px;
+  vertical-align: middle;
   width: 26px;
+}
+
+.material-cell .artifact-link,
+.material-cell span {
+  vertical-align: middle;
 }
 
 .materials-table th:nth-child(1) {
