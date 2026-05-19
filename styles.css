@@ -358,6 +358,17 @@ input[type="search"] {
   position: absolute;
 }
 
+.image-panel.is-storage-upload.is-storage-incomplete .storage-upload-slots {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 12px;
+}
+
+.image-panel.is-storage-upload.is-storage-incomplete canvas:not(.is-empty) + .screenshot-hover-hint + .storage-upload-slots {
+  margin-top: 8px;
+}
+
 .storage-upload-slot {
   align-content: center;
   background:
@@ -1158,6 +1169,10 @@ input[type="search"] {
   display: block;
   height: auto;
   max-width: none;
+}
+
+.example-preview img[hidden] {
+  display: none;
 }
 
 .storage-example-images {

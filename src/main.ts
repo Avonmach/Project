@@ -456,6 +456,7 @@ function updateScreenshotPanel(): void {
   if (!tab) {
     loadedImage = null;
     imagePanel.classList.remove("is-storage-upload");
+    imagePanel.classList.remove("is-storage-incomplete");
     return;
   }
 
@@ -465,6 +466,7 @@ function updateScreenshotPanel(): void {
     storage: "Storage screenshots"
   }[tab];
   imagePanel.classList.toggle("is-storage-upload", tab === "storage");
+  if (tab !== "storage") imagePanel.classList.remove("is-storage-incomplete");
   updateScreenshotGuidance(tab);
   imageInput.multiple = tab === "storage";
   restoreActiveScreenshotToCanvas();
@@ -529,10 +531,12 @@ function drawStoragePreview(): void {
   if (!storageImages.length) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.classList.add("is-empty");
+    imagePanel.classList.add("is-storage-incomplete");
     imagePanel.classList.toggle("is-compact-upload", hasAnyLoadedScreenshot());
     return;
   }
 
+  imagePanel.classList.toggle("is-storage-incomplete", storageImages.length < STORAGE_REQUIRED_SCREENSHOTS);
   imagePanel.classList.remove("is-compact-upload");
   const gap = 12;
   const { width, height, placements } = calculateStoragePreviewLayout(storageImages, gap);
