@@ -10,6 +10,8 @@ const requiredPaths = [
   "Damaged_Items.png",
   "Reference_Screenshot/Damaged_Artefacts.png",
   "Reference_Screenshot/Restored_Artefacts.png",
+  "Material_1.png",
+  "Material_2.png",
   "Items#.png"
 ];
 

@@ -336,9 +336,50 @@ input[type="search"] {
   font-size: 13px;
 }
 
+.storage-upload-slots {
+  display: none;
+}
+
 .image-panel canvas.is-empty + .screenshot-hover-hint {
   opacity: 1;
   visibility: visible;
+}
+
+.image-panel.is-storage-upload canvas.is-empty + .screenshot-hover-hint {
+  visibility: hidden;
+}
+
+.image-panel.is-storage-upload canvas.is-empty ~ .storage-upload-slots {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  inset: 0;
+  padding: 12px;
+  position: absolute;
+}
+
+.storage-upload-slot {
+  align-content: center;
+  background:
+    linear-gradient(180deg, rgba(242, 227, 197, 0.94), rgba(232, 213, 177, 0.94)),
+    repeating-linear-gradient(45deg, rgba(68, 59, 49, 0.08) 0 8px, transparent 8px 16px);
+  border: 1px dashed var(--image-border);
+  border-radius: 8px;
+  color: #3d3124;
+  display: grid;
+  gap: 6px;
+  min-height: 106px;
+  padding: 14px;
+  text-align: center;
+}
+
+.storage-upload-slot strong {
+  font-size: 17px;
+}
+
+.storage-upload-slot span {
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .image-panel.is-compact-upload .screenshot-preview-shell {
@@ -1114,6 +1155,21 @@ input[type="search"] {
 }
 
 .example-preview img {
+  display: block;
+  height: auto;
+  max-width: none;
+}
+
+.storage-example-images {
+  display: flex;
+  gap: 8px;
+}
+
+.storage-example-images[hidden] {
+  display: none;
+}
+
+.storage-example-images img {
   display: block;
   height: auto;
   max-width: none;

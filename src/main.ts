@@ -7,7 +7,6 @@ import {
 import type { StorageRecognitionFrame } from "./application/analyze-storage/storage-recognition-ports";
 import { attachQuantityDebugSource } from "./infrastructure/image-processing/quantity-debug-source";
 import { recognitionModeForTab } from "./application/analyze-screenshot/recognition-mode";
-import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
 import { AMBIGUOUS_FINAL_MARGIN } from "./application/config/matching-thresholds";
 import { STATUS_MESSAGES } from "./application/config/status-messages";
 import {
@@ -175,6 +174,7 @@ let selectedCollectionCounts = new Map<string, number>();
 const screenshotHintDetail = document.querySelector<HTMLElement>("#screenshotHintDetail");
 const examplePopover = document.querySelector<HTMLDetailsElement>(".example-popover");
 const exampleScreenshotImage = document.querySelector<HTMLImageElement>("#exampleScreenshotImage");
+const storageExampleImages = document.querySelector<HTMLElement>("#storageExampleImages");
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
 
@@ -198,7 +198,6 @@ async function initialize() {
   digitTemplates = await loadQuantityFontTemplatesFromBrowser();
   await loadReferences();
   await loadArchaeologyReference();
-  await loadStorageImagesFromUrls(DEFAULT_SCREENSHOTS.storage);
   analyzeButton.disabled = false;
   drawEmptyState(STATUS_MESSAGES.readyToAnalyze);
 }
@@ -456,6 +455,7 @@ function updateScreenshotPanel(): void {
   imagePanel.hidden = !tab;
   if (!tab) {
     loadedImage = null;
+    imagePanel.classList.remove("is-storage-upload");
     return;
   }
 
@@ -464,6 +464,7 @@ function updateScreenshotPanel(): void {
     restored: "Restored artefact screenshot",
     storage: "Storage screenshots"
   }[tab];
+  imagePanel.classList.toggle("is-storage-upload", tab === "storage");
   updateScreenshotGuidance(tab);
   imageInput.multiple = tab === "storage";
   restoreActiveScreenshotToCanvas();
@@ -479,8 +480,10 @@ function updateScreenshotGuidance(tab: ScreenshotTab): void {
   }
 
   if (!examplePopover || !exampleScreenshotImage) return;
-  examplePopover.hidden = tab === "storage";
   examplePopover.open = false;
+  const storageExampleVisible = tab === "storage";
+  exampleScreenshotImage.hidden = storageExampleVisible;
+  if (storageExampleImages) storageExampleImages.hidden = !storageExampleVisible;
   exampleScreenshotImage.src = {
     damaged: "Reference_Screenshot/Damaged_Artefacts.png",
     restored: "Reference_Screenshot/Restored_Artefacts.png",
