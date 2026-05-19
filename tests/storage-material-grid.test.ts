@@ -31,6 +31,19 @@ test("storageMaterialContentArea wraps all detected storage boxes", () => {
   );
 });
 
+test("detectStorageMaterialBoxes ignores a sixth scrollbar-like material column", () => {
+  const imageData = makeStorageImageData(320, 80);
+  for (const x of [6, 50, 94, 138, 182, 226]) drawMaterial(imageData, x, 10);
+
+  assert.deepEqual(detectStorageMaterialBoxes(imageData), [
+    { x: 6, y: 5, w: 44, h: 44 },
+    { x: 50, y: 5, w: 44, h: 44 },
+    { x: 94, y: 5, w: 44, h: 44 },
+    { x: 138, y: 5, w: 44, h: 44 },
+    { x: 182, y: 5, w: 44, h: 44 }
+  ]);
+});
+
 function makeStorageImageData(width: number, height: number): ImageData {
   const imageData = makeImageData(width, height);
   for (let index = 0; index < imageData.data.length; index += 4) {

@@ -369,6 +369,15 @@ input[type="search"] {
   margin-top: 8px;
 }
 
+.image-panel.is-storage-upload.is-storage-has-first .storage-upload-slot:first-child,
+.image-panel.is-storage-upload.is-storage-has-second .storage-upload-slot:nth-child(2) {
+  display: none;
+}
+
+.image-panel.is-storage-upload.is-storage-incomplete.is-storage-has-first .storage-upload-slots {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .storage-upload-slot {
   align-content: center;
   background:

@@ -87,7 +87,7 @@ function clusterCenters(centers: readonly Point[], cell: number): Point[] {
 }
 
 function makeCellBoxesFromCenters(centers: readonly Point[], cell: number, imageWidth: number, imageHeight: number): BoundingBox[] {
-  const columns = clusterAxis(centers.map((center) => center.x), cell);
+  const columns = materialColumns(clusterAxis(centers.map((center) => center.x), cell));
   const rows = clusterAxis(centers.map((center) => center.y), cell);
   const cellWidth = axisSpacing(columns) ?? cell;
   const cellHeight = axisSpacing(rows) ?? cell;
@@ -125,6 +125,11 @@ function clusterAxis(values: readonly number[], cell: number): number[] {
   }
 
   return clusters.map((cluster) => cluster.value);
+}
+
+function materialColumns(columns: readonly number[]): number[] {
+  const sorted = [...columns].sort((a, b) => a - b);
+  return sorted.length > 5 ? sorted.slice(0, 5) : sorted;
 }
 
 function axisSpacing(values: readonly number[]): number | null {
@@ -168,5 +173,6 @@ function isStorageMaterialPixel(r: number, g: number, b: number): boolean {
 function isFramePixel(r: number, g: number, b: number): boolean {
   const isBrightFrame = r > 175 && g > 155 && b > 120;
   const isGreenDivider = g > 150 && r < 120 && b < 140;
-  return isBrightFrame || isGreenDivider;
+  const isScrollbar = r > 145 && g > 100 && b > 45 && r > b + 45;
+  return isBrightFrame || isGreenDivider || isScrollbar;
 }

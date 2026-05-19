@@ -9,7 +9,6 @@ export interface ResultsState<TDetection> {
   setActiveTab(tab: ResultsTab): TDetection[];
   setDetectionsForMode(mode: DetectionMode, detections: TDetection[]): TDetection[];
   removeDetectionForMode(mode: DetectionMode, detection: TDetection): TDetection[];
-  shouldRequestScreenshot(tab: ResultsTab): boolean;
 }
 
 export function createResultsState<TDetection>(): ResultsState<TDetection> {
@@ -18,8 +17,6 @@ export function createResultsState<TDetection>(): ResultsState<TDetection> {
     damaged: [],
     restored: []
   };
-  const screenshotRequestedTabs = new Set<ResultsTab>();
-
   return {
     get activeTab() {
       return activeTab;
@@ -44,11 +41,6 @@ export function createResultsState<TDetection>(): ResultsState<TDetection> {
     removeDetectionForMode(mode, detection) {
       detectionsByMode[mode] = detectionsByMode[mode].filter((item) => item !== detection);
       return detectionsByMode[resultModeForTab(activeTab)];
-    },
-    shouldRequestScreenshot(tab) {
-      if (!["restored", "storage"].includes(tab) || screenshotRequestedTabs.has(tab)) return false;
-      screenshotRequestedTabs.add(tab);
-      return true;
     }
   };
 }

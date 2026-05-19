@@ -48,14 +48,3 @@ test("createResultsState removes a detection from one recognition mode", () => {
   assert.deepEqual(state.detectionsForMode("damaged"), [second]);
 });
 
-test("createResultsState requests separate screenshots only once for relevant tabs", () => {
-  const state = createResultsState();
-
-  assert.equal(state.shouldRequestScreenshot("damaged"), false);
-  assert.equal(state.shouldRequestScreenshot("overview"), false);
-  assert.equal(state.shouldRequestScreenshot("restored"), true);
-  assert.equal(state.shouldRequestScreenshot("restored"), false);
-  assert.equal(state.shouldRequestScreenshot("storage"), true);
-  assert.equal(state.shouldRequestScreenshot("storage"), false);
-  assert.equal(state.shouldRequestScreenshot("materials"), false);
-});

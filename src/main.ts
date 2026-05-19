@@ -415,7 +415,6 @@ function setActiveResultsTab(tab: ResultsTab): void {
     if (tab === "damaged") renderDamagedTable(filteredDetections());
     updateTotals();
     renderResultsTabContent();
-    requestTabScreenshot(tab);
   });
 }
 
@@ -441,11 +440,6 @@ function renderDamagedTable(items: readonly AppDetection[]): void {
   });
 }
 
-function requestTabScreenshot(tab: ResultsTab): void {
-  if (!resultsState.shouldRequestScreenshot(tab)) return;
-  browserActions.requestScreenshotFile();
-}
-
 function currentScreenshotTab(): ScreenshotTab | null {
   return screenshotTabForResultsTab(resultsState.activeTab);
 }
@@ -467,6 +461,7 @@ function updateScreenshotPanel(): void {
   }[tab];
   imagePanel.classList.toggle("is-storage-upload", tab === "storage");
   if (tab !== "storage") imagePanel.classList.remove("is-storage-incomplete");
+  if (tab !== "storage") imagePanel.classList.remove("is-storage-has-first", "is-storage-has-second");
   updateScreenshotGuidance(tab);
   imageInput.multiple = tab === "storage";
   restoreActiveScreenshotToCanvas();
@@ -532,11 +527,14 @@ function drawStoragePreview(): void {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.classList.add("is-empty");
     imagePanel.classList.add("is-storage-incomplete");
+    imagePanel.classList.remove("is-storage-has-first", "is-storage-has-second");
     imagePanel.classList.toggle("is-compact-upload", hasAnyLoadedScreenshot());
     return;
   }
 
   imagePanel.classList.toggle("is-storage-incomplete", storageImages.length < STORAGE_REQUIRED_SCREENSHOTS);
+  imagePanel.classList.toggle("is-storage-has-first", storageImages.length >= 1);
+  imagePanel.classList.toggle("is-storage-has-second", storageImages.length >= 2);
   imagePanel.classList.remove("is-compact-upload");
   const gap = 12;
   const { width, height, placements } = calculateStoragePreviewLayout(storageImages, gap);
