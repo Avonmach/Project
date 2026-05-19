@@ -14,6 +14,7 @@ export interface StorageTabRendererOptions<TDetection> {
   readonly uploadedImageCount: number;
   readonly requiredImageCount: number;
   readonly analysisDone: boolean;
+  readonly detectedGridCellCount: number;
   readonly detectedMaterialNames: ReadonlySet<string>;
   readonly materials: readonly StorageMaterial[];
   readonly calculateMaterialTotals: (items: readonly TDetection[]) => readonly StorageMaterialNeed[];
@@ -30,6 +31,7 @@ export function renderStorageTab<TDetection>({
   uploadedImageCount,
   requiredImageCount,
   analysisDone,
+  detectedGridCellCount,
   detectedMaterialNames,
   materials,
   calculateMaterialTotals,
@@ -49,6 +51,7 @@ export function renderStorageTab<TDetection>({
   summary.append(
     makeOverviewCard("Screenshots", `${uploadedImageCount}/${requiredImageCount}`),
     makeOverviewCard("Needed now", calculateMaterialTotals(visibleDetections).length),
+    makeOverviewCard("Grid slots", analysisDone ? detectedGridCellCount : 0),
     makeOverviewCard("Detected materials", analysisDone ? detectedMaterials.length : 0)
   );
 

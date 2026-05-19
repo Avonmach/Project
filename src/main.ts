@@ -1,5 +1,10 @@
 import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
 import { analyzeScreenshot } from "./application/analyze-screenshot/analyze-screenshot";
+import {
+  analyzeStorageScreenshots as analyzeStorageScreenshotsForGrid,
+  type StorageGridDetection
+} from "./application/analyze-storage/analyze-storage-screenshots";
+import type { StorageRecognitionFrame } from "./application/analyze-storage/storage-recognition-ports";
 import { recognitionModeForTab } from "./application/analyze-screenshot/recognition-mode";
 import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
 import { AMBIGUOUS_FINAL_MARGIN } from "./application/config/matching-thresholds";
@@ -40,6 +45,7 @@ import {
   getGridCellSize,
 } from "./infrastructure/image-processing/bank-grid";
 import { createCanvasFrameSource } from "./infrastructure/image-processing/canvas-frame-source";
+import { createCanvasStorageFrameSource } from "./infrastructure/image-processing/canvas-storage-frame-source";
 import { calculateStoragePreviewLayout } from "./infrastructure/image-processing/storage-preview-layout";
 import {
   createCanvasDetectionPreviewFactory,
@@ -74,7 +80,7 @@ import {
   type MaterialCellRow
 } from "./presentation/renderers/material-cell";
 import type { MaterialRow } from "./presentation/renderers/materials-tab";
-import { drawAnalysisOverlay } from "./presentation/renderers/analysis-overlay";
+import { drawAnalysisOverlay, drawAnalysisOverlayMarkers, type OverlayFrame } from "./presentation/renderers/analysis-overlay";
 import { updateDetectionRow as updateDetectionRowElement } from "./presentation/renderers/detection-row-update";
 import { makeReferenceCanvas } from "./presentation/renderers/preview-canvases";
 import {
@@ -143,6 +149,8 @@ const loadedImagesByTab: Record<ScreenshotTab, HTMLImageElement | null> = {
 };
 let storageImages: HTMLImageElement[] = [];
 let storageAnalysisDone = false;
+let storageGridDetections: StorageGridDetection[] = [];
+let storageRecognitionFrames: StorageRecognitionFrame[] = [];
 let detectedStorageMaterialNames = new Set<string>();
 let detections: AppDetection[] = [];
 let references: PreparedArtefactReference[] = [];
@@ -234,6 +242,8 @@ async function loadStorageImagesFromUrls(srcs: readonly string[]): Promise<void>
     }
     loadedImagesByTab.storage = storageImages[0] ?? null;
     storageAnalysisDone = false;
+    storageGridDetections = [];
+    storageRecognitionFrames = [];
     detectedStorageMaterialNames = new Set();
     if (currentScreenshotTab() === "storage") restoreActiveScreenshotToCanvas();
     renderResultsTabContent();
@@ -271,11 +281,19 @@ function analyzeCurrentImage() {
 function analyzeStorageScreenshots(): void {
   if (storageImages.length < STORAGE_REQUIRED_SCREENSHOTS) {
     storageAnalysisDone = false;
+    storageGridDetections = [];
+    storageRecognitionFrames = [];
     renderResultsTabContent();
     return;
   }
+  const analysis = analyzeStorageScreenshotsForGrid({
+    frameSource: createCanvasStorageFrameSource({ images: storageImages, canvas, context: ctx })
+  });
   storageAnalysisDone = true;
+  storageGridDetections = [...analysis.detections];
+  storageRecognitionFrames = [...analysis.frames];
   detectedStorageMaterialNames = new Set();
+  drawStorageAnalysisOverlay();
   renderResultsTabContent();
 }
 
@@ -419,7 +437,11 @@ function updateScreenshotPanel(): void {
 function restoreActiveScreenshotToCanvas(): void {
   const tab = currentScreenshotTab();
   if (tab === "storage") {
-    drawStoragePreview();
+    if (storageAnalysisDone) {
+      drawStorageAnalysisOverlay();
+    } else {
+      drawStoragePreview();
+    }
     return;
   }
   loadedImage = tab ? loadedImagesByTab[tab] : null;
@@ -450,6 +472,34 @@ function drawStoragePreview(): void {
   ctx.fillStyle = "#221f1c";
   ctx.fillRect(0, 0, width, height);
   for (const { image, x, y } of placements) ctx.drawImage(image, x, y);
+}
+
+function drawStorageAnalysisOverlay(): void {
+  drawStoragePreview();
+  if (!storageGridDetections.length && !storageRecognitionFrames.length) return;
+
+  const gap = 12;
+  const { placements } = calculateStoragePreviewLayout(storageImages, gap);
+  const translatedDetections = storageGridDetections.flatMap((detection) => {
+    const placement = placements[detection.screenshotIndex];
+    return placement ? [{ ...detection, box: translateBox(detection.box, placement.x, placement.y) }] : [];
+  });
+  const translatedFrames: OverlayFrame[] = storageRecognitionFrames.flatMap((frame, screenshotIndex) => {
+    const placement = placements[screenshotIndex];
+    if (!placement) return [];
+    return [
+      {
+        contentArea: frame.contentArea ? translateBox(frame.contentArea, placement.x, placement.y) : null,
+        infinityArea: frame.infinityArea ? translateBox(frame.infinityArea, placement.x, placement.y) : null
+      }
+    ];
+  });
+
+  drawAnalysisOverlayMarkers({
+    context: ctx,
+    items: translatedDetections,
+    frames: translatedFrames
+  });
 }
 
 function renderOverviewTab(items: readonly AppDetection[]): void {
@@ -502,6 +552,7 @@ function renderStorageTab(items: readonly AppDetection[]): void {
     uploadedImageCount: storageImages.length,
     requiredImageCount: STORAGE_REQUIRED_SCREENSHOTS,
     analysisDone: storageAnalysisDone,
+    detectedGridCellCount: storageGridDetections.length,
     detectedMaterialNames: detectedStorageMaterialNames,
     materials: archaeologyReference.materials || [],
     calculateMaterialTotals: (detections) => calculateMaterialTotalsForRecipes(detections, recipeByRestoredName),
@@ -662,6 +713,10 @@ function drawBoxes(
 ): void {
   if (!loadedImage) return;
   drawAnalysisOverlay({ context: ctx, image: loadedImage, items, contentArea, infinityArea });
+}
+
+function translateBox<TBox extends BoundingBox>(box: TBox, x: number, y: number): TBox {
+  return { ...box, x: box.x + x, y: box.y + y };
 }
 
 function preserveScrollPosition(render: () => void): void {
