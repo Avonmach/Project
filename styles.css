@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  --bg: #d4c19d;
+  --bg: #8d8374;
   --panel: #f1e3c5;
   --panel-strong: #e8d6b3;
   --surface: #ead8b8;
@@ -32,11 +32,11 @@
 body {
   margin: 0;
   background:
-    linear-gradient(rgba(89, 66, 38, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(89, 66, 38, 0.03) 1px, transparent 1px),
-    radial-gradient(circle at 12% -8%, rgba(174, 113, 36, 0.34), transparent 300px),
-    radial-gradient(circle at 88% 2%, rgba(122, 77, 25, 0.18), transparent 340px),
-    linear-gradient(180deg, #deceb0 0%, #cdb78f 100%),
+    linear-gradient(rgba(68, 59, 49, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(68, 59, 49, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 12% -8%, rgba(120, 104, 83, 0.34), transparent 300px),
+    radial-gradient(circle at 88% 2%, rgba(76, 68, 58, 0.2), transparent 340px),
+    linear-gradient(180deg, #9d9384 0%, #7f7568 100%),
     var(--bg);
   background-size: 22px 22px, 22px 22px, auto, auto, auto;
   color: var(--ink);
