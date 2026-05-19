@@ -125,6 +125,7 @@ function connectExamplePreviewPositioning(): void {
 
   const positionPreview = () => {
     if (!popover.open) return;
+    loadVisibleExampleImages(popover);
     const rect = button.getBoundingClientRect();
     popover.style.setProperty("--example-preview-left", `${Math.round(rect.right + 12)}px`);
     popover.style.setProperty("--example-preview-top", "12px");
@@ -136,4 +137,12 @@ function connectExamplePreviewPositioning(): void {
   });
   window.addEventListener("resize", positionPreview);
   window.addEventListener("scroll", positionPreview, true);
+}
+
+function loadVisibleExampleImages(container: HTMLElement): void {
+  for (const image of container.querySelectorAll<HTMLImageElement>("img[data-example-src]")) {
+    if (image.hidden || image.closest("[hidden]")) continue;
+    const src = image.dataset.exampleSrc;
+    if (src && image.src !== src) image.src = src;
+  }
 }

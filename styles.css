@@ -139,6 +139,7 @@ p {
 }
 
 .wiki-link,
+.kofi-link,
 button {
   align-items: center;
   background: linear-gradient(180deg, #d8a046, #b67820);
@@ -157,10 +158,19 @@ button {
 
 button:hover,
 .wiki-link:hover,
+.kofi-link:hover,
 button:focus-visible,
-.wiki-link:focus-visible {
+.wiki-link:focus-visible,
+.kofi-link:focus-visible {
   background: linear-gradient(180deg, #e4b65f, #9e681e);
   transform: translateY(-1px);
+}
+
+.topbar-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .control-panel,

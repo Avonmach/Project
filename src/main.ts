@@ -481,7 +481,8 @@ function updateScreenshotGuidance(tab: ScreenshotTab): void {
   const storageExampleVisible = tab === "storage";
   exampleScreenshotImage.hidden = storageExampleVisible;
   if (storageExampleImages) storageExampleImages.hidden = !storageExampleVisible;
-  exampleScreenshotImage.src = {
+  exampleScreenshotImage.removeAttribute("src");
+  exampleScreenshotImage.dataset.exampleSrc = {
     damaged: "Reference_Screenshot/Damaged_Artefacts.png",
     restored: "Reference_Screenshot/Restored_Artefacts.png",
     storage: "Reference_Screenshot/Damaged_Artefacts.png"

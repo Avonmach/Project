@@ -19,7 +19,10 @@
           <p>Import a bank screenshot, review damaged artefacts, and build a restoration list.</p>
         </div>
       </div>
-      <a class="wiki-link" href="https://runescape.wiki/w/Calculator:Archaeology/Restoring_artefacts" target="_blank" rel="noreferrer">RuneScape Wiki calculator</a>
+      <div class="topbar-links">
+        <a class="wiki-link" href="https://runescape.wiki/w/Calculator:Archaeology/Restoring_artefacts" target="_blank" rel="noreferrer">RuneScape Wiki calculator</a>
+        <a class="kofi-link" href="https://ko-fi.com/avonmach" target="_blank" rel="noreferrer">Tip Me</a>
+      </div>
     </header>
 
     <section class="control-panel" aria-label="Analysis controls">
@@ -62,10 +65,10 @@
         <details class="example-popover">
           <summary class="example-button" aria-describedby="damagedExamplePreview">Example</summary>
           <div id="damagedExamplePreview" class="example-preview" role="tooltip">
-            <img id="exampleScreenshotImage" src="Reference_Screenshot/Damaged_Artefacts.png" alt="Example damaged artefact bank screenshot">
+            <img id="exampleScreenshotImage" data-example-src="Reference_Screenshot/Damaged_Artefacts.png" alt="Example damaged artefact bank screenshot">
             <div id="storageExampleImages" class="storage-example-images" hidden>
-              <img src="Material_1.png" alt="Example material storage screenshot 1">
-              <img src="Material_2.png" alt="Example material storage screenshot 2">
+              <img data-example-src="Material_1.png" alt="Example material storage screenshot 1">
+              <img data-example-src="Material_2.png" alt="Example material storage screenshot 2">
             </div>
           </div>
         </details>
@@ -223,14 +226,18 @@
     </section>
   </main>
 
-  <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
+  <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js" onload="window.initKofiWidget && window.initKofiWidget()"></script>
   <script>
-    kofiWidgetOverlay.draw("avonmach", {
-      "type": "floating-chat",
-      "floating-chat.donateButton.text": "Tip Me",
-      "floating-chat.donateButton.background-color": "#5cb85c",
-      "floating-chat.donateButton.text-color": "#fff"
-    });
+    window.initKofiWidget = function () {
+      if (!window.kofiWidgetOverlay) return;
+      window.kofiWidgetOverlay.draw("avonmach", {
+        "type": "floating-chat",
+        "floating-chat.donateButton.text": "Tip Me",
+        "floating-chat.donateButton.background-color": "#5cb85c",
+        "floating-chat.donateButton.text-color": "#fff"
+      });
+    };
+    window.initKofiWidget();
   </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
