@@ -28,6 +28,10 @@ export interface CollectionReference {
   readonly restoredName?: string | null;
   readonly icon?: string | null;
   readonly damagedIcon?: string | null;
+  readonly wikiPage?: string | null;
+  readonly restoredWikiPage?: string | null;
+  readonly digSite?: string | null;
+  readonly excavationHotspot?: string | null;
 }
 
 export interface CollectionOverviewRow {

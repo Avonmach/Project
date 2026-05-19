@@ -83,11 +83,11 @@ function makePlanningCollectionCard({
 
   const artefacts = document.createElement("div");
   artefacts.className = "planning-artefacts";
-  const missing: string[] = [];
+  const missing: MissingArtefact[] = [];
   for (const artefact of collection.artefacts) {
     const row = calculatePlannedArtefact(artefact, count, restoredArtefacts, damagedArtefacts);
-    if (row.missing > 0) missing.push(`${artefact} x${row.missing}`);
     artefacts.append(makePlanningArtefactRow(row, references));
+    if (row.missing > 0) missing.push(makeMissingArtefact(row, references));
   }
 
   card.append(heading, artefacts);
@@ -127,11 +127,19 @@ function makeCountButton(label: string, onClick: () => void): HTMLButtonElement 
 
 interface PlannedArtefact {
   readonly name: string;
-  readonly restoredQuantity: number;
+  readonly restoredRemaining: number;
   readonly restoredUsed: number;
-  readonly damagedQuantity: number;
+  readonly damagedRemaining: number;
   readonly damagedUsed: number;
   readonly missing: number;
+}
+
+interface MissingArtefact {
+  readonly name: string;
+  readonly quantity: number;
+  readonly artefactWikiPage?: string | null;
+  readonly excavationSite?: string | null;
+  readonly excavationSiteWikiPage?: string | null;
 }
 
 function calculatePlannedArtefact(
@@ -150,9 +158,9 @@ function calculatePlannedArtefact(
   consumeArtefact(damagedArtefacts, key, damagedUsed);
   return {
     name,
-    restoredQuantity,
+    restoredRemaining: Math.max(0, restoredQuantity - restoredUsed),
     restoredUsed,
-    damagedQuantity,
+    damagedRemaining: Math.max(0, damagedQuantity - damagedUsed),
     damagedUsed,
     missing: Math.max(0, remainingAfterRestored - damagedUsed)
   };
@@ -170,8 +178,8 @@ function makePlanningArtefactRow(row: PlannedArtefact, references: readonly Coll
   item.className = "planning-artefact";
   const reference = references.find((candidate) => normalizeName(candidate.restoredName || candidate.name) === normalizeName(row.name));
   item.append(
-    makePlanningVariant(reference?.icon, row.name, row.restoredQuantity, "Restored", "restored"),
-    makePlanningVariant(reference?.damagedIcon, row.name, row.damagedQuantity, "Damaged", "damaged")
+    makePlanningVariant(reference?.icon, row.name, row.restoredRemaining, "Restored", "restored"),
+    makePlanningVariant(reference?.damagedIcon, row.name, row.damagedRemaining, "Damaged", "damaged")
   );
   if (row.missing) {
     const missing = document.createElement("span");
@@ -180,6 +188,18 @@ function makePlanningArtefactRow(row: PlannedArtefact, references: readonly Coll
     item.append(missing);
   }
   return item;
+}
+
+function makeMissingArtefact(row: PlannedArtefact, references: readonly CollectionReference[]): MissingArtefact {
+  const reference = references.find((candidate) => normalizeName(candidate.restoredName || candidate.name) === normalizeName(row.name));
+  const excavationSite = reference?.excavationHotspot || reference?.digSite || null;
+  return {
+    name: row.name,
+    quantity: row.missing,
+    artefactWikiPage: reference?.restoredWikiPage || reference?.wikiPage || makeWikiPage(row.name),
+    excavationSite,
+    excavationSiteWikiPage: excavationSite ? makeWikiPage(excavationSite) : null
+  };
 }
 
 function makePlanningVariant(
@@ -206,7 +226,7 @@ function makePlanningVariant(
   return item;
 }
 
-function makeMissingList(missing: readonly string[]): HTMLElement {
+function makeMissingList(missing: readonly MissingArtefact[]): HTMLElement {
   const wrapper = document.createElement("div");
   wrapper.className = "planning-missing";
   const title = document.createElement("strong");
@@ -214,9 +234,30 @@ function makeMissingList(missing: readonly string[]): HTMLElement {
   const list = document.createElement("ul");
   for (const item of missing) {
     const li = document.createElement("li");
-    li.textContent = item;
+    li.append(makePlanningLink(item.name, item.artefactWikiPage), document.createTextNode(` x${item.quantity}`));
+    if (item.excavationSite) {
+      li.append(document.createTextNode(" - "), makePlanningLink(item.excavationSite, item.excavationSiteWikiPage));
+    }
     list.append(li);
   }
   wrapper.append(title, list);
   return wrapper;
+}
+
+function makePlanningLink(label: string, href?: string | null): HTMLElement {
+  if (!href) {
+    const span = document.createElement("span");
+    span.textContent = label;
+    return span;
+  }
+  const link = document.createElement("a");
+  link.href = href;
+  link.target = "_blank";
+  link.rel = "noreferrer";
+  link.textContent = label;
+  return link;
+}
+
+function makeWikiPage(title: string): string {
+  return `https://runescape.wiki/w/${encodeURIComponent(title).replace(/%20/g, "_")}`;
 }

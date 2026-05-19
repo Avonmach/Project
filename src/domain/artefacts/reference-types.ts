@@ -8,4 +8,5 @@ export interface ArtefactReferenceMetadata {
   readonly archaeologyLevel?: number | null;
   readonly culture?: string | null;
   readonly digSite?: string | null;
+  readonly excavationHotspot?: string | null;
 }
