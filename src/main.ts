@@ -160,6 +160,7 @@ let storageRecognitionFrames: StorageRecognitionFrame[] = [];
 let storageDetections: StorageDetection[] = [];
 let detectedStorageMaterials: DetectedStorageMaterial[] = [];
 let storedOtherItems = new Map<string, number>();
+let checkedMaterialRows = new Set<string>();
 let detections: AppDetection[] = [];
 let references: PreparedArtefactReference[] = [];
 let materialReferences: PreparedMaterialReference[] = [];
@@ -558,6 +559,8 @@ function renderMaterialsTab(items: readonly AppDetection[]): void {
     sortMaterialRows: (rows) => [...rows].sort((a, b) => a.name.localeCompare(b.name)),
     storedOtherItems,
     onOtherItemStorageChange: handleOtherItemStorageChange,
+    checkedRows: checkedMaterialRows,
+    onToggleRowCheck: handleMaterialRowCheck,
     makeMaterialCell,
     makeTextCell,
     makeTableHead,
@@ -613,6 +616,15 @@ function handleOtherItemStorageChange(name: string, quantity: number): void {
     storedOtherItems.set(key, quantity);
   } else {
     storedOtherItems.delete(key);
+  }
+}
+
+function handleMaterialRowCheck(name: string, checked: boolean): void {
+  const key = normalizeName(name);
+  if (checked) {
+    checkedMaterialRows.add(key);
+  } else {
+    checkedMaterialRows.delete(key);
   }
 }
 

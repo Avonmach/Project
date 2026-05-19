@@ -647,6 +647,22 @@ input[type="search"] {
   font-weight: 900;
 }
 
+.materials-table tbody tr {
+  cursor: pointer;
+}
+
+.materials-table tbody tr.checked-row td {
+  background: rgba(51, 111, 84, 0.1);
+}
+
+.materials-table tbody tr.checked-row td:first-child {
+  border-left: 4px solid var(--green);
+}
+
+.materials-table tbody tr.checked-row td:nth-child(4) {
+  background: rgba(51, 111, 84, 0.16);
+}
+
 .materials-table th:nth-child(3),
 .materials-table th:nth-child(4),
 .materials-table td:nth-child(3),
@@ -772,20 +788,28 @@ input[type="search"] {
 }
 
 .artefact-review-strip {
-  background: linear-gradient(90deg, #b88738, #2e6c54, #3f6f89);
-  border-bottom: 1px solid var(--line);
   display: grid;
-  gap: 1px;
+  gap: 10px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 12px;
 }
 
 .artefact-review-strip > div {
-  background: rgba(240, 226, 200, 0.96);
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-  padding: 10px 12px;
+  background: linear-gradient(180deg, var(--surface-soft), var(--green-soft));
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--green);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.artefact-review-strip > div:nth-child(2) {
+  background: linear-gradient(180deg, var(--surface-soft), var(--bronze-soft));
+  border-left-color: var(--gold);
+}
+
+.artefact-review-strip > div:nth-child(3) {
+  background: linear-gradient(180deg, var(--surface-soft), var(--rose-soft));
+  border-left-color: var(--warn);
 }
 
 .artefact-review-strip span {
@@ -796,9 +820,11 @@ input[type="search"] {
 }
 
 .artefact-review-strip strong {
-  color: var(--ink);
-  font-size: 20px;
-  line-height: 1;
+  color: #20332d;
+  display: block;
+  font-size: 24px;
+  line-height: 1.1;
+  margin-top: 4px;
 }
 
 table {

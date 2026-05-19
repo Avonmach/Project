@@ -38,6 +38,8 @@ export interface MaterialsTabRendererOptions<TDetection extends MaterialsTabDete
   readonly sortMaterialRows: (rows: readonly MaterialRow[]) => readonly MaterialRow[];
   readonly storedOtherItems: ReadonlyMap<string, number>;
   readonly onOtherItemStorageChange: (name: string, quantity: number) => void;
+  readonly checkedRows: ReadonlySet<string>;
+  readonly onToggleRowCheck: (name: string, checked: boolean) => void;
   readonly makeMaterialCell: (row: Pick<MaterialRow, "name">) => HTMLTableCellElement;
   readonly makeTextCell: (value: string | number, className?: string) => HTMLTableCellElement;
   readonly makeTableHead: (labels: readonly string[]) => HTMLTableSectionElement;
@@ -57,6 +59,8 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
   sortMaterialRows,
   storedOtherItems,
   onOtherItemStorageChange,
+  checkedRows,
+  onToggleRowCheck,
   makeMaterialCell,
   makeTextCell,
   makeTableHead,
@@ -94,6 +98,8 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
     storedByMaterial,
     artefactQuantities,
     references,
+    checkedRows,
+    onToggleRowCheck,
     makeMaterialCell,
     makeTextCell,
     makeTableHead
@@ -111,6 +117,8 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
       storedByMaterial: storedOtherItems,
       artefactQuantities,
       references,
+      checkedRows,
+      onToggleRowCheck,
       makeMaterialCell,
       makeStorageCell: (row, toBuyCell) =>
         makeEditableStorageCell(row, storedOtherItems.get(normalizeName(row.name)) ?? 0, toBuyCell, onOtherItemStorageChange),
@@ -128,6 +136,8 @@ function makeMaterialsTable({
   storedByMaterial,
   artefactQuantities,
   references,
+  checkedRows,
+  onToggleRowCheck,
   makeMaterialCell,
   makeStorageCell,
   makeTextCell,
@@ -138,6 +148,8 @@ function makeMaterialsTable({
   readonly storedByMaterial: ReadonlyMap<string, number>;
   readonly artefactQuantities: ReadonlyMap<string, number>;
   readonly references: readonly MaterialsTabReference[];
+  readonly checkedRows: ReadonlySet<string>;
+  readonly onToggleRowCheck: (name: string, checked: boolean) => void;
   readonly makeMaterialCell: (row: Pick<MaterialRow, "name">) => HTMLTableCellElement;
   readonly makeStorageCell?: (row: MaterialRow, toBuyCell: HTMLTableCellElement) => HTMLTableCellElement;
   readonly makeTextCell: (value: string | number, className?: string) => HTMLTableCellElement;
@@ -150,9 +162,17 @@ function makeMaterialsTable({
 
   for (const row of rows) {
     const tr = document.createElement("tr");
+    const rowKey = normalizeName(row.name);
     const inStorage = storedByMaterial.get(normalizeName(row.name)) ?? 0;
     const toBuy = Math.max(0, row.quantity - inStorage);
     const toBuyCell = makeTextCell(toBuy, "number-cell");
+    tr.classList.toggle("checked-row", checkedRows.has(rowKey));
+    tr.addEventListener("click", (event) => {
+      if (isInteractiveRowTarget(event.target)) return;
+      const checked = !tr.classList.contains("checked-row");
+      tr.classList.toggle("checked-row", checked);
+      onToggleRowCheck(row.name, checked);
+    });
     tr.append(
       makeMaterialCell(row),
       makeStorageCell ? makeStorageCell(row, toBuyCell) : makeTextCell(inStorage, "number-cell"),
@@ -165,6 +185,10 @@ function makeMaterialsTable({
 
   table.append(body);
   return table;
+}
+
+function isInteractiveRowTarget(target: EventTarget | null): boolean {
+  return target instanceof Element && Boolean(target.closest("button, input, a, details, summary, select, textarea"));
 }
 
 function makeEditableStorageCell(
