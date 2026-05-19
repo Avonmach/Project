@@ -259,12 +259,5 @@ function makeUsedByArtefactIcon(
     tile.append(fallback);
   }
 
-  if (quantity) {
-    const badge = document.createElement("span");
-    badge.className = "collection-artefact-count";
-    badge.textContent = String(quantity);
-    tile.append(badge);
-  }
-
   return tile;
 }
