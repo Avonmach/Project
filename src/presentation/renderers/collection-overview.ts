@@ -27,6 +27,7 @@ export interface CollectionReference {
   readonly name: string;
   readonly restoredName?: string | null;
   readonly icon?: string | null;
+  readonly damagedIcon?: string | null;
 }
 
 interface CollectionOverviewRow {
@@ -210,26 +211,35 @@ function makeCollectionArtefactIcon(
 ): HTMLSpanElement {
   const reference = references.find((item) => normalizeName(item.restoredName || item.name) === normalizeName(artefact));
   const tile = document.createElement("span");
-  tile.className = "collection-artefact";
+  tile.className = "collection-artefact collection-artefact-stack";
   if (!quantity) tile.classList.add("is-missing");
   tile.title = quantity ? `${artefact}: ${quantity}` : `${artefact}: missing`;
-
-  if (reference?.icon) {
-    const image = document.createElement("img");
-    image.src = `data/${reference.icon}`;
-    image.alt = artefact;
-    image.loading = "lazy";
-    tile.append(image);
-  } else {
-    const fallback = document.createElement("span");
-    fallback.className = "collection-artefact-fallback";
-    fallback.textContent = artefact.slice(0, 2).toUpperCase();
-    tile.append(fallback);
-  }
+  tile.append(
+    makeCollectionArtefactVariant(reference?.icon, artefact, "collection-artefact-variant restored"),
+    makeCollectionArtefactVariant(reference?.damagedIcon, artefact, "collection-artefact-variant damaged")
+  );
 
   const badge = document.createElement("span");
   badge.className = "collection-artefact-count";
   badge.textContent = String(quantity);
   tile.append(badge);
   return tile;
+}
+
+function makeCollectionArtefactVariant(icon: string | null | undefined, artefact: string, className: string): HTMLSpanElement {
+  const variant = document.createElement("span");
+  variant.className = className;
+  if (icon) {
+    const image = document.createElement("img");
+    image.src = `data/${icon}`;
+    image.alt = artefact;
+    image.loading = "lazy";
+    variant.append(image);
+  } else {
+    const fallback = document.createElement("span");
+    fallback.className = "collection-artefact-fallback";
+    fallback.textContent = artefact.slice(0, 2).toUpperCase();
+    variant.append(fallback);
+  }
+  return variant;
 }
