@@ -121,8 +121,12 @@ function makeCollectionRewards(collection: ArchaeologyCollection, count: number,
   }
   rewardParts.push(`Restore XP: ${formatNumber(restorationExperience)}`);
   if (rexExperience) rewardParts.push(`Rex XP: ${formatNumber(rexExperience)}`);
-  rewardParts.push(`Total XP: ${formatNumber(restorationExperience + rexExperience)}`);
-  rewards.textContent = rewardParts.length ? `Reward: ${rewardParts.join(" | ")}` : "Reward: none listed";
+  const rewardText = document.createElement("span");
+  rewardText.textContent = rewardParts.length ? `Reward: ${rewardParts.join(" | ")}` : "Reward: none listed";
+  const totalXp = document.createElement("strong");
+  totalXp.className = "planning-total-xp";
+  totalXp.textContent = `Total XP: ${formatNumber(restorationExperience + rexExperience)}`;
+  rewards.append(rewardText, totalXp);
   return rewards;
 }
 
