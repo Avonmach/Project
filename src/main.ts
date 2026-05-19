@@ -525,6 +525,7 @@ function renderOverviewTab(items: readonly AppDetection[]): void {
     panel: overviewPanel,
     allDetections: detections,
     visibleDetections: items,
+    references,
     quantityNeedsReview,
     makeEmptyMessage,
     makeOverviewCard,
