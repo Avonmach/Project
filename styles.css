@@ -471,6 +471,18 @@ input[type="search"] {
   text-transform: uppercase;
 }
 
+.collection-overview-row {
+  cursor: pointer;
+}
+
+.collection-overview-row.checked-row td {
+  background: rgba(51, 111, 84, 0.12);
+}
+
+.collection-overview-row.checked-row td:first-child {
+  border-left: 4px solid var(--green);
+}
+
 .table-sort {
   background: transparent;
   border: 0;
@@ -499,7 +511,7 @@ input[type="search"] {
 .collection-artefacts {
   display: flex;
   flex-wrap: wrap;
-  gap: 9px;
+  gap: 7px;
   max-width: 100%;
   min-width: 0;
 }
@@ -569,6 +581,115 @@ input[type="search"] {
   font-weight: 800;
 }
 
+.planning-collections {
+  display: grid;
+  gap: 12px;
+}
+
+.planning-collection {
+  background: rgba(240, 226, 200, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.planning-collection-heading {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.planning-collection-heading h3 {
+  color: var(--green-dark);
+  font-size: 15px;
+  margin: 0;
+}
+
+.planning-count-control {
+  display: inline-flex;
+}
+
+.planning-count-control button,
+.planning-count-control input {
+  border: 1px solid var(--line);
+  font: inherit;
+  font-weight: 800;
+  min-height: 32px;
+  text-align: center;
+}
+
+.planning-count-control button {
+  background: var(--surface-soft);
+  padding: 0;
+  width: 30px;
+}
+
+.planning-count-control input {
+  border-left: 0;
+  border-right: 0;
+  width: 48px;
+}
+
+.planning-artefacts {
+  display: grid;
+  gap: 7px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+}
+
+.planning-artefact {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.planning-variant {
+  align-items: center;
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  display: inline-flex;
+  gap: 5px;
+  min-height: 34px;
+  padding: 4px 7px;
+}
+
+.planning-variant img {
+  height: 26px;
+  width: 26px;
+}
+
+.planning-variant.damaged {
+  background: #9f8b6f;
+  border-color: #806b52;
+}
+
+.planning-variant.damaged img {
+  filter: brightness(0.72) saturate(0.84);
+}
+
+.planning-variant.is-missing {
+  filter: grayscale(1);
+  opacity: 0.42;
+}
+
+.planning-missing-count {
+  color: var(--red);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.planning-missing {
+  margin-top: 10px;
+}
+
+.planning-missing ul {
+  margin: 5px 0 0 18px;
+  padding: 0;
+}
+
 .secondary-table {
   border-collapse: separate;
   border-spacing: 0;
@@ -581,23 +702,23 @@ input[type="search"] {
 }
 
 .collection-name-col {
-  width: 25%;
+  width: 18%;
 }
 
 .collection-collector-col {
-  width: 13%;
+  width: 10%;
 }
 
 .collection-level-col {
-  width: 8%;
+  width: 6%;
 }
 
 .collection-progress-col {
-  width: 13%;
+  width: 10%;
 }
 
 .collection-artefacts-col {
-  width: 41%;
+  width: 56%;
 }
 
 .secondary-table th,

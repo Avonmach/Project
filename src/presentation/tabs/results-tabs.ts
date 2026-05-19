@@ -1,9 +1,10 @@
-export type ResultsTab = "overview" | "damaged" | "restored" | "storage" | "materials";
+export type ResultsTab = "overview" | "planning" | "damaged" | "restored" | "storage" | "materials";
 export type DetectionMode = "damaged" | "restored";
 export type ScreenshotTab = "damaged" | "restored" | "storage";
 
 export const RESULT_TAB_TITLES: Record<ResultsTab, string> = {
   overview: "Overview",
+  planning: "Planning",
   damaged: "Damaged Artefacts",
   restored: "Restored Artefacts",
   storage: "Storage",

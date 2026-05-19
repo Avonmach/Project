@@ -82,6 +82,7 @@ import {
   makeCollectionOverview as makeCollectionOverviewElement,
   type CollectionSort
 } from "./presentation/renderers/collection-overview";
+import { renderPlanningTab as renderPlanningTabPanel } from "./presentation/renderers/planning-tab";
 import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentation/renderers/restoration-plan";
 import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentation/renderers/recognition-info";
 import {
@@ -137,6 +138,7 @@ const {
   resultTabButtons,
   resultTabPanels,
   overviewPanel,
+  planningPanel,
   damagedDetectedCount,
   damagedVisibleCount,
   damagedReviewCount,
@@ -168,6 +170,8 @@ let archaeologyReference: ArchaeologyReferenceData = emptyArchaeologyReferenceDa
 let { recipeByRestoredName, materialByName } = emptyArchaeologyReferenceIndexes();
 const resultsState = createResultsState<AppDetection>();
 let collectionSort: CollectionSort = { key: "progress", direction: "desc" };
+let selectedCollections = new Set<string>();
+let selectedCollectionCounts = new Map<string, number>();
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
 
@@ -404,6 +408,7 @@ function setActiveResultsTab(tab: ResultsTab): void {
 function renderResultsTabContent(): void {
   const items = filteredDetections();
   if (resultsState.activeTab === "overview") renderOverviewTab(items);
+  if (resultsState.activeTab === "planning") renderPlanningTab();
   if (resultsState.activeTab === "restored") renderRestoredTab(items);
   if (resultsState.activeTab === "storage") renderStorageTab(items);
   if (resultsState.activeTab === "materials") renderMaterialsTab(items);
@@ -610,6 +615,20 @@ function makeMaterialCell(row: MaterialCellRow): HTMLTableCellElement {
   return makeMaterialCellElement(row, materialByName);
 }
 
+function renderPlanningTab(): void {
+  renderPlanningTabPanel({
+    panel: planningPanel,
+    selectedCollections,
+    collectionCounts: selectedCollectionCounts,
+    collections: archaeologyReference.collections || [],
+    damagedItems: resultsState.detectionsForMode("damaged"),
+    restoredItems: resultsState.detectionsForMode("restored"),
+    references,
+    onCollectionCountChange: handleCollectionCountChange,
+    makeEmptyMessage
+  });
+}
+
 function handleOtherItemStorageChange(name: string, quantity: number): void {
   const key = normalizeName(name);
   if (quantity > 0) {
@@ -645,6 +664,8 @@ function makeCollectionOverview(items: readonly AppDetection[]): HTMLElement {
     collections: archaeologyReference.collections || [],
     references,
     collectionSort,
+    selectedCollections,
+    onToggleCollection: handleCollectionToggle,
     onSortChange: (sort) => {
       collectionSort = sort;
       renderResultsTabContent();
@@ -745,6 +766,24 @@ function updateTotals(): void {
     if (detections.length) renderRestorationPlan(filteredDetections());
     renderResultsTabContent();
   });
+}
+
+function handleCollectionToggle(collectionName: string, selected: boolean): void {
+  const key = normalizeName(collectionName);
+  if (selected) {
+    selectedCollections.add(key);
+    if (!selectedCollectionCounts.has(key)) selectedCollectionCounts.set(key, 1);
+  } else {
+    selectedCollections.delete(key);
+    selectedCollectionCounts.delete(key);
+  }
+  if (resultsState.activeTab === "planning") renderPlanningTab();
+}
+
+function handleCollectionCountChange(collectionName: string, count: number): void {
+  const key = normalizeName(collectionName);
+  selectedCollectionCounts.set(key, Math.max(1, count));
+  renderPlanningTab();
 }
 
 function exportResults(): void {

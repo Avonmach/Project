@@ -23,6 +23,7 @@ export interface AppElements {
   resultTabButtons: HTMLElement[];
   resultTabPanels: HTMLElement[];
   overviewPanel: HTMLElement;
+  planningPanel: HTMLElement;
   damagedDetectedCount: HTMLElement;
   damagedVisibleCount: HTMLElement;
   damagedReviewCount: HTMLElement;
@@ -59,6 +60,7 @@ export function getAppElements(): AppElements {
     resultTabButtons: queryElements<HTMLElement>("[data-results-tab]"),
     resultTabPanels: queryElements<HTMLElement>("[data-results-panel]"),
     overviewPanel: requireElement("overviewPanel", HTMLElement),
+    planningPanel: requireElement("planningPanel", HTMLElement),
     damagedDetectedCount: requireElement("damagedDetectedCount", HTMLElement),
     damagedVisibleCount: requireElement("damagedVisibleCount", HTMLElement),
     damagedReviewCount: requireElement("damagedReviewCount", HTMLElement),
