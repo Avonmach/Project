@@ -30,7 +30,7 @@ export function renderDamagedTab<TDetection extends ReviewableDetection>({
 
   body.replaceChildren();
   if (!allDetections.length) {
-    drawDamagedEmptyState(body, "Analyze a damaged artefact screenshot to populate this table.");
+    drawDamagedEmptyState(body, "When image is loaded please click Analyze.");
     return;
   }
 
