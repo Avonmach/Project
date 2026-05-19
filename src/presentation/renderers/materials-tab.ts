@@ -86,15 +86,18 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
 
   const table = document.createElement("table");
   table.className = "secondary-table materials-table";
-  table.append(makeTableHead(["Material", "Needed", "In storage", "Used by artefacts"]));
+  table.append(makeTableHead(["Material", "In storage", "Total", "To buy", "Used by artefacts"]));
   const body = document.createElement("tbody");
 
   for (const row of sortMaterialRows(materialRows)) {
     const tr = document.createElement("tr");
+    const inStorage = storedByMaterial.get(normalizeName(row.name)) ?? 0;
+    const toBuy = Math.max(0, row.quantity - inStorage);
     tr.append(
       makeMaterialCell(row),
+      makeTextCell(inStorage, "number-cell"),
       makeTextCell(row.quantity, "number-cell"),
-      makeTextCell(storedByMaterial.get(normalizeName(row.name)) ?? 0, "number-cell"),
+      makeTextCell(toBuy, "number-cell"),
       makeUsedByArtefactsCell(row.artefacts, artefactQuantities, references)
     );
     body.append(tr);
