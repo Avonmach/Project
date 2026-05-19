@@ -47,7 +47,7 @@ export function matchMaterial<TReference extends MaterialMatchReference>(
     .sort((a, b) => b.score - a.score);
 
   const best = candidates[0] ?? { item: fallback, score: 0, shapeScore: 0, colorScore: 0 };
-  return { ...best, candidates: candidates.slice(0, 5) };
+  return { ...best, candidates };
 }
 
 function requireFirstReference<TReference extends MaterialMatchReference>(references: readonly TReference[]): TReference {

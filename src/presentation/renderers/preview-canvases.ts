@@ -185,6 +185,8 @@ export function makeStorageProcessedCanvas(imageData: ImageData, box: BoundingBo
   const previewCtx = preview.getContext("2d");
   if (!previewCtx) return preview;
   previewCtx.imageSmoothingEnabled = false;
+  previewCtx.fillStyle = PREVIEW_BACKGROUND;
+  previewCtx.fillRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
 
   if (bounds) {
     const longest = Math.max(bounds.w, bounds.h);
