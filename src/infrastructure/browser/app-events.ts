@@ -19,6 +19,7 @@ export interface AppBrowserActions {
 
 export function connectAppEvents(elements: AppElements, handlers: AppEventHandlers): AppBrowserActions {
   let lastHandledPasteAt = 0;
+  let lastShortcutImageLoadAt = 0;
   elements.loadDefaultButton.addEventListener("click", () => openFilePicker(elements.imageInput));
   elements.analyzeButton.addEventListener("click", handlers.analyzeCurrentImage);
   elements.viewMode.addEventListener("change", handlers.renderDetections);
@@ -35,6 +36,10 @@ export function connectAppEvents(elements: AppElements, handlers: AppEventHandle
     void handlers.handleSelectedImageInput();
   });
   const handlePasteEvent = (event: ClipboardEvent) => {
+    if (Date.now() - lastShortcutImageLoadAt < 800) {
+      event.preventDefault();
+      return;
+    }
     lastHandledPasteAt = Date.now();
     void handlePaste(event, handlers);
   };
@@ -42,10 +47,12 @@ export function connectAppEvents(elements: AppElements, handlers: AppEventHandle
   document.addEventListener("keydown", (event) => {
     if (!isPasteShortcut(event) || isEditablePasteTarget(event.target)) return;
     const shortcutAt = Date.now();
-    window.setTimeout(() => {
-      if (lastHandledPasteAt >= shortcutAt) return;
-      void handlePasteShortcutFallback(handlers);
-    }, 120);
+    void handlePasteShortcutFallback(handlers, {
+      pasteEventHasArrived: () => lastHandledPasteAt >= shortcutAt,
+      markImageLoaded: () => {
+        lastShortcutImageLoadAt = Date.now();
+      }
+    });
   });
   connectExamplePreviewPositioning();
 
@@ -54,7 +61,13 @@ export function connectAppEvents(elements: AppElements, handlers: AppEventHandle
   };
 }
 
-async function handlePasteShortcutFallback(handlers: AppEventHandlers): Promise<void> {
+async function handlePasteShortcutFallback(
+  handlers: AppEventHandlers,
+  options: {
+    pasteEventHasArrived(): boolean;
+    markImageLoaded(): void;
+  }
+): Promise<void> {
   let srcs: readonly string[] = [];
   try {
     srcs = await readNavigatorClipboardImagesAsDataUrls();
@@ -62,9 +75,12 @@ async function handlePasteShortcutFallback(handlers: AppEventHandlers): Promise<
     console.warn("Could not read pasted image from clipboard.", error);
   }
   if (srcs.length) {
+    if (options.pasteEventHasArrived()) return;
+    options.markImageLoaded();
     await handlers.handlePastedImages(srcs);
     return;
   }
+  if (options.pasteEventHasArrived()) return;
   handlers.handlePasteWithoutImage?.();
 }
 
