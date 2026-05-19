@@ -626,15 +626,12 @@ function renderMaterialsTab(items: readonly AppDetection[]): void {
 function renderStorageTab(items: readonly AppDetection[]): void {
   renderStorageTabPanel({
     panel: storagePanel,
-    visibleDetections: items,
     storageDetections,
     uploadedImageCount: storageImages.length,
     requiredImageCount: STORAGE_REQUIRED_SCREENSHOTS,
     analysisDone: storageAnalysisDone,
-    detectedGridCellCount: storageGridDetections.length,
     detectedMaterials: detectedStorageMaterials,
     materialReferenceCount: materialReferences.length,
-    calculateMaterialTotals: (detections) => calculateMaterialTotalsForRecipes(detections, recipeByRestoredName),
     makeStorageDetectionTableRow,
     makeMaterialCell,
     makeLinkedTextCell,

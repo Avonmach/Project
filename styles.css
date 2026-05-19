@@ -374,6 +374,24 @@ input[type="search"] {
   top: calc(100% + 8px);
 }
 
+.image-panel.is-storage-upload.is-storage-incomplete.is-storage-has-first .screenshot-preview-shell {
+  align-items: stretch;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: max-content minmax(280px, 1fr);
+}
+
+.image-panel.is-storage-upload.is-storage-incomplete.is-storage-has-first canvas:not(.is-empty) {
+  grid-column: 1;
+}
+
+.image-panel.is-storage-upload.is-storage-incomplete.is-storage-has-first canvas:not(.is-empty) + .screenshot-hover-hint + .storage-upload-slots {
+  grid-column: 2;
+  inset: auto;
+  padding: 0;
+  position: static;
+}
+
 .image-panel.is-storage-upload.is-storage-has-first .storage-upload-slot:first-child,
 .image-panel.is-storage-upload.is-storage-has-second .storage-upload-slot:nth-child(2) {
   display: none;

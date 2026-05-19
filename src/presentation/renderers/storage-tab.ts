@@ -3,11 +3,6 @@ export interface StorageMaterial {
   readonly wikiPage?: string | null;
 }
 
-export interface StorageMaterialNeed {
-  readonly name: string;
-  readonly quantity: number;
-}
-
 export interface DetectedStorageMaterial {
   readonly name: string;
   readonly quantity: number;
@@ -15,17 +10,14 @@ export interface DetectedStorageMaterial {
   readonly matchScore?: number;
 }
 
-export interface StorageTabRendererOptions<TVisibleDetection, TStorageDetection> {
+export interface StorageTabRendererOptions<TStorageDetection> {
   readonly panel: HTMLElement;
-  readonly visibleDetections: readonly TVisibleDetection[];
   readonly storageDetections: readonly TStorageDetection[];
   readonly uploadedImageCount: number;
   readonly requiredImageCount: number;
   readonly analysisDone: boolean;
-  readonly detectedGridCellCount: number;
   readonly detectedMaterials: readonly DetectedStorageMaterial[];
   readonly materialReferenceCount: number;
-  readonly calculateMaterialTotals: (items: readonly TVisibleDetection[]) => readonly StorageMaterialNeed[];
   readonly makeStorageDetectionTableRow: (detection: TStorageDetection) => HTMLTableRowElement;
   readonly makeMaterialCell: (row: { readonly name: string }) => HTMLTableCellElement;
   readonly makeLinkedTextCell: (label: string, href?: string | null) => HTMLTableCellElement;
@@ -34,24 +26,21 @@ export interface StorageTabRendererOptions<TVisibleDetection, TStorageDetection>
   readonly makeOverviewCard: (label: string, value: string | number) => HTMLElement;
 }
 
-export function renderStorageTab<TVisibleDetection, TStorageDetection>({
+export function renderStorageTab<TStorageDetection>({
   panel,
-  visibleDetections,
   storageDetections,
   uploadedImageCount,
   requiredImageCount,
   analysisDone,
-  detectedGridCellCount,
   detectedMaterials,
   materialReferenceCount,
-  calculateMaterialTotals,
   makeStorageDetectionTableRow,
   makeMaterialCell,
   makeLinkedTextCell,
   makeTableHead,
   makeEmptyMessage,
   makeOverviewCard
-}: StorageTabRendererOptions<TVisibleDetection, TStorageDetection>): void {
+}: StorageTabRendererOptions<TStorageDetection>): void {
   panel.replaceChildren();
   const materialRows = [...detectedMaterials]
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -60,8 +49,6 @@ export function renderStorageTab<TVisibleDetection, TStorageDetection>({
   summary.className = "overview-grid";
   summary.append(
     makeOverviewCard("Screenshots", `${uploadedImageCount}/${requiredImageCount}`),
-    makeOverviewCard("Needed now", calculateMaterialTotals(visibleDetections).length),
-    makeOverviewCard("Grid slots", analysisDone ? detectedGridCellCount : 0),
     makeOverviewCard("Detected materials", analysisDone ? materialRows.length : 0)
   );
 
