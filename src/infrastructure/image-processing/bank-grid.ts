@@ -80,9 +80,10 @@ export function estimateBankGrid(imageData: ImageData, options: EstimateBankGrid
   const contentColumns = getGridColumns(countGridColumnsWithinContent(content.maxX - x + 1, cell));
   const contentRows = getGridRows(Math.max(1, Math.ceil((content.maxY - y + 1) / cell)));
   const itemExtent = gridExtentFromItemCenters(itemCenters, x, y, cell);
-  const last = itemExtent || lastOccupiedGridCell(imageData, x, y, cell, content);
+  const occupiedExtent = lastOccupiedGridCell(imageData, x, y, cell, content);
+  const last = maxGridExtent(itemExtent, occupiedExtent);
   const columns = Math.max(1, contentColumns - (options.trimLastColumn ? 1 : 0));
-  const rows = itemExtent ? Math.min(contentRows, Math.max(1, itemExtent.row + 1)) : contentRows;
+  const rows = Math.min(contentRows, Math.max(1, last.row + 1));
   return {
     x,
     y,
@@ -96,6 +97,15 @@ export function estimateBankGrid(imageData: ImageData, options: EstimateBankGrid
     contentArea: bankContent,
     infinityArea: bankContent?.infinity || null
   };
+}
+
+function maxGridExtent(
+  first: { readonly row: number; readonly column: number } | null,
+  second: { readonly row: number; readonly column: number }
+): { row: number; column: number } {
+  if (!first) return second;
+  if (second.row > first.row || (second.row === first.row && second.column > first.column)) return second;
+  return first;
 }
 
 export function foregroundAlphaBounds(imageData: ImageData): BankGridBox | null {
