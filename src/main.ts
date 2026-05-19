@@ -192,6 +192,7 @@ async function initialize() {
   await loadReferences();
   await loadArchaeologyReference();
   await loadImageFromUrl(DEFAULT_SCREENSHOTS.damaged, "damaged");
+  await loadStorageImagesFromUrls(DEFAULT_SCREENSHOTS.storage);
   analyzeButton.disabled = false;
   drawEmptyState(STATUS_MESSAGES.readyToAnalyze);
 }
