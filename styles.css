@@ -622,6 +622,13 @@ input[type="search"] {
   width: auto;
 }
 
+.materials-table th:nth-child(3),
+.materials-table th:nth-child(4),
+.materials-table td:nth-child(3),
+.materials-table td:nth-child(4) {
+  text-align: center;
+}
+
 .materials-table .collection-artefacts {
   gap: 5px;
 }
