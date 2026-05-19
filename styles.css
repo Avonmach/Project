@@ -916,13 +916,16 @@ td:nth-child(9),
 }
 
 .storage-results-table th:nth-child(2) {
-  width: 78px;
+  width: 104px;
 }
 
-.storage-results-table th:nth-child(3),
 .storage-results-table th:nth-child(4),
 .storage-results-table th:nth-child(5) {
   width: 86px;
+}
+
+.storage-results-table th:nth-child(3) {
+  width: 108px;
 }
 
 .storage-results-table th:nth-child(6) {
