@@ -302,7 +302,9 @@ input[type="search"] {
 }
 
 .image-panel canvas.is-empty {
-  display: none;
+  display: block;
+  min-height: 130px;
+  opacity: 0;
 }
 
 .screenshot-hover-hint {
@@ -362,11 +364,14 @@ input[type="search"] {
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  inset: 0;
   padding: 12px;
+  position: absolute;
 }
 
 .image-panel.is-storage-upload.is-storage-incomplete canvas:not(.is-empty) + .screenshot-hover-hint + .storage-upload-slots {
-  margin-top: 8px;
+  bottom: auto;
+  top: calc(100% + 8px);
 }
 
 .image-panel.is-storage-upload.is-storage-has-first .storage-upload-slot:first-child,
