@@ -1,8 +1,8 @@
 {
   "source": "https://runescape.wiki/",
-  "generatedAt": "2026-05-13T23:00:42.031Z",
+  "generatedAt": "2026-05-19T12:07:06.147Z",
   "counts": {
-    "materials": 44,
+    "materials": 43,
     "artefactRecipes": 218,
     "collections": 74
   },
@@ -11,126 +11,126 @@
       "name": "Aetherium alloy",
       "wikiPage": "https://runescape.wiki/w/Aetherium_alloy",
       "icon": "material-icons/aetherium-alloy.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Aetherium_alloy_detail.png/64px-Aetherium_alloy_detail.png?90ff7",
+      "sourceIcon": "https://runescape.wiki/images/Aetherium_alloy.png?a1415",
       "pageId": 752677
     },
     {
       "name": "Ancient vis",
       "wikiPage": "https://runescape.wiki/w/Ancient_vis",
       "icon": "material-icons/ancient-vis.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Ancient_vis_detail.png/64px-Ancient_vis_detail.png?1f78b",
+      "sourceIcon": "https://runescape.wiki/images/Ancient_vis.png?23810",
       "pageId": 752657
     },
     {
       "name": "Animal furs",
       "wikiPage": "https://runescape.wiki/w/Animal_furs",
       "icon": "material-icons/animal-furs.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Animal_furs_detail.png/64px-Animal_furs_detail.png?dab16",
+      "sourceIcon": "https://runescape.wiki/images/Animal_furs.png?d66b0",
       "pageId": 752666
     },
     {
       "name": "Armadylean yellow",
       "wikiPage": "https://runescape.wiki/w/Armadylean_yellow",
       "icon": "material-icons/armadylean-yellow.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Armadylean_yellow_detail.png/64px-Armadylean_yellow_detail.png?f6b20",
+      "sourceIcon": "https://runescape.wiki/images/Armadylean_yellow.png?9fb9f",
       "pageId": 752667
     },
     {
       "name": "Blood of Orcus",
       "wikiPage": "https://runescape.wiki/w/Blood_of_Orcus",
       "icon": "material-icons/blood-of-orcus.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Blood_of_Orcus_detail.png/64px-Blood_of_Orcus_detail.png?1f78b",
+      "sourceIcon": "https://runescape.wiki/images/Blood_of_Orcus.png?a9d68",
       "pageId": 752960
     },
     {
       "name": "Cadmium red",
       "wikiPage": "https://runescape.wiki/w/Cadmium_red",
       "icon": "material-icons/cadmium-red.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Cadmium_red_detail.png/64px-Cadmium_red_detail.png?eb79b",
+      "sourceIcon": "https://runescape.wiki/images/Cadmium_red.png?24178",
       "pageId": 752656
     },
     {
       "name": "Carbon black",
       "wikiPage": "https://runescape.wiki/w/Carbon_black",
       "icon": "material-icons/carbon-black.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Carbon_black_detail.png/64px-Carbon_black_detail.png?388da",
+      "sourceIcon": "https://runescape.wiki/images/Carbon_black.png?21d22",
       "pageId": 780020
     },
     {
       "name": "Chaotic brimstone",
       "wikiPage": "https://runescape.wiki/w/Chaotic_brimstone",
       "icon": "material-icons/chaotic-brimstone.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Chaotic_brimstone_detail.png/64px-Chaotic_brimstone_detail.png?cba28",
+      "sourceIcon": "https://runescape.wiki/images/Chaotic_brimstone.png?c62d2",
       "pageId": 752661
     },
     {
       "name": "Cobalt blue",
       "wikiPage": "https://runescape.wiki/w/Cobalt_blue",
       "icon": "material-icons/cobalt-blue.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Cobalt_blue_detail.png/64px-Cobalt_blue_detail.png?90038",
+      "sourceIcon": "https://runescape.wiki/images/Cobalt_blue.png?db254",
       "pageId": 752655
     },
     {
       "name": "Compass rose",
       "wikiPage": "https://runescape.wiki/w/Compass_rose",
       "icon": "material-icons/compass-rose.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Compass_rose_detail.png/64px-Compass_rose_detail.png?7e08d",
+      "sourceIcon": "https://runescape.wiki/images/Compass_rose.png?66b7a",
       "pageId": 780021
     },
     {
       "name": "Demonhide",
       "wikiPage": "https://runescape.wiki/w/Demonhide",
       "icon": "material-icons/demonhide.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Demonhide_detail.png/64px-Demonhide_detail.png?69467",
+      "sourceIcon": "https://runescape.wiki/images/Demonhide.png?ca7e2",
       "pageId": 752961
     },
     {
       "name": "Dragon metal",
       "wikiPage": "https://runescape.wiki/w/Dragon_metal",
       "icon": "material-icons/dragon-metal.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Dragon_metal_detail.png/64px-Dragon_metal_detail.png?71e30",
+      "sourceIcon": "https://runescape.wiki/images/Dragon_metal.png?8418e",
       "pageId": 4895
     },
     {
       "name": "Everlight silvthril",
       "wikiPage": "https://runescape.wiki/w/Everlight_silvthril",
       "icon": "material-icons/everlight-silvthril.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Everlight_silvthril_detail.png/64px-Everlight_silvthril_detail.png?a1201",
+      "sourceIcon": "https://runescape.wiki/images/Everlight_silvthril.png?b7ea2",
       "pageId": 752659
     },
     {
       "name": "Eye of Dagon",
       "wikiPage": "https://runescape.wiki/w/Eye_of_Dagon",
       "icon": "material-icons/eye-of-dagon.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Eye_of_Dagon_detail.png/64px-Eye_of_Dagon_detail.png?160bf",
+      "sourceIcon": "https://runescape.wiki/images/Eye_of_Dagon.png?2566e",
       "pageId": 752662
     },
     {
       "name": "Felt",
       "wikiPage": "https://runescape.wiki/w/Felt",
       "icon": "material-icons/felt.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Felt_detail.png/64px-Felt_detail.png?1b881",
+      "sourceIcon": "https://runescape.wiki/images/Felt.png?196f9",
       "pageId": 780022
     },
     {
       "name": "Fossilised bone",
       "wikiPage": "https://runescape.wiki/w/Fossilised_bone",
       "icon": "material-icons/fossilised-bone.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Fossilised_bone_detail.png/64px-Fossilised_bone_detail.png?90ff7",
+      "sourceIcon": "https://runescape.wiki/images/Fossilised_bone.png?dd511",
       "pageId": 752673
     },
     {
       "name": "Goldrune",
       "wikiPage": "https://runescape.wiki/w/Goldrune",
       "icon": "material-icons/goldrune.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Goldrune_detail.png/64px-Goldrune_detail.png?d51f4",
+      "sourceIcon": "https://runescape.wiki/images/Goldrune.png?94da4",
       "pageId": 752649
     },
     {
       "name": "Hellfire metal",
       "wikiPage": "https://runescape.wiki/w/Hellfire_metal",
       "icon": "material-icons/hellfire-metal.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Hellfire_metal_detail.png/64px-Hellfire_metal_detail.png?160bf",
+      "sourceIcon": "https://runescape.wiki/images/Hellfire_metal.png?bb5ec",
       "pageId": 752663
     },
     {
@@ -144,56 +144,49 @@
       "name": "Imperial steel",
       "wikiPage": "https://runescape.wiki/w/Imperial_steel",
       "icon": "material-icons/imperial-steel.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Imperial_steel_detail.png/64px-Imperial_steel_detail.png?a1201",
+      "sourceIcon": "https://runescape.wiki/images/Imperial_steel.png?e9be1",
       "pageId": 752648
     },
     {
       "name": "Keramos",
       "wikiPage": "https://runescape.wiki/w/Keramos",
       "icon": "material-icons/keramos.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Keramos_detail.png/64px-Keramos_detail.png?27df0",
+      "sourceIcon": "https://runescape.wiki/images/Keramos.png?ea0d0",
       "pageId": 752650
     },
     {
       "name": "Leather scraps",
       "wikiPage": "https://runescape.wiki/w/Leather_scraps",
       "icon": "material-icons/leather-scraps.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Leather_scraps_detail.png/64px-Leather_scraps_detail.png?10076",
+      "sourceIcon": "https://runescape.wiki/images/Leather_scraps.png?0cf58",
       "pageId": 752653
     },
     {
       "name": "Malachite green",
       "wikiPage": "https://runescape.wiki/w/Malachite_green",
       "icon": "material-icons/malachite-green.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Malachite_green_detail.png/64px-Malachite_green_detail.png?7d097",
+      "sourceIcon": "https://runescape.wiki/images/Malachite_green.png?7250c",
       "pageId": 752668
     },
     {
       "name": "Mark of the Kyzaj",
       "wikiPage": "https://runescape.wiki/w/Mark_of_the_Kyzaj",
       "icon": "material-icons/mark-of-the-kyzaj.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Mark_of_the_Kyzaj_detail.png/64px-Mark_of_the_Kyzaj_detail.png?07907",
+      "sourceIcon": "https://runescape.wiki/images/Mark_of_the_Kyzaj.png?33bcc",
       "pageId": 752669
-    },
-    {
-      "name": "Materials (Archaeology)",
-      "wikiPage": "https://runescape.wiki/w/Materials_(Archaeology)",
-      "icon": "material-icons/materials-archaeology.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Eye_of_Dagon_detail.png/64px-Eye_of_Dagon_detail.png?160bf",
-      "pageId": 753023
     },
     {
       "name": "Orgone",
       "wikiPage": "https://runescape.wiki/w/Orgone",
       "icon": "material-icons/orgone.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Orgone_detail.png/64px-Orgone_detail.png?d32b9",
+      "sourceIcon": "https://runescape.wiki/images/Orgone.png?2c788",
       "pageId": 780023
     },
     {
       "name": "Orthenglass",
       "wikiPage": "https://runescape.wiki/w/Orthenglass",
       "icon": "material-icons/orthenglass.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Orthenglass_detail.png/64px-Orthenglass_detail.png?5debd",
+      "sourceIcon": "https://runescape.wiki/images/Orthenglass.png?ed18c",
       "pageId": 752651
     },
     {
@@ -207,112 +200,112 @@
       "name": "Purpleheart wood",
       "wikiPage": "https://runescape.wiki/w/Purpleheart_wood",
       "icon": "material-icons/purpleheart-wood.png",
-      "sourceIcon": "https://runescape.wiki/images/Purpleheart_wood_detail.png?5ebfd",
+      "sourceIcon": "https://runescape.wiki/images/Purpleheart_wood.png?e3608",
       "pageId": 753612
     },
     {
       "name": "Quintessence",
       "wikiPage": "https://runescape.wiki/w/Quintessence",
       "icon": "material-icons/quintessence.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Quintessence_detail.png/64px-Quintessence_detail.png?1e9e8",
+      "sourceIcon": "https://runescape.wiki/images/Quintessence.png?b34c4",
       "pageId": 752678
     },
     {
       "name": "Samite silk",
       "wikiPage": "https://runescape.wiki/w/Samite_silk",
       "icon": "material-icons/samite-silk.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Samite_silk_detail.png/64px-Samite_silk_detail.png?f6f14",
+      "sourceIcon": "https://runescape.wiki/images/Samite_silk.png?52b58",
       "pageId": 752685
     },
     {
       "name": "Soapstone",
       "wikiPage": "https://runescape.wiki/w/Soapstone",
       "icon": "material-icons/soapstone.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Soapstone_detail.png/64px-Soapstone_detail.png?cee9b",
+      "sourceIcon": "https://runescape.wiki/images/Soapstone.png?35990",
       "pageId": 752679
     },
     {
       "name": "Star of Saradomin",
       "wikiPage": "https://runescape.wiki/w/Star_of_Saradomin",
       "icon": "material-icons/star-of-saradomin.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Star_of_Saradomin_detail.png/64px-Star_of_Saradomin_detail.png?e50ab",
+      "sourceIcon": "https://runescape.wiki/images/Star_of_Saradomin.png?f993c",
       "pageId": 752660
     },
     {
       "name": "Stormguard steel",
       "wikiPage": "https://runescape.wiki/w/Stormguard_steel",
       "icon": "material-icons/stormguard-steel.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Stormguard_steel_detail.png/64px-Stormguard_steel_detail.png?7d3e1",
+      "sourceIcon": "https://runescape.wiki/images/Stormguard_steel.png?719d4",
       "pageId": 752664
     },
     {
       "name": "Third Age iron",
       "wikiPage": "https://runescape.wiki/w/Third_Age_iron",
       "icon": "material-icons/third-age-iron.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Third_Age_iron_detail.png/64px-Third_Age_iron_detail.png?631f7",
+      "sourceIcon": "https://runescape.wiki/images/Third_Age_iron.png?0ba66",
       "pageId": 752644
     },
     {
       "name": "Tyrian purple",
       "wikiPage": "https://runescape.wiki/w/Tyrian_purple",
       "icon": "material-icons/tyrian-purple.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Tyrian_purple_detail.png/64px-Tyrian_purple_detail.png?5a1c5",
+      "sourceIcon": "https://runescape.wiki/images/Tyrian_purple.png?b47a5",
       "pageId": 752658
     },
     {
       "name": "Vellum",
       "wikiPage": "https://runescape.wiki/w/Vellum",
       "icon": "material-icons/vellum.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Vellum_detail.png/64px-Vellum_detail.png?08fa7",
+      "sourceIcon": "https://runescape.wiki/images/Vellum.png?b7d2e",
       "pageId": 752654
     },
     {
       "name": "Vulcanised rubber",
       "wikiPage": "https://runescape.wiki/w/Vulcanised_rubber",
       "icon": "material-icons/vulcanised-rubber.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Vulcanised_rubber_detail.png/64px-Vulcanised_rubber_detail.png?24730",
+      "sourceIcon": "https://runescape.wiki/images/Vulcanised_rubber.png?2f13b",
       "pageId": 752670
     },
     {
       "name": "Warforged bronze",
       "wikiPage": "https://runescape.wiki/w/Warforged_bronze",
       "icon": "material-icons/warforged-bronze.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Warforged_bronze_detail.png/64px-Warforged_bronze_detail.png?08771",
+      "sourceIcon": "https://runescape.wiki/images/Warforged_bronze.png?28761",
       "pageId": 752672
     },
     {
       "name": "White marble",
       "wikiPage": "https://runescape.wiki/w/White_marble",
       "icon": "material-icons/white-marble.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/White_marble_detail.png/64px-White_marble_detail.png?38801",
+      "sourceIcon": "https://runescape.wiki/images/White_marble.png?c5603",
       "pageId": 752652
     },
     {
       "name": "White oak",
       "wikiPage": "https://runescape.wiki/w/White_oak",
       "icon": "material-icons/white-oak.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/White_oak_detail.png/64px-White_oak_detail.png?35aa5",
+      "sourceIcon": "https://runescape.wiki/images/White_oak.png?cd6d0",
       "pageId": 752645
     },
     {
       "name": "Wings of War",
       "wikiPage": "https://runescape.wiki/w/Wings_of_War",
       "icon": "material-icons/wings-of-war.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Wings_of_War_detail.png/64px-Wings_of_War_detail.png?e5fe2",
+      "sourceIcon": "https://runescape.wiki/images/Wings_of_War.png?c5719",
       "pageId": 752665
     },
     {
       "name": "Yu'biusk clay",
       "wikiPage": "https://runescape.wiki/w/Yu%27biusk_clay",
       "icon": "material-icons/yubiusk-clay.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Yu%27biusk_clay_detail.png/64px-Yu%27biusk_clay_detail.png?1e9e8",
+      "sourceIcon": "https://runescape.wiki/images/Yu%27biusk_clay.png?2f3fe",
       "pageId": 752675
     },
     {
       "name": "Zarosian insignia",
       "wikiPage": "https://runescape.wiki/w/Zarosian_insignia",
       "icon": "material-icons/zarosian-insignia.png",
-      "sourceIcon": "https://runescape.wiki/images/thumb/Zarosian_insignia_detail.png/64px-Zarosian_insignia_detail.png?3539c",
+      "sourceIcon": "https://runescape.wiki/images/Zarosian_insignia.png?b0543",
       "pageId": 752647
     }
   ],

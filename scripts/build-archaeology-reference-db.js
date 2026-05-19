@@ -54,9 +54,10 @@ async function buildMaterials(pages) {
   const records = [];
 
   for (const page of pages) {
+    if (page.title === "Materials (Archaeology)") continue;
     const pageInfo = info.get(page.title);
     const slug = slugify(page.title);
-    const iconSource = pageInfo?.thumbnail?.source || (await getDirectFileIconSource(page.title));
+    const iconSource = (await getDirectFileIconSource(page.title)) || pageInfo?.thumbnail?.source;
     const icon = iconSource ? `material-icons/${slug}.png` : null;
     if (iconSource) await download(iconSource, path.join(MATERIAL_ICON_DIR, `${slug}.png`));
 
