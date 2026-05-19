@@ -44,6 +44,12 @@ interface Point {
   readonly y: number;
 }
 
+interface GridExtent {
+  readonly row: number;
+  readonly column: number;
+  readonly maxColumn: number;
+}
+
 export function detectItemBoxes(imageData: ImageData, grid = estimateBankGrid(imageData)): BankGridBox[] {
   const boxes: BankGridBox[] = [];
 
@@ -82,7 +88,8 @@ export function estimateBankGrid(imageData: ImageData, options: EstimateBankGrid
   const itemExtent = gridExtentFromItemCenters(itemCenters, x, y, cell);
   const occupiedExtent = lastOccupiedGridCell(imageData, x, y, cell, content);
   const last = maxGridExtent(itemExtent, occupiedExtent);
-  const columns = Math.max(1, contentColumns - (options.trimLastColumn ? 1 : 0));
+  const observedColumns = Math.max(1, last.maxColumn + 1);
+  const columns = Math.max(1, Math.min(contentColumns, observedColumns) - (options.trimLastColumn ? 1 : 0));
   const rows = Math.min(contentRows, Math.max(1, last.row + 1));
   return {
     x,
@@ -100,12 +107,12 @@ export function estimateBankGrid(imageData: ImageData, options: EstimateBankGrid
 }
 
 function maxGridExtent(
-  first: { readonly row: number; readonly column: number } | null,
-  second: { readonly row: number; readonly column: number }
-): { row: number; column: number } {
+  first: GridExtent | null,
+  second: GridExtent
+): GridExtent {
   if (!first) return second;
-  if (second.row > first.row || (second.row === first.row && second.column > first.column)) return second;
-  return first;
+  const last = second.row > first.row || (second.row === first.row && second.column > first.column) ? second : first;
+  return { ...last, maxColumn: Math.max(first.maxColumn, second.maxColumn) };
 }
 
 export function foregroundAlphaBounds(imageData: ImageData): BankGridBox | null {
@@ -238,15 +245,17 @@ function isBeforeLastDetectedItem(row: number, column: number, grid: BankGrid): 
   return row < grid.lastOccupiedRow || (row === grid.lastOccupiedRow && column <= lastColumn);
 }
 
-function gridExtentFromItemCenters(centers: readonly Point[], gridX: number, gridY: number, cell: number): { row: number; column: number } | null {
+function gridExtentFromItemCenters(centers: readonly Point[], gridX: number, gridY: number, cell: number): GridExtent | null {
   let last = null;
+  let maxColumn = -1;
   for (const center of centers) {
     const column = Math.floor((center.x - gridX) / cell);
     const row = Math.floor((center.y - gridY) / cell);
     if (column < 0 || row < 0) continue;
+    maxColumn = Math.max(maxColumn, column);
     if (!last || row > last.row || (row === last.row && column > last.column)) last = { row, column };
   }
-  return last;
+  return last ? { ...last, maxColumn } : null;
 }
 
 function findBankContentArea(imageData: ImageData): (BankGridBox & { readonly infinity?: BankGridBox | null }) | null {
@@ -395,10 +404,10 @@ function isBankContentBackgroundPixel(r: number, g: number, b: number): boolean 
   return Math.abs(r - 48) <= 8 && Math.abs(g - 43) <= 8 && Math.abs(b - 38) <= 8;
 }
 
-function lastOccupiedGridCell(imageData: ImageData, gridX: number, gridY: number, cell: number, content: Bounds): { row: number; column: number } {
+function lastOccupiedGridCell(imageData: ImageData, gridX: number, gridY: number, cell: number, content: Bounds): GridExtent {
   const maxColumns = Math.max(1, Math.ceil((content.maxX - gridX + 1) / cell));
   const maxRows = Math.max(1, Math.ceil((content.maxY - gridY + 1) / cell));
-  let last = { row: 0, column: 0 };
+  let last = { row: 0, column: 0, maxColumn: 0 };
 
   for (let row = 0; row < maxRows; row += 1) {
     for (let column = 0; column < maxColumns; column += 1) {
@@ -407,7 +416,7 @@ function lastOccupiedGridCell(imageData: ImageData, gridX: number, gridY: number
       const w = Math.min(cell, imageData.width - x);
       const h = Math.min(cell, imageData.height - y);
       const box = { x, y, w, h, area: countCellForeground(imageData, x, y, w, h) };
-      if (isOccupiedCell(imageData, box)) last = { row, column };
+      if (isOccupiedCell(imageData, box)) last = { row, column, maxColumn: Math.max(last.maxColumn, column) };
     }
   }
 

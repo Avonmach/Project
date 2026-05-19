@@ -16,7 +16,7 @@ interface CellBackgroundOptions {
 
 export function makeFullShapeImageData(imageData: ImageData, grid: BankGrid, mode = "damaged"): ImageData {
   const out = new ImageData(imageData.width, imageData.height);
-  const removeSimilarBackground = mode === "restored";
+  const removeSimilarBackground = mode === "restored" || mode === "damaged";
 
   for (let row = 0; row < grid.rows; row += 1) {
     for (let column = 0; column < grid.columns; column += 1) {
