@@ -50,6 +50,16 @@ body {
   padding: 22px;
 }
 
+.visually-hidden {
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 .topbar,
 .summary,
 .workspace,

@@ -5,7 +5,7 @@ export type ScreenshotTab = "damaged" | "restored" | "storage";
 export const RESULT_TAB_TITLES: Record<ResultsTab, string> = {
   overview: "Overview",
   planning: "Planning",
-  damaged: "Damaged Artefacts",
+  damaged: "Artefacts",
   restored: "Restored Artefacts",
   storage: "Storage",
   materials: "Materials"

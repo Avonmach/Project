@@ -1,7 +1,7 @@
 import { connectResultTabButtons, type ResultsTab } from "../../presentation/tabs/results-tabs";
 import type { AppElements } from "./app-elements";
 import { closeOpenDetailsMenusOutsideTarget } from "./details-menu";
-import { openFilePicker, readClipboardImagesAsDataUrls } from "./file-input";
+import { openFilePicker, readClipboardImagesAsDataUrls, readNavigatorClipboardImagesAsDataUrls } from "./file-input";
 
 export interface AppEventHandlers {
   analyzeCurrentImage(): void;
@@ -43,7 +43,14 @@ export function connectAppEvents(elements: AppElements, handlers: AppEventHandle
 }
 
 async function handlePaste(event: ClipboardEvent, handlers: AppEventHandlers): Promise<void> {
-  const srcs = await readClipboardImagesAsDataUrls(event);
+  let srcs = await readClipboardImagesAsDataUrls(event);
+  if (!srcs.length) {
+    try {
+      srcs = await readNavigatorClipboardImagesAsDataUrls();
+    } catch (error) {
+      console.warn("Could not read pasted image from clipboard.", error);
+    }
+  }
   if (!srcs.length) return;
   event.preventDefault();
   await handlers.handlePastedImages(srcs);
