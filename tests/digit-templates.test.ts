@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { normalizeDigit } from "../src/domain/ocr/digit-templates";
+import { normalizeDigit, thinDigitTemplate } from "../src/domain/ocr/digit-templates";
 
 test("normalizeDigit keeps a one-pixel vertical stroke one cell wide", () => {
   const pixels = Array.from({ length: 8 }, (_, y) => ({ x: 2, y }));
@@ -119,6 +119,26 @@ test("normalizeDigit keeps a thick source zero hollow", () => {
 
   assert.notEqual(normalized[0], "11111");
   assert.match(normalized.slice(2, 7).join(""), /0/);
+});
+
+test("thinDigitTemplate thins a thick nine without removing its shape", () => {
+  const template = [
+    "11111",
+    "11111",
+    "11011",
+    "11111",
+    "11111",
+    "00011",
+    "00110",
+    "01100"
+  ];
+
+  const thinned = thinDigitTemplate(template);
+
+  assert.ok(thinned.some((row) => row.includes("0")));
+  assert.ok(thinned.join("").replaceAll("0", "").length < template.join("").replaceAll("0", "").length);
+  assert.ok(thinned.slice(0, 5).some((row) => row.startsWith("1")));
+  assert.ok(thinned.slice(0, 7).some((row) => row.endsWith("1")));
 });
 
 function pixelsFromMask(rows: readonly string[]): Array<{ x: number; y: number }> {

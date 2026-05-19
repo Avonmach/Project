@@ -18,7 +18,7 @@ export const FALLBACK_DIGIT_TEMPLATES: DigitTemplateMap = {
   6: ["00110", "01000", "10000", "11110", "10001", "10001", "10001", "01110"],
   7: ["11111", "00001", "00010", "00010", "00100", "00100", "01000", "01000"],
   8: ["01110", "10001", "10001", "01110", "10001", "10001", "10001", "01110"],
-  9: ["01110", "10001", "10001", "10001", "01111", "00001", "00010", "11100"]
+  9: ["01110", "10001", "10001", "10001", "01111", "00001", "00010", "00100"]
 };
 
 export function buildDigitTemplatesFromFont(fontFamily: string): DigitTemplateMap {
@@ -26,9 +26,56 @@ export function buildDigitTemplatesFromFont(fontFamily: string): DigitTemplateMa
   for (let digit = 0; digit <= 9; digit += 1) {
     const key = String(digit) as Digit;
     if (key === "0") continue;
-    templates[key] = renderDigitTemplate(key, fontFamily);
+    templates[key] = thinDigitTemplate(renderDigitTemplate(key, fontFamily));
   }
   return templates;
+}
+
+export function thinDigitTemplate(template: DigitTemplate): string[] {
+  const height = template.length;
+  const width = templateWidth(template);
+  const values = Array.from({ length: height }, (_, y) =>
+    Array.from({ length: width }, (_, x) => (templateValueAt(template, y, x) === "1" ? 1 : 0))
+  );
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const step of [0, 1]) {
+      const remove: Array<[number, number]> = [];
+      for (let y = 1; y < height - 1; y += 1) {
+        for (let x = 1; x < width - 1; x += 1) {
+          if (!values[y]?.[x]) continue;
+          const n = thinningNeighbors(values, x, y);
+          const count = n.reduce((sum, value) => sum + value, 0);
+          const transitions = n.filter((value, index) => value === 0 && n[(index + 1) % n.length] === 1).length;
+          if (count < 2 || count > 6 || transitions !== 1) continue;
+          const [north, , east, , south, , west] = n as [number, number, number, number, number, number, number, number];
+          if (step === 0 && north * east * south === 0 && east * south * west === 0) remove.push([x, y]);
+          if (step === 1 && north * east * west === 0 && north * south * west === 0) remove.push([x, y]);
+        }
+      }
+      for (const [x, y] of remove) {
+        const row = values[y];
+        if (row) row[x] = 0;
+        changed = true;
+      }
+    }
+  }
+
+  return values.map((row) => row.map((value) => (value ? "1" : "0")).join(""));
+}
+
+function thinningNeighbors(values: readonly (readonly number[])[], x: number, y: number): number[] {
+  return [
+    values[y - 1]?.[x] ?? 0,
+    values[y - 1]?.[x + 1] ?? 0,
+    values[y]?.[x + 1] ?? 0,
+    values[y + 1]?.[x + 1] ?? 0,
+    values[y + 1]?.[x] ?? 0,
+    values[y + 1]?.[x - 1] ?? 0,
+    values[y]?.[x - 1] ?? 0,
+    values[y - 1]?.[x - 1] ?? 0
+  ];
 }
 
 export function digitTemplateWidth(digit: Digit | string): number {
