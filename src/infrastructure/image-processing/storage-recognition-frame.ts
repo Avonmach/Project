@@ -1,12 +1,12 @@
 import type { StorageRecognitionFrame } from "../../application/analyze-storage/storage-recognition-ports";
-import { detectItemBoxes, estimateBankGrid } from "./bank-grid";
+import { detectStorageMaterialBoxes, storageMaterialContentArea } from "./storage-material-grid";
 
 export function createStorageRecognitionFrame(imageData: ImageData): StorageRecognitionFrame {
-  const grid = estimateBankGrid(imageData);
+  const boxes = detectStorageMaterialBoxes(imageData);
   return {
     imageData,
-    boxes: detectItemBoxes(imageData, grid),
-    contentArea: grid.contentArea,
-    infinityArea: grid.infinityArea
+    boxes,
+    contentArea: storageMaterialContentArea(boxes),
+    infinityArea: null
   };
 }
