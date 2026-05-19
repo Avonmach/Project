@@ -40,6 +40,7 @@ import {
   getGridCellSize,
 } from "./infrastructure/image-processing/bank-grid";
 import { createCanvasFrameSource } from "./infrastructure/image-processing/canvas-frame-source";
+import { calculateStoragePreviewLayout } from "./infrastructure/image-processing/storage-preview-layout";
 import {
   createCanvasDetectionPreviewFactory,
   createQuantityDebugSource,
@@ -442,18 +443,13 @@ function drawStoragePreview(): void {
   }
 
   const gap = 12;
-  const width = Math.max(...storageImages.map((image) => image.naturalWidth));
-  const height = storageImages.reduce((sum, image) => sum + image.naturalHeight, 0) + gap * (storageImages.length - 1);
+  const { width, height, placements } = calculateStoragePreviewLayout(storageImages, gap);
   canvas.width = width;
   canvas.height = height;
   canvas.classList.remove("is-empty");
   ctx.fillStyle = "#221f1c";
   ctx.fillRect(0, 0, width, height);
-  let y = 0;
-  for (const image of storageImages) {
-    ctx.drawImage(image, 0, y);
-    y += image.naturalHeight + gap;
-  }
+  for (const { image, x, y } of placements) ctx.drawImage(image, x, y);
 }
 
 function renderOverviewTab(items: readonly AppDetection[]): void {
