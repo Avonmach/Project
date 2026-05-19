@@ -89,19 +89,21 @@ function clusterCenters(centers: readonly Point[], cell: number): Point[] {
 function makeCellBoxesFromCenters(centers: readonly Point[], cell: number, imageWidth: number, imageHeight: number): BoundingBox[] {
   const columns = clusterAxis(centers.map((center) => center.x), cell);
   const rows = clusterAxis(centers.map((center) => center.y), cell);
+  const cellWidth = axisSpacing(columns) ?? cell;
+  const cellHeight = axisSpacing(rows) ?? cell;
   const boxesByKey = new Map<string, BoundingBox>();
 
   for (const center of centers) {
     const column = closestAxisValue(columns, center.x);
     const row = closestAxisValue(rows, center.y);
     if (column === null || row === null) continue;
-    const x = Math.max(0, Math.min(imageWidth - cell, Math.round(column - cell / 2)));
-    const y = Math.max(0, Math.min(imageHeight - cell, Math.round(row - cell / 2)));
+    const x = Math.max(0, Math.min(imageWidth - cellWidth, Math.round(column - cellWidth / 2)));
+    const y = Math.max(0, Math.min(imageHeight - cellHeight, Math.round(row - cellHeight / 2)));
     boxesByKey.set(`${x}:${y}`, {
       x,
       y,
-      w: Math.min(cell, imageWidth - x),
-      h: Math.min(cell, imageHeight - y)
+      w: Math.min(cellWidth, imageWidth - x),
+      h: Math.min(cellHeight, imageHeight - y)
     });
   }
 
@@ -125,6 +127,17 @@ function clusterAxis(values: readonly number[], cell: number): number[] {
   return clusters.map((cluster) => cluster.value);
 }
 
+function axisSpacing(values: readonly number[]): number | null {
+  if (values.length < 2) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const gaps = sorted
+    .slice(1)
+    .map((value, index) => value - (sorted[index] ?? value))
+    .filter((gap) => gap > 8);
+  if (!gaps.length) return null;
+  return Math.round(gaps.sort((a, b) => a - b)[Math.floor(gaps.length / 2)] ?? gaps[0] ?? 0);
+}
+
 function closestAxisValue(values: readonly number[], target: number): number | null {
   let closest: number | null = null;
   let closestDistance = Number.POSITIVE_INFINITY;
@@ -146,23 +159,14 @@ function isMaterialComponent(box: BoundingBox): boolean {
 }
 
 function isStorageMaterialPixel(r: number, g: number, b: number): boolean {
-  if (isStorageBackgroundPixel(r, g, b)) return false;
   if (isFramePixel(r, g, b)) return false;
-  if (isQuantityTextPixel(r, g, b)) return false;
-  const tooDark = r < 24 && g < 24 && b < 24;
-  return !tooDark;
-}
-
-function isStorageBackgroundPixel(r: number, g: number, b: number): boolean {
-  return Math.abs(r - 48) + Math.abs(g - 43) + Math.abs(b - 38) <= 28;
+  const brightest = Math.max(r, g, b);
+  const darkest = Math.min(r, g, b);
+  return brightest > 55 && (brightest - darkest > 18 || darkest > 70);
 }
 
 function isFramePixel(r: number, g: number, b: number): boolean {
   const isBrightFrame = r > 175 && g > 155 && b > 120;
   const isGreenDivider = g > 150 && r < 120 && b < 140;
   return isBrightFrame || isGreenDivider;
-}
-
-function isQuantityTextPixel(r: number, g: number, b: number): boolean {
-  return r > 145 && g > 145 && b < 95;
 }
