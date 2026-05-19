@@ -550,7 +550,6 @@ function renderMaterialsTab(items: readonly AppDetection[]): void {
     panel: materialsPanel,
     allDetections: detections,
     visibleDetections: items,
-    recipeRecordCount: archaeologyReference.artefactRecipes?.length || 0,
     storedMaterials: detectedStorageMaterials,
     references,
     calculateMaterialTotals: (detections) => calculateMaterialTotalsForRecipes(detections, recipeByRestoredName),

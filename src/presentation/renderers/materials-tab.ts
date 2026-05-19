@@ -30,7 +30,6 @@ export interface MaterialsTabRendererOptions<TDetection extends MaterialsTabDete
   readonly panel: HTMLElement;
   readonly allDetections: readonly TDetection[];
   readonly visibleDetections: readonly TDetection[];
-  readonly recipeRecordCount: number;
   readonly storedMaterials: readonly StoredMaterialRow[];
   readonly references: readonly MaterialsTabReference[];
   readonly calculateMaterialTotals: (items: readonly TDetection[]) => readonly MaterialRow[];
@@ -50,7 +49,6 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
   panel,
   allDetections,
   visibleDetections,
-  recipeRecordCount,
   storedMaterials,
   references,
   calculateMaterialTotals,
@@ -82,8 +80,7 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
   summary.append(
     makeOverviewCard("Artefact quantity", visibleDetections.reduce((sum, detection) => sum + detection.quantity, 0)),
     makeOverviewCard("Unique artefacts", aggregateRestoredArtefacts(visibleDetections).length),
-    makeOverviewCard("Needed materials", materialRows.length),
-    makeOverviewCard("Recipe records", recipeRecordCount)
+    makeOverviewCard("Needed materials", materialRows.length)
   );
 
   if (!materialRows.length) {
