@@ -13,6 +13,7 @@ import { STATUS_MESSAGES } from "./application/config/status-messages";
 import {
   aggregateRestoredArtefacts as aggregateRestoredArtefactsForDetections,
   calculateMaterialTotals as calculateMaterialTotalsForRecipes,
+  calculateOtherItemTotals as calculateOtherItemTotalsForRecipes,
   type MaterialRecipe
 } from "./application/calculate-materials/material-totals";
 import { applyCandidatePrediction as applyCandidatePredictionRule } from "./application/correct-detection/candidate-prediction";
@@ -558,6 +559,7 @@ function renderMaterialsTab(items: readonly AppDetection[]): void {
     storedMaterials: detectedStorageMaterials,
     references,
     calculateMaterialTotals: (detections) => calculateMaterialTotalsForRecipes(detections, recipeByRestoredName),
+    calculateOtherItemTotals: (detections) => calculateOtherItemTotalsForRecipes(detections, recipeByRestoredName),
     aggregateRestoredArtefacts: (detections) => aggregateRestoredArtefactsForDetections(detections, quantityNeedsReview),
     sortMaterialRows: (rows) => [...rows].sort((a, b) => a.name.localeCompare(b.name)),
     makeMaterialCell,

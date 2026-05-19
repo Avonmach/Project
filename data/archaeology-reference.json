@@ -1,6 +1,6 @@
 {
   "source": "https://runescape.wiki/",
-  "generatedAt": "2026-05-19T12:07:06.147Z",
+  "generatedAt": "2026-05-19T13:38:22.668Z",
   "counts": {
     "materials": 43,
     "artefactRecipes": 218,
@@ -331,6 +331,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 27000
     },
     {
@@ -354,6 +355,7 @@
           "quantity": 50
         }
       ],
+      "otherItems": [],
       "experience": 5600
     },
     {
@@ -377,6 +379,7 @@
           "quantity": 44
         }
       ],
+      "otherItems": [],
       "experience": 45000
     },
     {
@@ -404,6 +407,7 @@
           "quantity": 14
         }
       ],
+      "otherItems": [],
       "experience": 646.2
     },
     {
@@ -423,6 +427,7 @@
           "quantity": 36
         }
       ],
+      "otherItems": [],
       "experience": 9333.3
     },
     {
@@ -440,6 +445,12 @@
         {
           "name": "Yu'biusk clay",
           "quantity": 42
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Emerald",
+          "quantity": 1
         }
       ],
       "experience": 18666.7
@@ -461,6 +472,7 @@
           "quantity": 46
         }
       ],
+      "otherItems": [],
       "experience": 9722.2
     },
     {
@@ -480,6 +492,7 @@
           "quantity": 24
         }
       ],
+      "otherItems": [],
       "experience": 1073.3
     },
     {
@@ -507,6 +520,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 24500
     },
     {
@@ -530,6 +544,7 @@
           "quantity": 18
         }
       ],
+      "otherItems": [],
       "experience": 2193.3
     },
     {
@@ -551,6 +566,12 @@
         {
           "name": "Goldrune",
           "quantity": 24
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Ruby",
+          "quantity": 1
         }
       ],
       "experience": 3500
@@ -576,6 +597,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 13333.3
     },
     {
@@ -603,6 +625,7 @@
           "quantity": 42
         }
       ],
+      "otherItems": [],
       "experience": 10500
     },
     {
@@ -626,6 +649,7 @@
           "quantity": 44
         }
       ],
+      "otherItems": [],
       "experience": 23333.3
     },
     {
@@ -653,6 +677,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 43333.3
     },
     {
@@ -676,6 +701,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 46666.7
     },
     {
@@ -699,6 +725,7 @@
           "quantity": 32
         }
       ],
+      "otherItems": [],
       "experience": 18666.7
     },
     {
@@ -722,6 +749,7 @@
           "quantity": 14
         }
       ],
+      "otherItems": [],
       "experience": 664.1
     },
     {
@@ -741,6 +769,7 @@
           "quantity": 60
         }
       ],
+      "otherItems": [],
       "experience": 29666.7
     },
     {
@@ -760,6 +789,7 @@
           "quantity": 50
         }
       ],
+      "otherItems": [],
       "experience": 29666.7
     },
     {
@@ -787,6 +817,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 3500
     },
     {
@@ -814,6 +845,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 24500
     },
     {
@@ -841,6 +873,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 24500
     },
     {
@@ -868,6 +901,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 3966.7
     },
     {
@@ -891,6 +925,7 @@
           "quantity": 38
         }
       ],
+      "otherItems": [],
       "experience": 10500
     },
     {
@@ -910,6 +945,7 @@
           "quantity": 46
         }
       ],
+      "otherItems": [],
       "experience": 11666.7
     },
     {
@@ -933,6 +969,7 @@
           "quantity": 60
         }
       ],
+      "otherItems": [],
       "experience": 43333.3
     },
     {
@@ -952,6 +989,7 @@
           "quantity": 64
         }
       ],
+      "otherItems": [],
       "experience": 27000
     },
     {
@@ -975,6 +1013,7 @@
           "quantity": 18
         }
       ],
+      "otherItems": [],
       "experience": 1423.3
     },
     {
@@ -998,6 +1037,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 2333.3
     },
     {
@@ -1015,6 +1055,12 @@
         {
           "name": "Armadylean yellow",
           "quantity": 32
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Diamond",
+          "quantity": 1
         }
       ],
       "experience": 6066.7
@@ -1040,6 +1086,7 @@
           "quantity": 22
         }
       ],
+      "otherItems": [],
       "experience": 7388.9
     },
     {
@@ -1061,6 +1108,16 @@
         {
           "name": "Felt",
           "quantity": 120
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Draconic energy",
+          "quantity": 10
+        },
+        {
+          "name": "Softened fungal shafts",
+          "quantity": 200
         }
       ],
       "experience": 36666.6
@@ -1086,6 +1143,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 43333.3
     },
     {
@@ -1113,6 +1171,7 @@
           "quantity": 24
         }
       ],
+      "otherItems": [],
       "experience": 13333.3
     },
     {
@@ -1132,6 +1191,7 @@
           "quantity": 46
         }
       ],
+      "otherItems": [],
       "experience": 22166.7
     },
     {
@@ -1155,6 +1215,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 1283.3
     },
     {
@@ -1172,6 +1233,12 @@
         {
           "name": "Star of Saradomin",
           "quantity": 26
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Bronze bar",
+          "quantity": 1
         }
       ],
       "experience": 4433.3
@@ -1193,6 +1260,7 @@
           "quantity": 32
         }
       ],
+      "otherItems": [],
       "experience": 5366.7
     },
     {
@@ -1212,6 +1280,7 @@
           "quantity": 5
         }
       ],
+      "otherItems": [],
       "experience": 250
     },
     {
@@ -1231,6 +1300,7 @@
           "quantity": 2
         }
       ],
+      "otherItems": [],
       "experience": 430.8
     },
     {
@@ -1246,6 +1316,7 @@
           "quantity": 66
         }
       ],
+      "otherItems": [],
       "experience": 4666.7
     },
     {
@@ -1269,6 +1340,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 5600
     },
     {
@@ -1286,6 +1358,12 @@
         {
           "name": "Goldrune",
           "quantity": 34
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Phoenix feather",
+          "quantity": 1
         }
       ],
       "experience": 7388.9
@@ -1307,6 +1385,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 1493.3
     },
     {
@@ -1326,6 +1405,7 @@
           "quantity": 22
         }
       ],
+      "otherItems": [],
       "experience": 1493.3
     },
     {
@@ -1349,6 +1429,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 31000
     },
     {
@@ -1368,6 +1449,7 @@
           "quantity": 36
         }
       ],
+      "otherItems": [],
       "experience": 4200
     },
     {
@@ -1395,6 +1477,7 @@
           "quantity": 24
         }
       ],
+      "otherItems": [],
       "experience": 43333.3
     },
     {
@@ -1418,6 +1501,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 27000
     },
     {
@@ -1437,6 +1521,7 @@
           "quantity": 18
         }
       ],
+      "otherItems": [],
       "experience": 646.2
     },
     {
@@ -1464,6 +1549,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 2333.3
     },
     {
@@ -1487,6 +1573,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 14166.7
     },
     {
@@ -1506,6 +1593,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 17500
     },
     {
@@ -1529,6 +1617,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 3033.3
     },
     {
@@ -1548,6 +1637,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 5133.3
     },
     {
@@ -1571,6 +1661,12 @@
           "quantity": 22
         }
       ],
+      "otherItems": [
+        {
+          "name": "Clockwork",
+          "quantity": 1
+        }
+      ],
       "experience": 8555.6
     },
     {
@@ -1590,6 +1686,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 2566.7
     },
     {
@@ -1609,6 +1706,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 2566.7
     },
     {
@@ -1628,6 +1726,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 2566.7
     },
     {
@@ -1655,6 +1754,7 @@
           "quantity": 18
         }
       ],
+      "otherItems": [],
       "experience": 4433.3
     },
     {
@@ -1674,6 +1774,7 @@
           "quantity": 42
         }
       ],
+      "otherItems": [],
       "experience": 18666.7
     },
     {
@@ -1693,6 +1794,7 @@
           "quantity": 62
         }
       ],
+      "otherItems": [],
       "experience": 41666.7
     },
     {
@@ -1712,6 +1814,7 @@
           "quantity": 42
         }
       ],
+      "otherItems": [],
       "experience": 21000
     },
     {
@@ -1731,6 +1834,7 @@
           "quantity": 42
         }
       ],
+      "otherItems": [],
       "experience": 19833.3
     },
     {
@@ -1754,6 +1858,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 17500
     },
     {
@@ -1769,6 +1874,7 @@
           "quantity": 50
         }
       ],
+      "otherItems": [],
       "experience": 600
     },
     {
@@ -1788,6 +1894,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 17500
     },
     {
@@ -1803,6 +1910,7 @@
           "quantity": 50
         }
       ],
+      "otherItems": [],
       "experience": 600
     },
     {
@@ -1826,6 +1934,7 @@
           "quantity": 32
         }
       ],
+      "otherItems": [],
       "experience": 31000
     },
     {
@@ -1849,6 +1958,7 @@
           "quantity": 24
         }
       ],
+      "otherItems": [],
       "experience": 6066.7
     },
     {
@@ -1868,6 +1978,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 5366.7
     },
     {
@@ -1887,6 +1998,7 @@
           "quantity": 22
         }
       ],
+      "otherItems": [],
       "experience": 1703.3
     },
     {
@@ -1906,6 +2018,7 @@
           "quantity": 24
         }
       ],
+      "otherItems": [],
       "experience": 1703.3
     },
     {
@@ -1929,6 +2042,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 1703.3
     },
     {
@@ -1948,6 +2062,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 6300
     },
     {
@@ -1967,6 +2082,7 @@
           "quantity": 36
         }
       ],
+      "otherItems": [],
       "experience": 6300
     },
     {
@@ -1990,6 +2106,7 @@
           "quantity": 22
         }
       ],
+      "otherItems": [],
       "experience": 8555.6
     },
     {
@@ -2009,6 +2126,7 @@
           "quantity": 54
         }
       ],
+      "otherItems": [],
       "experience": 32333.3
     },
     {
@@ -2028,6 +2146,7 @@
           "quantity": 24
         }
       ],
+      "otherItems": [],
       "experience": 2053.3
     },
     {
@@ -2047,6 +2166,7 @@
           "quantity": 24
         }
       ],
+      "otherItems": [],
       "experience": 2053.3
     },
     {
@@ -2070,6 +2190,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 3773.3
     },
     {
@@ -2093,6 +2214,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 3033.3
     },
     {
@@ -2116,6 +2238,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 3966.7
     },
     {
@@ -2139,6 +2262,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 2333.3
     },
     {
@@ -2162,6 +2286,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 2800
     },
     {
@@ -2185,6 +2310,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 15833.3
     },
     {
@@ -2208,6 +2334,7 @@
           "quantity": 18
         }
       ],
+      "otherItems": [],
       "experience": 3773.3
     },
     {
@@ -2231,6 +2358,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 3773.3
     },
     {
@@ -2250,6 +2378,7 @@
           "quantity": 54
         }
       ],
+      "otherItems": [],
       "experience": 46666.7
     },
     {
@@ -2269,6 +2398,7 @@
           "quantity": 60
         }
       ],
+      "otherItems": [],
       "experience": 22166.7
     },
     {
@@ -2279,6 +2409,7 @@
       "culture": null,
       "digSite": null,
       "materials": [],
+      "otherItems": [],
       "experience": null
     },
     {
@@ -2306,6 +2437,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 16666.7
     },
     {
@@ -2323,6 +2455,12 @@
         {
           "name": "Vellum",
           "quantity": 44
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Black mushroom ink",
+          "quantity": 1
         }
       ],
       "experience": 16666.7
@@ -2352,6 +2490,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 735.9
     },
     {
@@ -2375,6 +2514,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 27000
     },
     {
@@ -2392,6 +2532,12 @@
         {
           "name": "Keramos",
           "quantity": 24
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "White candle",
+          "quantity": 1
         }
       ],
       "experience": 1073.3
@@ -2421,6 +2567,7 @@
           "quantity": 18
         }
       ],
+      "otherItems": [],
       "experience": 2800
     },
     {
@@ -2440,6 +2587,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 8944.4
     },
     {
@@ -2463,6 +2611,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 16666.7
     },
     {
@@ -2482,6 +2631,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 16666.7
     },
     {
@@ -2505,6 +2655,7 @@
           "quantity": 26
         }
       ],
+      "otherItems": [],
       "experience": 16666.7
     },
     {
@@ -2528,6 +2679,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 10500
     },
     {
@@ -2551,6 +2703,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 10500
     },
     {
@@ -2574,6 +2727,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 10500
     },
     {
@@ -2593,6 +2747,7 @@
           "quantity": 46
         }
       ],
+      "otherItems": [],
       "experience": 31000
     },
     {
@@ -2612,6 +2767,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 9722.2
     },
     {
@@ -2635,6 +2791,7 @@
           "quantity": 8
         }
       ],
+      "otherItems": [],
       "experience": 574.4
     },
     {
@@ -2658,6 +2815,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 45000
     },
     {
@@ -2681,6 +2839,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 23333.3
     },
     {
@@ -2700,6 +2859,7 @@
           "quantity": 44
         }
       ],
+      "otherItems": [],
       "experience": 13333.3
     },
     {
@@ -2719,6 +2879,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 4666.7
     },
     {
@@ -2742,6 +2903,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 735.9
     },
     {
@@ -2769,6 +2931,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 2800
     },
     {
@@ -2792,6 +2955,7 @@
           "quantity": 18
         }
       ],
+      "otherItems": [],
       "experience": 3266.7
     },
     {
@@ -2819,6 +2983,7 @@
           "quantity": 22
         }
       ],
+      "otherItems": [],
       "experience": 3266.7
     },
     {
@@ -2846,6 +3011,7 @@
           "quantity": 14
         }
       ],
+      "otherItems": [],
       "experience": 3266.7
     },
     {
@@ -2865,6 +3031,7 @@
           "quantity": 60
         }
       ],
+      "otherItems": [],
       "experience": 38333.3
     },
     {
@@ -2888,6 +3055,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 38333.3
     },
     {
@@ -2911,6 +3079,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 38333.3
     },
     {
@@ -2928,6 +3097,12 @@
         {
           "name": "Orthenglass",
           "quantity": 36
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Sapphire",
+          "quantity": 1
         }
       ],
       "experience": 5133.3
@@ -2957,6 +3132,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 6066.7
     },
     {
@@ -2976,6 +3152,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 15000
     },
     {
@@ -2995,6 +3172,7 @@
           "quantity": 62
         }
       ],
+      "otherItems": [],
       "experience": 41666.7
     },
     {
@@ -3014,6 +3192,7 @@
           "quantity": 42
         }
       ],
+      "otherItems": [],
       "experience": 18666.7
     },
     {
@@ -3037,6 +3216,7 @@
           "quantity": 26
         }
       ],
+      "otherItems": [],
       "experience": 7388.9
     },
     {
@@ -3060,6 +3240,7 @@
           "quantity": 10
         }
       ],
+      "otherItems": [],
       "experience": 664.1
     },
     {
@@ -3081,6 +3262,12 @@
         {
           "name": "Ancient vis",
           "quantity": 12
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Dragonstone",
+          "quantity": 1
         }
       ],
       "experience": 1423.3
@@ -3106,6 +3293,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 430.8
     },
     {
@@ -3129,6 +3317,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 430.8
     },
     {
@@ -3156,6 +3345,7 @@
           "quantity": 6
         }
       ],
+      "otherItems": [],
       "experience": 735.9
     },
     {
@@ -3179,6 +3369,7 @@
           "quantity": 32
         }
       ],
+      "otherItems": [],
       "experience": 28333.3
     },
     {
@@ -3202,6 +3393,7 @@
           "quantity": 26
         }
       ],
+      "otherItems": [],
       "experience": 7388.9
     },
     {
@@ -3225,6 +3417,7 @@
           "quantity": 18
         }
       ],
+      "otherItems": [],
       "experience": 3033.3
     },
     {
@@ -3248,6 +3441,7 @@
           "quantity": 14
         }
       ],
+      "otherItems": [],
       "experience": 1283.3
     },
     {
@@ -3271,6 +3465,7 @@
           "quantity": 44
         }
       ],
+      "otherItems": [],
       "experience": 28333.3
     },
     {
@@ -3290,6 +3485,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 25666.7
     },
     {
@@ -3317,6 +3513,7 @@
           "quantity": 14
         }
       ],
+      "otherItems": [],
       "experience": 3966.7
     },
     {
@@ -3336,6 +3533,7 @@
           "quantity": 32
         }
       ],
+      "otherItems": [],
       "experience": 6066.7
     },
     {
@@ -3355,6 +3553,7 @@
           "quantity": 32
         }
       ],
+      "otherItems": [],
       "experience": 6066.7
     },
     {
@@ -3378,6 +3577,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 9333.3
     },
     {
@@ -3401,6 +3601,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 32333.3
     },
     {
@@ -3424,6 +3625,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 22166.7
     },
     {
@@ -3447,6 +3649,7 @@
           "quantity": 24
         }
       ],
+      "otherItems": [],
       "experience": 7388.9
     },
     {
@@ -3466,6 +3669,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 574.4
     },
     {
@@ -3489,6 +3693,7 @@
           "quantity": 14
         }
       ],
+      "otherItems": [],
       "experience": 861.5
     },
     {
@@ -3508,6 +3713,7 @@
           "quantity": 36
         }
       ],
+      "otherItems": [],
       "experience": 7388.9
     },
     {
@@ -3527,6 +3733,7 @@
           "quantity": 60
         }
       ],
+      "otherItems": [],
       "experience": 21000
     },
     {
@@ -3554,6 +3761,7 @@
           "quantity": 22
         }
       ],
+      "otherItems": [],
       "experience": 15833.3
     },
     {
@@ -3581,6 +3789,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 15833.3
     },
     {
@@ -3600,6 +3809,7 @@
           "quantity": 38
         }
       ],
+      "otherItems": [],
       "experience": 10888.9
     },
     {
@@ -3617,6 +3827,12 @@
         {
           "name": "Goldrune",
           "quantity": 30
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Sapphire",
+          "quantity": 1
         }
       ],
       "experience": 5133.3
@@ -3642,6 +3858,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 7388.9
     },
     {
@@ -3665,6 +3882,7 @@
           "quantity": 26
         }
       ],
+      "otherItems": [],
       "experience": 25666.7
     },
     {
@@ -3688,6 +3906,7 @@
           "quantity": 14
         }
       ],
+      "otherItems": [],
       "experience": 6533.3
     },
     {
@@ -3709,6 +3928,12 @@
         {
           "name": "Goldrune",
           "quantity": 32
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Dragonstone",
+          "quantity": 1
         }
       ],
       "experience": 7388.9
@@ -3734,6 +3959,7 @@
           "quantity": 32
         }
       ],
+      "otherItems": [],
       "experience": 7388.9
     },
     {
@@ -3755,6 +3981,12 @@
         {
           "name": "Goldrune",
           "quantity": 28
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Dragonstone",
+          "quantity": 1
         }
       ],
       "experience": 5600
@@ -3780,6 +4012,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 7388.9
     },
     {
@@ -3801,6 +4034,12 @@
         {
           "name": "Ancient vis",
           "quantity": 22
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Dragonstone",
+          "quantity": 1
         }
       ],
       "experience": 2193.3
@@ -3826,6 +4065,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 27000
     },
     {
@@ -3849,6 +4089,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 35000
     },
     {
@@ -3870,6 +4111,12 @@
         {
           "name": "Zarosian insignia",
           "quantity": 40
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Death rune",
+          "quantity": 30
         }
       ],
       "experience": 36666.7
@@ -3895,6 +4142,12 @@
           "quantity": 40
         }
       ],
+      "otherItems": [
+        {
+          "name": "Death rune",
+          "quantity": 50
+        }
+      ],
       "experience": 36666.7
     },
     {
@@ -3918,6 +4171,12 @@
           "quantity": 30
         }
       ],
+      "otherItems": [
+        {
+          "name": "Death rune",
+          "quantity": 100
+        }
+      ],
       "experience": 36666.7
     },
     {
@@ -3937,6 +4196,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 430.8
     },
     {
@@ -3960,6 +4220,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 22166.7
     },
     {
@@ -3979,6 +4240,7 @@
           "quantity": 52
         }
       ],
+      "otherItems": [],
       "experience": 19833.3
     },
     {
@@ -4002,6 +4264,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 33666.7
     },
     {
@@ -4025,6 +4288,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 33666.7
     },
     {
@@ -4048,6 +4312,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 33666.7
     },
     {
@@ -4071,6 +4336,7 @@
           "quantity": 26
         }
       ],
+      "otherItems": [],
       "experience": 11277.8
     },
     {
@@ -4094,6 +4360,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 43333.3
     },
     {
@@ -4117,6 +4384,7 @@
           "quantity": 26
         }
       ],
+      "otherItems": [],
       "experience": 6066.7
     },
     {
@@ -4136,6 +4404,7 @@
           "quantity": 38
         }
       ],
+      "otherItems": [],
       "experience": 10888.9
     },
     {
@@ -4153,6 +4422,12 @@
         {
           "name": "Hellfire metal",
           "quantity": 24
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Ruby",
+          "quantity": 1
         }
       ],
       "experience": 861.5
@@ -4178,6 +4453,7 @@
           "quantity": 26
         }
       ],
+      "otherItems": [],
       "experience": 11666.7
     },
     {
@@ -4201,6 +4477,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 23333.3
     },
     {
@@ -4224,6 +4501,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 7388.9
     },
     {
@@ -4241,6 +4519,12 @@
         {
           "name": "Star of Saradomin",
           "quantity": 26
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Silver bar",
+          "quantity": 1
         }
       ],
       "experience": 4433.3
@@ -4262,6 +4546,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 25666.7
     },
     {
@@ -4285,6 +4570,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 6533.3
     },
     {
@@ -4302,6 +4588,12 @@
         {
           "name": "Orthenglass",
           "quantity": 36
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Diamond",
+          "quantity": 1
         }
       ],
       "experience": 11277.8
@@ -4323,6 +4615,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 9722.2
     },
     {
@@ -4346,6 +4639,7 @@
           "quantity": 48
         }
       ],
+      "otherItems": [],
       "experience": 43333.3
     },
     {
@@ -4369,6 +4663,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 4200
     },
     {
@@ -4388,6 +4683,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 6533.3
     },
     {
@@ -4411,6 +4707,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 14166.7
     },
     {
@@ -4428,6 +4725,12 @@
         {
           "name": "Wings of War",
           "quantity": 34
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Rope",
+          "quantity": 1
         }
       ],
       "experience": 8944.4
@@ -4453,6 +4756,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 9333.3
     },
     {
@@ -4476,6 +4780,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 9333.3
     },
     {
@@ -4499,6 +4804,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 9333.3
     },
     {
@@ -4522,6 +4828,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 9333.3
     },
     {
@@ -4549,6 +4856,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 8166.7
     },
     {
@@ -4568,6 +4876,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 4666.7
     },
     {
@@ -4585,6 +4894,12 @@
         {
           "name": "White oak",
           "quantity": 30
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Clockwork",
+          "quantity": 1
         }
       ],
       "experience": 4666.7
@@ -4610,6 +4925,7 @@
           "quantity": 20
         }
       ],
+      "otherItems": [],
       "experience": 23333.3
     },
     {
@@ -4633,6 +4949,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 40000
     },
     {
@@ -4656,6 +4973,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 40000
     },
     {
@@ -4679,6 +4997,7 @@
           "quantity": 24
         }
       ],
+      "otherItems": [],
       "experience": 23333.3
     },
     {
@@ -4702,6 +5021,7 @@
           "quantity": 40
         }
       ],
+      "otherItems": [],
       "experience": 40000
     },
     {
@@ -4725,6 +5045,7 @@
           "quantity": 28
         }
       ],
+      "otherItems": [],
       "experience": 15000
     },
     {
@@ -4744,6 +5065,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 305.1
     },
     {
@@ -4763,6 +5085,7 @@
           "quantity": 16
         }
       ],
+      "otherItems": [],
       "experience": 305.1
     },
     {
@@ -4780,6 +5103,12 @@
         {
           "name": "Ancient vis",
           "quantity": 38
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Molten glass",
+          "quantity": 1
         }
       ],
       "experience": 18666.7
@@ -4805,6 +5134,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 31000
     },
     {
@@ -4832,6 +5162,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 35000
     },
     {
@@ -4859,6 +5190,7 @@
           "quantity": 1
         }
       ],
+      "otherItems": [],
       "experience": 10000
     },
     {
@@ -4878,6 +5210,7 @@
           "quantity": 46
         }
       ],
+      "otherItems": [],
       "experience": 18666.7
     },
     {
@@ -4897,6 +5230,7 @@
           "quantity": 66
         }
       ],
+      "otherItems": [],
       "experience": 35000
     },
     {
@@ -4920,6 +5254,7 @@
           "quantity": 34
         }
       ],
+      "otherItems": [],
       "experience": 35000
     },
     {
@@ -4943,6 +5278,7 @@
           "quantity": 42
         }
       ],
+      "otherItems": [],
       "experience": 45000
     },
     {
@@ -4962,6 +5298,7 @@
           "quantity": 64
         }
       ],
+      "otherItems": [],
       "experience": 45000
     },
     {
@@ -4979,6 +5316,12 @@
         {
           "name": "Vulcanised rubber",
           "quantity": 36
+        }
+      ],
+      "otherItems": [
+        {
+          "name": "Weapon poison (3)",
+          "quantity": 1
         }
       ],
       "experience": 8166.7
@@ -5004,6 +5347,7 @@
           "quantity": 12
         }
       ],
+      "otherItems": [],
       "experience": 520.5
     },
     {
@@ -5023,6 +5367,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 12500
     },
     {
@@ -5046,6 +5391,7 @@
           "quantity": 30
         }
       ],
+      "otherItems": [],
       "experience": 12500
     },
     {
@@ -5065,6 +5411,7 @@
           "quantity": 14
         }
       ],
+      "otherItems": [],
       "experience": 520.5
     }
   ],

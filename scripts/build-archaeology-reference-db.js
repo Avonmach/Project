@@ -87,6 +87,7 @@ async function buildArtefactRecipes(items, materialNames) {
       culture: item.culture,
       digSite: item.digSite,
       materials: recipe.materials,
+      otherItems: recipe.otherItems,
       experience: recipe.experience
     });
   }
@@ -127,6 +128,7 @@ async function buildCollections(pages) {
 function parseRecipe(wikitext, materialNames) {
   const fields = parseTemplateFields(wikitext, "Infobox Recipe");
   const materials = [];
+  const otherItems = [];
 
   for (let index = 1; index <= 20; index += 1) {
     const rawName = fields[`mat${index}`];
@@ -135,13 +137,17 @@ function parseRecipe(wikitext, materialNames) {
     const quantity = numberValue(fields[`mat${index}qty`]) || 1;
     const normalized = normalizeName(name);
     if (!name || /\(damaged\)$/i.test(name)) continue;
-    if (!materialNames.has(normalized)) continue;
-    materials.push({ name, quantity });
+    if (materialNames.has(normalized)) {
+      materials.push({ name, quantity });
+    } else {
+      otherItems.push({ name, quantity });
+    }
   }
 
   return {
     experience: numberValue(fields.skill1exp),
-    materials
+    materials,
+    otherItems
   };
 }
 

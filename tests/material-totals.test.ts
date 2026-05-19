@@ -3,7 +3,8 @@ import test from "node:test";
 
 import {
   aggregateRestoredArtefacts,
-  calculateMaterialTotals
+  calculateMaterialTotals,
+  calculateOtherItemTotals
 } from "../src/application/calculate-materials/material-totals";
 
 test("calculateMaterialTotals multiplies recipe materials by detection quantity", () => {
@@ -31,6 +32,32 @@ test("calculateMaterialTotals multiplies recipe materials by detection quantity"
   assert.deepEqual(totals, [
     { name: "Third age iron", quantity: 28, artefacts: ["Restored token", "Restored vase"] },
     { name: "Zarosian insignia", quantity: 4, artefacts: ["Restored vase"] }
+  ]);
+});
+
+test("calculateOtherItemTotals keeps non-archaeology recipe items separate", () => {
+  const recipes = new Map([
+    [
+      "restored vase",
+      {
+        materials: [{ name: "Third age iron", quantity: 8 }],
+        otherItems: [{ name: "Gold leaf", quantity: 1 }]
+      }
+    ],
+    ["restored token", { otherItems: [{ name: "Clockwork", quantity: 2 }] }]
+  ]);
+
+  const totals = calculateOtherItemTotals(
+    [
+      { artefact: "Damaged vase", restoredName: "Restored vase", quantity: 2 },
+      { artefact: "Damaged token", restoredName: "Restored token", quantity: 4 }
+    ],
+    recipes
+  );
+
+  assert.deepEqual(totals, [
+    { name: "Gold leaf", quantity: 2, artefacts: ["Restored vase"] },
+    { name: "Clockwork", quantity: 8, artefacts: ["Restored token"] }
   ]);
 });
 

@@ -21,6 +21,7 @@ export interface ArchaeologyMaterialRecord {
 export interface ArchaeologyArtefactRecipeRecord {
   readonly restoredName: string;
   readonly materials?: readonly { readonly name: string; readonly quantity: number }[];
+  readonly otherItems?: readonly { readonly name: string; readonly quantity: number }[];
   readonly [key: string]: unknown;
 }
 
@@ -110,11 +111,16 @@ function isArchaeologyMaterialRecord(value: unknown): value is ArchaeologyMateri
 function isArchaeologyArtefactRecipeRecord(value: unknown): value is ArchaeologyArtefactRecipeRecord {
   if (!isRecord(value) || typeof value.restoredName !== "string") return false;
   return (
-    value.materials === undefined ||
-    (Array.isArray(value.materials) &&
-      value.materials.every(
-        (material) => isRecord(material) && typeof material.name === "string" && isFiniteNumber(material.quantity)
-      ))
+    (value.materials === undefined ||
+      (Array.isArray(value.materials) &&
+        value.materials.every(
+          (material) => isRecord(material) && typeof material.name === "string" && isFiniteNumber(material.quantity)
+        ))) &&
+    (value.otherItems === undefined ||
+      (Array.isArray(value.otherItems) &&
+        value.otherItems.every(
+          (item) => isRecord(item) && typeof item.name === "string" && isFiniteNumber(item.quantity)
+        )))
   );
 }
 

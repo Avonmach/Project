@@ -34,6 +34,7 @@ export interface MaterialsTabRendererOptions<TDetection extends MaterialsTabDete
   readonly storedMaterials: readonly StoredMaterialRow[];
   readonly references: readonly MaterialsTabReference[];
   readonly calculateMaterialTotals: (items: readonly TDetection[]) => readonly MaterialRow[];
+  readonly calculateOtherItemTotals: (items: readonly TDetection[]) => readonly MaterialRow[];
   readonly aggregateRestoredArtefacts: (items: readonly TDetection[]) => readonly RestoredArtefactSummaryRow[];
   readonly sortMaterialRows: (rows: readonly MaterialRow[]) => readonly MaterialRow[];
   readonly makeMaterialCell: (row: Pick<MaterialRow, "name">) => HTMLTableCellElement;
@@ -51,6 +52,7 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
   storedMaterials,
   references,
   calculateMaterialTotals,
+  calculateOtherItemTotals,
   aggregateRestoredArtefacts,
   sortMaterialRows,
   makeMaterialCell,
@@ -68,6 +70,7 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
   const summary = document.createElement("div");
   summary.className = "overview-grid";
   const materialRows = calculateMaterialTotals(visibleDetections);
+  const otherItemRows = calculateOtherItemTotals(visibleDetections);
   const storedByMaterial = new Map(storedMaterials.map((material) => [normalizeName(material.name), material.quantity]));
   const artefactQuantities = new Map(
     aggregateRestoredArtefacts(visibleDetections).map((artefact) => [normalizeName(artefact.restoredName), artefact.quantity])
@@ -84,12 +87,63 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
     return;
   }
 
+  const table = makeMaterialsTable({
+    firstColumnLabel: "Material",
+    rows: sortMaterialRows(materialRows),
+    storedByMaterial,
+    artefactQuantities,
+    references,
+    makeMaterialCell,
+    makeTextCell,
+    makeTableHead
+  });
+
+  panel.append(summary, table);
+
+  if (otherItemRows.length) {
+    const otherTitle = document.createElement("h3");
+    otherTitle.className = "section-heading";
+    otherTitle.textContent = "Other required items";
+    const otherTable = makeMaterialsTable({
+      firstColumnLabel: "Item",
+      rows: sortMaterialRows(otherItemRows),
+      storedByMaterial: new Map(),
+      artefactQuantities,
+      references,
+      makeMaterialCell: (row) => makeTextMaterialCell(row.name),
+      makeTextCell,
+      makeTableHead
+    });
+    otherTable.classList.add("other-items-table");
+    panel.append(otherTitle, otherTable);
+  }
+}
+
+function makeMaterialsTable({
+  firstColumnLabel,
+  rows,
+  storedByMaterial,
+  artefactQuantities,
+  references,
+  makeMaterialCell,
+  makeTextCell,
+  makeTableHead
+}: {
+  readonly firstColumnLabel: string;
+  readonly rows: readonly MaterialRow[];
+  readonly storedByMaterial: ReadonlyMap<string, number>;
+  readonly artefactQuantities: ReadonlyMap<string, number>;
+  readonly references: readonly MaterialsTabReference[];
+  readonly makeMaterialCell: (row: Pick<MaterialRow, "name">) => HTMLTableCellElement;
+  readonly makeTextCell: (value: string | number, className?: string) => HTMLTableCellElement;
+  readonly makeTableHead: (labels: readonly string[]) => HTMLTableSectionElement;
+}): HTMLTableElement {
   const table = document.createElement("table");
   table.className = "secondary-table materials-table";
-  table.append(makeTableHead(["Material", "In storage", "Total", "To buy", "Used by artefacts"]));
+  table.append(makeTableHead([firstColumnLabel, "In storage", "Total", "To buy", "Used by artefacts"]));
   const body = document.createElement("tbody");
 
-  for (const row of sortMaterialRows(materialRows)) {
+  for (const row of rows) {
     const tr = document.createElement("tr");
     const inStorage = storedByMaterial.get(normalizeName(row.name)) ?? 0;
     const toBuy = Math.max(0, row.quantity - inStorage);
@@ -104,7 +158,14 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
   }
 
   table.append(body);
-  panel.append(summary, table);
+  return table;
+}
+
+function makeTextMaterialCell(name: string): HTMLTableCellElement {
+  const cell = document.createElement("td");
+  cell.className = "material-cell";
+  cell.textContent = name;
+  return cell;
 }
 
 function makeUsedByArtefactsCell(
