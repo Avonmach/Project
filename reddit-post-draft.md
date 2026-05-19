@@ -19,6 +19,7 @@ The tool is meant to make Archaeology planning easier. You can upload screenshot
 - which artefacts are still missing
 - which materials are still needed for restorations
 - material totals from your storage screenshots
+- which collections you want to work on next, including what you still need to complete them
 
 One problem I wanted to solve is that Archaeology artefacts can come from several random sources, not only normal excavation. You can get random artefacts from expeditions, tetracompasses, and Archaeology professors, so it can become annoying to manually keep track of what you have and what collections you can complete. This tool is intended to give a clearer overview.
 
