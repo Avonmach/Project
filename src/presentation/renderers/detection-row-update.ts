@@ -40,7 +40,7 @@ export function updateDetectionRow<TDetection extends UpdatableDetection>({
 
   detection.referencePreview.classList.remove("review-border");
   const input = elements.quantityCell?.querySelector(".qty-input");
-  if (input) input.classList.remove("quantity-warning-input");
+  if (input) input.classList.remove("quantity-warning-input", "quantity-close-input");
   elements.referenceCell.replaceChildren(makeReferenceCorrectionDropdown(detection));
   elements.nameCell.replaceChildren();
   if (elements.row) {

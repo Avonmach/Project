@@ -175,6 +175,32 @@ test("fallback eight matches the detected sample grid", () => {
   ]);
 });
 
+test("fallback six matches the detected sample grid", () => {
+  assert.deepEqual(FALLBACK_DIGIT_TEMPLATES[6], [
+    "00110",
+    "01001",
+    "10000",
+    "10110",
+    "11001",
+    "10001",
+    "10001",
+    "01110"
+  ]);
+});
+
+test("fallback three matches the detected sample grid", () => {
+  assert.deepEqual(FALLBACK_DIGIT_TEMPLATES[3], [
+    "0110",
+    "1001",
+    "0001",
+    "0110",
+    "0001",
+    "0001",
+    "1001",
+    "0110"
+  ]);
+});
+
 function pixelsFromMask(rows: readonly string[]): Array<{ x: number; y: number }> {
   return rows.flatMap((row, y) =>
     [...row].flatMap((value, x) => (value === "#" ? [{ x, y }] : []))

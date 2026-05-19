@@ -655,7 +655,7 @@ function makeQuantityDebugView(detection: AppDetection): HTMLElement {
 
 function markQuantityManual(quantityCell: HTMLTableCellElement): void {
   const input = quantityCell.querySelector(".qty-input");
-  if (input) input.classList.remove("quantity-warning-input");
+  if (input) input.classList.remove("quantity-warning-input", "quantity-close-input");
   const row = quantityCell.closest("tr");
   const detection = detections.find((item) => item.rowElements?.quantityCell === quantityCell);
   if (row && detection) {
@@ -829,7 +829,7 @@ function applyStorageQuantityChange(detection: StorageDetection, quantity: numbe
 
 function markStorageQuantityManual(detection: StorageDetection, quantityCell: HTMLTableCellElement): void {
   const input = quantityCell.querySelector(".qty-input");
-  if (input) input.classList.remove("quantity-warning-input");
+  if (input) input.classList.remove("quantity-warning-input", "quantity-close-input");
   if (detection.rowElements?.row) detection.rowElements.row.className = storageRowReviewClass(detection);
   if (detection.rowElements?.statusCell) {
     detection.rowElements.statusCell.replaceChildren(makeDetectionStatusPill(detection, storageQuantityNeedsReview(detection)));

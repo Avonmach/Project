@@ -120,7 +120,7 @@ export function makeDetectionTableRow<TDetection extends DetectionRowModel>({
 
   input.className = "qty-input";
   if (quantityWarning) input.classList.add("quantity-warning-input");
-  if (quantityCandidatesAreClose(detection)) input.classList.add("quantity-close-input");
+  if (quantityWarning && quantityCandidatesAreClose(detection)) input.classList.add("quantity-close-input");
   input.type = "text";
   input.inputMode = "numeric";
   input.value = String(detection.quantity);
