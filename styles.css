@@ -499,7 +499,7 @@ input[type="search"] {
 .collection-artefacts {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
+  gap: 9px;
   max-width: 100%;
   min-width: 0;
 }
@@ -510,48 +510,30 @@ input[type="search"] {
   border: 1px solid var(--line);
   border-radius: 6px;
   display: inline-flex;
-  height: 42px;
+  height: 56px;
   justify-content: center;
   position: relative;
-  width: 42px;
+  width: 56px;
 }
 
 .collection-artefact img {
-  height: 32px;
+  height: 42px;
   image-rendering: auto;
-  width: 32px;
-}
-
-.collection-artefact-stack {
-  flex-direction: column;
-  height: 72px;
-  overflow: hidden;
   width: 42px;
 }
 
-.collection-artefact-stack .collection-artefact-variant {
-  align-items: center;
+.collection-artefact-stack {
   display: inline-flex;
-  flex: 1 1 0;
-  justify-content: center;
-  width: 100%;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.collection-artefact-stack .collection-artefact-variant.restored {
-  background: var(--surface-soft);
-}
-
-.collection-artefact-stack .collection-artefact-variant.damaged {
+.collection-artefact.damaged {
   background: #9f8b6f;
-  border-top: 1px solid rgba(67, 49, 30, 0.28);
+  border-color: #806b52;
 }
 
-.collection-artefact-stack .collection-artefact-variant img {
-  height: 28px;
-  width: 28px;
-}
-
-.collection-artefact-stack .collection-artefact-variant.damaged img {
+.collection-artefact.damaged img {
   filter: brightness(0.72) saturate(0.84);
 }
 

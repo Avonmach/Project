@@ -210,15 +210,26 @@ function makeCollectionArtefactIcon(
   references: readonly CollectionReference[]
 ): HTMLSpanElement {
   const reference = references.find((item) => normalizeName(item.restoredName || item.name) === normalizeName(artefact));
+  const stack = document.createElement("span");
+  stack.className = "collection-artefact-stack";
+  stack.append(
+    makeCollectionArtefactTile(reference?.icon, artefact, quantity, "collection-artefact restored"),
+    makeCollectionArtefactTile(reference?.damagedIcon, artefact, quantity, "collection-artefact damaged")
+  );
+  return stack;
+}
+
+function makeCollectionArtefactTile(
+  icon: string | null | undefined,
+  artefact: string,
+  quantity: number,
+  className: string
+): HTMLSpanElement {
   const tile = document.createElement("span");
-  tile.className = "collection-artefact collection-artefact-stack";
+  tile.className = className;
   if (!quantity) tile.classList.add("is-missing");
   tile.title = quantity ? `${artefact}: ${quantity}` : `${artefact}: missing`;
-  tile.append(
-    makeCollectionArtefactVariant(reference?.icon, artefact, "collection-artefact-variant restored"),
-    makeCollectionArtefactVariant(reference?.damagedIcon, artefact, "collection-artefact-variant damaged")
-  );
-
+  appendCollectionArtefactImage(tile, icon, artefact);
   const badge = document.createElement("span");
   badge.className = "collection-artefact-count";
   badge.textContent = String(quantity);
@@ -226,20 +237,17 @@ function makeCollectionArtefactIcon(
   return tile;
 }
 
-function makeCollectionArtefactVariant(icon: string | null | undefined, artefact: string, className: string): HTMLSpanElement {
-  const variant = document.createElement("span");
-  variant.className = className;
+function appendCollectionArtefactImage(tile: HTMLSpanElement, icon: string | null | undefined, artefact: string): void {
   if (icon) {
     const image = document.createElement("img");
     image.src = `data/${icon}`;
     image.alt = artefact;
     image.loading = "lazy";
-    variant.append(image);
+    tile.append(image);
   } else {
     const fallback = document.createElement("span");
     fallback.className = "collection-artefact-fallback";
     fallback.textContent = artefact.slice(0, 2).toUpperCase();
-    variant.append(fallback);
+    tile.append(fallback);
   }
-  return variant;
 }
