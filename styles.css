@@ -908,11 +908,11 @@ td:nth-child(9),
 .storage-results-table {
   max-width: 100%;
   min-width: 700px;
-  width: auto;
+  width: 100%;
 }
 
 .storage-results-table th:nth-child(1) {
-  width: 240px;
+  width: auto;
 }
 
 .storage-results-table th:nth-child(2) {
@@ -937,6 +937,11 @@ td:nth-child(9),
   white-space: nowrap;
 }
 
+.storage-results-table th:nth-child(2),
+.storage-results-table th:nth-child(3),
+.storage-results-table th:nth-child(4),
+.storage-results-table th:nth-child(5),
+.storage-results-table th:nth-child(6),
 .storage-results-table td:nth-child(2),
 .storage-results-table td:nth-child(3),
 .storage-results-table td:nth-child(4),

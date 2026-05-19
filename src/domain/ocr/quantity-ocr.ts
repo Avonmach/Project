@@ -144,7 +144,8 @@ export function detectQuantity(
 }
 
 export function isQuantityPixel(r: number, g: number, b: number): boolean {
-  return r > 125 && g > 105 && b < 85 && r >= g - 20;
+  const brightness = (r + g) / 2;
+  return r >= 175 && g >= 150 && b <= 90 && r >= g - 20 && r <= g + 80 && brightness - b >= 95;
 }
 
 export function quantityCandidatesAreClose(detection: { quantityAlternatives?: readonly QuantityAlternative[] }): boolean {
