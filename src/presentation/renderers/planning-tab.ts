@@ -95,12 +95,13 @@ function makePlanningCollectionCard({
     const row = calculatePlannedArtefact(artefact, count, restoredArtefacts, damagedArtefacts);
     artefacts.append(makePlanningArtefactRow(row, references));
     if (row.missing > 0) missing.push(makeMissingArtefact(row, references));
-    restorationExperience += (recipeByRestoredName.get(normalizeName(artefact))?.experience || 0) * row.damagedUsed;
+    restorationExperience += (recipeByRestoredName.get(normalizeName(artefact))?.experience || 0) * count;
   }
   const rewards = makeCollectionRewards(collection, count, restorationExperience);
 
-  card.append(heading, artefacts, rewards);
+  card.append(heading, artefacts);
   if (missing.length) card.append(makeMissingList(missing));
+  card.append(rewards);
   return card;
 }
 
@@ -118,11 +119,9 @@ function makeCollectionRewards(collection: ArchaeologyCollection, count: number,
   if (collection.recurringReward && repeatCount > 0) {
     rewardParts.push(`Repeat x${repeatCount}: ${collection.recurringReward}`);
   }
-  if (restorationExperience) rewardParts.push(`Restore XP: ${formatNumber(restorationExperience)}`);
+  rewardParts.push(`Restore XP: ${formatNumber(restorationExperience)}`);
   if (rexExperience) rewardParts.push(`Rex XP: ${formatNumber(rexExperience)}`);
-  if (restorationExperience || rexExperience) {
-    rewardParts.push(`Total XP: ${formatNumber(restorationExperience + rexExperience)}`);
-  }
+  rewardParts.push(`Total XP: ${formatNumber(restorationExperience + rexExperience)}`);
   rewards.textContent = rewardParts.length ? `Reward: ${rewardParts.join(" | ")}` : "Reward: none listed";
   return rewards;
 }
