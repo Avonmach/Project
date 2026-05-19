@@ -58,7 +58,7 @@ function connectExamplePreviewPositioning(): void {
     if (!popover.open) return;
     const rect = button.getBoundingClientRect();
     popover.style.setProperty("--example-preview-left", `${Math.round(rect.right + 12)}px`);
-    popover.style.setProperty("--example-preview-top", `${Math.round(rect.top)}px`);
+    popover.style.setProperty("--example-preview-top", "12px");
   };
 
   popover.addEventListener("toggle", () => {
