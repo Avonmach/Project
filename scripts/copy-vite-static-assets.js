@@ -8,6 +8,7 @@ const requiredPaths = [
   "data",
   "runescape-small-07",
   "Damaged_Items.png",
+  "Reference_Screenshot/Damaged_Artefacts.png",
   "Items#.png"
 ];
 

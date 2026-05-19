@@ -155,6 +155,11 @@ const loadedImagesByTab: Record<ScreenshotTab, HTMLImageElement | null> = {
   restored: null,
   storage: null
 };
+const exampleImagesByTab: Record<ScreenshotTab, boolean> = {
+  damaged: false,
+  restored: false,
+  storage: false
+};
 let storageImages: HTMLImageElement[] = [];
 let storageAnalysisDone = false;
 let storageGridDetections: StorageGridDetection[] = [];
@@ -193,7 +198,7 @@ async function initialize() {
   digitTemplates = await loadQuantityFontTemplatesFromBrowser();
   await loadReferences();
   await loadArchaeologyReference();
-  await loadImageFromUrl(DEFAULT_SCREENSHOTS.damaged, "damaged");
+  await loadImageFromUrl(DEFAULT_SCREENSHOTS.damaged, "damaged", { example: true });
   await loadStorageImagesFromUrls(DEFAULT_SCREENSHOTS.storage);
   analyzeButton.disabled = false;
   drawEmptyState(STATUS_MESSAGES.readyToAnalyze);
@@ -217,16 +222,22 @@ async function loadArchaeologyReference() {
   }
 }
 
-async function loadImageFromUrl(src: string, tab: ScreenshotTab = currentScreenshotTab() || "damaged") {
+async function loadImageFromUrl(
+  src: string,
+  tab: ScreenshotTab = currentScreenshotTab() || "damaged",
+  options: { readonly example?: boolean } = {}
+) {
   if (tab === "storage") {
     await loadStorageImagesFromUrls([src]);
     return;
   }
   try {
     loadedImagesByTab[tab] = await loadImageToCanvas(src, canvas, ctx);
+    exampleImagesByTab[tab] = Boolean(options.example);
     canvas.classList.remove("is-empty");
     if (currentScreenshotTab() === tab) {
       loadedImage = loadedImagesByTab[tab];
+      updateScreenshotTitle(tab);
     } else {
       restoreActiveScreenshotToCanvas();
     }
@@ -456,13 +467,18 @@ function updateScreenshotPanel(): void {
     return;
   }
 
-  screenshotTitle.textContent = {
+  updateScreenshotTitle(tab);
+  imageInput.multiple = tab === "storage";
+  restoreActiveScreenshotToCanvas();
+}
+
+function updateScreenshotTitle(tab: ScreenshotTab): void {
+  const title = {
     damaged: "Damaged artefact screenshot",
     restored: "Restored artefact screenshot",
     storage: "Storage screenshots"
   }[tab];
-  imageInput.multiple = tab === "storage";
-  restoreActiveScreenshotToCanvas();
+  screenshotTitle.textContent = exampleImagesByTab[tab] ? `${title} (Example)` : title;
 }
 
 function restoreActiveScreenshotToCanvas(): void {
