@@ -5,6 +5,7 @@ import type { PreparedMaterialReference } from "../../application/load-reference
 export interface StorageMatchCandidate {
   readonly item: PreparedMaterialReference;
   readonly score?: number;
+  readonly overlapScore?: number;
   readonly shapeScore?: number;
   readonly colorScore?: number;
 }
@@ -34,6 +35,7 @@ export interface StorageDetection {
     readonly source: string;
   } | null;
   matchScore?: number | null;
+  overlapScore?: number | null;
   shapeScore?: number | null;
   colorScore?: number | null;
   matchGap?: number | null;

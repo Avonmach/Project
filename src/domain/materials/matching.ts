@@ -20,6 +20,7 @@ export interface MaterialMatchReference {
 export interface MaterialMatchCandidate<TReference extends MaterialMatchReference> {
   readonly item: TReference;
   readonly score: number;
+  readonly overlapScore: number;
   readonly shapeScore: number;
   readonly colorScore: number;
 }
@@ -43,13 +44,14 @@ export function matchMaterial<TReference extends MaterialMatchReference>(
       return {
         item,
         score: shape.total * 0.72 + colorScore * 0.28,
+        overlapScore: shape.overlap ?? 0,
         shapeScore: shape.total,
         colorScore
       };
     })
     .sort((a, b) => b.score - a.score);
 
-  const best = candidates[0] ?? { item: fallback, score: 0, shapeScore: 0, colorScore: 0 };
+  const best = candidates[0] ?? { item: fallback, score: 0, overlapScore: 0, shapeScore: 0, colorScore: 0 };
   return { ...best, candidates };
 }
 

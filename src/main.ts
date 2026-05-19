@@ -788,17 +788,19 @@ function makeStorageDetections(
         quantityAlternatives: item.quantityAlternatives,
         quantityDebug: attachQuantityDebugSource(item.quantityDebug || null, frame.imageData),
         matchScore: item.matchScore,
+        overlapScore: item.overlapScore,
         shapeScore: item.shapeScore,
         colorScore: item.colorScore,
         matchGap: item.matchGap,
         ambiguousMatch: storageMatchNeedsReview(item),
-        topMatches: (item.topMatches || []).flatMap((candidate) => {
+        topMatches: (item.topMatches || []).slice(0, 5).flatMap((candidate) => {
           const candidateReference = referenceByName.get(candidate.name);
           return candidateReference
             ? [
                 {
                   item: candidateReference,
                   score: candidate.score,
+                  overlapScore: candidate.overlapScore,
                   shapeScore: candidate.shapeScore,
                   colorScore: candidate.colorScore
                 }
@@ -813,10 +815,9 @@ function makeStorageDetections(
   });
 }
 
-function storageMatchNeedsReview(detection: Pick<StorageGridDetection, "matchScore" | "matchGap" | "materialName">): boolean {
+function storageMatchNeedsReview(detection: Pick<StorageGridDetection, "matchGap" | "materialName">): boolean {
   if (!detection.materialName) return true;
-  if ((detection.matchScore ?? 0) < 0.55) return true;
-  return detection.matchGap !== null && detection.matchGap !== undefined && detection.matchGap <= AMBIGUOUS_FINAL_MARGIN;
+  return detection.matchGap !== null && detection.matchGap !== undefined && detection.matchGap <= 0.03;
 }
 
 function storageQuantityNeedsReview(detection: StorageDetection): boolean {

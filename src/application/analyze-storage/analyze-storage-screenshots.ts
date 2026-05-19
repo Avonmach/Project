@@ -17,6 +17,7 @@ export interface StorageGridDetection {
   readonly materialName?: string;
   readonly wikiPage?: string | null;
   readonly matchScore?: number;
+  readonly overlapScore?: number;
   readonly shapeScore?: number;
   readonly colorScore?: number;
   readonly matchGap?: number | null;
@@ -65,6 +66,7 @@ export function analyzeStorageScreenshots({
                 materialName: material.name,
                 wikiPage: material.wikiPage,
                 matchScore: material.score,
+                ...(material.overlapScore !== undefined ? { overlapScore: material.overlapScore } : {}),
                 ...(material.shapeScore !== undefined ? { shapeScore: material.shapeScore } : {}),
                 ...(material.colorScore !== undefined ? { colorScore: material.colorScore } : {}),
                 ...(secondMatch ? { matchGap: material.score - secondMatch.score } : {}),
