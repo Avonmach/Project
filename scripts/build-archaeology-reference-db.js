@@ -5,12 +5,14 @@ const path = require("path");
 const API = "https://runescape.wiki/api.php";
 const OUT_DIR = path.join(__dirname, "..", "data");
 const MATERIAL_ICON_DIR = path.join(OUT_DIR, "material-icons");
+const OTHER_ITEM_ICON_DIR = path.join(OUT_DIR, "other-item-icons");
 const DAMAGED_DB_FILE = path.join(OUT_DIR, "damaged-artifacts.json");
 const OUT_FILE = path.join(OUT_DIR, "archaeology-reference.json");
 const USER_AGENT = "ArcheologyImageRecognition/0.1 (local personal project)";
 
 async function main() {
   await fs.mkdir(MATERIAL_ICON_DIR, { recursive: true });
+  await fs.mkdir(OTHER_ITEM_ICON_DIR, { recursive: true });
 
   const damagedDb = JSON.parse(await fs.readFile(DAMAGED_DB_FILE, "utf8"));
   const materialPages = await getCategoryPages("Category:Archaeology materials");
@@ -18,6 +20,7 @@ async function main() {
   const materials = await buildMaterials(materialPages);
   const materialNames = new Set(materials.map((material) => normalizeName(material.name)));
   const recipes = await buildArtefactRecipes(damagedDb.items, materialNames);
+  const otherItems = await buildOtherItems(recipes);
   const collections = await buildCollections(collectionPages);
 
   await fs.writeFile(
@@ -28,10 +31,12 @@ async function main() {
         generatedAt: new Date().toISOString(),
         counts: {
           materials: materials.length,
+          otherItems: otherItems.length,
           artefactRecipes: recipes.length,
           collections: collections.length
         },
         materials,
+        otherItems,
         artefactRecipes: recipes,
         collections
       },
@@ -42,7 +47,7 @@ async function main() {
   );
 
   console.log(
-    `Wrote ${materials.length} materials, ${recipes.length} recipes, and ${collections.length} collections to ${path.relative(
+    `Wrote ${materials.length} materials, ${otherItems.length} other items, ${recipes.length} recipes, and ${collections.length} collections to ${path.relative(
       process.cwd(),
       OUT_FILE
     )}`
@@ -92,6 +97,32 @@ async function buildArtefactRecipes(items, materialNames) {
     });
   }
   return records.sort((a, b) => a.restoredName.localeCompare(b.restoredName));
+}
+
+async function buildOtherItems(recipes) {
+  const names = [
+    ...new Set(recipes.flatMap((recipe) => recipe.otherItems || []).map((item) => item.name).filter(Boolean))
+  ].sort((a, b) => a.localeCompare(b));
+  const info = await getPageInfo(names);
+  const records = [];
+
+  for (const name of names) {
+    const pageInfo = info.get(name);
+    const slug = slugify(name);
+    const iconSource = (await getDirectFileIconSource(name)) || pageInfo?.thumbnail?.source;
+    const icon = iconSource ? `other-item-icons/${slug}.png` : null;
+    if (iconSource) await download(iconSource, path.join(OTHER_ITEM_ICON_DIR, `${slug}.png`));
+
+    records.push({
+      name,
+      wikiPage: pageInfo?.fullurl || wikiUrl(name),
+      icon,
+      sourceIcon: iconSource || null,
+      pageId: pageInfo?.pageid || null
+    });
+  }
+
+  return records;
 }
 
 async function buildCollections(pages) {

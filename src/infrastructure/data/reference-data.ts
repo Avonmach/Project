@@ -18,6 +18,13 @@ export interface ArchaeologyMaterialRecord {
   readonly [key: string]: unknown;
 }
 
+export interface ArchaeologyOtherItemRecord {
+  readonly name: string;
+  readonly icon?: string | null;
+  readonly wikiPage?: string | null;
+  readonly [key: string]: unknown;
+}
+
 export interface ArchaeologyArtefactRecipeRecord {
   readonly restoredName: string;
   readonly materials?: readonly { readonly name: string; readonly quantity: number }[];
@@ -37,6 +44,7 @@ export interface ArchaeologyCollectionRecord {
 
 export interface ArchaeologyReferenceData {
   readonly materials: readonly ArchaeologyMaterialRecord[];
+  readonly otherItems: readonly ArchaeologyOtherItemRecord[];
   readonly artefactRecipes: readonly ArchaeologyArtefactRecipeRecord[];
   readonly collections: readonly ArchaeologyCollectionRecord[];
 }
@@ -57,7 +65,7 @@ export async function loadArchaeologyReferenceData(path = ARCHAEOLOGY_REFERENCE_
 }
 
 export function emptyArchaeologyReferenceData(): ArchaeologyReferenceData {
-  return { materials: [], artefactRecipes: [], collections: [] };
+  return { materials: [], otherItems: [], artefactRecipes: [], collections: [] };
 }
 
 function parseDamagedArtifactsDatabase(value: unknown, path: string): DamagedArtifactsDatabase {
@@ -73,12 +81,13 @@ function filterRecords<TRecord>(values: readonly unknown[], guard: RecordGuard<T
 
 function parseArchaeologyReferenceData(value: unknown, path: string): ArchaeologyReferenceData {
   if (!isRecord(value)) throw new Error(`Invalid archaeology reference data: ${path}`);
-  const { materials, artefactRecipes, collections } = value;
+  const { materials, otherItems, artefactRecipes, collections } = value;
   if (!Array.isArray(materials) || !Array.isArray(artefactRecipes) || !Array.isArray(collections)) {
     throw new Error(`Invalid archaeology reference data: ${path}`);
   }
   return {
     materials: filterRecords(materials, isArchaeologyMaterialRecord),
+    otherItems: Array.isArray(otherItems) ? filterRecords(otherItems, isArchaeologyOtherItemRecord) : [],
     artefactRecipes: filterRecords(artefactRecipes, isArchaeologyArtefactRecipeRecord),
     collections: filterRecords(collections, isArchaeologyCollectionRecord)
   };
@@ -100,6 +109,14 @@ function isDamagedArtifactReferenceRecord(value: unknown): value is DamagedArtif
 }
 
 function isArchaeologyMaterialRecord(value: unknown): value is ArchaeologyMaterialRecord {
+  return isNamedIconReference(value);
+}
+
+function isArchaeologyOtherItemRecord(value: unknown): value is ArchaeologyOtherItemRecord {
+  return isNamedIconReference(value);
+}
+
+function isNamedIconReference(value: unknown): value is ArchaeologyMaterialRecord {
   return (
     isRecord(value) &&
     typeof value.name === "string" &&

@@ -622,6 +622,30 @@ input[type="search"] {
   width: auto;
 }
 
+.editable-storage-cell {
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+
+.storage-quantity-input {
+  background: #0f1513;
+  border: 1px solid #52635c;
+  border-radius: 4px;
+  color: #f0f4ed;
+  font: inherit;
+  font-weight: 800;
+  max-width: 96px;
+  padding: 5px 7px;
+  text-align: center;
+  width: 100%;
+}
+
+.storage-quantity-input:focus {
+  border-color: #d1ab5f;
+  box-shadow: 0 0 0 2px rgba(209, 171, 95, 0.22);
+  outline: none;
+}
+
 .materials-table th:nth-child(3),
 .materials-table th:nth-child(4),
 .materials-table td:nth-child(3),

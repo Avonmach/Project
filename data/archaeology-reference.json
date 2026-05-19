@@ -1,8 +1,9 @@
 {
   "source": "https://runescape.wiki/",
-  "generatedAt": "2026-05-19T13:38:22.668Z",
+  "generatedAt": "2026-05-19T14:46:40.598Z",
   "counts": {
     "materials": 43,
+    "otherItems": 17,
     "artefactRecipes": 218,
     "collections": 74
   },
@@ -307,6 +308,127 @@
       "icon": "material-icons/zarosian-insignia.png",
       "sourceIcon": "https://runescape.wiki/images/Zarosian_insignia.png?b0543",
       "pageId": 752647
+    }
+  ],
+  "otherItems": [
+    {
+      "name": "Black mushroom ink",
+      "wikiPage": "https://runescape.wiki/w/Black_mushroom_ink",
+      "icon": "other-item-icons/black-mushroom-ink.png",
+      "sourceIcon": "https://runescape.wiki/images/Black_mushroom_ink.png?24982",
+      "pageId": 30000
+    },
+    {
+      "name": "Bronze bar",
+      "wikiPage": "https://runescape.wiki/w/Bronze_bar",
+      "icon": "other-item-icons/bronze-bar.png",
+      "sourceIcon": "https://runescape.wiki/images/Bronze_bar.png?b167f",
+      "pageId": 688762
+    },
+    {
+      "name": "Clockwork",
+      "wikiPage": "https://runescape.wiki/w/Clockwork",
+      "icon": "other-item-icons/clockwork.png",
+      "sourceIcon": "https://runescape.wiki/images/Clockwork.png?4193d",
+      "pageId": 25651
+    },
+    {
+      "name": "Death rune",
+      "wikiPage": "https://runescape.wiki/w/Death_rune",
+      "icon": "other-item-icons/death-rune.png",
+      "sourceIcon": "https://runescape.wiki/images/Death_rune.png?4080e",
+      "pageId": 320
+    },
+    {
+      "name": "Diamond",
+      "wikiPage": "https://runescape.wiki/w/Diamond",
+      "icon": "other-item-icons/diamond.png",
+      "sourceIcon": "https://runescape.wiki/images/Diamond.png?144b7",
+      "pageId": 2953
+    },
+    {
+      "name": "Draconic energy",
+      "wikiPage": "https://runescape.wiki/w/Draconic_energy",
+      "icon": "other-item-icons/draconic-energy.png",
+      "sourceIcon": "https://runescape.wiki/images/Draconic_energy.png?74483",
+      "pageId": 632637
+    },
+    {
+      "name": "Dragonstone",
+      "wikiPage": "https://runescape.wiki/w/Dragonstone",
+      "icon": "other-item-icons/dragonstone.png",
+      "sourceIcon": "https://runescape.wiki/images/Dragonstone.png?226fc",
+      "pageId": 3228
+    },
+    {
+      "name": "Emerald",
+      "wikiPage": "https://runescape.wiki/w/Emerald",
+      "icon": "other-item-icons/emerald.png",
+      "sourceIcon": "https://runescape.wiki/images/Emerald.png?c80a8",
+      "pageId": 431
+    },
+    {
+      "name": "Molten glass",
+      "wikiPage": "https://runescape.wiki/w/Molten_glass",
+      "icon": "other-item-icons/molten-glass.png",
+      "sourceIcon": "https://runescape.wiki/images/Molten_glass.png?0f40b",
+      "pageId": 7102
+    },
+    {
+      "name": "Phoenix feather",
+      "wikiPage": "https://runescape.wiki/w/Phoenix_feather",
+      "icon": "other-item-icons/phoenix-feather.png",
+      "sourceIcon": "https://runescape.wiki/images/Phoenix_feather.png?39886",
+      "pageId": 31789
+    },
+    {
+      "name": "Rope",
+      "wikiPage": "https://runescape.wiki/w/Rope",
+      "icon": "other-item-icons/rope.png",
+      "sourceIcon": "https://runescape.wiki/images/Rope.png?a725f",
+      "pageId": 7226
+    },
+    {
+      "name": "Ruby",
+      "wikiPage": "https://runescape.wiki/w/Ruby",
+      "icon": "other-item-icons/ruby.png",
+      "sourceIcon": "https://runescape.wiki/images/Ruby.png?bea68",
+      "pageId": 2952
+    },
+    {
+      "name": "Sapphire",
+      "wikiPage": "https://runescape.wiki/w/Sapphire",
+      "icon": "other-item-icons/sapphire.png",
+      "sourceIcon": "https://runescape.wiki/images/Sapphire.png?d6725",
+      "pageId": 238
+    },
+    {
+      "name": "Silver bar",
+      "wikiPage": "https://runescape.wiki/w/Silver_bar",
+      "icon": "other-item-icons/silver-bar.png",
+      "sourceIcon": "https://runescape.wiki/images/Silver_bar.png?f4b17",
+      "pageId": 342
+    },
+    {
+      "name": "Softened fungal shafts",
+      "wikiPage": "https://runescape.wiki/w/Softened_fungal_shafts",
+      "icon": "other-item-icons/softened-fungal-shafts.png",
+      "sourceIcon": "https://runescape.wiki/images/Softened_fungal_shafts.png?3d8a1",
+      "pageId": 1003902
+    },
+    {
+      "name": "Weapon poison (3)",
+      "wikiPage": "https://runescape.wiki/w/Weapon_poison_(3)",
+      "icon": "other-item-icons/weapon-poison-3.png",
+      "sourceIcon": "https://runescape.wiki/images/Weapon_poison_%283%29.png?88c84",
+      "pageId": 438325
+    },
+    {
+      "name": "White candle",
+      "wikiPage": "https://runescape.wiki/w/White_candle",
+      "icon": "other-item-icons/white-candle.png",
+      "sourceIcon": "https://runescape.wiki/images/White_candle.png?4559a",
+      "pageId": 9597
     }
   ],
   "artefactRecipes": [

@@ -9,6 +9,7 @@ import {
 test("createArchaeologyReferenceIndexes normalizes recipe and material lookup keys", () => {
   const indexes = createArchaeologyReferenceIndexes({
     materials: [{ name: "Third Age Iron" }, { name: "Zarosian insignia" }],
+    otherItems: [{ name: "Death rune", icon: "other-item-icons/death-rune.png" }],
     artefactRecipes: [
       { restoredName: "Restored Vase", materials: [{ name: "Third Age Iron", quantity: 8 }] },
       { restoredName: "Restored token" }
@@ -18,6 +19,7 @@ test("createArchaeologyReferenceIndexes normalizes recipe and material lookup ke
 
   assert.equal(indexes.recipeByRestoredName.get("restored vase")?.restoredName, "Restored Vase");
   assert.equal(indexes.materialByName.get("third age iron")?.name, "Third Age Iron");
+  assert.equal(indexes.materialByName.get("death rune")?.icon, "other-item-icons/death-rune.png");
 });
 
 test("emptyArchaeologyReferenceIndexes returns empty lookup maps", () => {

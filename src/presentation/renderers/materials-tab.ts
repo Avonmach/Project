@@ -37,6 +37,8 @@ export interface MaterialsTabRendererOptions<TDetection extends MaterialsTabDete
   readonly calculateOtherItemTotals: (items: readonly TDetection[]) => readonly MaterialRow[];
   readonly aggregateRestoredArtefacts: (items: readonly TDetection[]) => readonly RestoredArtefactSummaryRow[];
   readonly sortMaterialRows: (rows: readonly MaterialRow[]) => readonly MaterialRow[];
+  readonly storedOtherItems: ReadonlyMap<string, number>;
+  readonly onOtherItemStorageChange: (name: string, quantity: number) => void;
   readonly makeMaterialCell: (row: Pick<MaterialRow, "name">) => HTMLTableCellElement;
   readonly makeTextCell: (value: string | number, className?: string) => HTMLTableCellElement;
   readonly makeTableHead: (labels: readonly string[]) => HTMLTableSectionElement;
@@ -55,6 +57,8 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
   calculateOtherItemTotals,
   aggregateRestoredArtefacts,
   sortMaterialRows,
+  storedOtherItems,
+  onOtherItemStorageChange,
   makeMaterialCell,
   makeTextCell,
   makeTableHead,
@@ -107,10 +111,12 @@ export function renderMaterialsTab<TDetection extends MaterialsTabDetection>({
     const otherTable = makeMaterialsTable({
       firstColumnLabel: "Item",
       rows: sortMaterialRows(otherItemRows),
-      storedByMaterial: new Map(),
+      storedByMaterial: storedOtherItems,
       artefactQuantities,
       references,
-      makeMaterialCell: (row) => makeTextMaterialCell(row.name),
+      makeMaterialCell,
+      makeStorageCell: (row, toBuyCell) =>
+        makeEditableStorageCell(row, storedOtherItems.get(normalizeName(row.name)) ?? 0, toBuyCell, onOtherItemStorageChange),
       makeTextCell,
       makeTableHead
     });
@@ -126,6 +132,7 @@ function makeMaterialsTable({
   artefactQuantities,
   references,
   makeMaterialCell,
+  makeStorageCell,
   makeTextCell,
   makeTableHead
 }: {
@@ -135,6 +142,7 @@ function makeMaterialsTable({
   readonly artefactQuantities: ReadonlyMap<string, number>;
   readonly references: readonly MaterialsTabReference[];
   readonly makeMaterialCell: (row: Pick<MaterialRow, "name">) => HTMLTableCellElement;
+  readonly makeStorageCell?: (row: MaterialRow, toBuyCell: HTMLTableCellElement) => HTMLTableCellElement;
   readonly makeTextCell: (value: string | number, className?: string) => HTMLTableCellElement;
   readonly makeTableHead: (labels: readonly string[]) => HTMLTableSectionElement;
 }): HTMLTableElement {
@@ -147,11 +155,12 @@ function makeMaterialsTable({
     const tr = document.createElement("tr");
     const inStorage = storedByMaterial.get(normalizeName(row.name)) ?? 0;
     const toBuy = Math.max(0, row.quantity - inStorage);
+    const toBuyCell = makeTextCell(toBuy, "number-cell");
     tr.append(
       makeMaterialCell(row),
-      makeTextCell(inStorage, "number-cell"),
+      makeStorageCell ? makeStorageCell(row, toBuyCell) : makeTextCell(inStorage, "number-cell"),
       makeTextCell(row.quantity, "number-cell"),
-      makeTextCell(toBuy, "number-cell"),
+      toBuyCell,
       makeUsedByArtefactsCell(row.artefacts, artefactQuantities, references)
     );
     body.append(tr);
@@ -161,11 +170,33 @@ function makeMaterialsTable({
   return table;
 }
 
-function makeTextMaterialCell(name: string): HTMLTableCellElement {
+function makeEditableStorageCell(
+  row: MaterialRow,
+  value: number,
+  toBuyCell: HTMLTableCellElement,
+  onChange: (name: string, quantity: number) => void
+): HTMLTableCellElement {
   const cell = document.createElement("td");
-  cell.className = "material-cell";
-  cell.textContent = name;
+  cell.className = "number-cell editable-storage-cell";
+  const input = document.createElement("input");
+  input.className = "storage-quantity-input";
+  input.type = "number";
+  input.min = "0";
+  input.step = "1";
+  input.value = String(value);
+  input.setAttribute("aria-label", `${row.name} in storage`);
+  input.addEventListener("input", () => {
+    const quantity = parseStorageQuantity(input.value);
+    onChange(row.name, quantity);
+    toBuyCell.textContent = String(Math.max(0, row.quantity - quantity));
+  });
+  cell.append(input);
   return cell;
+}
+
+function parseStorageQuantity(value: string): number {
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
 }
 
 function makeUsedByArtefactsCell(

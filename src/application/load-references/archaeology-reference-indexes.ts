@@ -9,9 +9,12 @@ export interface ArchaeologyReferenceIndexes {
 }
 
 export function createArchaeologyReferenceIndexes(reference: ArchaeologyReferenceData): ArchaeologyReferenceIndexes {
+  const otherItems = reference.otherItems || [];
   return {
     recipeByRestoredName: new Map(reference.artefactRecipes.map((recipe) => [normalizeName(recipe.restoredName), recipe])),
-    materialByName: new Map(reference.materials.map((material) => [normalizeName(material.name), material]))
+    materialByName: new Map(
+      [...reference.materials, ...otherItems].map((material) => [normalizeName(material.name), material])
+    )
   };
 }
 

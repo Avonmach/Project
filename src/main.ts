@@ -34,6 +34,7 @@ import {
 import { sortMaterialRows as sortMaterialRowsForMode } from "./application/sort-results/result-row-sorting";
 import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode } from "./domain/artefacts/matching";
 import { quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
+import { normalizeName } from "./domain/shared/format";
 import type { BoundingBox } from "./domain/shared/geometry";
 import { exportAnalysisResults } from "./infrastructure/browser/analysis-export";
 import { connectAppEvents } from "./infrastructure/browser/app-events";
@@ -164,6 +165,7 @@ let storageGridDetections: StorageGridDetection[] = [];
 let storageRecognitionFrames: StorageRecognitionFrame[] = [];
 let storageDetections: StorageDetection[] = [];
 let detectedStorageMaterials: DetectedStorageMaterial[] = [];
+let storedOtherItems = new Map<string, number>();
 let detections: AppDetection[] = [];
 let references: PreparedArtefactReference[] = [];
 let materialReferences: PreparedMaterialReference[] = [];
@@ -562,6 +564,8 @@ function renderMaterialsTab(items: readonly AppDetection[]): void {
     calculateOtherItemTotals: (detections) => calculateOtherItemTotalsForRecipes(detections, recipeByRestoredName),
     aggregateRestoredArtefacts: (detections) => aggregateRestoredArtefactsForDetections(detections, quantityNeedsReview),
     sortMaterialRows: (rows) => [...rows].sort((a, b) => a.name.localeCompare(b.name)),
+    storedOtherItems,
+    onOtherItemStorageChange: handleOtherItemStorageChange,
     makeMaterialCell,
     makeTextCell,
     makeTableHead,
@@ -609,6 +613,15 @@ function renderRestorationPlan(items: readonly AppDetection[]): void {
 
 function makeMaterialCell(row: MaterialCellRow): HTMLTableCellElement {
   return makeMaterialCellElement(row, materialByName);
+}
+
+function handleOtherItemStorageChange(name: string, quantity: number): void {
+  const key = normalizeName(name);
+  if (quantity > 0) {
+    storedOtherItems.set(key, quantity);
+  } else {
+    storedOtherItems.delete(key);
+  }
 }
 
 function sortMaterialRows(rows: readonly MaterialRow[]): readonly MaterialRow[] {
