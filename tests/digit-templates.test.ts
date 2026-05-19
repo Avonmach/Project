@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { normalizeDigit, thinDigitTemplate } from "../src/domain/ocr/digit-templates";
+import { FALLBACK_DIGIT_TEMPLATES, normalizeDigit, thinDigitTemplate } from "../src/domain/ocr/digit-templates";
 
 test("normalizeDigit keeps a one-pixel vertical stroke one cell wide", () => {
   const pixels = Array.from({ length: 8 }, (_, y) => ({ x: 2, y }));
@@ -160,6 +160,19 @@ test("thinDigitTemplate thins a thick eight into narrow loops", () => {
   assert.ok(thinned.slice(4).some((row) => row.includes("0")));
   assert.ok(thinned.slice(0, 4).join("").includes("1"));
   assert.ok(thinned.slice(4).join("").includes("1"));
+});
+
+test("fallback eight matches the detected sample grid", () => {
+  assert.deepEqual(FALLBACK_DIGIT_TEMPLATES[8], [
+    "01110",
+    "10001",
+    "10001",
+    "01110",
+    "10001",
+    "10001",
+    "10001",
+    "01110"
+  ]);
 });
 
 function pixelsFromMask(rows: readonly string[]): Array<{ x: number; y: number }> {

@@ -17,7 +17,7 @@ export const FALLBACK_DIGIT_TEMPLATES: DigitTemplateMap = {
   5: ["11111", "10000", "10000", "11110", "00001", "00001", "10001", "01110"],
   6: ["00110", "01000", "10000", "11110", "10001", "10001", "10001", "01110"],
   7: ["11111", "00001", "00010", "00010", "00100", "00100", "01000", "01000"],
-  8: ["00100", "01010", "01010", "00100", "01010", "01010", "01010", "00100"],
+  8: ["01110", "10001", "10001", "01110", "10001", "10001", "10001", "01110"],
   9: ["01110", "10001", "10001", "10001", "01111", "00001", "00010", "00100"]
 };
 
@@ -25,7 +25,7 @@ export function buildDigitTemplatesFromFont(fontFamily: string): DigitTemplateMa
   const templates = { ...FALLBACK_DIGIT_TEMPLATES };
   for (let digit = 0; digit <= 9; digit += 1) {
     const key = String(digit) as Digit;
-    if (key === "0") continue;
+    if (key === "0" || key === "8") continue;
     templates[key] = thinDigitTemplate(renderDigitTemplate(key, fontFamily));
   }
   return templates;
