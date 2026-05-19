@@ -271,7 +271,7 @@ function quantityScanBox(box: BoundingBox, strict = false): BoundingBox {
   return {
     x: box.x,
     y: box.y,
-    w: Math.min(strict ? 24 : 26, box.w),
+    w: Math.min(strict ? 24 : 34, box.w),
     h: Math.min(17, box.h)
   };
 }

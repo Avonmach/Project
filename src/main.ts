@@ -743,7 +743,7 @@ function translateBox<TBox extends BoundingBox>(box: TBox, x: number, y: number)
 }
 
 function makeStorageDetectionTableRow(detection: StorageDetection): HTMLTableRowElement {
-  return makeDetectionTableRowElement({
+  const row = makeDetectionTableRowElement({
     detection,
     showMetadataColumns: false,
     quantityNeedsReview: storageQuantityNeedsReview,
@@ -758,6 +758,8 @@ function makeStorageDetectionTableRow(detection: StorageDetection): HTMLTableRow
     makeRecognitionInfo: makeRecognitionInfoElement,
     makeQuantityDebugView: (item) => makeQuantityDebugViewElement(item.quantityDebug)
   });
+  row.classList.add("storage-detection-row");
+  return row;
 }
 
 function makeStorageDetections(

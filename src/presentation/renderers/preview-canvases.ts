@@ -164,7 +164,7 @@ export function makeStorageProcessedCanvas(imageData: ImageData, box: BoundingBo
     const r = readImageDataChannel(crop.data, i);
     const g = readImageDataChannel(crop.data, i + 1);
     const b = readImageDataChannel(crop.data, i + 2);
-    const isBackground = backgroundColors.some((color) => colorDistance({ r, g, b }, color) <= 34);
+    const isBackground = backgroundColors.some((color) => matchesBackgroundColor({ r, g, b }, color));
     if (isBackground) continue;
     masked.data[i] = r;
     masked.data[i + 1] = g;
@@ -345,6 +345,14 @@ function dominantEdgeColors(imageData: ImageData, limit: number): PreviewRgbColo
 
 function colorDistance(first: PreviewRgbColor, second: PreviewRgbColor): number {
   return Math.hypot(first.r - second.r, first.g - second.g, first.b - second.b);
+}
+
+function channelDistance(first: PreviewRgbColor, second: PreviewRgbColor): number {
+  return Math.max(Math.abs(first.r - second.r), Math.abs(first.g - second.g), Math.abs(first.b - second.b));
+}
+
+function matchesBackgroundColor(first: PreviewRgbColor, second: PreviewRgbColor): boolean {
+  return channelDistance(first, second) <= 10 && colorDistance(first, second) <= 18;
 }
 
 function paintFingerprintMask(canvas: HTMLCanvasElement, fingerprint: readonly FingerprintPixel[]): void {

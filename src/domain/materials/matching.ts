@@ -68,7 +68,7 @@ function materialScreenshotFingerprint(imageData: ImageData, box: BoundingBox): 
     const r = readImageDataChannel(crop.data, i);
     const g = readImageDataChannel(crop.data, i + 1);
     const b = readImageDataChannel(crop.data, i + 2);
-    if (isQuantityPixel(r, g, b) || backgroundColors.some((color) => colorDistance({ r, g, b }, color) <= 34)) continue;
+    if (isQuantityPixel(r, g, b) || backgroundColors.some((color) => matchesBackgroundColor({ r, g, b }, color))) continue;
     masked.data[i] = r;
     masked.data[i + 1] = g;
     masked.data[i + 2] = b;
@@ -138,4 +138,12 @@ function dominantEdgeColors(imageData: ImageData, limit: number): MaterialRgbCol
 
 function colorDistance(first: MaterialRgbColor, second: MaterialRgbColor): number {
   return Math.hypot(first.r - second.r, first.g - second.g, first.b - second.b);
+}
+
+function channelDistance(first: MaterialRgbColor, second: MaterialRgbColor): number {
+  return Math.max(Math.abs(first.r - second.r), Math.abs(first.g - second.g), Math.abs(first.b - second.b));
+}
+
+function matchesBackgroundColor(first: MaterialRgbColor, second: MaterialRgbColor): boolean {
+  return channelDistance(first, second) <= 10 && colorDistance(first, second) <= 18;
 }

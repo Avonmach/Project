@@ -801,6 +801,18 @@ tbody tr:hover td {
   border-left-color: var(--green);
 }
 
+.storage-detection-row td:first-child {
+  border-left: 3px solid transparent;
+}
+
+.storage-detection-row.review-row td:first-child {
+  border-left-color: var(--warn);
+}
+
+.storage-detection-row.checked-row td:first-child {
+  border-left-color: var(--green);
+}
+
 tbody tr button,
 tbody tr input,
 tbody tr a,
@@ -893,26 +905,36 @@ td:nth-child(9),
   margin-inline: auto;
 }
 
-.storage-results-table th:nth-child(1) {
+.storage-results-table {
+  max-width: 100%;
+  min-width: 700px;
   width: auto;
 }
 
+.storage-results-table th:nth-child(1) {
+  width: 240px;
+}
+
 .storage-results-table th:nth-child(2) {
-  width: 86px;
+  width: 78px;
 }
 
 .storage-results-table th:nth-child(3),
 .storage-results-table th:nth-child(4),
 .storage-results-table th:nth-child(5) {
-  width: 96px;
+  width: 86px;
 }
 
 .storage-results-table th:nth-child(6) {
-  width: 130px;
+  width: 124px;
 }
 
 .storage-results-table th {
   white-space: normal;
+}
+
+.storage-results-table .status-pill {
+  white-space: nowrap;
 }
 
 .storage-results-table td:nth-child(2),
