@@ -284,6 +284,7 @@ input[type="search"] {
 }
 
 .screenshot-preview-shell {
+  cursor: pointer;
   margin: 12px 12px 8px;
   max-height: 260px;
   min-height: 130px;
@@ -295,7 +296,7 @@ input[type="search"] {
   background: #221f1c;
   border: 1px solid #594d3c;
   border-radius: 6px;
-  display: none;
+  display: block;
   image-rendering: pixelated;
   max-width: 100%;
 }
@@ -318,10 +319,12 @@ input[type="search"] {
   inset: 0;
   justify-content: center;
   min-height: 130px;
+  opacity: 0;
   padding: 18px;
   pointer-events: none;
   position: absolute;
   text-align: center;
+  visibility: hidden;
 }
 
 .screenshot-hover-hint strong {
@@ -335,6 +338,7 @@ input[type="search"] {
 
 .image-panel canvas.is-empty + .screenshot-hover-hint {
   opacity: 1;
+  visibility: visible;
 }
 
 .plan-panel {

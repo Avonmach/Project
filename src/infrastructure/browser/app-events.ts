@@ -20,7 +20,14 @@ export interface AppBrowserActions {
 export function connectAppEvents(elements: AppElements, handlers: AppEventHandlers): AppBrowserActions {
   let lastHandledPasteAt = 0;
   let lastShortcutImageLoadAt = 0;
+  const screenshotPreviewShell = document.querySelector<HTMLElement>(".screenshot-preview-shell");
   elements.loadDefaultButton.addEventListener("click", () => openFilePicker(elements.imageInput));
+  screenshotPreviewShell?.addEventListener("click", () => openFilePicker(elements.imageInput));
+  screenshotPreviewShell?.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    openFilePicker(elements.imageInput);
+  });
   elements.analyzeButton.addEventListener("click", handlers.analyzeCurrentImage);
   elements.viewMode.addEventListener("change", handlers.renderDetections);
   elements.artefactSearch.addEventListener("input", handlers.renderDetections);
