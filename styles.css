@@ -285,11 +285,9 @@ input[type="search"] {
   background: #221f1c;
   border: 1px solid #594d3c;
   border-radius: 6px;
-  display: block;
+  display: none;
   image-rendering: pixelated;
   max-width: 100%;
-  opacity: 0;
-  transition: opacity 140ms ease;
 }
 
 .image-panel canvas.is-empty {
@@ -323,16 +321,6 @@ input[type="search"] {
 .screenshot-hover-hint span {
   color: var(--muted);
   font-size: 13px;
-}
-
-.screenshot-preview-shell:hover canvas,
-.screenshot-preview-shell:focus-within canvas {
-  opacity: 1;
-}
-
-.screenshot-preview-shell:hover .screenshot-hover-hint,
-.screenshot-preview-shell:focus-within .screenshot-hover-hint {
-  opacity: 0;
 }
 
 .image-panel canvas.is-empty + .screenshot-hover-hint {
