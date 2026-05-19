@@ -1,7 +1,7 @@
 import { connectResultTabButtons, type ResultsTab } from "../../presentation/tabs/results-tabs";
 import type { AppElements } from "./app-elements";
 import { closeOpenDetailsMenusOutsideTarget } from "./details-menu";
-import { openFilePicker } from "./file-input";
+import { openFilePicker, readClipboardImagesAsDataUrls } from "./file-input";
 
 export interface AppEventHandlers {
   analyzeCurrentImage(): void;
@@ -9,6 +9,7 @@ export interface AppEventHandlers {
   setActiveResultsTab(tab: ResultsTab): void;
   exportResults(): void;
   handleSelectedImageInput(): Promise<void>;
+  handlePastedImages(srcs: readonly string[]): Promise<void>;
 }
 
 export interface AppBrowserActions {
@@ -31,8 +32,18 @@ export function connectAppEvents(elements: AppElements, handlers: AppEventHandle
   elements.imageInput.addEventListener("change", () => {
     void handlers.handleSelectedImageInput();
   });
+  document.addEventListener("paste", (event) => {
+    void handlePaste(event, handlers);
+  });
 
   return {
     requestScreenshotFile: () => openFilePicker(elements.imageInput)
   };
+}
+
+async function handlePaste(event: ClipboardEvent, handlers: AppEventHandlers): Promise<void> {
+  const srcs = await readClipboardImagesAsDataUrls(event);
+  if (!srcs.length) return;
+  event.preventDefault();
+  await handlers.handlePastedImages(srcs);
 }

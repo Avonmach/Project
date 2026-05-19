@@ -269,11 +269,16 @@ input[type="search"] {
 }
 
 .image-panel {
-  overflow: auto;
+  grid-column: 1 / 2;
+  overflow: hidden;
 }
 
-.image-panel {
-  grid-column: 1 / 2;
+.screenshot-preview-shell {
+  margin: 12px;
+  max-height: 260px;
+  min-height: 130px;
+  overflow: auto;
+  position: relative;
 }
 
 .image-panel canvas {
@@ -282,12 +287,46 @@ input[type="search"] {
   border-radius: 6px;
   display: block;
   image-rendering: pixelated;
-  margin: 12px;
-  max-width: calc(100% - 24px);
+  max-width: 100%;
+  opacity: 0;
+  transition: opacity 140ms ease;
 }
 
 .image-panel canvas.is-empty {
   display: none;
+}
+
+.screenshot-hover-hint {
+  align-items: center;
+  background:
+    linear-gradient(180deg, rgba(242, 227, 197, 0.94), rgba(232, 213, 177, 0.94)),
+    repeating-linear-gradient(45deg, rgba(68, 59, 49, 0.08) 0 8px, transparent 8px 16px);
+  border: 1px dashed var(--image-border);
+  border-radius: 8px;
+  color: #3d3124;
+  display: flex;
+  font-weight: 800;
+  inset: 0;
+  justify-content: center;
+  min-height: 130px;
+  padding: 18px;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+}
+
+.screenshot-preview-shell:hover canvas,
+.screenshot-preview-shell:focus-within canvas {
+  opacity: 1;
+}
+
+.screenshot-preview-shell:hover .screenshot-hover-hint,
+.screenshot-preview-shell:focus-within .screenshot-hover-hint {
+  opacity: 0;
+}
+
+.image-panel canvas.is-empty + .screenshot-hover-hint {
+  opacity: 1;
 }
 
 .plan-panel {

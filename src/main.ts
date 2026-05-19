@@ -186,7 +186,8 @@ const browserActions = connectAppEvents(elements, {
   setActiveResultsTab,
   exportResults,
   handleSelectedImageInput: () =>
-    loadSelectedScreenshotInput({ imageInput, loadImageFromUrl, loadImagesFromUrls: loadSelectedImagesFromUrls, drawEmptyState })
+    loadSelectedScreenshotInput({ imageInput, loadImageFromUrl, loadImagesFromUrls: loadSelectedImagesFromUrls, drawEmptyState }),
+  handlePastedImages: loadSelectedImagesFromUrls
 });
 
 initialize();
