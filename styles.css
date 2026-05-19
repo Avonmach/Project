@@ -702,23 +702,23 @@ input[type="search"] {
 }
 
 .collection-name-col {
-  width: 18%;
+  width: 20%;
 }
 
 .collection-collector-col {
-  width: 10%;
+  width: 11%;
 }
 
 .collection-level-col {
-  width: 6%;
+  width: 7%;
 }
 
 .collection-progress-col {
-  width: 10%;
+  width: 11%;
 }
 
 .collection-artefacts-col {
-  width: 56%;
+  width: 51%;
 }
 
 .secondary-table th,
