@@ -633,8 +633,15 @@ function sortMaterialRows(rows: readonly MaterialRow[]): readonly MaterialRow[] 
 }
 
 function makeCollectionOverview(items: readonly AppDetection[]): HTMLElement {
+  const restoredItems = filterAndSortDetections(resultsState.detectionsForMode("restored"), viewMode.value, {
+    query: artefactSearch.value,
+    culture: cultureFilter.value,
+    reviewOnly: reviewOnly.checked,
+    quantityNeedsReview
+  });
   return makeCollectionOverviewElement({
     items,
+    restoredItems,
     collections: archaeologyReference.collections || [],
     references,
     collectionSort,

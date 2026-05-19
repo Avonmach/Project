@@ -45,6 +45,7 @@ interface OwnedArtefact {
 
 export interface CollectionOverviewOptions<TDetection extends CollectionOverviewDetection> {
   readonly items: readonly TDetection[];
+  readonly restoredItems: readonly TDetection[];
   readonly collections: readonly ArchaeologyCollection[];
   readonly references: readonly CollectionReference[];
   readonly collectionSort: CollectionSort;
@@ -56,6 +57,7 @@ export interface CollectionOverviewOptions<TDetection extends CollectionOverview
 
 export function makeCollectionOverview<TDetection extends CollectionOverviewDetection>({
   items,
+  restoredItems,
   collections,
   references,
   collectionSort,
@@ -66,10 +68,14 @@ export function makeCollectionOverview<TDetection extends CollectionOverviewDete
 }: CollectionOverviewOptions<TDetection>): HTMLDivElement {
   const section = document.createElement("div");
   section.className = "collection-overview";
-  const ownedArtefacts = getOwnedArtefactMap(items);
+  const damagedArtefacts = getOwnedArtefactMap(items);
+  const restoredArtefacts = getOwnedArtefactMap(restoredItems);
   const rows = collections
     .map((collection) => {
-      const matched = collection.artefacts.filter((artefact) => ownedArtefacts.has(normalizeName(artefact)));
+      const matched = collection.artefacts.filter((artefact) => {
+        const key = normalizeName(artefact);
+        return damagedArtefacts.has(key) || restoredArtefacts.has(key);
+      });
       const total = collection.artefactCount || collection.artefacts.length || 1;
       return { collection, matched, progress: matched.length, progressTotal: total, progressPercent: matched.length / total };
     })
@@ -97,7 +103,7 @@ export function makeCollectionOverview<TDetection extends CollectionOverviewDete
       makeTextCell(row.collection.collector || ""),
       makeTextCell(row.collection.archaeologyLevel ?? ""),
       makeTextCell(`${row.progress}/${row.progressTotal} (${Math.round(row.progressPercent * 100)}%)`),
-      makeCollectionArtefactsCell(row.collection.artefacts, ownedArtefacts, references)
+      makeCollectionArtefactsCell(row.collection.artefacts, restoredArtefacts, damagedArtefacts, references)
     );
     body.append(tr);
   }
@@ -188,7 +194,8 @@ function getOwnedArtefactMap<TDetection extends CollectionOverviewDetection>(ite
 
 function makeCollectionArtefactsCell(
   artefacts: readonly string[],
-  ownedArtefacts: ReadonlyMap<string, OwnedArtefact>,
+  restoredArtefacts: ReadonlyMap<string, OwnedArtefact>,
+  damagedArtefacts: ReadonlyMap<string, OwnedArtefact>,
   references: readonly CollectionReference[]
 ): HTMLTableCellElement {
   const cell = document.createElement("td");
@@ -196,8 +203,9 @@ function makeCollectionArtefactsCell(
   grid.className = "collection-artefacts";
 
   for (const artefact of artefacts) {
-    const owned = ownedArtefacts.get(normalizeName(artefact));
-    grid.append(makeCollectionArtefactIcon(artefact, owned?.quantity || 0, references));
+    const restored = restoredArtefacts.get(normalizeName(artefact));
+    const damaged = damagedArtefacts.get(normalizeName(artefact));
+    grid.append(makeCollectionArtefactIcon(artefact, restored?.quantity || 0, damaged?.quantity || 0, references));
   }
 
   cell.append(grid);
@@ -206,15 +214,16 @@ function makeCollectionArtefactsCell(
 
 function makeCollectionArtefactIcon(
   artefact: string,
-  quantity: number,
+  restoredQuantity: number,
+  damagedQuantity: number,
   references: readonly CollectionReference[]
 ): HTMLSpanElement {
   const reference = references.find((item) => normalizeName(item.restoredName || item.name) === normalizeName(artefact));
   const stack = document.createElement("span");
   stack.className = "collection-artefact-stack";
   stack.append(
-    makeCollectionArtefactTile(reference?.icon, artefact, quantity, "collection-artefact restored"),
-    makeCollectionArtefactTile(reference?.damagedIcon, artefact, quantity, "collection-artefact damaged")
+    makeCollectionArtefactTile(reference?.icon, artefact, restoredQuantity, "collection-artefact restored", "restored"),
+    makeCollectionArtefactTile(reference?.damagedIcon, artefact, damagedQuantity, "collection-artefact damaged", "damaged")
   );
   return stack;
 }
@@ -223,12 +232,13 @@ function makeCollectionArtefactTile(
   icon: string | null | undefined,
   artefact: string,
   quantity: number,
-  className: string
+  className: string,
+  variant: "restored" | "damaged"
 ): HTMLSpanElement {
   const tile = document.createElement("span");
   tile.className = className;
   if (!quantity) tile.classList.add("is-missing");
-  tile.title = quantity ? `${artefact}: ${quantity}` : `${artefact}: missing`;
+  tile.title = quantity ? `${artefact} (${variant}): ${quantity}` : `${artefact} (${variant}): missing`;
   appendCollectionArtefactImage(tile, icon, artefact);
   const badge = document.createElement("span");
   badge.className = "collection-artefact-count";
