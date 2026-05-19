@@ -48,6 +48,7 @@ export function renderDamagedTab<TDetection extends ReviewableDetection>({
 
 interface ReviewableDetection {
   readonly ambiguousMatch?: boolean;
+  readonly quantity: number;
 }
 
 interface DamagedReviewSummaryOptions<TDetection extends ReviewableDetection> {
@@ -68,7 +69,7 @@ function updateDamagedReviewSummary<TDetection extends ReviewableDetection>({
   quantityNeedsReview
 }: DamagedReviewSummaryOptions<TDetection>): void {
   detectedCountElement.textContent = String(allDetections.length);
-  visibleCountElement.textContent = String(visibleDetections.length);
+  visibleCountElement.textContent = String(visibleDetections.reduce((sum, detection) => sum + detection.quantity, 0));
   reviewCountElement.textContent = String(
     visibleDetections.filter((detection) => detection.ambiguousMatch || quantityNeedsReview(detection)).length
   );

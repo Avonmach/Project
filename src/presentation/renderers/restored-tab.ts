@@ -58,6 +58,7 @@ export function drawTableEmptyState(body: HTMLTableSectionElement, message: stri
 
 interface ReviewableDetection {
   readonly ambiguousMatch?: boolean;
+  readonly quantity: number;
 }
 
 interface RestoredReviewSummaryOptions<TDetection extends ReviewableDetection> {
@@ -78,7 +79,7 @@ function updateRestoredReviewSummary<TDetection extends ReviewableDetection>({
   quantityNeedsReview
 }: RestoredReviewSummaryOptions<TDetection>): void {
   detectedCountElement.textContent = String(allDetections.length);
-  visibleCountElement.textContent = String(visibleDetections.length);
+  visibleCountElement.textContent = String(visibleDetections.reduce((sum, detection) => sum + detection.quantity, 0));
   reviewCountElement.textContent = String(
     visibleDetections.filter((detection) => detection.ambiguousMatch || quantityNeedsReview(detection)).length
   );

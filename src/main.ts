@@ -84,8 +84,6 @@ import {
 } from "./presentation/renderers/collection-overview";
 import { renderRestorationPlan as renderRestorationPlanPanel } from "./presentation/renderers/restoration-plan";
 import { makeRecognitionInfo as makeRecognitionInfoElement } from "./presentation/renderers/recognition-info";
-import { renderSummaryTotals } from "./presentation/renderers/summary-totals";
-import { renderReferenceCount } from "./presentation/renderers/reference-count";
 import {
   makeMaterialCell as makeMaterialCellElement,
   type MaterialCellReference,
@@ -128,10 +126,6 @@ const {
   exportResultsButton,
   resultsBody,
   restoredResultsBody,
-  slotCountEl,
-  quantityTotalEl,
-  manualCountEl,
-  referenceCountEl,
   visibleCountEl,
   reviewCountEl,
   highestLevelEl,
@@ -203,7 +197,6 @@ async function initialize() {
 async function loadReferences() {
   const items = await loadDamagedArtifactRecords();
   references = await prepareArtefactReferences(items, loadImageElement);
-  renderReferenceCount(referenceCountEl, references.length);
 }
 
 async function loadArchaeologyReference() {
@@ -731,12 +724,6 @@ function drawEmptyState(message: string): void {
 
 function updateTotals(): void {
   preserveScrollPosition(() => {
-    renderSummaryTotals({
-      detections,
-      slotCountElement: slotCountEl,
-      quantityTotalElement: quantityTotalEl,
-      manualCountElement: manualCountEl
-    });
     if (detections.length) renderRestorationPlan(filteredDetections());
     renderResultsTabContent();
   });

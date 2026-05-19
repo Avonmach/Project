@@ -12,10 +12,6 @@ export interface AppElements {
   exportResultsButton: HTMLButtonElement;
   resultsBody: HTMLTableSectionElement;
   restoredResultsBody: HTMLTableSectionElement;
-  slotCountEl: HTMLElement;
-  quantityTotalEl: HTMLElement;
-  manualCountEl: HTMLElement;
-  referenceCountEl: HTMLElement;
   visibleCountEl: HTMLElement;
   reviewCountEl: HTMLElement;
   highestLevelEl: HTMLElement;
@@ -52,10 +48,6 @@ export function getAppElements(): AppElements {
     exportResultsButton: requireElement("exportResults", HTMLButtonElement),
     resultsBody: requireElement("resultsBody", HTMLTableSectionElement),
     restoredResultsBody: requireElement("restoredResultsBody", HTMLTableSectionElement),
-    slotCountEl: requireElement("slotCount", HTMLElement),
-    quantityTotalEl: requireElement("quantityTotal", HTMLElement),
-    manualCountEl: requireElement("manualCount", HTMLElement),
-    referenceCountEl: requireElement("referenceCount", HTMLElement),
     visibleCountEl: requireElement("visibleCount", HTMLElement),
     reviewCountEl: requireElement("reviewCount", HTMLElement),
     highestLevelEl: requireElement("highestLevel", HTMLElement),

@@ -178,25 +178,48 @@ function makeEditableStorageCell(
 ): HTMLTableCellElement {
   const cell = document.createElement("td");
   cell.className = "number-cell editable-storage-cell";
+  const stepper = document.createElement("div");
+  stepper.className = "qty-stepper storage-quantity-stepper";
   const input = document.createElement("input");
-  input.className = "storage-quantity-input";
-  input.type = "number";
-  input.min = "0";
-  input.step = "1";
+  input.className = "qty-input storage-quantity-input";
+  input.type = "text";
+  input.inputMode = "numeric";
   input.value = String(value);
   input.setAttribute("aria-label", `${row.name} in storage`);
-  input.addEventListener("input", () => {
-    const quantity = parseStorageQuantity(input.value);
+  const commitValue = (quantity: number) => {
+    input.value = String(quantity);
     onChange(row.name, quantity);
     toBuyCell.textContent = String(Math.max(0, row.quantity - quantity));
+  };
+  input.addEventListener("change", () => {
+    const quantity = parseStorageQuantity(input.value);
+    commitValue(quantity);
   });
-  cell.append(input);
+  const arrows = document.createElement("div");
+  arrows.className = "qty-arrows";
+  const down = makeQuantityButton("-", () => commitValue(Math.max(0, parseStorageQuantity(input.value) - 1)));
+  const up = makeQuantityButton("+", () => commitValue(parseStorageQuantity(input.value) + 1));
+  arrows.append(up, down);
+  stepper.append(input, arrows);
+  cell.append(stepper);
   return cell;
 }
 
 function parseStorageQuantity(value: string): number {
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+}
+
+function makeQuantityButton(label: string, onClick: () => void): HTMLButtonElement {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "qty-button";
+  button.textContent = label;
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    onClick();
+  });
+  return button;
 }
 
 function makeUsedByArtefactsCell(
