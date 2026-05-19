@@ -209,14 +209,17 @@ function makePlanningArtefactRow(row: PlannedArtefact, references: readonly Coll
   const item = document.createElement("div");
   item.className = "planning-artefact";
   const reference = references.find((candidate) => normalizeName(candidate.restoredName || candidate.name) === normalizeName(row.name));
-  item.append(
-    makePlanningVariant(reference?.icon, row.name, row.restoredRemaining, "Restored", "restored"),
-    makePlanningVariant(reference?.damagedIcon, row.name, row.damagedRemaining, "Damaged", "damaged")
+  const variants = document.createElement("div");
+  variants.className = "planning-variant-row";
+  variants.append(
+    makePlanningVariant(reference?.icon, row.name, row.restoredRemaining, "restored"),
+    makePlanningVariant(reference?.damagedIcon, row.name, row.damagedRemaining, "damaged")
   );
+  item.append(variants);
   if (row.missing) {
-    const missing = document.createElement("span");
+    const missing = document.createElement("div");
     missing.className = "planning-missing-count";
-    missing.textContent = `Missing ${row.missing}`;
+    missing.append(document.createTextNode("Missing "), makeStrongNumber(row.missing));
     item.append(missing);
   }
   return item;
@@ -238,7 +241,6 @@ function makePlanningVariant(
   icon: string | null | undefined,
   name: string,
   count: number,
-  label: string,
   variant: "restored" | "damaged"
 ): HTMLElement {
   const item = document.createElement("span");
@@ -252,8 +254,9 @@ function makePlanningVariant(
     item.append(image);
   }
   const text = document.createElement("span");
-  text.textContent = `${label} ${count}`;
-  item.title = `${name} (${label.toLowerCase()}): ${count}`;
+  text.className = "planning-variant-count";
+  text.textContent = String(count);
+  item.title = `${name} (${variant}): ${count}`;
   item.append(text);
   return item;
 }
@@ -266,17 +269,33 @@ function makeMissingList(missing: readonly MissingArtefact[]): HTMLElement {
   const list = document.createElement("ul");
   for (const item of missing) {
     const li = document.createElement("li");
-    li.append(
-      makePlanningLink(item.name, item.artefactWikiPage, "artifact-link"),
-      document.createTextNode(` x${item.quantity}`)
-    );
+    li.className = "planning-missing-row";
+    const name = document.createElement("span");
+    name.className = "planning-missing-name";
+    name.append(makePlanningLink(item.name, item.artefactWikiPage, "artifact-link"));
+    const quantity = document.createElement("span");
+    quantity.className = "planning-missing-quantity";
+    quantity.append(document.createTextNode("x"), makeStrongNumber(item.quantity));
+    const site = document.createElement("span");
+    site.className = "planning-missing-site";
     if (item.excavationSite) {
-      li.append(document.createTextNode(" - "), makePlanningLink(item.excavationSite, item.excavationSiteWikiPage));
+      site.append(
+        document.createTextNode("Excavation site: "),
+        makePlanningLink(item.excavationSite, item.excavationSiteWikiPage, "artifact-link")
+      );
     }
+    li.append(name, quantity, site);
     list.append(li);
   }
   wrapper.append(title, list);
   return wrapper;
+}
+
+function makeStrongNumber(value: number): HTMLElement {
+  const strong = document.createElement("strong");
+  strong.className = "planning-number";
+  strong.textContent = String(value);
+  return strong;
 }
 
 function makePlanningLink(label: string, href?: string | null, className?: string): HTMLElement {
