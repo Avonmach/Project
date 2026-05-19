@@ -608,6 +608,23 @@ input[type="search"] {
   width: 26px;
 }
 
+.materials-table th:nth-child(1) {
+  width: 220px;
+}
+
+.materials-table th:nth-child(2),
+.materials-table th:nth-child(3) {
+  width: 110px;
+}
+
+.materials-table th:nth-child(4) {
+  width: auto;
+}
+
+.material-used-by-artefacts {
+  justify-content: flex-start;
+}
+
 .results-panel {
   grid-column: 1 / 2;
   min-width: 0;
