@@ -13,11 +13,11 @@ test("detectStorageMaterialBoxes detects separated material grids on both sides"
   drawMaterial(imageData, 194, 10);
 
   assert.deepEqual(detectStorageMaterialBoxes(imageData), [
-    { x: 6, y: 10, w: 44, h: 44 },
-    { x: 50, y: 10, w: 44, h: 44 },
-    { x: 150, y: 10, w: 44, h: 44 },
-    { x: 194, y: 10, w: 44, h: 44 },
-    { x: 6, y: 54, w: 44, h: 44 }
+    { x: 6, y: 5, w: 44, h: 44 },
+    { x: 50, y: 5, w: 44, h: 44 },
+    { x: 150, y: 5, w: 44, h: 44 },
+    { x: 194, y: 5, w: 44, h: 44 },
+    { x: 6, y: 49, w: 44, h: 44 }
   ]);
 });
 

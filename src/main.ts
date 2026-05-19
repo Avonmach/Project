@@ -25,6 +25,10 @@ import {
   emptyArchaeologyReferenceIndexes
 } from "./application/load-references/archaeology-reference-indexes";
 import { prepareArtefactReferences } from "./application/load-references/artefact-reference-preparation";
+import {
+  prepareMaterialReferences,
+  type PreparedMaterialReference
+} from "./application/load-references/material-reference-preparation";
 import { sortMaterialRows as sortMaterialRowsForMode } from "./application/sort-results/result-row-sorting";
 import { matchArtifact as matchArtefactAgainstReferences, type RecognitionMode } from "./domain/artefacts/matching";
 import { quantityCandidatesAreClose } from "./domain/ocr/quantity-ocr";
@@ -46,6 +50,7 @@ import {
 } from "./infrastructure/image-processing/bank-grid";
 import { createCanvasFrameSource } from "./infrastructure/image-processing/canvas-frame-source";
 import { createCanvasStorageFrameSource } from "./infrastructure/image-processing/canvas-storage-frame-source";
+import { createReferenceMaterialMatcher } from "./infrastructure/image-processing/material-recognition-adapters";
 import { calculateStoragePreviewLayout } from "./infrastructure/image-processing/storage-preview-layout";
 import {
   createCanvasDetectionPreviewFactory,
@@ -64,7 +69,10 @@ import { updateCultureFilterOptions as updateCultureFilterOptionsElement } from 
 import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
 import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from "./presentation/renderers/restored-tab";
 import { renderMaterialsTab as renderMaterialsTabPanel } from "./presentation/renderers/materials-tab";
-import { renderStorageTab as renderStorageTabPanel } from "./presentation/renderers/storage-tab";
+import {
+  renderStorageTab as renderStorageTabPanel,
+  type DetectedStorageMaterial
+} from "./presentation/renderers/storage-tab";
 import { renderDamagedTab as renderDamagedTabPanel } from "./presentation/renderers/damaged-tab";
 import {
   makeCollectionOverview as makeCollectionOverviewElement,
@@ -151,9 +159,10 @@ let storageImages: HTMLImageElement[] = [];
 let storageAnalysisDone = false;
 let storageGridDetections: StorageGridDetection[] = [];
 let storageRecognitionFrames: StorageRecognitionFrame[] = [];
-let detectedStorageMaterialNames = new Set<string>();
+let detectedStorageMaterials: DetectedStorageMaterial[] = [];
 let detections: AppDetection[] = [];
 let references: PreparedArtefactReference[] = [];
+let materialReferences: PreparedMaterialReference[] = [];
 let archaeologyReference: ArchaeologyReferenceData = emptyArchaeologyReferenceData();
 let { recipeByRestoredName, materialByName } = emptyArchaeologyReferenceIndexes();
 const resultsState = createResultsState<AppDetection>();
@@ -194,10 +203,12 @@ async function loadArchaeologyReference() {
   try {
     archaeologyReference = await loadArchaeologyReferenceData();
     ({ recipeByRestoredName, materialByName } = createArchaeologyReferenceIndexes(archaeologyReference));
+    materialReferences = await prepareMaterialReferences(archaeologyReference.materials || [], loadImageElement);
   } catch (error) {
     console.warn(STATUS_MESSAGES.referenceLoadWarning, error);
     archaeologyReference = emptyArchaeologyReferenceData();
     ({ recipeByRestoredName, materialByName } = emptyArchaeologyReferenceIndexes());
+    materialReferences = [];
   }
 }
 
@@ -244,7 +255,7 @@ async function loadStorageImagesFromUrls(srcs: readonly string[]): Promise<void>
     storageAnalysisDone = false;
     storageGridDetections = [];
     storageRecognitionFrames = [];
-    detectedStorageMaterialNames = new Set();
+    detectedStorageMaterials = [];
     if (currentScreenshotTab() === "storage") restoreActiveScreenshotToCanvas();
     renderResultsTabContent();
   } catch (error) {
@@ -283,16 +294,19 @@ function analyzeStorageScreenshots(): void {
     storageAnalysisDone = false;
     storageGridDetections = [];
     storageRecognitionFrames = [];
+    detectedStorageMaterials = [];
     renderResultsTabContent();
     return;
   }
   const analysis = analyzeStorageScreenshotsForGrid({
-    frameSource: createCanvasStorageFrameSource({ images: storageImages, canvas, context: ctx })
+    frameSource: createCanvasStorageFrameSource({ images: storageImages, canvas, context: ctx }),
+    digitTemplates,
+    materialMatcher: materialReferences.length ? createReferenceMaterialMatcher(materialReferences) : undefined
   });
   storageAnalysisDone = true;
   storageGridDetections = [...analysis.detections];
   storageRecognitionFrames = [...analysis.frames];
-  detectedStorageMaterialNames = new Set();
+  detectedStorageMaterials = mergeStorageMaterials(analysis.detections);
   drawStorageAnalysisOverlay();
   renderResultsTabContent();
 }
@@ -553,8 +567,8 @@ function renderStorageTab(items: readonly AppDetection[]): void {
     requiredImageCount: STORAGE_REQUIRED_SCREENSHOTS,
     analysisDone: storageAnalysisDone,
     detectedGridCellCount: storageGridDetections.length,
-    detectedMaterialNames: detectedStorageMaterialNames,
-    materials: archaeologyReference.materials || [],
+    detectedMaterials: detectedStorageMaterials,
+    materialReferenceCount: materialReferences.length,
     calculateMaterialTotals: (detections) => calculateMaterialTotalsForRecipes(detections, recipeByRestoredName),
     makeMaterialCell,
     makeLinkedTextCell,
@@ -717,6 +731,30 @@ function drawBoxes(
 
 function translateBox<TBox extends BoundingBox>(box: TBox, x: number, y: number): TBox {
   return { ...box, x: box.x + x, y: box.y + y };
+}
+
+function mergeStorageMaterials(items: readonly StorageGridDetection[]): DetectedStorageMaterial[] {
+  const byName = new Map<string, DetectedStorageMaterial>();
+  for (const item of items) {
+    if (!item.materialName) continue;
+    const existing = byName.get(item.materialName);
+    const quantity = item.quantity || 1;
+    if (existing) {
+      byName.set(item.materialName, {
+        ...existing,
+        quantity: existing.quantity + quantity,
+        matchScore: Math.max(existing.matchScore || 0, item.matchScore || 0)
+      });
+    } else {
+      byName.set(item.materialName, {
+        name: item.materialName,
+        quantity,
+        wikiPage: item.wikiPage,
+        matchScore: item.matchScore
+      });
+    }
+  }
+  return [...byName.values()];
 }
 
 function preserveScrollPosition(render: () => void): void {

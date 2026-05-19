@@ -8,6 +8,13 @@ export interface StorageMaterialNeed {
   readonly quantity: number;
 }
 
+export interface DetectedStorageMaterial {
+  readonly name: string;
+  readonly quantity: number;
+  readonly wikiPage?: string | null;
+  readonly matchScore?: number;
+}
+
 export interface StorageTabRendererOptions<TDetection> {
   readonly panel: HTMLElement;
   readonly visibleDetections: readonly TDetection[];
@@ -15,8 +22,8 @@ export interface StorageTabRendererOptions<TDetection> {
   readonly requiredImageCount: number;
   readonly analysisDone: boolean;
   readonly detectedGridCellCount: number;
-  readonly detectedMaterialNames: ReadonlySet<string>;
-  readonly materials: readonly StorageMaterial[];
+  readonly detectedMaterials: readonly DetectedStorageMaterial[];
+  readonly materialReferenceCount: number;
   readonly calculateMaterialTotals: (items: readonly TDetection[]) => readonly StorageMaterialNeed[];
   readonly makeMaterialCell: (row: { readonly name: string }) => HTMLTableCellElement;
   readonly makeLinkedTextCell: (label: string, href?: string | null) => HTMLTableCellElement;
@@ -32,8 +39,8 @@ export function renderStorageTab<TDetection>({
   requiredImageCount,
   analysisDone,
   detectedGridCellCount,
-  detectedMaterialNames,
-  materials,
+  detectedMaterials,
+  materialReferenceCount,
   calculateMaterialTotals,
   makeMaterialCell,
   makeLinkedTextCell,
@@ -42,8 +49,7 @@ export function renderStorageTab<TDetection>({
   makeOverviewCard
 }: StorageTabRendererOptions<TDetection>): void {
   panel.replaceChildren();
-  const detectedMaterials = [...materials]
-    .filter((material) => detectedMaterialNames.has(material.name))
+  const materialRows = [...detectedMaterials]
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const summary = document.createElement("div");
@@ -52,7 +58,7 @@ export function renderStorageTab<TDetection>({
     makeOverviewCard("Screenshots", `${uploadedImageCount}/${requiredImageCount}`),
     makeOverviewCard("Needed now", calculateMaterialTotals(visibleDetections).length),
     makeOverviewCard("Grid slots", analysisDone ? detectedGridCellCount : 0),
-    makeOverviewCard("Detected materials", analysisDone ? detectedMaterials.length : 0)
+    makeOverviewCard("Detected materials", analysisDone ? materialRows.length : 0)
   );
 
   if (!uploadedImageCount) {
@@ -65,25 +71,28 @@ export function renderStorageTab<TDetection>({
     return;
   }
 
-  if (!materials.length) {
+  if (!materialReferenceCount) {
     panel.append(summary, makeEmptyMessage("Material reference data is not available."));
     return;
   }
 
-  if (!detectedMaterials.length) {
+  if (!materialRows.length) {
     panel.append(summary, makeEmptyMessage("No storage materials were detected in the uploaded screenshots."));
     return;
   }
 
   const table = document.createElement("table");
   table.className = "secondary-table materials-table";
-  table.append(makeTableHead(["Material", "Wiki page"]));
+  table.append(makeTableHead(["Material", "Quantity", "Wiki page"]));
   const body = document.createElement("tbody");
 
-  for (const material of detectedMaterials) {
+  for (const material of materialRows) {
     const tr = document.createElement("tr");
     const linkCell = makeLinkedTextCell(material.name, material.wikiPage);
-    tr.append(makeMaterialCell({ name: material.name }), linkCell);
+    const quantityCell = document.createElement("td");
+    quantityCell.className = "number-cell";
+    quantityCell.textContent = String(material.quantity);
+    tr.append(makeMaterialCell({ name: material.name }), quantityCell, linkCell);
     body.append(tr);
   }
 
