@@ -1,3 +1,5 @@
+import { inject as injectVercelAnalytics } from "@vercel/analytics";
+
 import { FALLBACK_DIGIT_TEMPLATES } from "./domain/ocr/digit-templates";
 import { analyzeScreenshot } from "./application/analyze-screenshot/analyze-screenshot";
 import {
@@ -177,6 +179,8 @@ const exampleScreenshotImage = document.querySelector<HTMLImageElement>("#exampl
 const storageExampleImages = document.querySelector<HTMLElement>("#storageExampleImages");
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
+
+injectVercelAnalytics();
 
 const browserActions = connectAppEvents(elements, {
   analyzeCurrentImage,
