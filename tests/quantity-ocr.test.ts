@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { FALLBACK_DIGIT_TEMPLATES } from "../src/domain/ocr/digit-templates";
-import { detectQuantity } from "../src/domain/ocr/quantity-ocr";
+import { detectQuantity, quantityCandidatesAreClose } from "../src/domain/ocr/quantity-ocr";
 
 test("detectQuantity can match the corrected zero reference template", () => {
   const imageData = { width: 44, height: 44, data: new Uint8ClampedArray(44 * 44 * 4) } as ImageData;
@@ -72,4 +72,44 @@ test("detectQuantity strict mode keeps a connected two as one digit", () => {
 
   assert.equal(result.debug.digitBoxes.length, 1);
   assert.equal(result.quantity, 2);
+});
+
+test("quantityCandidatesAreClose only marks per-digit gaps of two percent or less", () => {
+  const baseDebug = {
+    mode: "damaged" as const,
+    strict: false,
+    scanBox: { x: 0, y: 0, w: 10, h: 10 },
+    pixelCount: 0,
+    pixels: [],
+    digitBoxes: [],
+    rejectedBoxes: [],
+    text: "88",
+    confidence: 0.9
+  };
+
+  assert.equal(
+    quantityCandidatesAreClose({
+      quantityDebug: {
+        ...baseDebug,
+        matches: [
+          { index: 1, digit: "8", score: 0.9, normalized: [], options: [{ digit: "8", score: 0.9, template: [], width: 5, height: 8 }, { digit: "6", score: 0.87, template: [], width: 5, height: 8 }] },
+          { index: 2, digit: "8", score: 0.91, normalized: [], options: [{ digit: "8", score: 0.91, template: [], width: 5, height: 8 }, { digit: "9", score: 0.88, template: [], width: 5, height: 8 }] }
+        ]
+      }
+    }),
+    false
+  );
+
+  assert.equal(
+    quantityCandidatesAreClose({
+      quantityDebug: {
+        ...baseDebug,
+        matches: [
+          { index: 1, digit: "8", score: 0.9, normalized: [], options: [{ digit: "8", score: 0.9, template: [], width: 5, height: 8 }, { digit: "6", score: 0.879, template: [], width: 5, height: 8 }] },
+          { index: 2, digit: "8", score: 0.91, normalized: [], options: [{ digit: "8", score: 0.91, template: [], width: 5, height: 8 }, { digit: "9", score: 0.895, template: [], width: 5, height: 8 }] }
+        ]
+      }
+    }),
+    true
+  );
 });

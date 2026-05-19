@@ -64,7 +64,7 @@ export interface QuantityResult {
   readonly debug: QuantityDebug;
 }
 
-const QUANTITY_REVIEW_MARGIN = 0.03;
+const QUANTITY_REVIEW_MARGIN = 0.02;
 
 export function detectQuantity(
   imageData: ImageData,
@@ -148,20 +148,16 @@ export function isQuantityPixel(r: number, g: number, b: number): boolean {
   return r >= 175 && g >= 150 && b <= 90 && r >= g - 20 && r <= g + 80 && brightness - b >= 95;
 }
 
-export function quantityCandidatesAreClose(detection: { quantityAlternatives?: readonly QuantityAlternative[] }): boolean {
-  const gap = quantityAlternativeConfidenceGap(detection);
-  return gap !== null && gap <= QUANTITY_REVIEW_MARGIN;
+export function quantityCandidatesAreClose(detection: { quantityDebug?: QuantityDebug | null }): boolean {
+  return quantityDigitConfidenceGaps(detection).some((gap) => gap <= QUANTITY_REVIEW_MARGIN);
 }
 
-export function quantityAlternativeConfidenceGap(detection: {
-  quantityAlternatives?: readonly QuantityAlternative[];
-}): number | null {
-  const options = detection.quantityAlternatives || [];
-  if (options.length < 2) return null;
-  const first = options[0];
-  const second = options[1];
-  if (!first || !second) return null;
-  return Math.abs(first.confidence - second.confidence);
+export function quantityDigitConfidenceGaps(detection: { quantityDebug?: QuantityDebug | null }): number[] {
+  return (detection.quantityDebug?.matches || []).flatMap((match) => {
+    const first = match.options[0];
+    const second = match.options[1];
+    return first && second ? [Math.abs(first.score - second.score)] : [];
+  });
 }
 
 function makeQuantityDebug({
