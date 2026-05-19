@@ -691,7 +691,7 @@ input[type="search"] {
 }
 
 .collection-artefact.damaged img {
-  filter: brightness(0.72) saturate(0.84);
+  filter: brightness(0.84) saturate(0.9);
 }
 
 .collection-artefact.is-missing {
