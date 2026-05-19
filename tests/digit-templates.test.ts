@@ -141,6 +141,27 @@ test("thinDigitTemplate thins a thick nine without removing its shape", () => {
   assert.ok(thinned.slice(0, 7).some((row) => row.endsWith("1")));
 });
 
+test("thinDigitTemplate thins a thick eight into narrow loops", () => {
+  const template = [
+    "11111",
+    "11011",
+    "11011",
+    "11111",
+    "11011",
+    "11011",
+    "11011",
+    "11111"
+  ];
+
+  const thinned = thinDigitTemplate(template);
+
+  assert.ok(thinned.join("").replaceAll("0", "").length < template.join("").replaceAll("0", "").length);
+  assert.ok(thinned.slice(0, 4).some((row) => row.includes("0")));
+  assert.ok(thinned.slice(4).some((row) => row.includes("0")));
+  assert.ok(thinned.slice(0, 4).join("").includes("1"));
+  assert.ok(thinned.slice(4).join("").includes("1"));
+});
+
 function pixelsFromMask(rows: readonly string[]): Array<{ x: number; y: number }> {
   return rows.flatMap((row, y) =>
     [...row].flatMap((value, x) => (value === "#" ? [{ x, y }] : []))
