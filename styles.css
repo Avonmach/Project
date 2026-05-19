@@ -621,7 +621,11 @@ input[type="search"] {
 }
 
 .planning-count-control button {
+  align-items: center;
   background: var(--surface-soft);
+  color: #111111;
+  display: inline-flex;
+  justify-content: center;
   padding: 0;
   width: 30px;
 }

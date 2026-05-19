@@ -384,7 +384,15 @@ function makeStatusPill(detection: AppDetection, quantityWarning = quantityNeeds
 }
 
 function filteredDetections(): AppDetection[] {
-  return filterAndSortDetections(detections, viewMode.value, {
+  return filterDetectionsForItems(detections);
+}
+
+function filteredDetectionsForMode(mode: "damaged" | "restored"): AppDetection[] {
+  return filterDetectionsForItems(resultsState.detectionsForMode(mode));
+}
+
+function filterDetectionsForItems(items: readonly AppDetection[]): AppDetection[] {
+  return filterAndSortDetections(items, viewMode.value, {
     query: artefactSearch.value,
     culture: cultureFilter.value,
     reviewOnly: reviewOnly.checked,
@@ -621,8 +629,8 @@ function renderPlanningTab(): void {
     selectedCollections,
     collectionCounts: selectedCollectionCounts,
     collections: archaeologyReference.collections || [],
-    damagedItems: resultsState.detectionsForMode("damaged"),
-    restoredItems: resultsState.detectionsForMode("restored"),
+    damagedItems: filteredDetectionsForMode("damaged"),
+    restoredItems: filteredDetectionsForMode("restored"),
     references,
     onCollectionCountChange: handleCollectionCountChange,
     makeEmptyMessage
@@ -652,15 +660,9 @@ function sortMaterialRows(rows: readonly MaterialRow[]): readonly MaterialRow[] 
 }
 
 function makeCollectionOverview(items: readonly AppDetection[]): HTMLElement {
-  const restoredItems = filterAndSortDetections(resultsState.detectionsForMode("restored"), viewMode.value, {
-    query: artefactSearch.value,
-    culture: cultureFilter.value,
-    reviewOnly: reviewOnly.checked,
-    quantityNeedsReview
-  });
   return makeCollectionOverviewElement({
     items,
-    restoredItems,
+    restoredItems: filteredDetectionsForMode("restored"),
     collections: archaeologyReference.collections || [],
     references,
     collectionSort,
