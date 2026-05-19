@@ -274,7 +274,7 @@ input[type="search"] {
 }
 
 .screenshot-preview-shell {
-  margin: 12px;
+  margin: 12px 12px 8px;
   max-height: 260px;
   min-height: 130px;
   overflow: auto;
@@ -1051,13 +1051,28 @@ input[type="search"] {
 
 .example-popover {
   display: inline-flex;
-  position: relative;
-  z-index: 3;
+  margin: 0 0 12px 12px;
+  position: static;
 }
 
 .example-button {
+  align-items: center;
+  background: linear-gradient(180deg, #d8a046, #b67820);
+  border: 1px solid #7c4d17;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 800;
   min-height: 32px;
   padding: 0 12px;
+  user-select: none;
+  list-style: none;
+}
+
+.example-button::-webkit-details-marker {
+  display: none;
 }
 
 .example-preview {
@@ -1066,10 +1081,11 @@ input[type="search"] {
   border-radius: 8px;
   box-shadow: 0 18px 42px rgba(34, 24, 13, 0.34);
   display: none;
-  left: 0;
+  left: 22px;
   padding: 6px;
-  position: absolute;
-  top: calc(100% + 8px);
+  position: fixed;
+  top: 92px;
+  z-index: 1000;
 }
 
 .example-preview img {
@@ -1078,16 +1094,8 @@ input[type="search"] {
   max-width: none;
 }
 
-.example-popover:hover .example-preview,
-.example-popover:focus-within .example-preview {
+.example-popover[open] .example-preview {
   display: block;
-}
-
-.table-example-cell {
-  background: linear-gradient(180deg, #e4d1aa, #ccb98f);
-  position: relative;
-  text-align: left;
-  z-index: 4;
 }
 
 .artefact-review-strip + .artifact-table {

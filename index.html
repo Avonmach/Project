@@ -41,12 +41,6 @@
       <div id="imagePanel" class="image-panel surface-panel">
         <div class="panel-heading">
           <h2 id="screenshotTitle">Damaged artefact screenshot</h2>
-          <div class="example-popover">
-            <button class="example-button" type="button" aria-describedby="damagedExamplePreview">Example</button>
-            <div id="damagedExamplePreview" class="example-preview" role="tooltip">
-              <img src="Reference_Screenshot/Damaged_Artefacts.png" alt="Example damaged artefact bank screenshot">
-            </div>
-          </div>
         </div>
         <div class="screenshot-preview-shell" tabindex="0" aria-label="Screenshot preview. Hover or focus to reveal.">
           <canvas id="previewCanvas" width="927" height="170"></canvas>
@@ -54,6 +48,12 @@
             <strong>Upload or paste screenshot (CTRL + V)</strong>
           </div>
         </div>
+        <details class="example-popover">
+          <summary class="example-button" aria-describedby="damagedExamplePreview">Example</summary>
+          <div id="damagedExamplePreview" class="example-preview" role="tooltip">
+            <img src="Reference_Screenshot/Damaged_Artefacts.png" alt="Example damaged artefact bank screenshot">
+          </div>
+        </details>
       </div>
 
       <aside class="plan-panel surface-panel" aria-label="Restoration plan">
