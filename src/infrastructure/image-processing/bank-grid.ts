@@ -286,9 +286,10 @@ function findBankContentArea(imageData: ImageData): (BankGridBox & { readonly in
   const bottomCandidates = horizontalRuns.filter((y) => y > height * 0.45);
   const leftCandidates = verticalRuns.filter((x) => x < width * 0.2);
   const rightCandidates = verticalRuns.filter((x) => x > width * 0.75);
+  const bottomFrameCandidates = bottomCandidates.filter((y) => y < height - 1);
 
   const top = topCandidates.length ? Math.max(...topCandidates) + 1 : null;
-  const bottom = bottomCandidates.length ? Math.max(...bottomCandidates.filter((y) => y < height - 20)) - 1 : null;
+  const bottom = bottomFrameCandidates.length ? Math.max(...bottomFrameCandidates) - 1 : null;
   const left = leftCandidates.length ? Math.min(...leftCandidates) + 1 : null;
   const right = rightCandidates.length ? Math.max(...rightCandidates.filter((x) => x < width - 4)) - 1 : null;
   const infinity = findInfinitySymbolBounds(imageData);
