@@ -18,6 +18,7 @@ export interface AppBrowserActions {
 }
 
 export function connectAppEvents(elements: AppElements, handlers: AppEventHandlers): AppBrowserActions {
+  let lastHandledPasteAt = 0;
   elements.loadDefaultButton.addEventListener("click", () => openFilePicker(elements.imageInput));
   elements.analyzeButton.addEventListener("click", handlers.analyzeCurrentImage);
   elements.viewMode.addEventListener("change", handlers.renderDetections);
@@ -33,14 +34,42 @@ export function connectAppEvents(elements: AppElements, handlers: AppEventHandle
   elements.imageInput.addEventListener("change", () => {
     void handlers.handleSelectedImageInput();
   });
-  document.addEventListener("paste", (event) => {
+  const handlePasteEvent = (event: ClipboardEvent) => {
+    lastHandledPasteAt = Date.now();
     void handlePaste(event, handlers);
+  };
+  window.addEventListener("paste", handlePasteEvent, { capture: true });
+  document.addEventListener("keydown", (event) => {
+    if (!isPasteShortcut(event) || isEditablePasteTarget(event.target)) return;
+    const shortcutAt = Date.now();
+    window.setTimeout(() => {
+      if (lastHandledPasteAt >= shortcutAt) return;
+      void handlePasteShortcutFallback(handlers);
+    }, 120);
   });
   connectExamplePreviewPositioning();
 
   return {
     requestScreenshotFile: () => openFilePicker(elements.imageInput)
   };
+}
+
+async function handlePasteShortcutFallback(handlers: AppEventHandlers): Promise<void> {
+  let srcs: readonly string[] = [];
+  try {
+    srcs = await readNavigatorClipboardImagesAsDataUrls();
+  } catch (error) {
+    console.warn("Could not read pasted image from clipboard.", error);
+  }
+  if (srcs.length) {
+    await handlers.handlePastedImages(srcs);
+    return;
+  }
+  handlers.handlePasteWithoutImage?.();
+}
+
+function isPasteShortcut(event: KeyboardEvent): boolean {
+  return event.key.toLowerCase() === "v" && (event.ctrlKey || event.metaKey);
 }
 
 async function handlePaste(event: ClipboardEvent, handlers: AppEventHandlers): Promise<void> {
