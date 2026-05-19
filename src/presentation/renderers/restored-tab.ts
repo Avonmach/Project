@@ -30,7 +30,7 @@ export function renderRestoredTab<TDetection extends ReviewableDetection>({
 
   body.replaceChildren();
   if (!allDetections.length) {
-    drawTableEmptyState(body, "Upload and analyze a restored artefact screenshot to populate this table.");
+    drawTableEmptyState(body, "When image is loaded please click Analyze.");
     return;
   }
 

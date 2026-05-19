@@ -1081,10 +1081,10 @@ input[type="search"] {
   border-radius: 8px;
   box-shadow: 0 18px 42px rgba(34, 24, 13, 0.34);
   display: none;
-  left: 22px;
+  left: 128px;
   padding: 6px;
   position: fixed;
-  top: 245px;
+  top: 210px;
   z-index: 1000;
 }
 
