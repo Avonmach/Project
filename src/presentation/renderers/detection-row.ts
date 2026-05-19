@@ -29,6 +29,7 @@ export interface DetectionRowModel {
 
 export interface DetectionRowRendererOptions<TDetection extends DetectionRowModel> {
   readonly detection: TDetection;
+  readonly showMetadataColumns?: boolean;
   readonly quantityNeedsReview: (detection: TDetection) => boolean;
   readonly quantityCandidatesAreClose: (detection: TDetection) => boolean;
   readonly applyQuantityChange: (detection: TDetection, quantity: number, source: string) => void;
@@ -42,6 +43,7 @@ export interface DetectionRowRendererOptions<TDetection extends DetectionRowMode
 
 export function makeDetectionTableRow<TDetection extends DetectionRowModel>({
   detection,
+  showMetadataColumns = true,
   quantityNeedsReview,
   quantityCandidatesAreClose,
   applyQuantityChange,
@@ -158,17 +160,8 @@ export function makeDetectionTableRow<TDetection extends DetectionRowModel>({
     ...(actionCell ? { actionCell } : {})
   };
 
-  const rowCells = [
-    nameCell,
-    levelCell,
-    themeCell,
-    siteCell,
-    statusCell,
-    previewCell,
-    processedCell,
-    referenceCell,
-    quantityCell
-  ];
+  const metadataCells = showMetadataColumns ? [levelCell, themeCell, siteCell] : [];
+  const rowCells = [nameCell, ...metadataCells, statusCell, previewCell, processedCell, referenceCell, quantityCell];
   if (actionCell) rowCells.push(actionCell);
   row.append(...rowCells);
   return row;

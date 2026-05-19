@@ -92,7 +92,7 @@ import {
 import type { MaterialRow } from "./presentation/renderers/materials-tab";
 import { drawAnalysisOverlay, drawAnalysisOverlayMarkers, type OverlayFrame } from "./presentation/renderers/analysis-overlay";
 import { updateDetectionRow as updateDetectionRowElement } from "./presentation/renderers/detection-row-update";
-import { makeBackgroundRemovedCanvas, makePreviewCanvas, makeReferenceCanvas } from "./presentation/renderers/preview-canvases";
+import { makePreviewCanvas, makeReferenceCanvas, makeStorageProcessedCanvas } from "./presentation/renderers/preview-canvases";
 import {
   makeEmptyMessage,
   makeLinkedTextCell,
@@ -744,6 +744,7 @@ function translateBox<TBox extends BoundingBox>(box: TBox, x: number, y: number)
 function makeStorageDetectionTableRow(detection: StorageDetection): HTMLTableRowElement {
   return makeDetectionTableRowElement({
     detection,
+    showMetadataColumns: false,
     quantityNeedsReview: storageQuantityNeedsReview,
     quantityCandidatesAreClose: quantityCandidatesAreClose,
     applyQuantityChange: applyStorageQuantityChange,
@@ -768,7 +769,7 @@ function makeStorageDetections(
     if (!frame) return [];
     const reference = item.materialName ? referenceByName.get(item.materialName) : undefined;
     const preview = makePreviewCanvas(frame.imageData, item.box, { enhanceHover: false });
-    const processedPreview = makeBackgroundRemovedCanvas(frame.imageData, item.box);
+    const processedPreview = makeStorageProcessedCanvas(frame.imageData, item.box);
     return [
       {
         id: item.id,

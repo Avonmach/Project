@@ -87,7 +87,7 @@ export function renderStorageTab<TVisibleDetection, TStorageDetection>({
 
   const detectionTable = document.createElement("table");
   detectionTable.className = "secondary-table results-table";
-  detectionTable.append(makeTableHead(["Material", "Level", "Theme", "Site", "Status", "Screenshot", "Processed", "Guess", "Quantity"]));
+  detectionTable.append(makeTableHead(["Material", "Status", "Screenshot", "Processed", "Guess", "Quantity"]));
   const detectionBody = document.createElement("tbody");
 
   for (const detection of storageDetections) {

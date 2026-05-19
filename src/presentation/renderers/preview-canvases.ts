@@ -11,6 +11,12 @@ const PREVIEW_SIZE = 48;
 const PREVIEW_INSET = 3;
 const PREVIEW_BACKGROUND = "#dcc8a6";
 
+interface PreviewRgbColor {
+  readonly r: number;
+  readonly g: number;
+  readonly b: number;
+}
+
 export interface PreviewCanvasOptions {
   readonly enhanceHover?: boolean;
 }
@@ -149,6 +155,50 @@ export function makeBackgroundRemovedCanvas(imageData: ImageData, box: BoundingB
   return preview;
 }
 
+export function makeStorageProcessedCanvas(imageData: ImageData, box: BoundingBox): HTMLCanvasElement {
+  const crop = copyImageData(imageData, getIconMatchBox(box));
+  const backgroundColors = dominantEdgeColors(crop, 2);
+  const masked = new ImageData(crop.width, crop.height);
+
+  for (let i = 0; i < crop.data.length; i += 4) {
+    const r = readImageDataChannel(crop.data, i);
+    const g = readImageDataChannel(crop.data, i + 1);
+    const b = readImageDataChannel(crop.data, i + 2);
+    const isBackground = backgroundColors.some((color) => colorDistance({ r, g, b }, color) <= 34);
+    if (isBackground) continue;
+    masked.data[i] = r;
+    masked.data[i + 1] = g;
+    masked.data[i + 2] = b;
+    masked.data[i + 3] = 255;
+  }
+
+  const bounds = alphaBounds(masked, 20);
+  const source = document.createElement("canvas");
+  source.width = masked.width;
+  source.height = masked.height;
+  source.getContext("2d")?.putImageData(masked, 0, 0);
+
+  const preview = document.createElement("canvas");
+  preview.width = PREVIEW_SIZE;
+  preview.height = PREVIEW_SIZE;
+  preview.className = "clean-preview";
+  const previewCtx = preview.getContext("2d");
+  if (!previewCtx) return preview;
+  previewCtx.imageSmoothingEnabled = false;
+
+  if (bounds) {
+    const longest = Math.max(bounds.w, bounds.h);
+    const maxIconSize = PREVIEW_SIZE - PREVIEW_INSET * 2;
+    const drawW = Math.ceil((bounds.w / longest) * maxIconSize);
+    const drawH = Math.ceil((bounds.h / longest) * maxIconSize);
+    const dx = Math.floor((PREVIEW_SIZE - drawW) / 2);
+    const dy = Math.floor((PREVIEW_SIZE - drawH) / 2);
+    previewCtx.drawImage(source, bounds.x, bounds.y, bounds.w, bounds.h, dx, dy, drawW, drawH);
+  }
+
+  return preview;
+}
+
 export function makeRemovedOverlayCanvas(imageData: ImageData, shapeImageData: ImageData, box: BoundingBox): HTMLCanvasElement {
   const iconBox = getIconMatchBox(box);
   const overlay = copyImageData(imageData, iconBox);
@@ -260,6 +310,39 @@ function enhancePreviewColor(r: number, g: number, b: number): { readonly r: num
 
 function brightenChannel(value: number, factor: number): number {
   return Math.max(0, Math.min(255, Math.round(value * factor)));
+}
+
+function dominantEdgeColors(imageData: ImageData, limit: number): PreviewRgbColor[] {
+  const buckets = new Map<string, { count: number; r: number; g: number; b: number }>();
+  for (let y = 0; y < imageData.height; y += 1) {
+    for (let x = 0; x < imageData.width; x += 1) {
+      if (x > 1 && y > 1 && x < imageData.width - 2 && y < imageData.height - 2) continue;
+      const offset = (y * imageData.width + x) * 4;
+      const r = readImageDataChannel(imageData.data, offset);
+      const g = readImageDataChannel(imageData.data, offset + 1);
+      const b = readImageDataChannel(imageData.data, offset + 2);
+      const key = `${Math.round(r / 16)}:${Math.round(g / 16)}:${Math.round(b / 16)}`;
+      const bucket = buckets.get(key) || { count: 0, r: 0, g: 0, b: 0 };
+      bucket.count += 1;
+      bucket.r += r;
+      bucket.g += g;
+      bucket.b += b;
+      buckets.set(key, bucket);
+    }
+  }
+
+  return [...buckets.values()]
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit)
+    .map((bucket) => ({
+      r: Math.round(bucket.r / bucket.count),
+      g: Math.round(bucket.g / bucket.count),
+      b: Math.round(bucket.b / bucket.count)
+    }));
+}
+
+function colorDistance(first: PreviewRgbColor, second: PreviewRgbColor): number {
+  return Math.hypot(first.r - second.r, first.g - second.g, first.b - second.b);
 }
 
 function paintFingerprintMask(canvas: HTMLCanvasElement, fingerprint: readonly FingerprintPixel[]): void {

@@ -985,7 +985,7 @@ tbody tr:has(.processed-preview:hover),
   height: 34px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 64px;
 }
 
 .qty-input.quantity-warning-input,
