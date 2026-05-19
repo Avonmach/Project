@@ -182,7 +182,8 @@ const browserActions = connectAppEvents(elements, {
   exportResults,
   handleSelectedImageInput: () =>
     loadSelectedScreenshotInput({ imageInput, loadImageFromUrl, loadImagesFromUrls: loadSelectedImagesFromUrls, drawEmptyState }),
-  handlePastedImages: loadSelectedImagesFromUrls
+  handlePastedImages: loadSelectedImagesFromUrls,
+  handlePasteWithoutImage: () => drawEmptyState(STATUS_MESSAGES.clipboardNoImage)
 });
 
 initialize();

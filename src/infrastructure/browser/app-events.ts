@@ -10,6 +10,7 @@ export interface AppEventHandlers {
   exportResults(): void;
   handleSelectedImageInput(): Promise<void>;
   handlePastedImages(srcs: readonly string[]): Promise<void>;
+  handlePasteWithoutImage?(): void;
 }
 
 export interface AppBrowserActions {
@@ -51,9 +52,18 @@ async function handlePaste(event: ClipboardEvent, handlers: AppEventHandlers): P
       console.warn("Could not read pasted image from clipboard.", error);
     }
   }
-  if (!srcs.length) return;
+  if (!srcs.length) {
+    if (!isEditablePasteTarget(event.target)) handlers.handlePasteWithoutImage?.();
+    return;
+  }
   event.preventDefault();
   await handlers.handlePastedImages(srcs);
+}
+
+function isEditablePasteTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement;
 }
 
 function connectExamplePreviewPositioning(): void {
