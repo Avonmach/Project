@@ -350,25 +350,22 @@ function applyCandidatePrediction(detection: AppDetection, candidate: AppMatchCa
 }
 
 function renderDetections(): void {
-  preserveScrollPosition(() => {
-    if (!detections.length) {
-      if (resultsState.activeTab === "damaged") drawEmptyState(STATUS_MESSAGES.noDamagedSlotsDetected);
-      updateTotals();
-      renderRestorationPlan([]);
-      renderResultsTabContent();
-      return;
-    }
-
-    updateFilterOptions();
-    const visibleDetections = filteredDetections();
-    if (resultsState.activeTab === "damaged") {
-      renderDamagedTable(visibleDetections);
-    }
-
+  if (!detections.length) {
+    if (resultsState.activeTab === "damaged") drawEmptyState(STATUS_MESSAGES.noDamagedSlotsDetected);
     updateTotals();
-    renderRestorationPlan(visibleDetections);
+    renderRestorationPlan([]);
     renderResultsTabContent();
-  });
+    return;
+  }
+
+  updateFilterOptions();
+  const visibleDetections = filteredDetections();
+  if (resultsState.activeTab === "damaged") renderDamagedTable(visibleDetections);
+  if (resultsState.activeTab === "restored") renderRestoredTab(visibleDetections);
+
+  updateTotals();
+  renderRestorationPlan(visibleDetections);
+  renderResultsTabContent();
 }
 
 function makeDetectionTableRow(detection: AppDetection): HTMLTableRowElement {
@@ -411,15 +408,14 @@ function filterDetectionsForItems(items: readonly AppDetection[]): AppDetection[
 }
 
 function setActiveResultsTab(tab: ResultsTab): void {
-  preserveScrollPosition(() => {
-    detections = resultsState.setActiveTab(tab);
-    applyResultTabSelection({ tab, title: resultsTitle, buttons: resultTabButtons, panels: resultTabPanels });
-    updateScreenshotPanel();
+  detections = resultsState.setActiveTab(tab);
+  applyResultTabSelection({ tab, title: resultsTitle, buttons: resultTabButtons, panels: resultTabPanels });
+  updateScreenshotPanel();
 
-    if (tab === "damaged") renderDamagedTable(filteredDetections());
-    updateTotals();
-    renderResultsTabContent();
-  });
+  if (tab === "damaged") renderDamagedTable(filteredDetections());
+  if (tab === "restored") renderRestoredTab(filteredDetections());
+  updateTotals();
+  renderResultsTabContent();
 }
 
 function renderResultsTabContent(): void {
@@ -510,6 +506,8 @@ function restoreActiveScreenshotToCanvas(): void {
   }
   loadedImage = tab ? loadedImagesByTab[tab] : null;
   if (!tab || !loadedImage) {
+    canvas.width = 927;
+    canvas.height = hasAnyLoadedScreenshot() ? 86 : 170;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.classList.add("is-empty");
     imagePanel.classList.toggle("is-compact-upload", hasAnyLoadedScreenshot());
@@ -529,6 +527,8 @@ function hasAnyLoadedScreenshot(): boolean {
 function drawStoragePreview(): void {
   loadedImage = storageImages[0] ?? null;
   if (!storageImages.length) {
+    canvas.width = 927;
+    canvas.height = hasAnyLoadedScreenshot() ? 86 : 170;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.classList.add("is-empty");
     imagePanel.classList.add("is-storage-incomplete");
@@ -740,6 +740,7 @@ function applyQuantityChange(detection: AppDetection, quantity: number, source: 
 
 function removeDetection(detection: AppDetection): void {
   detections = resultsState.removeDetectionForMode(detection.recognitionMode, detection);
+  updateFilterOptions();
   renderDetections();
   drawBoxes(detections);
 }
@@ -808,10 +809,8 @@ function drawEmptyState(message: string): void {
 }
 
 function updateTotals(): void {
-  preserveScrollPosition(() => {
-    if (detections.length) renderRestorationPlan(filteredDetections());
-    renderResultsTabContent();
-  });
+  if (detections.length) renderRestorationPlan(filteredDetections());
+  renderResultsTabContent();
 }
 
 function handleCollectionToggle(collectionName: string, selected: boolean): void {
@@ -1039,11 +1038,3 @@ function isStoragePresentationDetection(item: StorageGridDetection | StorageDete
   return "artefact" in item;
 }
 
-function preserveScrollPosition(render: () => void): void {
-  const x = window.scrollX;
-  const y = window.scrollY;
-  render();
-  window.requestAnimationFrame(() => {
-    if (window.scrollX !== x || window.scrollY !== y) window.scrollTo(x, y);
-  });
-}
