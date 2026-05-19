@@ -17,6 +17,17 @@ export interface StorageMaterialMatch {
   readonly name: string;
   readonly wikiPage?: string | null;
   readonly score: number;
+  readonly shapeScore?: number;
+  readonly colorScore?: number;
+  readonly candidates?: readonly StorageMaterialMatchCandidate[];
+}
+
+export interface StorageMaterialMatchCandidate {
+  readonly name: string;
+  readonly wikiPage?: string | null;
+  readonly score: number;
+  readonly shapeScore?: number;
+  readonly colorScore?: number;
 }
 
 export interface StorageMaterialMatcher {

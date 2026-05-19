@@ -91,7 +91,22 @@ test("analyzeStorageScreenshots can attach material matches and quantities", () 
       materialName: "Third age iron",
       wikiPage: "https://example.test/material",
       matchScore: 0.91,
-      quantity: 1948
+      quantity: 1948,
+      originalQuantity: 1948,
+      quantityConfidence: 0.9,
+      quantityAlternatives: [{ quantity: 1948, confidence: 0.9 }],
+      quantityDebug: {
+        mode: "damaged",
+        strict: false,
+        scanBox: box,
+        pixelCount: 0,
+        pixels: [],
+        digitBoxes: [],
+        rejectedBoxes: [],
+        matches: [],
+        text: "1948",
+        confidence: 0.9
+      }
     }
   ]);
 });

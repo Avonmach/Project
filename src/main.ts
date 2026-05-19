@@ -5,6 +5,7 @@ import {
   type StorageGridDetection
 } from "./application/analyze-storage/analyze-storage-screenshots";
 import type { StorageRecognitionFrame } from "./application/analyze-storage/storage-recognition-ports";
+import { attachQuantityDebugSource } from "./infrastructure/image-processing/quantity-debug-source";
 import { recognitionModeForTab } from "./application/analyze-screenshot/recognition-mode";
 import { DEFAULT_SCREENSHOTS } from "./application/config/default-screenshots";
 import { AMBIGUOUS_FINAL_MARGIN } from "./application/config/matching-thresholds";
@@ -65,6 +66,7 @@ import {
 } from "./presentation/tabs/results-tabs";
 import { createResultsState } from "./presentation/state/results-state";
 import type { AppDetection, AppMatchCandidate } from "./presentation/state/app-detection";
+import type { StorageDetection } from "./presentation/state/storage-detection";
 import { updateCultureFilterOptions as updateCultureFilterOptionsElement } from "./presentation/filters/culture-options";
 import { renderOverviewTab as renderOverviewTabPanel } from "./presentation/renderers/overview-tab";
 import { drawTableEmptyState, renderRestoredTab as renderRestoredTabPanel } from "./presentation/renderers/restored-tab";
@@ -90,7 +92,7 @@ import {
 import type { MaterialRow } from "./presentation/renderers/materials-tab";
 import { drawAnalysisOverlay, drawAnalysisOverlayMarkers, type OverlayFrame } from "./presentation/renderers/analysis-overlay";
 import { updateDetectionRow as updateDetectionRowElement } from "./presentation/renderers/detection-row-update";
-import { makeReferenceCanvas } from "./presentation/renderers/preview-canvases";
+import { makeBackgroundRemovedCanvas, makePreviewCanvas, makeReferenceCanvas } from "./presentation/renderers/preview-canvases";
 import {
   makeEmptyMessage,
   makeLinkedTextCell,
@@ -159,6 +161,7 @@ let storageImages: HTMLImageElement[] = [];
 let storageAnalysisDone = false;
 let storageGridDetections: StorageGridDetection[] = [];
 let storageRecognitionFrames: StorageRecognitionFrame[] = [];
+let storageDetections: StorageDetection[] = [];
 let detectedStorageMaterials: DetectedStorageMaterial[] = [];
 let detections: AppDetection[] = [];
 let references: PreparedArtefactReference[] = [];
@@ -255,6 +258,7 @@ async function loadStorageImagesFromUrls(srcs: readonly string[]): Promise<void>
     storageAnalysisDone = false;
     storageGridDetections = [];
     storageRecognitionFrames = [];
+    storageDetections = [];
     detectedStorageMaterials = [];
     if (currentScreenshotTab() === "storage") restoreActiveScreenshotToCanvas();
     renderResultsTabContent();
@@ -294,6 +298,7 @@ function analyzeStorageScreenshots(): void {
     storageAnalysisDone = false;
     storageGridDetections = [];
     storageRecognitionFrames = [];
+    storageDetections = [];
     detectedStorageMaterials = [];
     renderResultsTabContent();
     return;
@@ -306,7 +311,8 @@ function analyzeStorageScreenshots(): void {
   storageAnalysisDone = true;
   storageGridDetections = [...analysis.detections];
   storageRecognitionFrames = [...analysis.frames];
-  detectedStorageMaterials = mergeStorageMaterials(analysis.detections);
+  storageDetections = makeStorageDetections(analysis.detections, analysis.frames);
+  detectedStorageMaterials = mergeStorageMaterials(storageDetections);
   drawStorageAnalysisOverlay();
   renderResultsTabContent();
 }
@@ -563,6 +569,7 @@ function renderStorageTab(items: readonly AppDetection[]): void {
   renderStorageTabPanel({
     panel: storagePanel,
     visibleDetections: items,
+    storageDetections,
     uploadedImageCount: storageImages.length,
     requiredImageCount: STORAGE_REQUIRED_SCREENSHOTS,
     analysisDone: storageAnalysisDone,
@@ -570,6 +577,7 @@ function renderStorageTab(items: readonly AppDetection[]): void {
     detectedMaterials: detectedStorageMaterials,
     materialReferenceCount: materialReferences.length,
     calculateMaterialTotals: (detections) => calculateMaterialTotalsForRecipes(detections, recipeByRestoredName),
+    makeStorageDetectionTableRow,
     makeMaterialCell,
     makeLinkedTextCell,
     makeTableHead,
@@ -733,28 +741,189 @@ function translateBox<TBox extends BoundingBox>(box: TBox, x: number, y: number)
   return { ...box, x: box.x + x, y: box.y + y };
 }
 
-function mergeStorageMaterials(items: readonly StorageGridDetection[]): DetectedStorageMaterial[] {
+function makeStorageDetectionTableRow(detection: StorageDetection): HTMLTableRowElement {
+  return makeDetectionTableRowElement({
+    detection,
+    quantityNeedsReview: storageQuantityNeedsReview,
+    quantityCandidatesAreClose: quantityCandidatesAreClose,
+    applyQuantityChange: applyStorageQuantityChange,
+    onQuantityChanged: (quantityCell) => {
+      markStorageQuantityManual(detection, quantityCell);
+      refreshStorageTotals();
+    },
+    onVerifyDetection: verifyStorageDetection,
+    makeReferenceCorrectionDropdown: makeStorageReferenceCorrectionDropdown,
+    makeRecognitionInfo: makeRecognitionInfoElement,
+    makeQuantityDebugView: (item) => makeQuantityDebugViewElement(item.quantityDebug)
+  });
+}
+
+function makeStorageDetections(
+  items: readonly StorageGridDetection[],
+  frames: readonly StorageRecognitionFrame[]
+): StorageDetection[] {
+  const referenceByName = new Map(materialReferences.map((reference) => [reference.name, reference]));
+  return items.flatMap((item) => {
+    const frame = frames[item.screenshotIndex];
+    if (!frame) return [];
+    const reference = item.materialName ? referenceByName.get(item.materialName) : undefined;
+    const preview = makePreviewCanvas(frame.imageData, item.box, { enhanceHover: false });
+    const processedPreview = makeBackgroundRemovedCanvas(frame.imageData, item.box);
+    return [
+      {
+        id: item.id,
+        screenshotIndex: item.screenshotIndex,
+        artefact: item.materialName || "Unknown material",
+        wikiPage: item.wikiPage,
+        archaeologyLevel: "",
+        culture: "",
+        digSite: `Storage ${item.screenshotIndex + 1}`,
+        quantity: item.quantity || 1,
+        originalQuantity: item.originalQuantity,
+        quantityConfidence: item.quantityConfidence,
+        quantityAlternatives: item.quantityAlternatives,
+        quantityDebug: attachQuantityDebugSource(item.quantityDebug || null, frame.imageData),
+        matchScore: item.matchScore,
+        shapeScore: item.shapeScore,
+        colorScore: item.colorScore,
+        matchGap: item.matchGap,
+        ambiguousMatch: storageMatchNeedsReview(item),
+        topMatches: (item.topMatches || []).flatMap((candidate) => {
+          const candidateReference = referenceByName.get(candidate.name);
+          return candidateReference
+            ? [
+                {
+                  item: candidateReference,
+                  score: candidate.score,
+                  shapeScore: candidate.shapeScore,
+                  colorScore: candidate.colorScore
+                }
+              ]
+            : [];
+        }),
+        preview,
+        processedPreview,
+        referencePreview: reference ? makeReferenceCanvas(reference.image) : makeBlankReferenceCanvas()
+      }
+    ];
+  });
+}
+
+function storageMatchNeedsReview(detection: Pick<StorageGridDetection, "matchScore" | "matchGap" | "materialName">): boolean {
+  if (!detection.materialName) return true;
+  if ((detection.matchScore ?? 0) < 0.55) return true;
+  return detection.matchGap !== null && detection.matchGap !== undefined && detection.matchGap <= AMBIGUOUS_FINAL_MARGIN;
+}
+
+function storageQuantityNeedsReview(detection: StorageDetection): boolean {
+  return !detection.quantityManual && quantityCandidatesAreClose(detection);
+}
+
+function applyStorageQuantityChange(detection: StorageDetection, quantity: number, source: string): void {
+  applyQuantityCorrection(detection, quantity, source);
+}
+
+function markStorageQuantityManual(detection: StorageDetection, quantityCell: HTMLTableCellElement): void {
+  const input = quantityCell.querySelector(".qty-input");
+  if (input) input.classList.remove("quantity-warning-input");
+  if (detection.rowElements?.row) detection.rowElements.row.className = storageRowReviewClass(detection);
+  if (detection.rowElements?.statusCell) {
+    detection.rowElements.statusCell.replaceChildren(makeDetectionStatusPill(detection, storageQuantityNeedsReview(detection)));
+  }
+}
+
+function verifyStorageDetection(detection: StorageDetection): void {
+  detection.ambiguousMatch = false;
+  detection.corrected = true;
+  detection.manual = true;
+  updateStorageDetectionRow(detection);
+}
+
+function makeStorageReferenceCorrectionDropdown(detection: StorageDetection): HTMLDetailsElement {
+  return makeReferenceCorrectionDropdownElement({
+    detection,
+    references: materialReferences,
+    applyReferenceCorrection: applyStorageReferenceCorrection
+  });
+}
+
+function applyStorageReferenceCorrection(
+  detection: StorageDetection,
+  item: PreparedMaterialReference,
+  score: number | null
+): void {
+  detection.artefact = item.name;
+  detection.restoredName = item.name;
+  detection.wikiPage = item.wikiPage;
+  detection.matchScore = score;
+  detection.matchGap = null;
+  detection.ambiguousMatch = false;
+  detection.corrected = true;
+  detection.manual = true;
+  detection.referencePreview = makeReferenceCanvas(item.image);
+  updateStorageDetectionRow(detection);
+  refreshStorageTotals();
+}
+
+function updateStorageDetectionRow(detection: StorageDetection): void {
+  updateDetectionRowElement({
+    detection,
+    rowReviewClass: storageRowReviewClass,
+    makeReferenceCorrectionDropdown: makeStorageReferenceCorrectionDropdown,
+    makeRecognitionInfo: makeRecognitionInfoElement,
+    makeStatusPill: (item) => makeDetectionStatusPill(item, storageQuantityNeedsReview(item))
+  });
+}
+
+function storageRowReviewClass(detection: StorageDetection): string {
+  return detectionRowReviewClass(detection, storageQuantityNeedsReview(detection));
+}
+
+function refreshStorageTotals(): void {
+  detectedStorageMaterials = mergeStorageMaterials(storageDetections);
+  renderResultsTabContent();
+}
+
+function makeBlankReferenceCanvas(): HTMLCanvasElement {
+  const canvasElement = document.createElement("canvas");
+  canvasElement.width = 48;
+  canvasElement.height = 48;
+  canvasElement.className = "reference-preview";
+  const canvasContext = canvasElement.getContext("2d");
+  if (canvasContext) {
+    canvasContext.fillStyle = "#dcc8a6";
+    canvasContext.fillRect(0, 0, canvasElement.width, canvasElement.height);
+  }
+  return canvasElement;
+}
+
+function mergeStorageMaterials(items: readonly StorageGridDetection[] | readonly StorageDetection[]): DetectedStorageMaterial[] {
   const byName = new Map<string, DetectedStorageMaterial>();
   for (const item of items) {
-    if (!item.materialName) continue;
-    const existing = byName.get(item.materialName);
+    const name = isStoragePresentationDetection(item) ? item.artefact : item.materialName;
+    if (!name || name === "Unknown material") continue;
+    const existing = byName.get(name);
     const quantity = item.quantity || 1;
     if (existing) {
-      byName.set(item.materialName, {
+      byName.set(name, {
         ...existing,
         quantity: existing.quantity + quantity,
         matchScore: Math.max(existing.matchScore || 0, item.matchScore || 0)
       });
     } else {
-      byName.set(item.materialName, {
-        name: item.materialName,
+      byName.set(name, {
+        name,
         quantity,
         wikiPage: item.wikiPage,
-        matchScore: item.matchScore
+        matchScore: item.matchScore ?? undefined
       });
     }
   }
   return [...byName.values()];
+}
+
+function isStoragePresentationDetection(item: StorageGridDetection | StorageDetection): item is StorageDetection {
+  return "artefact" in item;
 }
 
 function preserveScrollPosition(render: () => void): void {

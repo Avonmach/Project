@@ -15,16 +15,18 @@ export interface DetectedStorageMaterial {
   readonly matchScore?: number;
 }
 
-export interface StorageTabRendererOptions<TDetection> {
+export interface StorageTabRendererOptions<TVisibleDetection, TStorageDetection> {
   readonly panel: HTMLElement;
-  readonly visibleDetections: readonly TDetection[];
+  readonly visibleDetections: readonly TVisibleDetection[];
+  readonly storageDetections: readonly TStorageDetection[];
   readonly uploadedImageCount: number;
   readonly requiredImageCount: number;
   readonly analysisDone: boolean;
   readonly detectedGridCellCount: number;
   readonly detectedMaterials: readonly DetectedStorageMaterial[];
   readonly materialReferenceCount: number;
-  readonly calculateMaterialTotals: (items: readonly TDetection[]) => readonly StorageMaterialNeed[];
+  readonly calculateMaterialTotals: (items: readonly TVisibleDetection[]) => readonly StorageMaterialNeed[];
+  readonly makeStorageDetectionTableRow: (detection: TStorageDetection) => HTMLTableRowElement;
   readonly makeMaterialCell: (row: { readonly name: string }) => HTMLTableCellElement;
   readonly makeLinkedTextCell: (label: string, href?: string | null) => HTMLTableCellElement;
   readonly makeTableHead: (labels: readonly string[]) => HTMLTableSectionElement;
@@ -32,9 +34,10 @@ export interface StorageTabRendererOptions<TDetection> {
   readonly makeOverviewCard: (label: string, value: string | number) => HTMLElement;
 }
 
-export function renderStorageTab<TDetection>({
+export function renderStorageTab<TVisibleDetection, TStorageDetection>({
   panel,
   visibleDetections,
+  storageDetections,
   uploadedImageCount,
   requiredImageCount,
   analysisDone,
@@ -42,12 +45,13 @@ export function renderStorageTab<TDetection>({
   detectedMaterials,
   materialReferenceCount,
   calculateMaterialTotals,
+  makeStorageDetectionTableRow,
   makeMaterialCell,
   makeLinkedTextCell,
   makeTableHead,
   makeEmptyMessage,
   makeOverviewCard
-}: StorageTabRendererOptions<TDetection>): void {
+}: StorageTabRendererOptions<TVisibleDetection, TStorageDetection>): void {
   panel.replaceChildren();
   const materialRows = [...detectedMaterials]
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -76,16 +80,29 @@ export function renderStorageTab<TDetection>({
     return;
   }
 
-  if (!materialRows.length) {
+  if (!storageDetections.length) {
     panel.append(summary, makeEmptyMessage("No storage materials were detected in the uploaded screenshots."));
     return;
   }
 
-  const table = document.createElement("table");
-  table.className = "secondary-table materials-table";
-  table.append(makeTableHead(["Material", "Quantity", "Wiki page"]));
-  const body = document.createElement("tbody");
+  const detectionTable = document.createElement("table");
+  detectionTable.className = "secondary-table results-table";
+  detectionTable.append(makeTableHead(["Material", "Level", "Theme", "Site", "Status", "Screenshot", "Processed", "Guess", "Quantity"]));
+  const detectionBody = document.createElement("tbody");
 
+  for (const detection of storageDetections) {
+    detectionBody.append(makeStorageDetectionTableRow(detection));
+  }
+
+  detectionTable.append(detectionBody);
+
+  const totalsTitle = document.createElement("h3");
+  totalsTitle.textContent = "Detected storage totals";
+  totalsTitle.className = "section-heading";
+  const totalsTable = document.createElement("table");
+  totalsTable.className = "secondary-table materials-table";
+  totalsTable.append(makeTableHead(["Material", "Quantity", "Wiki page"]));
+  const totalsBody = document.createElement("tbody");
   for (const material of materialRows) {
     const tr = document.createElement("tr");
     const linkCell = makeLinkedTextCell(material.name, material.wikiPage);
@@ -93,9 +110,9 @@ export function renderStorageTab<TDetection>({
     quantityCell.className = "number-cell";
     quantityCell.textContent = String(material.quantity);
     tr.append(makeMaterialCell({ name: material.name }), quantityCell, linkCell);
-    body.append(tr);
+    totalsBody.append(tr);
   }
 
-  table.append(body);
-  panel.append(summary, table);
+  totalsTable.append(totalsBody);
+  panel.append(summary, detectionTable, totalsTitle, totalsTable);
 }

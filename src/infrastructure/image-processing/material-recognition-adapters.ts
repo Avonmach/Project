@@ -11,7 +11,16 @@ export function createReferenceMaterialMatcher(
       return {
         name: match.item.name,
         wikiPage: match.item.wikiPage,
-        score: match.score
+        score: match.score,
+        shapeScore: match.shapeScore,
+        colorScore: match.colorScore,
+        candidates: match.candidates.map((candidate) => ({
+          name: candidate.item.name,
+          wikiPage: candidate.item.wikiPage,
+          score: candidate.score,
+          shapeScore: candidate.shapeScore,
+          colorScore: candidate.colorScore
+        }))
       };
     }
   };
