@@ -42,6 +42,7 @@ export interface StorageDetection {
   ambiguousMatch?: boolean;
   corrected?: boolean;
   manual?: boolean;
+  bestMatchLimit?: number;
   topMatches?: readonly StorageMatchCandidate[];
   preview: HTMLCanvasElement;
   processedPreview: HTMLCanvasElement;

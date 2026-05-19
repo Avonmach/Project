@@ -19,6 +19,7 @@ export interface CorrectionDetection<TReference extends CorrectionReference> {
   readonly recognitionMode?: "damaged" | "restored";
   readonly referencePreview: Node;
   readonly topMatches?: readonly CorrectionCandidate<TReference>[];
+  readonly bestMatchLimit?: number;
 }
 
 export interface CorrectionDropdownOptions<TDetection extends CorrectionDetection<TReference>, TReference extends CorrectionReference> {
@@ -86,15 +87,17 @@ function makeCorrectionPanel<TDetection extends CorrectionDetection<TReference>,
   const renderList = () => {
     list.replaceChildren();
     const query = search.value.trim().toLowerCase();
-    const topMatches = [...(detection.topMatches || [])].sort((a, b) => candidateDisplayScore(b) - candidateDisplayScore(a));
-    const scored = new Map(topMatches.map((candidate) => [candidate.item.name, candidateDisplayScore(candidate)]));
+    const scoredMatches = [...(detection.topMatches || [])].sort((a, b) => candidateDisplayScore(b) - candidateDisplayScore(a));
+    const bestMatches = scoredMatches.slice(0, detection.bestMatchLimit ?? scoredMatches.length);
+    const bestNames = new Set(bestMatches.map((candidate) => candidate.item.name));
+    const scored = new Map(scoredMatches.map((candidate) => [candidate.item.name, candidateDisplayScore(candidate)]));
 
     const top = document.createElement("div");
     top.className = "correction-section-title";
     top.textContent = "Best matches";
     list.append(top);
 
-    for (const candidate of topMatches.filter((candidate) => matchesCorrectionSearch(candidate.item, query))) {
+    for (const candidate of bestMatches.filter((candidate) => matchesCorrectionSearch(candidate.item, query))) {
       list.append(makeCorrectionOption(detection, candidate.item, candidateDisplayScore(candidate), applyReferenceCorrection));
     }
 
@@ -104,12 +107,12 @@ function makeCorrectionPanel<TDetection extends CorrectionDetection<TReference>,
     list.append(all);
 
     const items = [...references]
-      .filter((item) => !scored.has(item.name))
+      .filter((item) => !bestNames.has(item.name))
       .filter((item) => matchesCorrectionSearch(item, query))
-      .sort((a, b) => sortName(a).localeCompare(sortName(b)));
+      .sort((a, b) => correctionItemSort(a, b, scored));
 
     for (const item of items) {
-      list.append(makeCorrectionOption(detection, item, null, applyReferenceCorrection));
+      list.append(makeCorrectionOption(detection, item, scored.get(item.name) ?? null, applyReferenceCorrection));
     }
   };
 
@@ -162,4 +165,15 @@ function candidateDisplayScore(candidate: CorrectionCandidate<CorrectionReferenc
 function matchesCorrectionSearch(item: CorrectionReference, query: string): boolean {
   if (!query) return true;
   return `${item.name} ${item.restoredName} ${item.culture || ""} ${item.archaeologyLevel || ""}`.toLowerCase().includes(query);
+}
+
+function correctionItemSort(
+  a: CorrectionReference,
+  b: CorrectionReference,
+  scores: ReadonlyMap<string, number>
+): number {
+  const aScore = scores.get(a.name);
+  const bScore = scores.get(b.name);
+  if (aScore !== undefined || bScore !== undefined) return (bScore ?? -1) - (aScore ?? -1);
+  return sortName(a).localeCompare(sortName(b));
 }

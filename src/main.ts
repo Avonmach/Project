@@ -793,7 +793,8 @@ function makeStorageDetections(
         colorScore: item.colorScore,
         matchGap: item.matchGap,
         ambiguousMatch: storageMatchNeedsReview(item),
-        topMatches: (item.topMatches || []).slice(0, 5).flatMap((candidate) => {
+        bestMatchLimit: 5,
+        topMatches: (item.topMatches || []).flatMap((candidate) => {
           const candidateReference = referenceByName.get(candidate.name);
           return candidateReference
             ? [
