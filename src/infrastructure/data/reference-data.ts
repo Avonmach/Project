@@ -27,6 +27,7 @@ export interface ArchaeologyOtherItemRecord {
 
 export interface ArchaeologyArtefactRecipeRecord {
   readonly restoredName: string;
+  readonly experience?: number | null;
   readonly materials?: readonly { readonly name: string; readonly quantity: number }[];
   readonly otherItems?: readonly { readonly name: string; readonly quantity: number }[];
   readonly [key: string]: unknown;
@@ -132,6 +133,7 @@ function isNamedIconReference(value: unknown): value is ArchaeologyMaterialRecor
 function isArchaeologyArtefactRecipeRecord(value: unknown): value is ArchaeologyArtefactRecipeRecord {
   if (!isRecord(value) || typeof value.restoredName !== "string") return false;
   return (
+    isOptionalNumberOrNull(value.experience) &&
     (value.materials === undefined ||
       (Array.isArray(value.materials) &&
         value.materials.every(

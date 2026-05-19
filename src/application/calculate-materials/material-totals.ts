@@ -6,6 +6,7 @@ export interface MaterialRecipeEntry {
 }
 
 export interface MaterialRecipe {
+  readonly experience?: number | null;
   readonly materials?: readonly MaterialRecipeEntry[];
   readonly otherItems?: readonly MaterialRecipeEntry[];
 }

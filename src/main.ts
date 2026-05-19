@@ -632,6 +632,7 @@ function renderPlanningTab(): void {
     damagedItems: filteredDetectionsForMode("damaged"),
     restoredItems: filteredDetectionsForMode("restored"),
     references,
+    recipeByRestoredName,
     onCollectionCountChange: handleCollectionCountChange,
     makeEmptyMessage
   });
