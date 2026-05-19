@@ -304,8 +304,9 @@ input[type="search"] {
   border: 1px dashed var(--image-border);
   border-radius: 8px;
   color: #3d3124;
-  display: flex;
+  display: grid;
   font-weight: 800;
+  gap: 6px;
   inset: 0;
   justify-content: center;
   min-height: 130px;
@@ -313,6 +314,15 @@ input[type="search"] {
   pointer-events: none;
   position: absolute;
   text-align: center;
+}
+
+.screenshot-hover-hint strong {
+  font-size: 18px;
+}
+
+.screenshot-hover-hint span {
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .screenshot-preview-shell:hover canvas,
@@ -1049,6 +1059,42 @@ input[type="search"] {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.example-popover {
+  display: inline-flex;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 3;
+}
+
+.example-button {
+  min-height: 32px;
+  padding: 0 12px;
+}
+
+.example-preview {
+  background: #221f1c;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  box-shadow: 0 18px 42px rgba(34, 24, 13, 0.34);
+  display: none;
+  left: 0;
+  max-width: min(760px, calc(100vw - 80px));
+  padding: 6px;
+  position: absolute;
+  top: calc(100% + 8px);
+}
+
+.example-preview img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+.example-popover:hover .example-preview,
+.example-popover:focus-within .example-preview {
+  display: block;
 }
 
 .artefact-review-strip + .artifact-table {
