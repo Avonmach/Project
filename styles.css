@@ -791,7 +791,10 @@ input[type="search"] {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  padding-bottom: 18px;
+}
+
+.artefact-review-strip + .artifact-table {
+  margin-top: 18px;
 }
 
 .artefact-review-strip > div {
