@@ -30,7 +30,7 @@ export function renderRestoredTab<TDetection extends ReviewableDetection>({
 
   body.replaceChildren();
   if (!allDetections.length) {
-    drawTableEmptyState(body, "When image is loaded please click Analyze.");
+    drawTableEmptyState(body, "After image is loaded please click Analyze.");
     return;
   }
 

@@ -1,6 +1,6 @@
 export const STATUS_MESSAGES = {
   loadingReferences: "Loading reference database.",
-  readyToAnalyze: "When image is loaded please click Analyze.",
+  readyToAnalyze: "After image is loaded please click Analyze.",
   screenshotLoadFailed: "Could not load the screenshot.",
   screenshotReadWarning: "Could not read the selected screenshot.",
   screenshotLoadWarning: "Could not load the screenshot.",

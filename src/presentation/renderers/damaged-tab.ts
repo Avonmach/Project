@@ -30,7 +30,7 @@ export function renderDamagedTab<TDetection extends ReviewableDetection>({
 
   body.replaceChildren();
   if (!allDetections.length) {
-    drawDamagedEmptyState(body, "When image is loaded please click Analyze.");
+    drawDamagedEmptyState(body, "After image is loaded please click Analyze.");
     return;
   }
 
