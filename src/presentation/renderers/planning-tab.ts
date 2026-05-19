@@ -109,7 +109,7 @@ function makeCollectionRewards(collection: ArchaeologyCollection, count: number,
   const rewards = document.createElement("div");
   rewards.className = "planning-rewards";
   const rewardParts: string[] = [];
-  const repeatCount = collection.firstReward ? Math.max(0, count - 1) : count;
+  const repeatCount = count;
   const chronotes = (collection.chronotes || 0) * count;
   const rexFragments = countRexFragments(collection.firstReward, collection.firstReward ? 1 : 0) +
     countRexFragments(collection.recurringReward, repeatCount);
@@ -117,7 +117,7 @@ function makeCollectionRewards(collection: ArchaeologyCollection, count: number,
   if (chronotes) rewardParts.push(`${formatNumber(chronotes)} chronotes`);
   if (collection.firstReward) rewardParts.push(`First: ${collection.firstReward}`);
   if (collection.recurringReward && repeatCount > 0) {
-    rewardParts.push(`Repeat x${repeatCount}: ${collection.recurringReward}`);
+    rewardParts.push(`Repeat: ${scaleRewardText(collection.recurringReward, repeatCount)}`);
   }
   rewardParts.push(`Restore XP: ${formatNumber(restorationExperience)}`);
   if (rexExperience) rewardParts.push(`Rex XP: ${formatNumber(rexExperience)}`);
@@ -331,6 +331,15 @@ function countRexFragments(reward: string | null | undefined, multiplier: number
   const fragmentCount = match?.[1];
   if (!fragmentCount) return 0;
   return (Number.parseInt(fragmentCount.replace(/,/g, ""), 10) || 0) * multiplier;
+}
+
+function scaleRewardText(reward: string, multiplier: number): string {
+  if (multiplier <= 1) return reward;
+  return reward.replace(/^([\d,]+(?:\.\d+)?)\s+(.+)$/u, (_match, rawQuantity: string, label: string) => {
+    const quantity = Number.parseFloat(rawQuantity.replace(/,/g, ""));
+    if (!Number.isFinite(quantity)) return reward;
+    return `${formatNumber(quantity * multiplier)} ${label}`;
+  });
 }
 
 function calculateRexFragmentExperience(fragments: number, level: number): number {

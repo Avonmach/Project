@@ -654,19 +654,23 @@ input[type="search"] {
 
 .planning-artefacts {
   display: grid;
-  gap: 7px;
-  grid-template-columns: repeat(auto-fill, minmax(138px, 1fr));
+  column-gap: 4px;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  justify-items: center;
+  row-gap: 5px;
 }
 
 .planning-artefact {
-  display: block;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .planning-variant-row {
   align-items: center;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .planning-variant {
@@ -705,6 +709,8 @@ input[type="search"] {
   font-size: 13px;
   font-weight: 800;
   margin-top: 4px;
+  text-align: center;
+  width: 100%;
 }
 
 .planning-variant-count,
@@ -730,7 +736,7 @@ input[type="search"] {
   align-items: baseline;
   display: grid;
   gap: 8px;
-  grid-template-columns: minmax(180px, 1.2fr) 48px minmax(180px, 1fr);
+  grid-template-columns: minmax(190px, 260px) 40px minmax(220px, 1fr);
 }
 
 .planning-missing-quantity {
