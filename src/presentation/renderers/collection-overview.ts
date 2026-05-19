@@ -21,6 +21,9 @@ export interface ArchaeologyCollection {
   readonly wikiPage?: string | null;
   readonly artefacts: readonly string[];
   readonly artefactCount?: number | null;
+  readonly chronotes?: number | null;
+  readonly firstReward?: string | null;
+  readonly recurringReward?: string | null;
 }
 
 export interface CollectionReference {

@@ -80,6 +80,7 @@ function makePlanningCollectionCard({
   const title = document.createElement("h3");
   title.textContent = collection.name;
   heading.append(title, makeCountControl(collection.name, count, onCollectionCountChange));
+  const rewards = makeCollectionRewards(collection);
 
   const artefacts = document.createElement("div");
   artefacts.className = "planning-artefacts";
@@ -90,9 +91,20 @@ function makePlanningCollectionCard({
     if (row.missing > 0) missing.push(makeMissingArtefact(row, references));
   }
 
-  card.append(heading, artefacts);
+  card.append(heading, rewards, artefacts);
   if (missing.length) card.append(makeMissingList(missing));
   return card;
+}
+
+function makeCollectionRewards(collection: ArchaeologyCollection): HTMLElement {
+  const rewards = document.createElement("div");
+  rewards.className = "planning-rewards";
+  const rewardParts: string[] = [];
+  if (collection.chronotes) rewardParts.push(`${formatNumber(collection.chronotes)} chronotes`);
+  if (collection.firstReward) rewardParts.push(`First: ${collection.firstReward}`);
+  if (collection.recurringReward) rewardParts.push(`Repeat: ${collection.recurringReward}`);
+  rewards.textContent = rewardParts.length ? `Reward: ${rewardParts.join(" | ")}` : "Reward: none listed";
+  return rewards;
 }
 
 function makeCountControl(
@@ -234,7 +246,10 @@ function makeMissingList(missing: readonly MissingArtefact[]): HTMLElement {
   const list = document.createElement("ul");
   for (const item of missing) {
     const li = document.createElement("li");
-    li.append(makePlanningLink(item.name, item.artefactWikiPage), document.createTextNode(` x${item.quantity}`));
+    li.append(
+      makePlanningLink(item.name, item.artefactWikiPage, "artifact-link"),
+      document.createTextNode(` x${item.quantity}`)
+    );
     if (item.excavationSite) {
       li.append(document.createTextNode(" - "), makePlanningLink(item.excavationSite, item.excavationSiteWikiPage));
     }
@@ -244,13 +259,15 @@ function makeMissingList(missing: readonly MissingArtefact[]): HTMLElement {
   return wrapper;
 }
 
-function makePlanningLink(label: string, href?: string | null): HTMLElement {
+function makePlanningLink(label: string, href?: string | null, className?: string): HTMLElement {
   if (!href) {
     const span = document.createElement("span");
+    if (className) span.className = className;
     span.textContent = label;
     return span;
   }
   const link = document.createElement("a");
+  if (className) link.className = className;
   link.href = href;
   link.target = "_blank";
   link.rel = "noreferrer";
@@ -260,4 +277,8 @@ function makePlanningLink(label: string, href?: string | null): HTMLElement {
 
 function makeWikiPage(title: string): string {
   return `https://runescape.wiki/w/${encodeURIComponent(title).replace(/%20/g, "_")}`;
+}
+
+function formatNumber(value: number): string {
+  return new Intl.NumberFormat("en-US").format(value);
 }

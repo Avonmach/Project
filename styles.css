@@ -598,7 +598,7 @@ input[type="search"] {
   display: flex;
   gap: 12px;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .planning-collection-heading h3 {
@@ -634,6 +634,13 @@ input[type="search"] {
   border-left: 0;
   border-right: 0;
   width: 48px;
+}
+
+.planning-rewards {
+  color: #3c3326;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 10px;
 }
 
 .planning-artefacts {
@@ -686,10 +693,13 @@ input[type="search"] {
 }
 
 .planning-missing {
+  color: #2f2419;
+  font-size: 13px;
   margin-top: 10px;
 }
 
 .planning-missing ul {
+  line-height: 1.45;
   margin: 5px 0 0 18px;
   padding: 0;
 }

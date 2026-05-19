@@ -39,6 +39,9 @@ export interface ArchaeologyCollectionRecord {
   readonly wikiPage?: string | null;
   readonly artefacts: readonly string[];
   readonly artefactCount?: number | null;
+  readonly chronotes?: number | null;
+  readonly firstReward?: string | null;
+  readonly recurringReward?: string | null;
   readonly [key: string]: unknown;
 }
 
@@ -150,6 +153,9 @@ function isArchaeologyCollectionRecord(value: unknown): value is ArchaeologyColl
     isOptionalNumberOrNull(value.archaeologyLevel) &&
     isOptionalStringOrNull(value.wikiPage) &&
     isOptionalNumberOrNull(value.artefactCount) &&
+    isOptionalNumberOrNull(value.chronotes) &&
+    isOptionalStringOrNull(value.firstReward) &&
+    isOptionalStringOrNull(value.recurringReward) &&
     Array.isArray(value.artefacts) &&
     value.artefacts.every((artefact) => typeof artefact === "string")
   );
