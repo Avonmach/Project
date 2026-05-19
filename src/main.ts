@@ -172,6 +172,9 @@ const resultsState = createResultsState<AppDetection>();
 let collectionSort: CollectionSort = { key: "progress", direction: "desc" };
 let selectedCollections = new Set<string>();
 let selectedCollectionCounts = new Map<string, number>();
+const screenshotHintDetail = document.querySelector<HTMLElement>("#screenshotHintDetail");
+const examplePopover = document.querySelector<HTMLDetailsElement>(".example-popover");
+const exampleScreenshotImage = document.querySelector<HTMLImageElement>("#exampleScreenshotImage");
 
 let digitTemplates = FALLBACK_DIGIT_TEMPLATES;
 
@@ -441,10 +444,6 @@ function renderDamagedTable(items: readonly AppDetection[]): void {
 
 function requestTabScreenshot(tab: ResultsTab): void {
   if (!resultsState.shouldRequestScreenshot(tab)) return;
-  if (tab === "restored") {
-    void loadImageFromUrl(DEFAULT_SCREENSHOTS.restored, "restored");
-    return;
-  }
   browserActions.requestScreenshotFile();
 }
 
@@ -465,8 +464,33 @@ function updateScreenshotPanel(): void {
     restored: "Restored artefact screenshot",
     storage: "Storage screenshots"
   }[tab];
+  updateScreenshotGuidance(tab);
   imageInput.multiple = tab === "storage";
   restoreActiveScreenshotToCanvas();
+}
+
+function updateScreenshotGuidance(tab: ScreenshotTab): void {
+  if (screenshotHintDetail) {
+    screenshotHintDetail.textContent = {
+      damaged: "Bank tab with only damaged artefacts. (Tip: Search for damaged in bank)",
+      restored: "Bank tab with only restored artefacts",
+      storage: "Upload both material storage screenshots"
+    }[tab];
+  }
+
+  if (!examplePopover || !exampleScreenshotImage) return;
+  examplePopover.hidden = tab === "storage";
+  examplePopover.open = false;
+  exampleScreenshotImage.src = {
+    damaged: "Reference_Screenshot/Damaged_Artefacts.png",
+    restored: "Reference_Screenshot/Restored_Artefacts.png",
+    storage: "Reference_Screenshot/Damaged_Artefacts.png"
+  }[tab];
+  exampleScreenshotImage.alt = {
+    damaged: "Example damaged artefact bank screenshot",
+    restored: "Example restored artefact bank screenshot",
+    storage: "Example bank screenshot"
+  }[tab];
 }
 
 function restoreActiveScreenshotToCanvas(): void {
@@ -483,12 +507,18 @@ function restoreActiveScreenshotToCanvas(): void {
   if (!tab || !loadedImage) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.classList.add("is-empty");
+    imagePanel.classList.toggle("is-compact-upload", hasAnyLoadedScreenshot());
     return;
   }
+  imagePanel.classList.remove("is-compact-upload");
   canvas.classList.remove("is-empty");
   canvas.width = loadedImage.naturalWidth;
   canvas.height = loadedImage.naturalHeight;
   ctx.drawImage(loadedImage, 0, 0);
+}
+
+function hasAnyLoadedScreenshot(): boolean {
+  return Boolean(loadedImagesByTab.damaged || loadedImagesByTab.restored);
 }
 
 function drawStoragePreview(): void {
@@ -496,9 +526,11 @@ function drawStoragePreview(): void {
   if (!storageImages.length) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.classList.add("is-empty");
+    imagePanel.classList.toggle("is-compact-upload", hasAnyLoadedScreenshot());
     return;
   }
 
+  imagePanel.classList.remove("is-compact-upload");
   const gap = 12;
   const { width, height, placements } = calculateStoragePreviewLayout(storageImages, gap);
   canvas.width = width;

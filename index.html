@@ -46,13 +46,13 @@
           <canvas id="previewCanvas" width="927" height="170"></canvas>
           <div class="screenshot-hover-hint">
             <strong>Upload or paste screenshot (CTRL + V)</strong>
-            <span>Bank tab with only damaged artefacts. (Tip: Search for damaged in bank)</span>
+            <span id="screenshotHintDetail">Bank tab with only damaged artefacts. (Tip: Search for damaged in bank)</span>
           </div>
         </div>
         <details class="example-popover">
           <summary class="example-button" aria-describedby="damagedExamplePreview">Example</summary>
           <div id="damagedExamplePreview" class="example-preview" role="tooltip">
-            <img src="Reference_Screenshot/Damaged_Artefacts.png" alt="Example damaged artefact bank screenshot">
+            <img id="exampleScreenshotImage" src="Reference_Screenshot/Damaged_Artefacts.png" alt="Example damaged artefact bank screenshot">
           </div>
         </details>
       </div>
@@ -180,7 +180,7 @@
           <table class="artifact-table restored-table">
           <thead>
             <tr>
-              <th>Restored artefact</th>
+              <th>Artefact</th>
               <th>Level</th>
               <th>Culture</th>
               <th>Dig site</th>

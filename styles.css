@@ -341,6 +341,16 @@ input[type="search"] {
   visibility: visible;
 }
 
+.image-panel.is-compact-upload .screenshot-preview-shell {
+  max-height: 118px;
+  min-height: 86px;
+}
+
+.image-panel.is-compact-upload .screenshot-hover-hint {
+  min-height: 86px;
+  padding: 12px;
+}
+
 .plan-panel {
   grid-column: 2 / 3;
   grid-row: 1 / 3;
