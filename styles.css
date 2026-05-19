@@ -904,11 +904,15 @@ td:nth-child(9),
 .storage-results-table th:nth-child(3),
 .storage-results-table th:nth-child(4),
 .storage-results-table th:nth-child(5) {
-  width: 76px;
+  width: 96px;
 }
 
 .storage-results-table th:nth-child(6) {
   width: 130px;
+}
+
+.storage-results-table th {
+  white-space: normal;
 }
 
 .storage-results-table td:nth-child(2),
