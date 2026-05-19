@@ -1063,7 +1063,6 @@ input[type="search"] {
 
 .example-popover {
   display: inline-flex;
-  margin-bottom: 10px;
   position: relative;
   z-index: 3;
 }
@@ -1080,7 +1079,6 @@ input[type="search"] {
   box-shadow: 0 18px 42px rgba(34, 24, 13, 0.34);
   display: none;
   left: 0;
-  max-width: min(760px, calc(100vw - 80px));
   padding: 6px;
   position: absolute;
   top: calc(100% + 8px);
@@ -1089,12 +1087,19 @@ input[type="search"] {
 .example-preview img {
   display: block;
   height: auto;
-  max-width: 100%;
+  max-width: none;
 }
 
 .example-popover:hover .example-preview,
 .example-popover:focus-within .example-preview {
   display: block;
+}
+
+.table-example-cell {
+  background: linear-gradient(180deg, #e4d1aa, #ccb98f);
+  position: relative;
+  text-align: left;
+  z-index: 4;
 }
 
 .artefact-review-strip + .artifact-table {

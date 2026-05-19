@@ -45,7 +45,7 @@
         <div class="screenshot-preview-shell" tabindex="0" aria-label="Screenshot preview. Hover or focus to reveal.">
           <canvas id="previewCanvas" width="927" height="170"></canvas>
           <div class="screenshot-hover-hint">
-            <strong>Upload screenshot or paste Ctrl+V</strong>
+            <strong>Upload or paste screenshot (CTRL + V)</strong>
           </div>
         </div>
       </div>
@@ -119,12 +119,6 @@
           <p class="empty">Select collections in Overview to create a plan.</p>
         </div>
         <div id="damagedPanel" class="tab-panel table-wrap" data-results-panel="damaged">
-          <div class="example-popover">
-            <button class="example-button" type="button" aria-describedby="damagedExamplePreview">Example</button>
-            <div id="damagedExamplePreview" class="example-preview" role="tooltip">
-              <img src="Reference_Screenshot/Damaged_Artefacts.png" alt="Example damaged artefact bank screenshot">
-            </div>
-          </div>
           <div class="artefact-review-strip" aria-label="Damaged artefact review summary">
             <div>
               <span>Artefacts</span>
@@ -141,6 +135,16 @@
           </div>
           <table class="artifact-table damaged-table">
           <thead>
+            <tr>
+              <th colspan="10" class="table-example-cell">
+                <div class="example-popover">
+                  <button class="example-button" type="button" aria-describedby="damagedExamplePreview">Example</button>
+                  <div id="damagedExamplePreview" class="example-preview" role="tooltip">
+                    <img src="Reference_Screenshot/Damaged_Artefacts.png" alt="Example damaged artefact bank screenshot">
+                  </div>
+                </div>
+              </th>
+            </tr>
             <tr>
               <th>Damaged artefact</th>
               <th>Level</th>
