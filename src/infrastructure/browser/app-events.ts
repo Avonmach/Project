@@ -35,6 +35,7 @@ export function connectAppEvents(elements: AppElements, handlers: AppEventHandle
   document.addEventListener("paste", (event) => {
     void handlePaste(event, handlers);
   });
+  connectExamplePreviewPositioning();
 
   return {
     requestScreenshotFile: () => openFilePicker(elements.imageInput)
@@ -46,4 +47,24 @@ async function handlePaste(event: ClipboardEvent, handlers: AppEventHandlers): P
   if (!srcs.length) return;
   event.preventDefault();
   await handlers.handlePastedImages(srcs);
+}
+
+function connectExamplePreviewPositioning(): void {
+  const popover = document.querySelector<HTMLDetailsElement>(".example-popover");
+  const button = popover?.querySelector<HTMLElement>(".example-button");
+  if (!popover || !button) return;
+
+  const positionPreview = () => {
+    if (!popover.open) return;
+    const rect = button.getBoundingClientRect();
+    popover.style.setProperty("--example-preview-left", `${Math.round(rect.right + 12)}px`);
+    popover.style.setProperty("--example-preview-top", `${Math.round(rect.top)}px`);
+  };
+
+  popover.addEventListener("toggle", () => {
+    if (!popover.open) return;
+    requestAnimationFrame(positionPreview);
+  });
+  window.addEventListener("resize", positionPreview);
+  window.addEventListener("scroll", positionPreview, true);
 }

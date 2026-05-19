@@ -1082,11 +1082,11 @@ input[type="search"] {
   border-radius: 8px;
   box-shadow: 0 18px 42px rgba(34, 24, 13, 0.34);
   display: none;
-  left: 128px;
+  left: var(--example-preview-left, 128px);
   padding: 6px;
   position: fixed;
-  top: 210px;
-  z-index: 1000;
+  top: var(--example-preview-top, 210px);
+  z-index: 3000;
 }
 
 .example-preview img {
