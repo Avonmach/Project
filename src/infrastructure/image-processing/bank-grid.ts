@@ -308,9 +308,9 @@ function findBankContentArea(imageData: ImageData): (BankGridBox & { readonly in
 
 function findInfinitySymbolBounds(imageData: ImageData): BankGridBox | null {
   const { width, height, data } = imageData;
-  const maxX = Math.min(width - 1, 80);
-  const maxY = Math.min(height - 1, 90);
-  const minY = Math.min(maxY, 35);
+  const maxX = Math.min(width - 1, 95);
+  const maxY = Math.min(height - 1, 95);
+  const minY = Math.min(maxY, 5);
   const mask = new Uint8Array(width * height);
 
   for (let y = minY; y <= maxY; y += 1) {
@@ -325,14 +325,14 @@ function findInfinitySymbolBounds(imageData: ImageData): BankGridBox | null {
   }
 
   return connectedComponents(dilate(mask, width, height, 1), width, height)
-    .filter((box) => box.x >= 5 && box.x < 45 && box.y >= minY && box.w >= 16 && box.w <= 48 && box.h >= 10 && box.h <= 34)
+    .filter((box) => box.x >= 5 && box.x < 60 && box.y >= minY && box.w >= 16 && box.w <= 56 && box.h >= 10 && box.h <= 38)
     .sort((a, b) => infinitySymbolScore(b) - infinitySymbolScore(a))[0] || null;
 }
 
 function infinitySymbolScore(box: BankGridBox): number {
   const aspect = box.w / Math.max(1, box.h);
   const aspectScore = 1 - Math.min(1, Math.abs(aspect - 1.9) / 1.9);
-  const positionScore = 1 - Math.min(1, (Math.abs(box.x - 18) + Math.abs(box.y - 52)) / 80);
+  const positionScore = 1 - Math.min(1, (Math.abs(box.x - 18) + Math.abs(box.y - 18)) / 80);
   return (box.area || 0) + aspectScore * 120 + positionScore * 80;
 }
 
