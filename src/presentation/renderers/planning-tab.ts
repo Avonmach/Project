@@ -127,7 +127,9 @@ function makeCountButton(label: string, onClick: () => void): HTMLButtonElement 
 
 interface PlannedArtefact {
   readonly name: string;
+  readonly restoredQuantity: number;
   readonly restoredUsed: number;
+  readonly damagedQuantity: number;
   readonly damagedUsed: number;
   readonly missing: number;
 }
@@ -139,14 +141,18 @@ function calculatePlannedArtefact(
   damagedArtefacts: Map<string, OwnedArtefact>
 ): PlannedArtefact {
   const key = normalizeName(name);
-  const restoredUsed = Math.min(count, restoredArtefacts.get(key)?.quantity || 0);
+  const restoredQuantity = restoredArtefacts.get(key)?.quantity || 0;
+  const restoredUsed = Math.min(count, restoredQuantity);
   consumeArtefact(restoredArtefacts, key, restoredUsed);
   const remainingAfterRestored = count - restoredUsed;
-  const damagedUsed = Math.min(remainingAfterRestored, damagedArtefacts.get(key)?.quantity || 0);
+  const damagedQuantity = damagedArtefacts.get(key)?.quantity || 0;
+  const damagedUsed = Math.min(remainingAfterRestored, damagedQuantity);
   consumeArtefact(damagedArtefacts, key, damagedUsed);
   return {
     name,
+    restoredQuantity,
     restoredUsed,
+    damagedQuantity,
     damagedUsed,
     missing: Math.max(0, remainingAfterRestored - damagedUsed)
   };
@@ -164,8 +170,8 @@ function makePlanningArtefactRow(row: PlannedArtefact, references: readonly Coll
   item.className = "planning-artefact";
   const reference = references.find((candidate) => normalizeName(candidate.restoredName || candidate.name) === normalizeName(row.name));
   item.append(
-    makePlanningVariant(reference?.icon, row.name, row.restoredUsed, "Restored", "restored"),
-    makePlanningVariant(reference?.damagedIcon, row.name, row.damagedUsed, "Damaged", "damaged")
+    makePlanningVariant(reference?.icon, row.name, row.restoredQuantity, "Restored", "restored"),
+    makePlanningVariant(reference?.damagedIcon, row.name, row.damagedQuantity, "Damaged", "damaged")
   );
   if (row.missing) {
     const missing = document.createElement("span");
